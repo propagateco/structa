@@ -11,7 +11,7 @@ export const Header = () => {
         <div className="flex items-center">
           <a href="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/f026816a-a5ff-4186-b6a5-2c651d3699ce.png"
+              src="/wordmark-light.svg"
               alt="Logo" 
               className="h-14 w-auto md:h-22"
             />

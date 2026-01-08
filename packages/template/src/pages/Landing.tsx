@@ -93,7 +93,7 @@ const Landing = () => {
                                             "Response AI",
                                             "Saral Influencers",
                                             "GreatLab",
-                                            "Quolum",
+                                            "Quolum"
                                         ]}
                                         className="mx-auto"
                                     />
@@ -127,8 +127,8 @@ const Landing = () => {
 
                                 {/* Stats Section */}
                                 <section className="mx-auto max-w-[1400px] px-8 pt-2">
-                                    <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-16 gap-0">
-                                        <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-12 lg:col-start-3">
+                                    <div className="flex justify-center">
+                                        <div className="w-full max-w-4xl">
                                             <div className="rounded-2xl bg-white p-12 shadow-[0_1px_3px_0_rgb(0,0,0,0.1)]">
                                                 {/* Header */}
                                                 <div className="space-y-4">
@@ -244,8 +244,8 @@ const Landing = () => {
 
                                 {/* Data Quality Section */}
                                 <section className="mx-auto max-w-[1400px] px-8 py-16">
-                                    <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-16 gap-0">
-                                        <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-12 lg:col-start-3 space-y-12">
+                                    <div className="flex justify-center">
+                                        <div className="w-full max-w-4xl space-y-12">
                                             {/* Section Header */}
                                             <div className="text-center space-y-4">
                                                 <h2 className="text-5xl font-medium tracking-tight">
@@ -554,8 +554,8 @@ const Landing = () => {
 
                                 {/* Lists Section */}
                                 <section className="mx-auto max-w-[1400px] px-8 py-16">
-                                    <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-16 gap-0">
-                                        <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-12 lg:col-start-3 space-y-12">
+                                    <div className="flex justify-center">
+                                        <div className="w-full max-w-4xl space-y-12">
                                             {/* Header */}
                                             <div className="text-center space-y-4">
                                                 <h2 className="text-4xl font-medium">
@@ -827,8 +827,8 @@ const Landing = () => {
                                     id="pricing"
                                     className="mx-auto max-w-[1400px] px-8"
                                 >
-                                    <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-16 gap-0">
-                                        <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-12 lg:col-start-3 space-y-8 text-center">
+                                    <div className="flex justify-center">
+                                        <div className="w-full max-w-4xl space-y-8 text-center">
                                             {/* Header */}
                                             <div className="space-y-4">
                                                 <div className="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-800 px-4 py-1.5">
@@ -1066,7 +1066,7 @@ const Landing = () => {
                                         <div className="flex flex-col items-center gap-8">
                                             {/* Logo */}
                                             <img
-                                                src="/lovable-uploads/acmelogo.png"
+                                                src="/logo-light.svg"
                                                 alt="Acme Logo"
                                                 className="h-12 w-auto"
                                             />

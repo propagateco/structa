@@ -18,7 +18,7 @@ const Legal = () => {
                 className="flex items-center gap-2"
               >
                 <img 
-                  src="/lovable-uploads/acmelogo.png" 
+                  src="/wordmark-light.svg" 
                   alt="Acme Logo" 
                   className="h-8 w-auto" 
                 />
@@ -76,7 +76,7 @@ const Legal = () => {
           <div className="container mx-auto px-4 py-12">
             <div className="flex flex-col items-center gap-8">
               <img 
-                src="/lovable-uploads/acmelogo.png"
+                src="/logo-light.svg"
                 alt="Acme Logo" 
                 className="h-12 w-auto"
               />
