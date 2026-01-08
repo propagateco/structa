@@ -6,7 +6,7 @@ export const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
-      <div className="max-w-[1200px] mx-auto px-4 h-[72px] flex items-center justify-between">
+      <div className="max-w-[1400px] mx-auto px-8 h-[72px] flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
           <a href="/" className="flex items-center">
