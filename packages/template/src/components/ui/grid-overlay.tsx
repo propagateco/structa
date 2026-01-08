@@ -4,7 +4,7 @@ const GridOverlay = () => {
 
   return (
     <div 
-      className="pointer-events-none fixed inset-0 z-[100]"
+      className="pointer-events-none fixed inset-0 z-[-1]"
       aria-hidden="true"
     >
       <div className="mx-auto h-full w-full max-w-[1400px] px-8 relative">
