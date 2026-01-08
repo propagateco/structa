@@ -28,7 +28,7 @@ const Landing = () => {
           {/* Content Container */}
           <div className="mx-auto max-w-[1400px] px-8 pt-8 pb-24 md:pt-12 md:pb-32 relative z-10">
             <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-16 gap-0">
-              <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-12 lg:col-start-3 space-y-8">
+              <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-10 lg:col-start-4 space-y-8">
               {/* New Badge */}
               <div className="flex justify-center">
                 <span className="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-800 px-3 py-1 text-sm text-muted-foreground">
@@ -79,21 +79,7 @@ const Landing = () => {
                     'Response AI',
                     'Saral Influencers', 
                     'GreatLab',
-                    'Quolum',
-                    'Linq',
-                    'Bionic Talent',
-                    'Acme Inc',
-                    'BuildCo',
-                    'TechStart',
-                    'InnovateLab',
-                    'DataSync',
-                    'CloudFlow',
-                    'NexGen',
-                    'Velocity',
-                    'Apex Systems',
-                    'CoreTech',
-                    'PrimeSoft',
-                    'Quantum Labs'
+                    'Quolum'
                   ]}
                   className="mx-auto"
                 />
@@ -101,7 +87,7 @@ const Landing = () => {
 
               {/* Video Section */}
               <div className="relative mt-8">
-                <div className="relative mx-auto max-w-4xl rounded-xl overflow-hidden">
+                <div className="relative w-full rounded-xl overflow-hidden">
                   <div className="aspect-[1.91/1]">
                     <video 
                       autoPlay 

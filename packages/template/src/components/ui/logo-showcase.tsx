@@ -6,7 +6,7 @@ interface LogoShowcaseProps {
 }
 
 const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
-  const NUM_SLOTS = 4; // Number of visible logo slots (4 logos in 1 row)
+  const NUM_SLOTS = 4; // Number of visible logo slots (4 logos to fit flexbox layout)
   const TRANSITION_DURATION = 3000; // Time each logo is visible (ms)
   
   // Initialize with first N logos
@@ -18,7 +18,7 @@ const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    if (logos.length <= NUM_SLOTS) {
+    if (logos.length < NUM_SLOTS) {
       // If we have fewer logos than slots, just show them all
       return;
     }
@@ -65,11 +65,11 @@ const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
 
   return (
     <div className={`${className}`}>
-      <div className="flex justify-center items-center gap-0 max-w-4xl mx-auto border-l border-t border-gray-200">
+      <div className="flex max-w-4xl mx-auto border-l border-t border-gray-200">
         {currentLogos.map((logo, index) => (
           <div
             key={`${logo}-${index}`}
-            className="w-[25%] aspect-square border-r border-b border-gray-200 flex items-center justify-center p-8 relative bg-white overflow-hidden"
+            className="flex-1 aspect-square border-r border-b border-gray-200 flex items-center justify-center p-8 relative bg-white overflow-hidden"
           >
             <div className="flex items-center justify-center w-full h-full">
               <span 
