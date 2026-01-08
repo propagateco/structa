@@ -6,7 +6,7 @@ interface LogoShowcaseProps {
 }
 
 const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
-  const NUM_SLOTS = 4; // Number of visible logo slots (4 logos to fit flexbox layout)
+  const NUM_SLOTS = 5; // Number of visible logo slots (5 logos to fit flexbox layout)
   const TRANSITION_DURATION = 3000; // Time each logo is visible (ms)
   
   // Initialize with first N logos
@@ -16,6 +16,12 @@ const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
   const [fadingSlots, setFadingSlots] = useState<Set<number>>(new Set());
   const nextIndexRef = useRef(NUM_SLOTS);
   const timeoutRef = useRef<NodeJS.Timeout>();
+
+  // Reinitialize when logos prop changes
+  useEffect(() => {
+    setCurrentLogos(logos.slice(0, NUM_SLOTS));
+    nextIndexRef.current = NUM_SLOTS;
+  }, [logos, NUM_SLOTS]);
 
   useEffect(() => {
     if (logos.length < NUM_SLOTS) {
@@ -65,7 +71,7 @@ const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
 
   return (
     <div className={`${className}`}>
-      <div className="flex max-w-4xl mx-auto border-l border-t border-gray-200">
+      <div className="flex w-full border-l border-t border-gray-200">
         {currentLogos.map((logo, index) => (
           <div
             key={`${logo}-${index}`}

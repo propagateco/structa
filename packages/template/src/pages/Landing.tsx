@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import FloatingIcons from "@/components/ui/floating-icons";
-import FloatingNotifications from "@/components/ui/floating-notifications";
-import { Header } from "@/components/landing/Header";
-import CalendlyEmbed from "@/components/ui/CalendlyEmbed";
-import LogoShowcase from "@/components/ui/logo-showcase";
-import GridOverlay from "@/components/ui/grid-overlay";
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, ArrowUpRight, Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import FloatingIcons from '@/components/ui/floating-icons';
+import FloatingNotifications from '@/components/ui/floating-notifications';
+import { Header } from '@/components/landing/Header';
+import CalendlyEmbed from '@/components/ui/CalendlyEmbed';
+import LogoShowcase from '@/components/ui/logo-showcase';
+import GridOverlay from '@/components/ui/grid-overlay';
 
 const Landing = () => {
     const navigate = useNavigate();
@@ -22,13 +22,10 @@ const Landing = () => {
             <main className="flex-1 pt-[72px]">
                 {/* Hero Section */}
                 <section className="relative min-h-screen">
-                    {/* Floating Icons */}
-                    <FloatingIcons />
-
                     {/* Content Container */}
                     <div className="mx-auto max-w-[1400px] px-8 pt-8 pb-24 md:pt-12 md:pb-32 relative z-10">
                         <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-16 gap-0">
-                            <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-10 lg:col-start-4 space-y-8">
+                            <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-12 lg:col-start-3 space-y-8">
                                 {/* New Badge */}
                                 <div className="flex justify-center">
                                     <span className="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-800 px-3 py-1 text-sm text-muted-foreground">
@@ -42,7 +39,7 @@ const Landing = () => {
                                 <h1 className="text-center text-4xl font-medium tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                                     Get an MVP + your first
                                     <br />
-                                    customers{" "}
+                                    customers{' '}
                                     <span className="bg-gradient-to-r from-primary/60 to-primary bg-clip-text text-transparent">
                                         in just 14 days
                                     </span>
@@ -50,9 +47,10 @@ const Landing = () => {
 
                                 {/* Hero Description */}
                                 <p className="mx-auto max-w-2xl text-center text-lg text-muted-foreground font-light leading-relaxed">
-                                    Acme builds your dream MVP in 14 days
-                                    (stress-free). Then, we'll build systems to
-                                    get your <b>first paying customers</b>.
+                                    Structa eliminates the guesswork from home
+                                    renovation with an AI-powered Clerk that
+                                    brings context, clarity, and confidence to
+                                    every project.
                                 </p>
 
                                 {/* CTA Buttons */}
@@ -60,8 +58,8 @@ const Landing = () => {
                                     <Button
                                         onClick={() =>
                                             window.open(
-                                                "https://calendly.com/harrison-from-acme/30min",
-                                                "_blank",
+                                                'https://calendly.com/harrison-from-acme/30min',
+                                                '_blank'
                                             )
                                         }
                                         className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 group"
@@ -73,8 +71,8 @@ const Landing = () => {
                                         variant="outline"
                                         onClick={() =>
                                             window.open(
-                                                "https://calendly.com/harrison-from-acme/30min",
-                                                "_blank",
+                                                'https://calendly.com/harrison-from-acme/30min',
+                                                '_blank'
                                             )
                                         }
                                         className="inline-flex h-11 items-center justify-center rounded-full border border-gray-200 dark:border-gray-800 px-8 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -83,24 +81,8 @@ const Landing = () => {
                                     </Button>
                                 </div>
 
-                                {/* Trusted By Section */}
-                                <div className="mt-24 space-y-6">
-                                    <p className="text-center text-sm text-muted-foreground font-light">
-                                        Trusted by founders & teams everywhere
-                                    </p>
-                                    <LogoShowcase
-                                        logos={[
-                                            "Response AI",
-                                            "Saral Influencers",
-                                            "GreatLab",
-                                            "Quolum"
-                                        ]}
-                                        className="mx-auto"
-                                    />
-                                </div>
-
                                 {/* Video Section */}
-                                <div className="relative mt-8">
+                                <div className="relative mt-24">
                                     <div className="relative w-full rounded-xl overflow-hidden">
                                         <div className="aspect-[1.91/1]">
                                             <video
@@ -116,6 +98,23 @@ const Landing = () => {
                                             </video>
                                         </div>
                                     </div>
+                                </div>
+
+                                {/* Logo Showcase Section */}
+                                <div className="mt-16 space-y-6">
+                                    <p className="text-center text-sm text-muted-foreground font-light">
+                                        Trusted by founders & teams everywhere
+                                    </p>
+                                    <LogoShowcase
+                                        logos={[
+                                            'Response AI',
+                                            'Saral Influencers',
+                                            'GreatLab',
+                                            'Quolum',
+                                            'DataFlow Pro',
+                                        ]}
+                                        className="mx-auto w-full"
+                                    />
                                 </div>
 
                                 {/* Notifications Section */}
@@ -253,7 +252,7 @@ const Landing = () => {
                                                     for code <br />
                                                     <span className="font-light italic">
                                                         and
-                                                    </span>{" "}
+                                                    </span>{' '}
                                                     <span className="text-gray-500">
                                                         customer acquisition.
                                                     </span>
@@ -292,8 +291,8 @@ const Landing = () => {
                                                             className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer group"
                                                             onClick={() =>
                                                                 window.open(
-                                                                    "https://calendly.com/harrison-from-acme/30min",
-                                                                    "_blank",
+                                                                    'https://calendly.com/harrison-from-acme/30min',
+                                                                    '_blank'
                                                                 )
                                                             }
                                                         >
@@ -332,8 +331,8 @@ const Landing = () => {
                                                             className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer group"
                                                             onClick={() =>
                                                                 window.open(
-                                                                    "https://calendly.com/harrison-from-acme/30min",
-                                                                    "_blank",
+                                                                    'https://calendly.com/harrison-from-acme/30min',
+                                                                    '_blank'
                                                                 )
                                                             }
                                                         >
@@ -374,8 +373,8 @@ const Landing = () => {
                                                             className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer group"
                                                             onClick={() =>
                                                                 window.open(
-                                                                    "https://calendly.com/harrison-from-acme/30min",
-                                                                    "_blank",
+                                                                    'https://calendly.com/harrison-from-acme/30min',
+                                                                    '_blank'
                                                                 )
                                                             }
                                                         >
@@ -575,8 +574,8 @@ const Landing = () => {
                                                         className="rounded-full px-6"
                                                         onClick={() =>
                                                             window.open(
-                                                                "https://calendly.com/harrison-from-acme/30min",
-                                                                "_blank",
+                                                                'https://calendly.com/harrison-from-acme/30min',
+                                                                '_blank'
                                                             )
                                                         }
                                                     >
@@ -588,13 +587,13 @@ const Landing = () => {
                                                         onClick={() =>
                                                             document
                                                                 .getElementById(
-                                                                    "pricing",
+                                                                    'pricing'
                                                                 )
                                                                 ?.scrollIntoView(
                                                                     {
                                                                         behavior:
-                                                                            "smooth",
-                                                                    },
+                                                                            'smooth',
+                                                                    }
                                                                 )
                                                         }
                                                     >
@@ -627,8 +626,8 @@ const Landing = () => {
                                                             className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer"
                                                             onClick={() =>
                                                                 window.open(
-                                                                    "https://calendly.com/harrison-from-acme/30min",
-                                                                    "_blank",
+                                                                    'https://calendly.com/harrison-from-acme/30min',
+                                                                    '_blank'
                                                                 )
                                                             }
                                                         >
@@ -663,8 +662,8 @@ const Landing = () => {
                                                             className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer"
                                                             onClick={() =>
                                                                 window.open(
-                                                                    "https://calendly.com/harrison-from-acme/30min",
-                                                                    "_blank",
+                                                                    'https://calendly.com/harrison-from-acme/30min',
+                                                                    '_blank'
                                                                 )
                                                             }
                                                         >
@@ -697,8 +696,8 @@ const Landing = () => {
                                                             className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer"
                                                             onClick={() =>
                                                                 window.open(
-                                                                    "https://calendly.com/harrison-from-acme/30min",
-                                                                    "_blank",
+                                                                    'https://calendly.com/harrison-from-acme/30min',
+                                                                    '_blank'
                                                                 )
                                                             }
                                                         >
@@ -733,8 +732,8 @@ const Landing = () => {
                                                             className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer"
                                                             onClick={() =>
                                                                 window.open(
-                                                                    "https://calendly.com/harrison-from-acme/30min",
-                                                                    "_blank",
+                                                                    'https://calendly.com/harrison-from-acme/30min',
+                                                                    '_blank'
                                                                 )
                                                             }
                                                         >
@@ -769,8 +768,8 @@ const Landing = () => {
                                                             className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer"
                                                             onClick={() =>
                                                                 window.open(
-                                                                    "https://calendly.com/harrison-from-acme/30min",
-                                                                    "_blank",
+                                                                    'https://calendly.com/harrison-from-acme/30min',
+                                                                    '_blank'
                                                                 )
                                                             }
                                                         >
@@ -804,8 +803,8 @@ const Landing = () => {
                                                             className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer"
                                                             onClick={() =>
                                                                 window.open(
-                                                                    "https://calendly.com/harrison-from-acme/30min",
-                                                                    "_blank",
+                                                                    'https://calendly.com/harrison-from-acme/30min',
+                                                                    '_blank'
                                                                 )
                                                             }
                                                         >
@@ -884,8 +883,8 @@ const Landing = () => {
                                                             <Button
                                                                 onClick={() =>
                                                                     window.open(
-                                                                        "https://calendly.com/harrison-from-acme/30min",
-                                                                        "_blank",
+                                                                        'https://calendly.com/harrison-from-acme/30min',
+                                                                        '_blank'
                                                                     )
                                                                 }
                                                                 className="inline-flex h-11 w-full items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
@@ -897,16 +896,16 @@ const Landing = () => {
 
                                                         <ul className="space-y-4 pt-8">
                                                             {[
-                                                                "Full MVP development in 14 days",
-                                                                "Codebase Access & 100% Code Ownership",
-                                                                "Payments, Emails, Authentication",
-                                                                "Backend Database",
-                                                                "Scalable Deployment",
-                                                                "SEO Optimization",
+                                                                'Full MVP development in 14 days',
+                                                                'Codebase Access & 100% Code Ownership',
+                                                                'Payments, Emails, Authentication',
+                                                                'Backend Database',
+                                                                'Scalable Deployment',
+                                                                'SEO Optimization',
                                                             ].map(
                                                                 (
                                                                     feature,
-                                                                    index,
+                                                                    index
                                                                 ) => (
                                                                     <li
                                                                         key={
@@ -929,7 +928,7 @@ const Landing = () => {
                                                                             }
                                                                         </span>
                                                                     </li>
-                                                                ),
+                                                                )
                                                             )}
                                                         </ul>
                                                     </div>
@@ -978,8 +977,8 @@ const Landing = () => {
                                                             <Button
                                                                 onClick={() =>
                                                                     window.open(
-                                                                        "https://calendly.com/harrison-from-acme/30min",
-                                                                        "_blank",
+                                                                        'https://calendly.com/harrison-from-acme/30min',
+                                                                        '_blank'
                                                                     )
                                                                 }
                                                                 className="inline-flex h-11 w-full items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
@@ -991,21 +990,21 @@ const Landing = () => {
 
                                                         <ul className="space-y-4 pt-8">
                                                             {[
-                                                                "Full MVP development in 14 days",
-                                                                "Daily Updates",
-                                                                "Full codebase & ownership of the code",
-                                                                "Payments, Emails, Authentication",
-                                                                "Backend Database",
-                                                                "Scalable Deployment",
-                                                                "SEO Optimization",
-                                                                "Cold Email System Setup",
-                                                                "Up to 20,000 Ideal Prospects Found [B2B List]",
-                                                                "LinkedIn Acquisition System",
-                                                                "YouTube Content Funnel",
+                                                                'Full MVP development in 14 days',
+                                                                'Daily Updates',
+                                                                'Full codebase & ownership of the code',
+                                                                'Payments, Emails, Authentication',
+                                                                'Backend Database',
+                                                                'Scalable Deployment',
+                                                                'SEO Optimization',
+                                                                'Cold Email System Setup',
+                                                                'Up to 20,000 Ideal Prospects Found [B2B List]',
+                                                                'LinkedIn Acquisition System',
+                                                                'YouTube Content Funnel',
                                                             ].map(
                                                                 (
                                                                     feature,
-                                                                    index,
+                                                                    index
                                                                 ) => (
                                                                     <li
                                                                         key={
@@ -1028,7 +1027,7 @@ const Landing = () => {
                                                                             }
                                                                         </span>
                                                                     </li>
-                                                                ),
+                                                                )
                                                             )}
                                                         </ul>
                                                     </div>
@@ -1076,7 +1075,7 @@ const Landing = () => {
                                                 <li>
                                                     <button
                                                         onClick={() =>
-                                                            navigate("/legal")
+                                                            navigate('/legal')
                                                         }
                                                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                                                     >
@@ -1087,8 +1086,8 @@ const Landing = () => {
                                                     <button
                                                         onClick={() =>
                                                             window.open(
-                                                                "https://calendly.com/harrison-from-acme/30min",
-                                                                "_blank",
+                                                                'https://calendly.com/harrison-from-acme/30min',
+                                                                '_blank'
                                                             )
                                                         }
                                                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -1101,13 +1100,13 @@ const Landing = () => {
                                                         onClick={() =>
                                                             document
                                                                 .getElementById(
-                                                                    "pricing",
+                                                                    'pricing'
                                                                 )
                                                                 ?.scrollIntoView(
                                                                     {
                                                                         behavior:
-                                                                            "smooth",
-                                                                    },
+                                                                            'smooth',
+                                                                    }
                                                                 )
                                                         }
                                                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
