@@ -25,9 +25,10 @@ const Landing = () => {
           {/* Floating Icons */}
           <FloatingIcons />
 
-          {/* Content Container */}
+          {/* Content Container - Using 16-column grid */}
           <div className="container mx-auto px-4 pt-8 pb-24 md:pt-12 md:pb-32 relative z-10">
-            <div className="mx-auto max-w-[64rem] space-y-8">
+            <div className="grid">
+              <div className="cols-12 start-3 cols-m-8 cols-s-8 space-y-8">
               {/* New Badge */}
               <div className="flex justify-center">
                 <span className="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-800 px-3 py-1 text-sm text-muted-foreground">
@@ -730,6 +731,7 @@ const Landing = () => {
                   </div>
                 </div>
               </footer>
+              </div>
             </div>
           </div>
         </section>

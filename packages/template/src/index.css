@@ -1,3 +1,6 @@
+/* Import grid system - must come first */
+@import './css/grid.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,6 +36,18 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    /* Grid system variables */
+    --gutter-h: 2rem;
+    --column: calc((100vw - (var(--gutter-h) * 2)) / 16);
+    
+    /* Grid lines for light mode */
+    --theme-border-color: rgba(200, 200, 200, 0.15);
+    --grid-line-rgb: 200, 200, 200;
+    
+    /* Font variables */
+    --font-heading: 'Inter', 'Geist', system-ui, sans-serif;
+    --font-body: 'Geist', system-ui, sans-serif;
   }
 
   .dark {
@@ -64,9 +79,44 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+  
+  [data-theme="dark"] {
+    --theme-border-color: rgba(255, 255, 255, 0.125);
+    --grid-line-rgb: 255, 255, 255;
+  }
 
   html {
-    font-family: 'Geist', system-ui, sans-serif;
+    font-family: var(--font-body);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+  
+  /* Payload-style typography scale */
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 1.125rem;
+    line-height: 1.6;
   }
 }
 
@@ -123,3 +173,26 @@
     transform: translateY(40px);
   }
 } */
+
+/* Payload-style hover effects */
+.hover-lift {
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.button-scale {
+  transition: transform 200ms ease;
+}
+
+.button-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
