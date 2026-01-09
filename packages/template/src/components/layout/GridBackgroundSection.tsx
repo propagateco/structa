@@ -25,9 +25,9 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
     const patternId = useId();
 
     const variantClasses = {
-        hero: 'bg-gradient-to-t from-blue-100/20 dark:from-blue-900/5',
+        hero: 'bg-gradient-to-t from-ds-azure/20 dark:from-ds-azure/5 py-12 md:py-0 md:py-12 md:pb-36',
         content:
-            'bg-gradient-to-b from-blue-100/10 via-amber-50/40 to-blue-500/[0.03] dark:from-blue-900/[0.03] dark:via-transparent dark:to-blue-800/[0.02]',
+            'bg-gradient-to-b from-ds-azure/10 via-ds-azure/40 to-ds-azure/[0.03] dark:from-ds-azure/[0.03] dark:via-transparent dark:to-ds-azure/[0.02]',
     };
 
     return (
@@ -35,7 +35,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
             className={cn(
                 'relative w-full',
                 showTopDivider &&
-                    'before:absolute before:top-0 before:-left-[100vw] before:[z-index:-1] before:h-px before:w-[200vw] before:bg-blue-200/50 dark:before:bg-blue-300/[0.08]',
+                    'before:absolute before:top-0 before:-left-[100vw] before:[z-index:-1] before:h-px before:w-[200vw] before:bg-ds-powder/50 dark:before:bg-ds-powder/[0.08]',
                 className
             )}
         >
@@ -59,7 +59,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
                     <svg
                         className={cn(
                             'pointer-events-none absolute inset-0 [z-index:-1] size-full',
-                            'fill-blue-500/50 stroke-blue-500/50',
+                            'fill-ds-powder/50 stroke-ds-powder/50',
                             'opacity-[.30] dark:opacity-[.15]'
                         )}
                         aria-hidden="true"
@@ -115,7 +115,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
 
             {/* Bottom horizontal line (full viewport width) */}
             {showBottomDivider && (
-                <div className="absolute bottom-0 -left-[100vw] [z-index:-1] h-px w-[200vw] bg-blue-200/50 dark:bg-blue-300/[0.08]" />
+                <div className="absolute bottom-0 -left-[100vw] [z-index:-1] h-px w-[200vw] bg-ds-powder/50 dark:bg-ds-powder/[0.08]" />
             )}
         </section>
     );

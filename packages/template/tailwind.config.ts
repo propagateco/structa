@@ -21,12 +21,105 @@ export default {
       gridTemplateColumns: {
         '16': 'repeat(16, minmax(0, 1fr))',
       },
+      fontFamily: {
+        sans: [
+          'Inter Tight Variable',
+          'system-ui',
+          'Helvetica Neue',
+          'sans-serif',
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol',
+          'Noto Color Emoji',
+        ],
+        header: [
+          'Space Grotesk Variable',
+          'Inter Tight Variable',
+          'system-ui',
+          'Helvetica Neue',
+          'sans-serif',
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol',
+          'Noto Color Emoji',
+        ],
+        serif: [
+          'Lora Variable',
+          'serif',
+        ],
+      },
+      fontSize: {
+        xxs: [
+          '0.5625rem',
+          {
+            lineHeight: '0.625rem',
+          },
+        ],
+        xs: [
+          '0.75rem',
+          {
+            lineHeight: '0.875rem',
+          },
+        ],
+        sm: [
+          '0.8125rem',
+          {
+            lineHeight: '1.125rem',
+          },
+        ],
+        md: [
+          '0.875rem',
+          {
+            lineHeight: '1.25rem',
+          },
+        ],
+        base: [
+          '1rem',
+          {
+            lineHeight: '1.35rem',
+          },
+        ],
+        lg: [
+          '1.125rem',
+          {
+            lineHeight: '1.5625rem',
+          },
+        ],
+        xl: [
+          '1.25rem',
+          {
+            lineHeight: '1.625rem',
+          },
+        ],
+        '2xl': [
+          '1.5625rem',
+          {
+            lineHeight: '1.875rem',
+          },
+        ],
+        '3xl': [
+          '1.875rem',
+          {
+            lineHeight: '2rem',
+          },
+        ],
+      },
+      tracking: {
+        widest: '0.2em',
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+        xs: 'calc(var(--radius) - 8px)',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        paper: "hsl(var(--paper))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -42,6 +135,7 @@ export default {
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
+          background: "hsl(var(--muted-background))",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
@@ -55,29 +149,118 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        text: {
+          DEFAULT: 'hsl(var(--textMain))',
+          secondary: 'hsl(var(--textSecondary))',
+          muted: 'hsl(var(--textMuted))',
+          link: 'hsl(var(--textLink))',
+          dark: 'hsl(var(--textDark))',
+        },
         success: {
-          DEFAULT: "#A7F3D0", // Pastel green
-          foreground: "#065F46",
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+          toast: "hsl(var(--success-toast))",
+          toastForeground: "hsl(var(--success-toast-foreground))",
         },
-        // Zed.dev inspired schematic colors
-        cream: {
-          50: '#FFFEF5',
-          100: '#FEFCEB',
-          900: '#1a1a18',
+        error: {
+          DEFAULT: "hsl(var(--error))",
+          foreground: "hsl(var(--error-foreground))",
+          toast: "hsl(var(--error-toast))",
+          toastForeground: "hsl(var(--error-toast-foreground))",
         },
-        offgray: {
-          50: '#f9fafb',
-          100: '#f3f4f6',
-          200: '#e5e7eb',
-          300: '#d1d5db',
-          400: '#9ca3af',
-          800: '#1f2937',
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+          toast: "hsl(var(--warning-toast))",
+          toastForeground: "hsl(var(--warning-toast-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+          toast: "hsl(var(--info-toast))",
+          toastForeground: "hsl(var(--info-toast-foreground))",
+        },
+        chart: {
+          1: "hsl(var(--chart-1))",
+          2: "hsl(var(--chart-2))",
+          3: "hsl(var(--chart-3))",
+          4: "hsl(var(--chart-4))",
+          5: "hsl(var(--chart-5))",
+        },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
+        ds: {
+          background: {
+            100: 'hsl(var(--ds-background-100))',
+            200: 'hsl(var(--ds-background-200))',
+          },
+          white: {
+            DEFAULT: 'hsl(var(--ds-white))',
+          },
+          paper: {
+            DEFAULT: 'hsl(var(--ds-paper))',
+          },
+          midnight: {
+            DEFAULT: 'hsl(var(--ds-midnight))',
+          },
+          ink: {
+            DEFAULT: 'hsl(var(--ds-ink))',
+          },
+          steel: {
+            DEFAULT: 'hsl(var(--ds-steel))',
+          },
+          teal: {
+            DEFAULT: 'hsl(var(--ds-teal))',
+          },
+          azure: {
+            DEFAULT: 'hsl(var(--ds-azure))',
+          },
+          powder: {
+            DEFAULT: 'hsl(var(--ds-powder))',
+          },
+          eggshell: {
+            DEFAULT: 'hsl(var(--ds-eggshell))',
+          },
+          apricot: {
+            DEFAULT: 'hsl(var(--ds-apricot))',
+          },
+          terra: {
+            DEFAULT: 'hsl(var(--ds-terra))',
+          },
+          plum: {
+            DEFAULT: 'hsl(var(--ds-plum))',
+          },
+          lichen: {
+            DEFAULT: 'hsl(var(--ds-lichen))',
+          },
+          mono: {
+            50: 'hsl(var(--ds-mono-50))',
+            100: 'hsl(var(--ds-mono-100))',
+            200: 'hsl(var(--ds-mono-200))',
+            300: 'hsl(var(--ds-mono-300))',
+            400: 'hsl(var(--ds-mono-400))',
+            500: 'hsl(var(--ds-mono-500))',
+            600: 'hsl(var(--ds-mono-600))',
+            700: 'hsl(var(--ds-mono-700))',
+            800: 'hsl(var(--ds-mono-800))',
+            900: 'hsl(var(--ds-mono-900))',
+            950: 'hsl(var(--ds-mono-950))',
+          },
         },
       },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+      aspectRatio: {
+        'large-logo': 'var(--aspect-large-logo)',
+      },
+      boxShadow: {
+        menu: 'var(--shadow-menu)',
       },
       keyframes: {
         "accordion-down": {
@@ -119,7 +302,15 @@ export default {
         scroll: {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-100%)' }
-        }
+        },
+        'caret-blink': {
+          '0%,70%,100%': {
+            opacity: '1',
+          },
+          '20%,50%': {
+            opacity: '0',
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -131,7 +322,8 @@ export default {
         "float-3": "float-3 10s ease-in-out infinite",
         "float-4": "float-4 11s ease-in-out infinite",
         "float-5": "float-5 12s ease-in-out infinite",
-        scroll: 'scroll 30s linear infinite'
+        scroll: 'scroll 30s linear infinite',
+        'caret-blink': 'caret-blink 1.25s ease-out infinite',
       },
     },
   },

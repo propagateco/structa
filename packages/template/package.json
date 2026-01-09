@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource-variable/inter-tight": "^5.1.1",
+    "@fontsource-variable/lora": "^5.1.1",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^3.9.0",
     "@mendable/firecrawl-js": "^1.9.2",

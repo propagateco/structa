@@ -79,7 +79,7 @@ const Landing = () => {
                 >
                     <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
                         {/* Video Section */}
-                        <div className="relative -mt-24">
+                        <div className="relative -mt-36">
                             <div className="relative w-full rounded-xl overflow-hidden">
                                 <div className="aspect-[1.91/1]">
                                     <video
