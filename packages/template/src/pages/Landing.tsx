@@ -17,14 +17,13 @@ const Landing = () => {
             <Header />
 
             {/* Main content - aligned with grid overlay */}
-            <main className="flex-1 pt-14 mx-3 sm:mx-8 lg:mx-12 border-x border-blue-200/50 dark:border-blue-300/[0.08]">
+            <main className="flex-1 pt-14 mx-3 sm:mx-4 md:mx-8 border-x border-blue-200/50 dark:border-blue-300/[0.08]">
                 {/* Hero Section - Grid Background (hero variant) */}
                 <GridBackgroundSection
                     variant="hero"
                     showTopDivider={false}
                     showBottomDivider={true}
                     showDiamonds={false}
-                    padding="none"
                     showGridBackground={true}
                 >
                     <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">

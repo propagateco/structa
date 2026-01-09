@@ -10,7 +10,6 @@ interface GridBackgroundSectionProps {
     showBottomDivider?: boolean;
     showDiamonds?: boolean;
     showGridBackground?: boolean;
-    padding?: 'none' | 'sm' | 'md' | 'lg';
     variant?: 'hero' | 'content';
 }
 
@@ -21,7 +20,6 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
     showBottomDivider = true,
     showDiamonds = true,
     showGridBackground = true,
-    padding = 'md',
     variant = 'content',
 }) => {
     const patternId = useId();
@@ -30,13 +28,6 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
         hero: 'bg-gradient-to-t from-blue-100/20 dark:from-blue-900/5',
         content:
             'bg-gradient-to-b from-blue-100/10 via-amber-50/40 to-blue-500/[0.03] dark:from-blue-900/[0.03] dark:via-transparent dark:to-blue-800/[0.02]',
-    };
-
-    const paddingClasses = {
-        none: '',
-        sm: 'py-8',
-        md: 'py-12 sm:px-6 md:py-20',
-        lg: 'py-16 sm:px-8 md:py-24',
     };
 
     return (
