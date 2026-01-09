@@ -202,7 +202,7 @@ const Landing = () => {
                     </div>
                 </section>
 
-                {/* ... rest of landing page continues ... */}
+                {/* ... rest of the landing page continues ... */}
 
             </main>
         </div>

@@ -6,7 +6,9 @@
   ],
   "scripts": {},
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@tsconfig/node22": "^22",
+    "@types/node": "^25.0.3",
     "typescript": "^5"
   },
   "dependencies": {

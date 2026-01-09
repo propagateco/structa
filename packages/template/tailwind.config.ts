@@ -58,7 +58,21 @@ export default {
         success: {
           DEFAULT: "#A7F3D0", // Pastel green
           foreground: "#065F46",
-        }
+        },
+        // Zed.dev inspired schematic colors
+        cream: {
+          50: '#FFFEF5',
+          100: '#FEFCEB',
+          900: '#1a1a18',
+        },
+        offgray: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          800: '#1f2937',
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
