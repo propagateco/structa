@@ -8,7 +8,7 @@ interface TexturedSectionProps {
   showTopDivider?: boolean;
   showBottomDivider?: boolean;
   showDiamonds?: boolean;
-  /** Grain/noise intensity - matches zed.dev's opacity values */
+  padding?: 'none' | 'sm' | 'md' | 'lg';
   grainIntensity?: 'subtle' | 'light' | 'medium' | 'strong';
   bgColor?: string;
 }
@@ -23,15 +23,22 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
   showTopDivider = true,
   showBottomDivider = true,
   showDiamonds = true,
+  padding = 'md',
   grainIntensity = 'light',
   bgColor = 'bg-white dark:bg-gray-950',
 }) => {
-  // Match zed.dev's opacity values: opacity-[0.035] dark:opacity-[0.012]
   const grainOpacityClasses = {
     subtle: 'opacity-[0.012] dark:opacity-[0.008]',
     light: 'opacity-[0.035] dark:opacity-[0.012]',
     medium: 'opacity-[0.05] dark:opacity-[0.02]',
     strong: '!opacity-15 dark:!opacity-[0.03]',
+  };
+
+  const paddingClasses = {
+    none: '',
+    sm: 'px-4 py-8',
+    md: 'px-4 py-12 sm:px-6 md:py-20',
+    lg: 'px-6 py-16 sm:px-8 md:py-24',
   };
 
   return (
@@ -52,19 +59,20 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
       )}
 
       {/* Main Content Area */}
-      <div className={cn('relative px-4 py-12 sm:px-6 md:py-20', bgColor)}>
+      <div className={cn('relative', paddingClasses[padding], bgColor)}>
         {/* Noise Texture Overlay - matches zed.dev's pattern */}
-        <div
-          className={cn(
-            'pointer-events-none [z-index:-1] absolute inset-0',
-            'bg-[size:180px] bg-repeat',
-            grainOpacityClasses[grainIntensity]
-          )}
-          style={{
-            // Using inline SVG noise pattern similar to zed.dev's noise.png
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          }}
-        />
+        {padding !== 'none' && (
+          <div
+            className={cn(
+              'pointer-events-none [z-index:-1] absolute inset-0',
+              'bg-[size:180px] bg-repeat',
+              grainOpacityClasses[grainIntensity]
+            )}
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+            }}
+          />
+        )}
 
         {/* Content Container */}
         <div className="mx-auto max-w-[1400px] px-4 relative z-10">
