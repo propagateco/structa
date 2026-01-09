@@ -18,13 +18,10 @@ const Landing = () => {
 
     return (
         <div className="min-h-screen flex flex-col relative bg-cream-100/20 dark:bg-[hsl(218,13%,7.5%)]">
-            {/* Grid Overlay - Payload-style vertical lines */}
-            <GridOverlay />
-
             <Header />
 
-            {/* Main content - matches zed.dev's mx-3 md:mx-8 lg:mx-12 pattern */}
-            <main className="flex-1 pt-14 mx-3 md:mx-8 lg:mx-12 border-x border-blue-200/50 dark:border-blue-300/[0.08]">
+            {/* Main content - aligned with grid overlay */}
+            <main className="flex-1 pt-14 mx-3 sm:mx-8 lg:mx-12 border-x border-blue-200/50 dark:border-blue-300/[0.08]">
                 {/* Hero Section - Grid Background (hero variant) */}
                 <GridBackgroundSection
                     variant="hero"
@@ -35,7 +32,7 @@ const Landing = () => {
                     showGridBackground={true}
                     className="min-h-[80vh]"
                 >
-                    <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-12 lg:col-start-3 space-y-8 py-8">
+                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
                         {/* New Badge */}
                         <div className="flex justify-center">
                             <span className="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-800 px-3 py-1 text-sm text-muted-foreground">
@@ -131,12 +128,12 @@ const Landing = () => {
                     showTopDivider={false}
                     showBottomDivider={false}
                     showDiamonds={false}
-                    grainIntensity="light"
+                    grainIntensity="strong"
                     padding="none"
                     className=""
                 >
-                    <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-12 lg:col-start-3">
-                        <div className="rounded-2xl bg-white dark:bg-gray-900 p-12 shadow-[0_1px_3px_0_rgb(0,0,0,0.1)]">
+                    <div className="col-span-4 sm:col-span-6 lg:col-span-12">
+                        <div className="p-12">
                             {/* Header */}
                             <div className="space-y-4">
                                 <span className="text-base text-muted-foreground">
@@ -234,7 +231,7 @@ const Landing = () => {
                     showGridBackground={true}
                     className=""
                 >
-                    <div className="col-span-4 sm:col-span-6 sm:col-start-2 lg:col-span-12 lg:col-start-3 space-y-12">
+                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-12">
                         {/* Section Header */}
                         <div className="text-center space-y-4">
                             <h2 className="text-5xl font-medium tracking-tight">
