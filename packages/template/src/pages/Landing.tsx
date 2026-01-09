@@ -1,12 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import FloatingIcons from '@/components/ui/floating-icons';
-import FloatingNotifications from '@/components/ui/floating-notifications';
 import { Header } from '@/components/landing/Header';
-import CalendlyEmbed from '@/components/ui/CalendlyEmbed';
 import LogoShowcase from '@/components/ui/logo-showcase';
-import GridOverlay from '@/components/ui/grid-overlay';
 import {
     GridBackgroundSection,
     TexturedSection,
@@ -26,22 +22,12 @@ const Landing = () => {
                 <GridBackgroundSection
                     variant="hero"
                     showTopDivider={false}
-                    showBottomDivider={false}
+                    showBottomDivider={true}
                     showDiamonds={false}
                     padding="none"
                     showGridBackground={true}
-                    className="min-h-[80vh]"
                 >
                     <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
-                        {/* New Badge */}
-                        <div className="flex justify-center">
-                            <span className="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-800 px-3 py-1 text-sm text-muted-foreground">
-                                <span className="mr-2 h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
-                                <b>New</b>: customer acquisition systems from
-                                scratch
-                            </span>
-                        </div>
-
                         {/* Hero Title */}
                         <h1 className="text-center text-2xl font-medium tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
                             Tools for the modern renovator.
@@ -81,9 +67,20 @@ const Landing = () => {
                                 Get Started
                             </Button>
                         </div>
+                    </div>
+                </GridBackgroundSection>
 
+                <TexturedSection
+                    showTopDivider={false}
+                    showBottomDivider={false}
+                    showDiamonds={false}
+                    grainIntensity="strong"
+                    padding="none"
+                    className=""
+                >
+                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
                         {/* Video Section */}
-                        <div className="relative mt-24">
+                        <div className="relative -mt-24">
                             <div className="relative w-full rounded-xl overflow-hidden">
                                 <div className="aspect-[1.91/1]">
                                     <video
@@ -118,7 +115,7 @@ const Landing = () => {
                             />
                         </div>
                     </div>
-                </GridBackgroundSection>
+                </TexturedSection>
 
                 {/* Diagonal Slash Divider - matches zed.dev's #divider-slash */}
                 <DiagonalDivider />
