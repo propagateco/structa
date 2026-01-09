@@ -46,12 +46,12 @@ const Landing = () => {
                         </div>
 
                         {/* Hero Title */}
-                        <h1 className="text-center text-4xl font-medium tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+                        <h1 className="text-center text-2xl font-medium tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
                             Tools for the modern renovator.
                         </h1>
 
                         {/* Hero Description */}
-                        <p className="mx-auto max-w-2xl text-center text-lg text-muted-foreground font-light leading-relaxed">
+                        <p className="mx-auto max-w-2xl text-center text-muted-foreground font-light leading-relaxed">
                             Structa eliminates the guesswork from home
                             renovation with an AI-powered Clerk that brings
                             context, clarity, and confidence to every project.

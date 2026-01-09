@@ -1,6 +1,7 @@
 import React, { useId } from 'react';
 import { cn } from '@/lib/utils';
 import { DiamondCorner } from './DiamondCorner';
+import { Container } from './Container';
 
 interface GridBackgroundSectionProps {
     children: React.ReactNode;
@@ -33,9 +34,9 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
 
     const paddingClasses = {
         none: '',
-        sm: 'px-4 py-8',
-        md: 'px-4 py-12 sm:px-6 md:py-20',
-        lg: 'px-6 py-16 sm:px-8 md:py-24',
+        sm: 'py-8',
+        md: 'py-12 sm:px-6 md:py-20',
+        lg: 'py-16 sm:px-8 md:py-24',
     };
 
     return (
@@ -58,7 +59,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
             {/* Main content area with gradient background */}
             <div
                 className={cn(
-                    'relative px-4 py-12 sm:px-6 md:py-20',
+                    'relative py-12 md:py-20',
                     variantClasses[variant]
                 )}
             >
@@ -106,11 +107,11 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
                 )}
 
                 {/* Content Container - full width with centered content */}
-                <div className="mx-auto max-w-[1400px] relative z-10">
-                    <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-16 gap-0">
+                <Container className="relative z-10">
+                    <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-0">
                         {children}
                     </div>
-                </div>
+                </Container>
             </div>
 
             {/* Diamond corners at bottom */}
