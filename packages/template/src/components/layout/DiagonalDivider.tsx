@@ -22,9 +22,9 @@ export const DiagonalDivider: React.FC<DiagonalDividerProps> = ({
       className={cn(
         'relative h-4 w-full',
         // Top horizontal line (full viewport width)
-        'before:absolute before:top-0 before:-left-[100vw] before:[z-index:-1] before:h-px before:w-[200vw] before:bg-blue-200/50 dark:before:bg-blue-300/8',
+        'before:absolute before:top-0 before:-left-[100vw] before:z-10 before:h-px before:w-[200vw] before:bg-ds-powder/50 dark:before:bg-ds-powder/8',
         // Bottom horizontal line (full viewport width)
-        'after:absolute after:bottom-0 after:-left-[100vw] after:[z-index:-1] after:h-px after:w-[200vw] after:bg-blue-200/50 dark:after:bg-blue-300/8',
+        'after:absolute after:bottom-0 after:-left-[100vw] after:z-10 after:h-px after:w-[200vw] after:bg-ds-powder/50 dark:after:bg-ds-powder/8',
         className
       )}
     >
@@ -41,8 +41,8 @@ export const DiagonalDivider: React.FC<DiagonalDividerProps> = ({
       {/* Diagonal lines SVG pattern */}
       <svg
         className={cn(
-          'pointer-events-none absolute inset-0 [z-index:-1] size-full select-none',
-          'text-blue-300 dark:text-blue-400/10',
+          'pointer-events-none absolute inset-0 z-0 size-full select-none',
+          'text-ds-powder dark:text-ds-powder/10',
           'py-[1px] !opacity-30 dark:!opacity-60'
         )}
       >

@@ -24,8 +24,8 @@ export const DiamondCorner: React.FC<DiamondCornerProps> = ({
     return (
         <div
             className={cn(
-                'absolute z-10 size-2 rotate-45 rounded-[1px]',
-                'border border-blue-200 dark:border-blue-300/20',
+                'absolute z-30 size-2 rotate-45 rounded-[1px]',
+                'border border-ds-powder dark:border-ds-powder/20',
                 'bg-white dark:bg-black',
                 className
             )}

@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Type } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Header } from '@/components/landing/Header';
+import { Header as TypographyHeader } from '@/components/ui/typography';
 import LogoShowcase from '@/components/ui/logo-showcase';
 import {
     GridBackgroundSection,
@@ -13,11 +14,11 @@ const Landing = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen flex flex-col relative bg-cream-100/20 dark:bg-[hsl(218,13%,7.5%)]">
+        <div className="min-h-screen flex flex-col relative bg-ds-paper dark:bg-[hsl(218,13%,7.5%)]">
             <Header />
 
             {/* Main content - aligned with grid overlay */}
-            <main className="flex-1 pt-14 mx-3 sm:mx-4 md:mx-8 border-x border-blue-200/50 dark:border-blue-300/[0.08]">
+            <main className="flex-1 pt-14 mx-3 sm:mx-4 md:mx-8 border-x border-ds-powder/50 dark:border-ds-powder/[0.08]">
                 {/* Hero Section - Grid Background (hero variant) */}
                 <GridBackgroundSection
                     variant="hero"
@@ -28,9 +29,9 @@ const Landing = () => {
                 >
                     <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
                         {/* Hero Title */}
-                        <h1 className="text-center text-2xl font-medium tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
+                        <TypographyHeader size="h1" className="text-center">
                             Tools for the modern renovator.
-                        </h1>
+                        </TypographyHeader>
 
                         {/* Hero Description */}
                         <p className="mx-auto max-w-2xl text-center text-muted-foreground font-light leading-relaxed">
@@ -48,9 +49,9 @@ const Landing = () => {
                                         '_blank'
                                     )
                                 }
-                                className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 group"
+                                className="inline-flex h-11 items-center justify-center rounded-none bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 group"
                             >
-                                Book a Call
+                                Start for free
                                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Button>
                             <Button
@@ -61,9 +62,9 @@ const Landing = () => {
                                         '_blank'
                                     )
                                 }
-                                className="inline-flex h-11 items-center justify-center rounded-full border border-gray-200 dark:border-gray-800 px-8 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                                className="inline-flex h-11 items-center justify-center rounded-none border border-gray-200 dark:border-gray-800 px-8 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                             >
-                                Get Started
+                                Book a demo
                             </Button>
                         </div>
                     </div>
@@ -99,8 +100,9 @@ const Landing = () => {
 
                         {/* Logo Showcase Section */}
                         <div className="mt-16 space-y-6">
-                            <p className="text-center text-sm text-muted-foreground font-light">
-                                Trusted by founders & teams everywhere
+                            <p className="text-center text-lg text-muted-foreground">
+                                Built for renovators, trades and designers
+                                alike.
                             </p>
                             <LogoShowcase
                                 logos={[
@@ -136,9 +138,9 @@ const Landing = () => {
                                     From zero lines of code to your first
                                     customer
                                 </span>
-                                <h2 className="text-4xl font-medium tracking-tight">
+                                <TypographyHeader size="h2">
                                     A Full-Stack, modern MVP + actual revenue
-                                </h2>
+                                </TypographyHeader>
                                 <p className="text-xl text-muted-foreground max-w-3xl">
                                     Acme has built 20+ apps with React,
                                     Supabase, Vercel & Stripe, then won 1,000+
@@ -149,9 +151,9 @@ const Landing = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-6">
                                     {/* Stat 1 */}
                                     <div className="space-y-2">
-                                        <h3 className="text-4xl font-medium text-[#f97316]">
+                                        <TypographyHeader size="h3">
                                             500K+
-                                        </h3>
+                                        </TypographyHeader>
                                         <h4 className="font-medium">
                                             Lines of code
                                         </h4>
@@ -164,9 +166,9 @@ const Landing = () => {
 
                                     {/* Stat 2 */}
                                     <div className="space-y-2">
-                                        <h3 className="text-4xl font-medium text-[#f97316]">
+                                        <TypographyHeader size="h3">
                                             4M+
-                                        </h3>
+                                        </TypographyHeader>
                                         <h4 className="font-medium">
                                             Cold Emails
                                         </h4>
@@ -180,9 +182,9 @@ const Landing = () => {
 
                                     {/* Stat 3 */}
                                     <div className="space-y-2">
-                                        <h3 className="text-4xl font-medium text-[#f97316]">
+                                        <TypographyHeader size="h3">
                                             Infinite
-                                        </h3>
+                                        </TypographyHeader>
                                         <h4 className="font-medium">
                                             Revisions & Updates
                                         </h4>
@@ -196,9 +198,9 @@ const Landing = () => {
 
                                     {/* Stat 4 */}
                                     <div className="space-y-2">
-                                        <h3 className="text-4xl font-medium text-[#f97316]">
+                                        <TypographyHeader size="h3">
                                             100%
-                                        </h3>
+                                        </TypographyHeader>
                                         <h4 className="font-medium">
                                             Ownership of the code
                                         </h4>
@@ -217,20 +219,19 @@ const Landing = () => {
                 {/* Diagonal Slash Divider */}
                 <DiagonalDivider />
 
-                {/* Features Section - Grid Background (content variant) */}
-                <GridBackgroundSection
-                    variant="content"
+                {/* Features Section - Textured */}
+                <TexturedSection
                     showTopDivider={false}
                     showBottomDivider={false}
                     showDiamonds={false}
+                    grainIntensity="medium"
                     padding="none"
-                    showGridBackground={true}
                     className=""
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-12">
+                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-12 py-20">
                         {/* Section Header */}
                         <div className="text-center space-y-4">
-                            <h2 className="text-5xl font-medium tracking-tight">
+                            <TypographyHeader size="h2">
                                 An MVP agency responsible for code <br />
                                 <span className="font-light italic">
                                     and
@@ -238,7 +239,7 @@ const Landing = () => {
                                 <span className="text-gray-500">
                                     customer acquisition.
                                 </span>
-                            </h2>
+                            </TypographyHeader>
                             <p className="text-xl text-muted-foreground">
                                 From idea - to code - to launch - to customers.
                                 In that order.
@@ -257,9 +258,9 @@ const Landing = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-medium">
+                                    <TypographyHeader size="h3">
                                         Modern, hyper-reliable stack
-                                    </h3>
+                                    </TypographyHeader>
                                     <p className="text-muted-foreground">
                                         Acme builds insanely fast with the help
                                         of software powerhouses. No bugs, no
@@ -355,7 +356,7 @@ const Landing = () => {
                             </div>
                         </div>
                     </div>
-                </GridBackgroundSection>
+                </TexturedSection>
 
                 {/* Diagonal Slash Divider */}
                 <DiagonalDivider />

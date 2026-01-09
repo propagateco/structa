@@ -26,7 +26,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
   showDiamonds = true,
   padding = 'md',
   grainIntensity = 'light',
-  bgColor = 'bg-white dark:bg-gray-950',
+  bgColor = 'bg-ds-paper dark:bg-gray-950',
 }) => {
   const grainOpacityClasses = {
     subtle: 'opacity-[0.012] dark:opacity-[0.008]',
@@ -47,7 +47,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
       className={cn(
         'relative w-full',
         // Top horizontal line (full viewport width)
-        showTopDivider && 'before:absolute before:top-0 before:-left-[100vw] before:[z-index:-1] before:h-px before:w-[200vw] before:bg-blue-200/50 dark:before:bg-blue-300/[0.08]',
+        showTopDivider && 'before:absolute before:top-0 before:-left-[100vw] before:z-10 before:h-px before:w-[200vw] before:bg-ds-powder/50 dark:before:bg-ds-powder/[0.08]',
         className
       )}
     >
@@ -93,7 +93,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
 
       {/* Bottom horizontal line (full viewport width) */}
       {showBottomDivider && (
-        <div className="absolute bottom-0 -left-[100vw] [z-index:-1] h-px w-[200vw] bg-blue-200/50 dark:bg-blue-300/[0.08]" />
+        <div className="absolute bottom-0 -left-[100vw] z-10 h-px w-[200vw] bg-ds-powder/50 dark:bg-ds-powder/[0.08]" />
       )}
     </section>
   );

@@ -35,7 +35,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
             className={cn(
                 'relative w-full',
                 showTopDivider &&
-                    'before:absolute before:top-0 before:-left-[100vw] before:[z-index:-1] before:h-px before:w-[200vw] before:bg-ds-powder/50 dark:before:bg-ds-powder/[0.08]',
+                    'before:absolute before:top-0 before:-left-[100vw] before:z-10 before:h-px before:w-[200vw] before:bg-ds-powder/50 dark:before:bg-ds-powder/[0.08]',
                 className
             )}
         >
@@ -58,12 +58,14 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
                 {showGridBackground && (
                     <svg
                         className={cn(
-                            'pointer-events-none absolute inset-0 [z-index:-1] size-full',
-                            'fill-ds-powder/50 stroke-ds-powder/50',
+                            'pointer-events-none absolute inset-0 z-0 size-full',
+                            'text-ds-azure',
                             'opacity-[.30] dark:opacity-[.15]'
                         )}
                         aria-hidden="true"
                         style={{
+                            fill: 'currentColor',
+                            stroke: 'currentColor',
                             maskImage:
                                 variant === 'hero'
                                     ? 'linear-gradient(to top, black 40%, transparent 100%)'
@@ -98,7 +100,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
                 )}
 
                 {/* Content Container - full width with centered content */}
-                <Container className="relative z-10">
+                <Container className="relative z-20">
                     <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-0">
                         {children}
                     </div>
@@ -115,7 +117,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
 
             {/* Bottom horizontal line (full viewport width) */}
             {showBottomDivider && (
-                <div className="absolute bottom-0 -left-[100vw] [z-index:-1] h-px w-[200vw] bg-ds-powder/50 dark:bg-ds-powder/[0.08]" />
+                <div className="absolute bottom-0 -left-[100vw] z-10 h-px w-[200vw] bg-ds-powder/50 dark:bg-ds-powder/[0.08]" />
             )}
         </section>
     );
