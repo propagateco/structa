@@ -3,7 +3,7 @@ import { DiamondCorner, Container } from '@/components/layout';
 
 export const Header = () => {
     return (
-        <header className="fixed inset-x-0 top-0 h-14 w-full bg-paper/90 dark:bg-gray-950/95 backdrop-blur-3xl border-b border-ds-powder/50 dark:border-ds-primary z-50">
+        <header className="fixed inset-x-0 top-0 h-14 w-full bg-paper dark:bg-gray-950/95 backdrop-blur-3xl border-b border-ds-powder/50 dark:border-ds-primary z-50">
             {/* Vertical grid lines at column positions - full viewport width */}
             <div className="absolute top-0 bottom-0 left-3 sm:left-4 md:left-8 w-px bg-ds-powder/50 dark:bg-ds-primary pointer-events-none" />
             <div className="absolute top-0 bottom-0 right-3 sm:right-4 md:right-8 w-px bg-ds-powder/50 dark:bg-ds-primary pointer-events-none" />
