@@ -30,9 +30,9 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
 }) => {
   const grainOpacityClasses = {
     subtle: 'opacity-[0.012] dark:opacity-[0.008]',
-    light: 'opacity-[0.035] dark:opacity-[0.012]',
-    medium: 'opacity-[0.05] dark:opacity-[0.02]',
-    strong: '!opacity-15 dark:!opacity-[0.03]',
+    light: 'opacity-[0.035] dark:opacity-[0.012] [z-index:0] opacity-[.03]!',
+    medium: 'opacity-[0.05] dark:opacity-[0.02] [z-index:0] opacity-[.04]!',
+    strong: 'opacity-[0.08] dark:opacity-[0.04] [z-index:0] opacity-[.06]!',
   };
 
   const paddingClasses = {
@@ -64,7 +64,11 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
         {/* Noise Texture Overlay - matches zed.dev's pattern */}
         {padding !== 'none' && (
           <div
-            className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.035] dark:opacity-[0.012] [z-index:0] opacity-[.03]!"
+            className={cn(
+              'pointer-events-none [z-index:-1] absolute inset-0',
+              'bg-[size:180px] bg-repeat',
+              grainOpacityClasses[grainIntensity]
+            )}
             style={{
               backgroundImage: `url('/noise.png')`,
             }}
