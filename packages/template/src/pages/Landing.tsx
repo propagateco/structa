@@ -8,6 +8,7 @@ import {
     GridBackgroundSection,
     TexturedSection,
     DiagonalDivider,
+    Gutter,
 } from '@/components/layout';
 
 const Landing = () => {
@@ -17,8 +18,22 @@ const Landing = () => {
         <div className="min-h-screen flex flex-col relative bg-ds-paper dark:bg-[hsl(218,13%,7.5%)]">
             <Header />
 
+            {/* Side gutters with noise texture */}
+            <div className="fixed left-0 top-0 bottom-0 w-3 sm:w-4 md:w-8 z-0 pointer-events-none bg-ds-mono-100">
+                <div
+                    className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.05] dark:opacity-[0.04]"
+                    style={{ backgroundImage: `url('/noise.png')` }}
+                />
+            </div>
+            <div className="fixed right-0 top-0 bottom-0 w-3 sm:w-4 md:w-8 z-0 pointer-events-none bg-ds-mono-100">
+                <div
+                    className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.05] dark:opacity-[0.04]"
+                    style={{ backgroundImage: `url('/noise.png')` }}
+                />
+            </div>
+
             {/* Main content - aligned with grid overlay */}
-            <main className="flex-1 pt-14 mx-3 sm:mx-4 md:mx-8 border-x border-ds-powder/50 dark:border-ds-powder/[0.08]">
+            <main className="flex-1 pt-14 mx-3 sm:mx-4 md:mx-8 border-x border-ds-powder/50 dark:border-ds-powder/[0.08] relative z-10">
                 {/* Hero Section - Grid Background (hero variant) */}
                 <GridBackgroundSection
                     variant="hero"
@@ -34,7 +49,7 @@ const Landing = () => {
                         </TypographyHeader>
 
                         {/* Hero Description */}
-                        <p className="mx-auto max-w-2xl text-center text-muted-foreground font-light leading-relaxed">
+                        <p className="mx-auto max-w-2xl text-center text-muted-foreground">
                             Structa eliminates the guesswork from home
                             renovation with an AI-powered Clerk that brings
                             context, clarity, and confidence to every project.
@@ -73,10 +88,8 @@ const Landing = () => {
                 <TexturedSection
                     showTopDivider={false}
                     showBottomDivider={false}
-                    showDiamonds={false}
-                    grainIntensity="strong"
+                    showTopDiamonds={true}
                     padding="none"
-                    className=""
                 >
                     <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
                         {/* Video Section */}
@@ -100,7 +113,7 @@ const Landing = () => {
 
                         {/* Logo Showcase Section */}
                         <div className="mt-16 space-y-6">
-                            <p className="text-center text-lg text-muted-foreground">
+                            <p className="text-center text-muted-foreground">
                                 Built for renovators, trades and designers
                                 alike.
                             </p>
@@ -125,10 +138,7 @@ const Landing = () => {
                 <TexturedSection
                     showTopDivider={false}
                     showBottomDivider={false}
-                    showDiamonds={false}
-                    grainIntensity="strong"
                     padding="none"
-                    className=""
                 >
                     <div className="col-span-4 sm:col-span-6 lg:col-span-12">
                         <div className="p-12">
@@ -223,8 +233,6 @@ const Landing = () => {
                 <TexturedSection
                     showTopDivider={false}
                     showBottomDivider={false}
-                    showDiamonds={false}
-                    grainIntensity="medium"
                     padding="none"
                     className=""
                 >
@@ -236,9 +244,7 @@ const Landing = () => {
                                 <span className="font-light italic">
                                     and
                                 </span>{' '}
-                                <span className="text-gray-500">
-                                    customer acquisition.
-                                </span>
+                                customer acquisition.
                             </TypographyHeader>
                             <p className="text-xl text-muted-foreground">
                                 From idea - to code - to launch - to customers.
@@ -293,17 +299,17 @@ const Landing = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-medium">
+                                    <TypographyHeader size="h3">
                                         Start to finish, code-to-customer.
-                                    </h3>
+                                    </TypographyHeader>
                                     <p className="text-muted-foreground">
                                         We don't hand you the code & disappear.
                                         We code it, deploy it, & sell it. We
                                         source the leads, build the systems,
-                                        everything.
+                                        eveything.
                                     </p>
                                     <div
-                                        className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer group"
+                                        className="flex items-center text-gray-600 hover:text-gray-900 eursor-pointer group"
                                         onClick={() =>
                                             window.open(
                                                 'https://calendly.com/harrison-from-acme/30min',
@@ -329,9 +335,9 @@ const Landing = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-medium">
+                                    <TypographyHeader size="h3">
                                         Done-for-you marketing systems.
-                                    </h3>
+                                    </TypographyHeader>
                                     <p className="text-muted-foreground">
                                         Not just outbound. We'll build organic
                                         content funnels within popular
