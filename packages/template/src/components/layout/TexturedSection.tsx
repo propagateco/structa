@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { DiamondCorner } from './DiamondCorner';
 import { Container } from './Container';
+import { Grid } from './Grid';
 
 interface TexturedSectionProps {
     children: React.ReactNode;
@@ -69,9 +70,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
 
                 {/* Content Container */}
                 <Container className="relative z-10">
-                    <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-0">
-                        {children}
-                    </div>
+                    <Grid showGrid={true}>{children}</Grid>
                 </Container>
             </div>
 
