@@ -53,7 +53,8 @@ This file gives opencode agents repo-specific guidance. Scope: this root file ap
 - Install dependencies (root + workspaces):
   - `npm install`
 - Development (template app):
-  - `npm run -w packages/template dev`
+  - Check if dev server is already running before starting: `lsof -i :5173` (or whichever port)
+  - Only start if not already running: `npm run -w packages/template dev`
 - Build (template app):
   - `npm run -w packages/template build`
 - Lint (template app):

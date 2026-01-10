@@ -62,18 +62,16 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
       {/* Main Content Area */}
       <div className={cn('relative', paddingClasses[padding], bgColor)}>
         {/* Noise Texture Overlay - matches zed.dev's pattern */}
-        {padding !== 'none' && (
-          <div
-            className={cn(
-              'pointer-events-none [z-index:-1] absolute inset-0',
-              'bg-[size:180px] bg-repeat',
-              grainOpacityClasses[grainIntensity]
-            )}
-            style={{
-              backgroundImage: `url('/noise.png')`,
-            }}
-          />
-        )}
+        <div
+          className={cn(
+            'pointer-events-none [z-index:-1] absolute inset-0',
+            'bg-[size:180px] bg-repeat',
+            grainOpacityClasses[grainIntensity]
+          )}
+          style={{
+            backgroundImage: `url('/noise.png')`,
+          }}
+        />
 
         {/* Content Container */}
         <Container className="relative z-10">
