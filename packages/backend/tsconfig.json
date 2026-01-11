@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@structa/*": ["../../*"],
+      "@core/*": ["../core/src/*"]
+    }
+  },
+  "include": ["src/**/*", "sst-env.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}
