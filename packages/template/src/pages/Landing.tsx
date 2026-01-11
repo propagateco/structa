@@ -125,6 +125,9 @@ const Landing = () => {
                                     'MyJobQuote',
                                     'Yelp',
                                     'Checkatrade',
+                                    'Rated People',
+                                    'Houzz',
+                                    'Thumbtack',
                                 ]}
                                 className="mx-auto w-full"
                             />
