@@ -11,6 +11,7 @@ interface TexturedSectionProps {
     showBottomDivider?: boolean;
     showTopDiamonds?: boolean;
     showBottomDiamonds?: boolean;
+    showGrid?: boolean;
     padding?: 'none' | 'sm' | 'md' | 'lg';
     grainIntensity?: 'subtle' | 'light' | 'medium' | 'strong';
     bgColor?: string;
@@ -27,6 +28,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
     showBottomDivider = true,
     showTopDiamonds = false,
     showBottomDiamonds = false,
+    showGrid = false,
     padding = 'md',
     bgColor = 'bg-ds-paper dark:bg-gray-950',
 }) => {
@@ -70,7 +72,15 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
 
                 {/* Content Container */}
                 <Container className="relative z-10">
-                    <Grid showGrid={true} cols={4} smCols={4} mdCols={8} lgCols={8}>{children}</Grid>
+                    <Grid
+                        showGrid={showGrid}
+                        cols={4}
+                        smCols={4}
+                        mdCols={8}
+                        lgCols={8}
+                    >
+                        {children}
+                    </Grid>
                 </Container>
             </div>
 
