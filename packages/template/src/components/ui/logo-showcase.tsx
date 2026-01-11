@@ -21,28 +21,31 @@ const LogoShowcase = ({
     logos: rawLogos,
     className = '',
 }: LogoShowcaseProps) => {
-    const logos = normalizeLogos(rawLogos);
-    const NUM_SLOTS = logos.length;
+    const allLogos = normalizeLogos(rawLogos);
+    const NUM_VISIBLE_SLOTS = 6;
     const TRANSITION_DURATION = 3000;
 
-    const [currentLogos, setCurrentLogos] = useState<LogoItem[]>(logos);
+    const [currentLogos, setCurrentLogos] = useState<LogoItem[]>(
+        allLogos.slice(0, NUM_VISIBLE_SLOTS)
+    );
     const [fadingSlots, setFadingSlots] = useState<Set<number>>(new Set());
-    const nextIndexRef = useRef(NUM_SLOTS);
+    const nextIndexRef = useRef(NUM_VISIBLE_SLOTS);
     const timeoutRef = useRef<NodeJS.Timeout>();
 
     useEffect(() => {
-        setCurrentLogos(normalizeLogos(rawLogos));
-        nextIndexRef.current = normalizeLogos(rawLogos).length;
+        const normalized = normalizeLogos(rawLogos);
+        setCurrentLogos(normalized.slice(0, NUM_VISIBLE_SLOTS));
+        nextIndexRef.current = NUM_VISIBLE_SLOTS;
     }, [rawLogos]);
 
     useEffect(() => {
-        if (logos.length <= NUM_SLOTS) {
+        if (allLogos.length <= NUM_VISIBLE_SLOTS) {
             return;
         }
 
         const interval = setInterval(() => {
-            const slotToReplace = Math.floor(Math.random() * NUM_SLOTS);
-            const logoToShow = logos[nextIndexRef.current % logos.length];
+            const slotToReplace = Math.floor(Math.random() * NUM_VISIBLE_SLOTS);
+            const logoToShow = allLogos[nextIndexRef.current % allLogos.length];
 
             setFadingSlots(prev => new Set(prev).add(slotToReplace));
 
@@ -62,7 +65,7 @@ const LogoShowcase = ({
                 }, 50);
             }, 500);
 
-            nextIndexRef.current = (nextIndexRef.current + 1) % logos.length;
+            nextIndexRef.current = (nextIndexRef.current + 1) % allLogos.length;
         }, TRANSITION_DURATION);
 
         return () => {
@@ -71,36 +74,34 @@ const LogoShowcase = ({
                 clearTimeout(timeoutRef.current);
             }
         };
-    }, [logos, NUM_SLOTS]);
+    }, [allLogos]);
 
     return (
         <div className={cn('w-full', className)}>
             <div
                 className={cn(
-                    'grid w-full border-ds-powder/50 dark:border-ds-powder/[0.08]',
+                    'grid w-full',
                     'grid-cols-4 md:grid-cols-8'
                 )}
             >
                 {currentLogos.map((logo, index) => (
                     <div
-                        key={`${logo.name}-${index}`}
+                        key={`slot-${index}`}
                         className={cn(
-                            'aspect-square border border-b border-ds-powder/50 dark:border-ds-powder/[0.08]',
+                            'aspect-square',
                             'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative bg-white dark:bg-gray-950 overflow-hidden',
+                            'border border-ds-powder/50 dark:border-ds-powder/[0.08]',
                             'md:col-span-2 lg:col-span-1',
                             logo.colSpan === 2 && 'col-span-2',
-                            index === currentLogos.length - 1 && 'border-r',
                             index === 0 &&
                                 'col-start-2 md:col-start-3 lg:col-start-2',
-                            index === 2 && 'md:border-r lg:border-r-0',
                             index === 3 && 'md:col-start-1 lg:col-start-auto'
                         )}
                     >
                         <div className="flex items-center justify-center w-full h-full">
                             <span
-                                key={logo.name}
                                 className={cn(
-                                    'text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight text-muted-foreground/50 text-center',
+                                    'text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight text-muted-foreground/70 text-center',
                                     'transition-all duration-1000 ease-in-out'
                                 )}
                                 style={{
