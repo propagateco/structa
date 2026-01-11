@@ -83,17 +83,17 @@ const LogoShowcase = ({
                             'aspect-square',
                             'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative bg-white dark:bg-gray-950 overflow-hidden',
                             'border-r border-ds-powder/50 dark:border-ds-powder/[0.08]',
-                            'md:col-span-2 lg:col-span-1',
+                            'md:col-span-2 lg:col-span-1 border-t',
                             logo.colSpan === 2 && 'col-span-2',
                             index === 0 &&
                                 'col-start-2 md:col-start-3 lg:col-start-2',
                             index === 3 && 'md:col-start-1 lg:col-start-auto',
-                            index >= 3 && 'border-t',
+                            index >= 4 && 'border-t-0 lg:border-t',
                             index === 0 && 'border-l',
-                            index === 3 && 'border-l',
-                            index === 5 && 'border-r-0',
-                            index < 3 && 'border-b md:border-b lg:border-b-0',
-                            index >= 3 && 'border-b lg:border-b-0'
+                            index === 3 && 'border-l lg:border-l-0',
+                            index === 5 && 'border-r',
+                            index < 3 && 'border-b md:border-b',
+                            index >= 3 && 'border-b lg:border-b'
                         )}
                     >
                         <div className="flex items-center justify-center w-full h-full">
