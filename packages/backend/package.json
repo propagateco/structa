@@ -1,0 +1,28 @@
+{
+  "name": "@structa/backend",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "typecheck": "bash ../../scripts/typecheck-monorepo.sh",
+    "typecheck:local": "bash ../../scripts/typecheck-local.sh"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.779.0",
+    "@aws-sdk/client-sqs": "^3.883.0",
+    "@hono/zod-validator": "^0.7.6",
+    "@openauthjs/openauth": "^0.4.2",
+    "@structa/core": "*",
+    "@structa/notifications": "*",
+    "@react-email/components": "^1.0.1",
+    "better-auth": "^1.4.3",
+    "hono": "^4.8.10",
+    "postgres": "^3.4.5",
+    "sharp": "^0.34.4",
+    "sst": "3.17.25",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.137"
+  }
+}

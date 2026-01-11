@@ -1,0 +1,35 @@
+import React, { forwardRef } from "react";
+import {
+  ImageRestriction,
+  FixedCropper,
+  FixedCropperRef,
+  FixedCropperProps,
+} from "react-advanced-cropper";
+import { CropperWrapper } from "./cropper-wrapper";
+
+export type CropperProps = Omit<FixedCropperProps, "wrapperComponent">;
+export type CropperRef = FixedCropperRef;
+
+export const Cropper = forwardRef<CropperRef, CropperProps>(
+  ({ stencilProps, ...props }: CropperProps, ref) => {
+    return (
+      <FixedCropper
+        ref={ref}
+        stencilProps={{
+          handlers: false,
+          lines: false,
+          movable: false,
+          resizable: false,
+          ...stencilProps,
+        }}
+        imageRestriction={ImageRestriction.stencil}
+        wrapperComponent={CropperWrapper as any}
+        backgroundClassName="bg-white"
+        backgroundWrapperClassName="bg-white"
+        {...props}
+      />
+    );
+  },
+);
+
+Cropper.displayName = "Cropper";
