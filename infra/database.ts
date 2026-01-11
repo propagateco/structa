@@ -1,35 +1,35 @@
-import { IS_DEPLOYED_STAGE, BRANCH_NAME } from "./dns";
-import { secret } from "./secret";
+import { IS_DEPLOYED_STAGE, BRANCH_NAME } from './dns';
+import { secret } from './secret';
 
 // Create Neon provider with API key
-const neonProvider = new neon.Provider("NeonProvider", {
+const neonProvider = new neon.Provider('NeonProvider', {
     apiKey: secret.NeonApiKey.value,
 });
 
 const project =
-    $app.stage === "production"
+    $app.stage === 'production'
         ? new neon.Project(
-              "NeonProject",
+              'NeonProject',
               {
-                  name: "propagate",
+                  name: 'structa',
               },
               {
                   provider: neonProvider,
-              },
+              }
           )
         : neon.Project.get(
-              "NeonProject",
+              'NeonProject',
               secret.NeonProjectId.value,
               undefined,
               {
                   provider: neonProvider,
-              },
+              }
           );
 
 const branch =
-    $app.stage !== "production"
+    $app.stage !== 'production'
         ? new neon.Branch(
-              "NeonBranch",
+              'NeonBranch',
               {
                   name: BRANCH_NAME,
                   projectId: project.id,
@@ -37,60 +37,60 @@ const branch =
               },
               {
                   provider: neonProvider,
-              },
+              }
           )
-        : neon.Branch.get("NeonBranch", project.defaultBranchId, undefined, {
+        : neon.Branch.get('NeonBranch', project.defaultBranchId, undefined, {
               provider: neonProvider,
           });
 
 const endpoint =
-    $app.stage !== "production"
+    $app.stage !== 'production'
         ? new neon.Endpoint(
-              "NeonEndpoint",
+              'NeonEndpoint',
               {
                   projectId: project.id,
                   branchId: branch.id,
               },
               {
                   provider: neonProvider,
-              },
+              }
           )
         : neon.Endpoint.get(
-              "NeonEndpoint",
+              'NeonEndpoint',
               project.defaultEndpointId,
               undefined,
               {
                   provider: neonProvider,
-              },
+              }
           );
 
 const role = new neon.Role(
-    "NeonRole",
+    'NeonRole',
     {
-        name: "admin",
+        name: 'neondb-owner',
         projectId: project.id,
         branchId: branch.id,
     },
     {
         provider: neonProvider,
-    },
+    }
 );
 
 const db = new neon.Database(
-    "NeonDatabase",
+    'NeonDatabase',
     {
-        name: "structa-db",
+        name: 'neondb',
         projectId: project.id,
         branchId: branch.id,
         ownerName: role.name,
     },
     {
         provider: neonProvider,
-    },
+    }
 );
 
 // Create a Linkable resource to use in your app
-export const database = new sst.Linkable("Database", {
+export const database = new sst.Linkable('Database', {
     properties: {
         username: role.name,
         password: role.password,
