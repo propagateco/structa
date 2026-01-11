@@ -75,12 +75,7 @@ const LogoShowcase = ({
 
     return (
         <div className={cn('w-full', className)}>
-            <div
-                className={cn(
-                    'grid w-full',
-                    'grid-cols-4 md:grid-cols-8'
-                )}
-            >
+            <div className={cn('grid w-full', 'grid-cols-4 md:grid-cols-8')}>
                 {currentLogos.map((logo, index) => (
                     <div
                         key={`slot-${index}`}
@@ -90,7 +85,8 @@ const LogoShowcase = ({
                             'border-t border-b border-r border-ds-powder/50 dark:border-ds-powder/[0.08]',
                             'md:col-span-2 lg:col-span-1',
                             logo.colSpan === 2 && 'col-span-2',
-                            index === 0 && 'md:col-start-3 lg:col-start-2',
+                            index === 0 &&
+                                'col-start-2 md:col-start-3 lg:col-start-2',
                             index === 3 && 'md:col-start-1 lg:col-start-auto',
                             index === 0 && 'border-l',
                             index === 3 && 'md:border-l lg:border-l',
