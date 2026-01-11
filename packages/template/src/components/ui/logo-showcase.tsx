@@ -75,29 +75,24 @@ const LogoShowcase = ({
 
     return (
         <div className={cn('w-full', className)}>
-            <div
-                className={cn(
-                    'grid w-full',
-                    'grid-cols-4 md:grid-cols-8'
-                )}
-            >
-                {currentLogos.map((logo, index) => {
-                    const isFirst = index === 0;
-                    const isLast = index === currentLogos.length - 1;
-
-                    return (
+            <div className="border border-ds-powder/50 dark:border-ds-powder/[0.08]">
+                <div
+                    className={cn(
+                        'grid w-full',
+                        'grid-cols-4 md:grid-cols-8',
+                        'gap-px bg-ds-powder/50 dark:bg-ds-powder/[0.08] -mx-px -my-px'
+                    )}
+                >
+                    {currentLogos.map((logo, index) => (
                         <div
                             key={`slot-${index}`}
                             className={cn(
                                 'aspect-square',
                                 'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative bg-white dark:bg-gray-950 overflow-hidden',
-                                'border border-ds-powder/50 dark:border-ds-powder/[0.08]',
                                 'md:col-span-2 lg:col-span-1',
                                 logo.colSpan === 2 && 'col-span-2',
                                 index === 0 && 'md:col-start-3 lg:col-start-2',
-                                index === 3 && 'md:col-start-1 lg:col-start-auto',
-                                isFirst && 'md:border-l lg:border-l',
-                                isLast && 'md:border-r lg:border-r'
+                                index === 3 && 'md:col-start-1 lg:col-start-auto'
                             )}
                         >
                             <div className="flex items-center justify-center w-full h-full">
@@ -117,8 +112,8 @@ const LogoShowcase = ({
                                 </span>
                             </div>
                         </div>
-                    );
-                })}
+                    ))}
+                </div>
             </div>
         </div>
     );
