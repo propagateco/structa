@@ -77,7 +77,7 @@ const LogoShowcase = ({
         <div className={cn('w-full', className)}>
             <div
                 className={cn(
-                    'grid w-full border border-ds-powder/50 dark:border-ds-powder/[0.08]',
+                    'grid w-full',
                     'grid-cols-4 md:grid-cols-8'
                 )}
             >
@@ -93,9 +93,12 @@ const LogoShowcase = ({
                             index === 0 && 'md:col-start-3 lg:col-start-2',
                             index === 3 && 'md:col-start-1 lg:col-start-auto',
                             index === 0 && 'border-l',
-                            index === 3 && 'md:border-l',
+                            index === 3 && 'md:border-l lg:border-l',
                             index === 4 && 'border-l',
-                            index === 5 && 'border-r-0'
+                            index === 5 && 'border-r-0',
+                            index < 3 && 'border-b-0 md:border-b',
+                            index === 4 && 'border-b-0 md:border-b',
+                            index === 5 && 'border-b-0'
                         )}
                     >
                         <div className="flex items-center justify-center w-full h-full">
