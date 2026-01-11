@@ -1,16 +1,28 @@
 {
-  "name": "@monorepo-template/scripts",
+  "name": "@structa/scripts",
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "@monorepo-template/core": "*",
-    "sst": "*"
+    "@structa/core": "*",
+    "sst": "*",
+    "turndown": "^7.2.2"
   },
   "scripts": {
-    "shell": "sst shell tsx"
+    "shell": "sst shell ts-node",
+    "docs:snap": "ts-node src/snapshotAll.ts",
+    "docs:list": "ts-node src/listRegistry.ts",
+    "docs:clean": "node -e \"require('fs').rmSync('docs/vendor', { recursive: true, force: true }); require('fs').mkdirSync('docs/vendor', { recursive: true })\"",
+    "worktrees:create": "ts-node src/worktrees.ts create",
+    "worktrees:delete": "ts-node src/worktrees.ts delete",
+    "worktrees:list": "ts-node src/worktrees.ts list",
+    "issues:create": "ts-node src/issues.ts create",
+    "issues:complete": "ts-node src/issues.ts complete"
   },
   "devDependencies": {
     "@types/node": "^22",
-    "tsx": "^4"
+    "@types/turndown": "^5.0.6",
+    "ts-node": "^10.9.2",
+    "tsx": "^4",
+    "typescript": "^5.9.3"
   }
 }

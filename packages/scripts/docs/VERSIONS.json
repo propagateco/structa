@@ -1,0 +1,16 @@
+{
+  "snapshots": [
+    {
+      "lib": "tanstack-query",
+      "name": "overview",
+      "url": "https://tanstack.com/query/latest/docs/framework/react/overview",
+      "fetched_at": "2026-01-09T23:26:08.877Z"
+    },
+    {
+      "lib": "tanstack-query",
+      "name": "api",
+      "url": "https://tanstack.com/query/latest/docs/framework/react/reference/useQuery",
+      "fetched_at": "2026-01-09T23:26:09.203Z"
+    }
+  ]
+}

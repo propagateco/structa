@@ -1,0 +1,15 @@
+export const secret = {
+    BetterAuthSecret: new sst.Secret("BetterAuthSecret"),
+    NeonApiKey: new sst.Secret("NeonApiKey"),
+    NeonProjectId: new sst.Secret("NeonProjectId"),
+    GoogleClientId: new sst.Secret("GoogleOAuthClientId"),
+    GoogleClientSecret: new sst.Secret("GoogleOAuthClientSecret"),
+    StripeSecretKey: new sst.Secret("StripeSecretKey"),
+    StripePublishableKey: new sst.Secret("StripePublishableKey"),
+    StripeClientId: new sst.Secret("StripeClientId"),
+    StripeWebhookSecret: new sst.Secret("StripeWebhookSecret"),
+    EncryptionKey: new sst.Secret("EncryptionKey"),
+    ExpoToken: new sst.Secret("ExpoToken"),
+    ExpoProjectId: new sst.Secret("ExpoProjectId"),
+    ExpoOwner: new sst.Secret("ExpoOwner"),
+};

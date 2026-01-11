@@ -1,7 +1,12 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@structa/*": ["../../*"]
+    }
   },
+  "include": ["src/**/*", "sst-env.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }

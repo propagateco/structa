@@ -1,3 +1,6 @@
+# worktrees
+.worktrees/
+
 # dependencies
 node_modules
 
@@ -16,3 +19,11 @@ node_modules
 
 # misc
 .DS_Store
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+

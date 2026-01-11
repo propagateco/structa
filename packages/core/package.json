@@ -1,20 +1,54 @@
 {
-  "name": "@monorepo-template/core",
-  "type": "module",
-  "version": "0.0.0",
-  "scripts": {
-    "test": "sst shell vitest"
-  },
-  "exports": {
-    "./*": [
-      "./src/*/index.ts",
-      "./src/*.ts"
-    ]
-  },
-  "dependencies": {
-    "sst": "*"
-  },
-  "devDependencies": {
-    "vitest": "^2"
-  }
+    "name": "@structa/core",
+    "version": "0.0.0",
+    "private": true,
+    "license": "UNLICENSED",
+    "scripts": {
+        "test": "sst shell vitest",
+        "typecheck": "bash ../../scripts/typecheck-monorepo.sh",
+        "typecheck:local": "bash ../../scripts/typecheck-local.sh",
+        "auth-generate": "sst shell -- npx @better-auth/cli@latest generate --config ../app/src/lib/auth.tsx --output ./src/auth/auth.sql.ts",
+        "db": "sst shell drizzle-kit",
+        "db:dev": "sst shell --stage dev drizzle-kit",
+        "db:prod": "sst shell --stage production drizzle-kit"
+    },
+    "exports": {
+        "./*": [
+            "./src/*/index.ts",
+            "./src/*/*.ts",
+            "./src/*.ts"
+        ]
+    },
+    "dependencies": {
+        "@aws-sdk/client-cloudwatch-logs": "^3.787.0",
+        "@aws-sdk/client-rds-data": "^3.723.0",
+        "@aws-sdk/client-s3": "^3.787.0",
+        "@aws-sdk/client-sqs": "^3.787.0",
+        "@aws-sdk/s3-request-presigner": "^3.787.0",
+        "@expo/eas-build-job": "^1.0.193",
+        "@expo/eas-json": "^16.13.2",
+        "@expo/spawn-async": "^1.7.2",
+        "@neondatabase/serverless": "^1.0.0",
+        "@paralleldrive/cuid2": "^2.2.2",
+        "@types/culori": "^2.1.1",
+        "@types/jsonwebtoken": "^9.0.9",
+        "@vectopus/atlas-icons-react": "^0.0.10",
+        "axios": "^1.11.0",
+        "culori": "^4.0.1",
+        "drizzle-orm": "^0.41.0",
+        "drizzle-zod": "^0.6.1",
+        "jsonwebtoken": "^9.0.2",
+        "pg": "^8.14.1",
+        "sharp": "^0.34.1",
+        "sst": "3.17.25",
+        "ws": "^8.18.1"
+    },
+    "devDependencies": {
+        "@types/pg": "^8.11.11",
+        "@types/ws": "^8.18.1",
+        "drizzle-kit": "^0.30.6",
+        "postgres": "^3.4.5",
+        "tsx": "^4.19.3",
+        "vitest": "^2.0.3"
+    }
 }
