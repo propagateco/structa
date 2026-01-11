@@ -49,30 +49,27 @@ const LogoShowcase = ({
 
             setFadingSlots(prev => new Set(prev).add(slotToReplace));
 
-            timeoutRef.current = setTimeout(() => {
+            setTimeout(() => {
                 setCurrentLogos(prev => {
                     const newLogos = [...prev];
                     newLogos[slotToReplace] = logoToShow;
                     return newLogos;
                 });
+            }, 600);
 
-                setTimeout(() => {
-                    setFadingSlots(prev => {
-                        const newSet = new Set(prev);
-                        newSet.delete(slotToReplace);
-                        return newSet;
-                    });
-                }, 50);
-            }, 500);
+            setTimeout(() => {
+                setFadingSlots(prev => {
+                    const newSet = new Set(prev);
+                    newSet.delete(slotToReplace);
+                    return newSet;
+                });
+            }, 650);
 
             nextIndexRef.current = (nextIndexRef.current + 1) % allLogos.length;
         }, TRANSITION_DURATION);
 
         return () => {
             clearInterval(interval);
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
         };
     }, [allLogos]);
 
@@ -80,8 +77,9 @@ const LogoShowcase = ({
         <div className={cn('w-full', className)}>
             <div
                 className={cn(
-                    'grid w-full',
-                    'grid-cols-4 md:grid-cols-8'
+                    'grid w-full border border-ds-powder/50 dark:border-ds-powder/[0.08]',
+                    'grid-cols-4 md:grid-cols-8',
+                    'gap-px bg-ds-powder/50 dark:bg-ds-powder/[0.08]'
                 )}
             >
                 {currentLogos.map((logo, index) => (
@@ -90,7 +88,6 @@ const LogoShowcase = ({
                         className={cn(
                             'aspect-square',
                             'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative bg-white dark:bg-gray-950 overflow-hidden',
-                            'border border-ds-powder/50 dark:border-ds-powder/[0.08]',
                             'md:col-span-2 lg:col-span-1',
                             logo.colSpan === 2 && 'col-span-2',
                             index === 0 &&
