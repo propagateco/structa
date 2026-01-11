@@ -85,7 +85,7 @@ const LogoShowcase = ({
                     <div
                         key={`${logo.name}-${index}`}
                         className={cn(
-                            'aspect-square border border-ds-powder/50 dark:border-ds-powder/[0.08]',
+                            'aspect-square border border-b border-ds-powder/50 dark:border-ds-powder/[0.08]',
                             'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative bg-white dark:bg-gray-950 overflow-hidden',
                             'md:col-span-2 lg:col-span-1',
                             logo.colSpan === 2 && 'col-span-2',

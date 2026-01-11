@@ -40,7 +40,7 @@ const Landing = () => {
                     showTopDivider={false}
                     showBottomDivider={true}
                     showDiamonds={false}
-                    showGridBackground={false}
+                    showGridBackground={true}
                 >
                     <div className="col-span-4 sm:col-span-6 lg:col-span-8 space-y-8 py-8">
                         {/* Hero Title */}
@@ -89,7 +89,6 @@ const Landing = () => {
                     showTopDivider={false}
                     showBottomDivider={false}
                     showTopDiamonds={true}
-                    showGridBackground={false}
                     padding="none"
                 >
                     <div className="col-span-4 md:col-span-8 space-y-8 py-8">
