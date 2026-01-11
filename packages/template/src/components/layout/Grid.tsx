@@ -13,14 +13,68 @@ const GRID_COL_CLASSES: Record<GridColCount, string> = {
     12: 'grid-cols-12',
 };
 
-const GRID_LINE_CLASSES: Record<GridColCount, string> = {
-    1: '',
-    2: 'bg-[linear-gradient(to_right,theme(colors.ds.powder/50)_0%,transparent_0%,transparent_50%,theme(colors.ds.powder/50)_50%,theme(colors.ds.powder/50)_100%)] dark:bg-[linear-gradient(to_right,theme(colors.ds.powder/50/[0.08])_0%,transparent_0%,transparent_50%,theme(colors.ds.powder/50/[0.08])_50%,theme(colors.ds.powder/50/[0.08])_100%)]',
-    3: 'bg-[linear-gradient(to_right,theme(colors.ds.powder/50)_0%,transparent_0%,transparent_33.33%,theme(colors.ds.powder/50)_33.33%,theme(colors.ds.powder/50)_66.66%,transparent_66.66%,transparent_100%,theme(colors.ds.powder/50)_100%)] dark:bg-[linear-gradient(to_right,theme(colors.ds.powder/50/[0.08])_0%,transparent_0%,transparent_33.33%,theme(colors.ds.powder/50/[0.08])_33.33%,theme(colors.ds.powder/50/[0.08])_66.66%,transparent_66.66%,transparent_100%,theme(colors.ds.powder/50/[0.08])_100%)]',
-    4: 'bg-[linear-gradient(to_right,theme(colors.ds.powder/50)_0%,transparent_0%,transparent_25%,theme(colors.ds.powder/50)_25%,theme(colors.ds.powder/50)_50%,transparent_50%,transparent_75%,theme(colors.ds.powder/50)_75%,theme(colors.ds.powder/50)_100%)] dark:bg-[linear-gradient(to_right,theme(colors.ds.powder/50/[0.08])_0%,transparent_0%,transparent_25%,theme(colors.ds.powder/50/[0.08])_25%,theme(colors.ds.powder/50/[0.08])_50%,transparent_50%,transparent_75%,theme(colors.ds.powder/50/[0.08])_75%,theme(colors.ds.powder/50/[0.08])_100%)]',
-    6: 'bg-[linear-gradient(to_right,theme(colors.ds.powder/50)_0%,transparent_0%,transparent_16.66%,theme(colors.ds.powder/50)_16.66%,theme(colors.ds.powder/50)_33.33%,transparent_33.33%,transparent_50%,theme(colors.ds.powder/50)_50%,theme(colors.ds.powder/50)_66.66%,transparent_66.66%,transparent_83.33%,theme(colors.ds.powder/50)_83.33%,theme(colors.ds.powder/50)_100%)] dark:bg-[linear-gradient(to_right,theme(colors.ds.powder/50/[0.08])_0%,transparent_0%,transparent_16.66%,theme(colors.ds.powder/50/[0.08])_16.66%,theme(colors.ds.powder/50/[0.08])_33.33%,transparent_33.33%,transparent_50%,theme(colors.ds.powder/50/[0.08])_50%,theme(colors.ds.powder/50/[0.08])_66.66%,transparent_66.66%,transparent_83.33%,theme(colors.ds.powder/50/[0.08])_83.33%,theme(colors.ds.powder/50/[0.08])_100%)]',
-    8: 'bg-[linear-gradient(to_right,theme(colors.ds.powder/50)_0%,transparent_0%,transparent_12.5%,theme(colors.ds.powder/50)_12.5%,theme(colors.ds.powder/50)_25%,transparent_25%,transparent_37.5%,theme(colors.ds.powder/50)_37.5%,theme(colors.ds.powder/50)_50%,transparent_50%,transparent_62.5%,theme(colors.ds.powder/50)_62.5%,theme(colors.ds.powder/50)_75%,transparent_75%,transparent_87.5%,theme(colors.ds.powder/50)_87.5%,theme(colors.ds.powder/50)_100%)] dark:bg-[linear-gradient(to_right,theme(colors.ds.powder/50/[0.08])_0%,transparent_0%,transparent_12.5%,theme(colors.ds.powder/50/[0.08])_12.5%,theme(colors.ds.powder/50/[0.08])_25%,transparent_25%,transparent_37.5%,theme(colors.ds.powder/50/[0.08])_37.5%,theme(colors.ds.powder/50/[0.08])_50%,transparent_50%,transparent_62.5%,theme(colors.ds.powder/50/[0.08])_62.5%,theme(colors.ds.powder/50/[0.08])_75%,transparent_75%,transparent_87.5%,theme(colors.ds.powder/50/[0.08])_87.5%,theme(colors.ds.powder/50/[0.08])_100%)]',
-    12: 'bg-[linear-gradient(to_right,theme(colors.ds.powder/50)_0%,transparent_0%,transparent_8.33%,theme(colors.ds.powder/50)_8.33%,theme(colors.ds.powder/50)_16.66%,transparent_16.66%,transparent_25%,theme(colors.ds.powder/50)_25%,theme(colors.ds.powder/50)_33.33%,transparent_33.33%,transparent_41.66%,theme(colors.ds.powder/50)_41.66%,theme(colors.ds.powder/50)_50%,transparent_50%,transparent_58.33%,theme(colors.ds.powder/50)_58.33%,theme(colors.ds.powder/50)_66.66%,transparent_66.66%,transparent_75%,theme(colors.ds.powder/50)_75%,theme(colors.ds.powder/50)_83.33%,transparent_83.33%,transparent_91.66%,theme(colors.ds.powder/50)_91.66%,theme(colors.ds.powder/50)_100%)] dark:bg-[linear-gradient(to_right,theme(colors.ds.powder/50/[0.08])_0%,transparent_0%,transparent_8.33%,theme(colors.ds.powder/50/[0.08])_8.33%,theme(colors.ds.powder/50/[0.08])_16.66%,transparent_16.66%,transparent_25%,theme(colors.ds.powder/50/[0.08])_25%,theme(colors.ds.powder/50/[0.08])_33.33%,transparent_33.33%,transparent_41.66%,theme(colors.ds.powder/50/[0.08])_41.66%,theme(colors.ds.powder/50/[0.08])_50%,transparent_50%,transparent_58.33%,theme(colors.ds.powder/50/[0.08])_58.33%,theme(colors.ds.powder/50/[0.08])_66.66%,transparent_66.66%,transparent_75%,theme(colors.ds.powder/50/[0.08])_75%,theme(colors.ds.powder/50/[0.08])_83.33%,transparent_83.33%,transparent_91.66%,theme(colors.ds.powder/50/[0.08])_91.66%,theme(colors.ds.powder/50/[0.08])_100%)]',
+const SM_GRID_COL_CLASSES: Record<GridColCount, string> = {
+    1: 'sm:grid-cols-1',
+    2: 'sm:grid-cols-2',
+    3: 'sm:grid-cols-3',
+    4: 'sm:grid-cols-4',
+    6: 'sm:grid-cols-6',
+    8: 'sm:grid-cols-8',
+    12: 'sm:grid-cols-12',
+};
+
+const MD_GRID_COL_CLASSES: Record<GridColCount, string> = {
+    1: 'md:grid-cols-1',
+    2: 'md:grid-cols-2',
+    3: 'md:grid-cols-3',
+    4: 'md:grid-cols-4',
+    6: 'md:grid-cols-6',
+    8: 'md:grid-cols-8',
+    12: 'md:grid-cols-12',
+};
+
+const LG_GRID_COL_CLASSES: Record<GridColCount, string> = {
+    1: 'lg:grid-cols-1',
+    2: 'lg:grid-cols-2',
+    3: 'lg:grid-cols-3',
+    4: 'lg:grid-cols-4',
+    6: 'lg:grid-cols-6',
+    8: 'lg:grid-cols-8',
+    12: 'lg:grid-cols-12',
+};
+
+const XL_GRID_COL_CLASSES: Record<GridColCount, string> = {
+    1: 'xl:grid-cols-1',
+    2: 'xl:grid-cols-2',
+    3: 'xl:grid-cols-3',
+    4: 'xl:grid-cols-4',
+    6: 'xl:grid-cols-6',
+    8: 'xl:grid-cols-8',
+    12: 'xl:grid-cols-12',
+};
+
+const generateGridLineGradient = (cols: GridColCount, opacity: number): string => {
+    if (cols === 1) return 'none';
+    
+    const interval = 100 / cols;
+    const stops: string[] = [];
+    const color = `hsl(var(--ds-powder) / ${opacity})`;
+    
+    for (let i = 0; i <= cols; i++) {
+        const position = i * interval;
+        if (i === 0) {
+            stops.push(`${color} ${position}%`);
+            stops.push(`transparent ${position}%`);
+        } else if (i === cols) {
+            stops.push(`transparent ${position}%`);
+            stops.push(`${color} ${position}%`);
+        } else {
+            stops.push(`transparent ${position}%`);
+            stops.push(`${color} ${position}%`);
+        }
+    }
+    
+    return `linear-gradient(to right, ${stops.join(', ')})`;
 };
 
 interface GridColumnConfig {
@@ -69,13 +123,17 @@ export const Grid: React.FC<GridProps> = ({
     const gridClasses = cn(
         'grid gap-0 relative',
         GRID_COL_CLASSES[cols],
-        `sm:${GRID_COL_CLASSES[smCols]}`,
-        mdCols && `md:${GRID_COL_CLASSES[mdCols]}`,
-        `lg:${GRID_COL_CLASSES[lgCols]}`,
-        xlCols && `xl:${GRID_COL_CLASSES[xlCols]}`,
-        showGrid && GRID_LINE_CLASSES[getMaxColumnCount({ cols, smCols, mdCols, lgCols, xlCols })],
+        SM_GRID_COL_CLASSES[smCols],
+        mdCols && MD_GRID_COL_CLASSES[mdCols],
+        LG_GRID_COL_CLASSES[lgCols],
+        xlCols && XL_GRID_COL_CLASSES[xlCols],
         className
     );
+
+    const maxCols = getMaxColumnCount({ cols, smCols, mdCols, lgCols, xlCols });
+    const gridLineStyle: React.CSSProperties = showGrid
+        ? { backgroundImage: generateGridLineGradient(maxCols, 0.5) }
+        : {};
 
     const fadeOverlayClasses = cn(
         'absolute left-0 right-0 pointer-events-none z-10 h-1/2',
@@ -83,7 +141,7 @@ export const Grid: React.FC<GridProps> = ({
     );
 
     return (
-        <div className={gridClasses}>
+        <div className={gridClasses} style={gridLineStyle}>
             {children}
 
             {fadeTop && (
