@@ -53,44 +53,29 @@ const XL_GRID_COL_CLASSES: Record<GridColCount, string> = {
     12: 'xl:grid-cols-12',
 };
 
-const generateGridLineGradient = (cols: GridColCount, opacity: number): string => {
-    if (cols === 1) return 'none';
+const generateGridLineGradient = (cols: number): string => {
+    if (cols <= 1) return 'none';
     
-    const interval = 100 / cols;
+    const color = 'hsl(var(--ds-powder) / 0.5)';
     const stops: string[] = [];
-    const color = `hsl(var(--ds-powder) / ${opacity})`;
     
-    for (let i = 0; i <= cols; i++) {
-        const position = i * interval;
-        if (i === 0) {
-            stops.push(`${color} ${position}%`);
-            stops.push(`transparent ${position}%`);
-        } else if (i === cols) {
-            stops.push(`transparent ${position}%`);
-            stops.push(`${color} ${position}%`);
-        } else {
-            stops.push(`transparent ${position}%`);
-            stops.push(`${color} ${position}%`);
-        }
+    stops.push(`${color} 0px`);
+    stops.push(`${color} 1px`);
+    stops.push(`transparent 1px`);
+    
+    for (let i = 1; i < cols; i++) {
+        const pos = (i / cols) * 100;
+        stops.push(`transparent calc(${pos}% - 0.5px)`);
+        stops.push(`${color} calc(${pos}% - 0.5px)`);
+        stops.push(`${color} calc(${pos}% + 0.5px)`);
+        stops.push(`transparent calc(${pos}% + 0.5px)`);
     }
     
+    stops.push(`transparent calc(100% - 1px)`);
+    stops.push(`${color} calc(100% - 1px)`);
+    stops.push(`${color} 100%`);
+    
     return `linear-gradient(to right, ${stops.join(', ')})`;
-};
-
-interface GridColumnConfig {
-    cols?: GridColCount;
-    smCols?: GridColCount;
-    mdCols?: GridColCount;
-    lgCols?: GridColCount;
-    xlCols?: GridColCount;
-}
-
-const getMaxColumnCount = (config: GridColumnConfig): GridColCount => {
-    if (config.xlCols) return config.xlCols;
-    if (config.lgCols) return config.lgCols;
-    if (config.mdCols) return config.mdCols;
-    if (config.smCols) return config.smCols;
-    return config.cols || 4;
 };
 
 export interface GridProps {
@@ -117,9 +102,11 @@ export const Grid: React.FC<GridProps> = ({
     cols = 4,
     smCols = 6,
     mdCols,
-    lgCols = 12,
+    lgCols = 8,
     xlCols,
 }) => {
+    const gridId = React.useId();
+    
     const gridClasses = cn(
         'grid gap-0 relative',
         GRID_COL_CLASSES[cols],
@@ -130,31 +117,65 @@ export const Grid: React.FC<GridProps> = ({
         className
     );
 
-    const maxCols = getMaxColumnCount({ cols, smCols, mdCols, lgCols, xlCols });
-    const gridLineStyle: React.CSSProperties = showGrid
-        ? { backgroundImage: generateGridLineGradient(maxCols, 0.5) }
-        : {};
-
     const fadeOverlayClasses = cn(
         'absolute left-0 right-0 pointer-events-none z-10 h-1/2',
         fadeColor
     );
 
+    const gridLineStyles = showGrid
+        ? `
+          [data-grid-id="${gridId}"] {
+            background-image: ${generateGridLineGradient(cols)};
+          }
+          @media (min-width: 640px) {
+            [data-grid-id="${gridId}"] {
+              background-image: ${generateGridLineGradient(smCols)};
+            }
+          }
+          ${
+              mdCols
+                  ? `@media (min-width: 768px) {
+              [data-grid-id="${gridId}"] {
+                background-image: ${generateGridLineGradient(mdCols)};
+              }
+            }`
+                  : ''
+          }
+          @media (min-width: 1024px) {
+            [data-grid-id="${gridId}"] {
+              background-image: ${generateGridLineGradient(lgCols)};
+            }
+          }
+          ${
+              xlCols
+                  ? `@media (min-width: 1280px) {
+              [data-grid-id="${gridId}"] {
+                background-image: ${generateGridLineGradient(xlCols)};
+              }
+            }`
+                  : ''
+          }
+        `
+        : '';
+
     return (
-        <div className={gridClasses} style={gridLineStyle}>
-            {children}
+        <>
+            {showGrid && <style dangerouslySetInnerHTML={{ __html: gridLineStyles }} />}
+            <div className={gridClasses} data-grid-id={showGrid ? gridId : undefined}>
+                {children}
 
-            {fadeTop && (
-                <div className={cn(fadeOverlayClasses, 'top-0')}>
-                    <div className="h-full w-full bg-gradient-to-t from-current to-transparent" />
-                </div>
-            )}
+                {fadeTop && (
+                    <div className={cn(fadeOverlayClasses, 'top-0')}>
+                        <div className="h-full w-full bg-gradient-to-t from-current to-transparent" />
+                    </div>
+                )}
 
-            {fadeBottom && (
-                <div className={cn(fadeOverlayClasses, 'bottom-0')}>
-                    <div className="h-full w-full bg-gradient-to-b from-current to-transparent" />
-                </div>
-            )}
-        </div>
+                {fadeBottom && (
+                    <div className={cn(fadeOverlayClasses, 'bottom-0')}>
+                        <div className="h-full w-full bg-gradient-to-b from-current to-transparent" />
+                    </div>
+                )}
+            </div>
+        </>
     );
 };

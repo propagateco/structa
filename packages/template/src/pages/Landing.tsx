@@ -42,7 +42,7 @@ const Landing = () => {
                     showDiamonds={false}
                     showGridBackground={true}
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
+                    <div className="col-span-4 sm:col-span-6 lg:col-span-8 space-y-8 py-8">
                         {/* Hero Title */}
                         <TypographyHeader size="h1" className="text-center">
                             Tools for the modern renovator.
@@ -91,7 +91,7 @@ const Landing = () => {
                     showTopDiamonds={true}
                     padding="none"
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
+                    <div className="col-span-4 md:col-span-8 space-y-8 py-8">
                         {/* Video Section */}
                         <div className="relative -mt-36">
                             <div className="relative w-full rounded-xl overflow-hidden">
@@ -119,11 +119,12 @@ const Landing = () => {
                             </p>
                             <LogoShowcase
                                 logos={[
-                                    'Response AI',
-                                    'Saral Influencers',
-                                    'GreatLab',
-                                    'Quolum',
-                                    'DataFlow Pro',
+                                    'TrustATrader',
+                                    'MyBuilder',
+                                    'Bark',
+                                    'MyJobQuote',
+                                    'Yelp',
+                                    'Checkatrade',
                                 ]}
                                 className="mx-auto w-full"
                             />
@@ -140,7 +141,7 @@ const Landing = () => {
                     showBottomDivider={false}
                     padding="none"
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-12">
+                    <div className="col-span-4 md:col-span-8">
                         <div className="p-12">
                             {/* Header */}
                             <div className="space-y-4">
@@ -236,7 +237,7 @@ const Landing = () => {
                     padding="none"
                     className=""
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-12 py-20">
+                    <div className="col-span-4 md:col-span-8 space-y-12 py-20">
                         {/* Section Header */}
                         <div className="text-center space-y-4">
                             <TypographyHeader size="h2">

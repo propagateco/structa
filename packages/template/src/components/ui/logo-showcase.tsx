@@ -1,63 +1,64 @@
 import { useState, useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
+
+interface LogoItem {
+    name: string;
+    colSpan?: 1 | 2;
+}
 
 interface LogoShowcaseProps {
-    logos: string[];
+    logos: (string | LogoItem)[];
     className?: string;
 }
 
-const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
-    const NUM_SLOTS = 5; // Number of visible logo slots (5 logos to fit flexbox layout)
-    const TRANSITION_DURATION = 3000; // Time each logo is visible (ms)
-
-    // Initialize with first N logos
-    const [currentLogos, setCurrentLogos] = useState<string[]>(
-        logos.slice(0, NUM_SLOTS)
+const normalizeLogos = (logos: (string | LogoItem)[]): LogoItem[] => {
+    return logos.map((logo) =>
+        typeof logo === 'string' ? { name: logo, colSpan: 1 } : logo
     );
+};
+
+const LogoShowcase = ({ logos: rawLogos, className = '' }: LogoShowcaseProps) => {
+    const logos = normalizeLogos(rawLogos);
+    const NUM_SLOTS = logos.length;
+    const TRANSITION_DURATION = 3000;
+
+    const [currentLogos, setCurrentLogos] = useState<LogoItem[]>(logos);
     const [fadingSlots, setFadingSlots] = useState<Set<number>>(new Set());
     const nextIndexRef = useRef(NUM_SLOTS);
     const timeoutRef = useRef<NodeJS.Timeout>();
 
-    // Reinitialize when logos prop changes
     useEffect(() => {
-        setCurrentLogos(logos.slice(0, NUM_SLOTS));
-        nextIndexRef.current = NUM_SLOTS;
-    }, [logos, NUM_SLOTS]);
+        setCurrentLogos(normalizeLogos(rawLogos));
+        nextIndexRef.current = normalizeLogos(rawLogos).length;
+    }, [rawLogos]);
 
     useEffect(() => {
-        if (logos.length < NUM_SLOTS) {
-            // If we have fewer logos than slots, just show them all
+        if (logos.length <= NUM_SLOTS) {
             return;
         }
 
         const interval = setInterval(() => {
-            // Pick a random slot to replace
             const slotToReplace = Math.floor(Math.random() * NUM_SLOTS);
-
-            // Get the next logo (cycling through the array)
             const logoToShow = logos[nextIndexRef.current % logos.length];
 
-            // Start fade out
-            setFadingSlots(prev => new Set(prev).add(slotToReplace));
+            setFadingSlots((prev) => new Set(prev).add(slotToReplace));
 
-            // After fade out completes, swap logo and fade in
             timeoutRef.current = setTimeout(() => {
-                setCurrentLogos(prev => {
+                setCurrentLogos((prev) => {
                     const newLogos = [...prev];
                     newLogos[slotToReplace] = logoToShow;
                     return newLogos;
                 });
 
-                // Remove from fading set to trigger fade in
                 setTimeout(() => {
-                    setFadingSlots(prev => {
+                    setFadingSlots((prev) => {
                         const newSet = new Set(prev);
                         newSet.delete(slotToReplace);
                         return newSet;
                     });
                 }, 50);
-            }, 500); // Half of transition duration for smooth effect
+            }, 500);
 
-            // Move to next logo
             nextIndexRef.current = (nextIndexRef.current + 1) % logos.length;
         }, TRANSITION_DURATION);
 
@@ -70,17 +71,34 @@ const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
     }, [logos, NUM_SLOTS]);
 
     return (
-        <div className={`${className}`}>
-            <div className="flex w-full border-l border-t border-ds-powder/50">
+        <div className={cn('w-full', className)}>
+            <div
+                className={cn(
+                    'grid w-full border-t border-ds-powder/50 dark:border-ds-powder/[0.08]',
+                    'grid-cols-2 sm:grid-cols-4 md:grid-cols-8 lg:grid-cols-6'
+                )}
+            >
+                <div className="hidden md:block md:col-span-1 lg:hidden" />
                 {currentLogos.map((logo, index) => (
                     <div
-                        key={`${logo}-${index}`}
-                        className="flex-1 aspect-square border-r border-b border-ds-powder/50 flex items-center justify-center p-8 relative bg-white overflow-hidden"
+                        key={`${logo.name}-${index}`}
+                        className={cn(
+                            'aspect-[2/1] sm:aspect-square border-l border-b border-ds-powder/50 dark:border-ds-powder/[0.08]',
+                            'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative bg-white dark:bg-gray-950 overflow-hidden',
+                            'md:col-span-2 lg:col-span-1',
+                            logo.colSpan === 2 && 'col-span-2',
+                            index === currentLogos.length - 1 && 'border-r',
+                            index === 2 && 'md:border-r lg:border-r-0',
+                            index === 3 && 'md:col-start-2 lg:col-start-auto'
+                        )}
                     >
                         <div className="flex items-center justify-center w-full h-full">
                             <span
-                                key={logo}
-                                className="text-2xl font-semibold tracking-tight text-muted-foreground/50 text-center transition-all duration-1000 ease-in-out"
+                                key={logo.name}
+                                className={cn(
+                                    'text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight text-muted-foreground/50 text-center',
+                                    'transition-all duration-1000 ease-in-out'
+                                )}
                                 style={{
                                     opacity: fadingSlots.has(index) ? 0 : 1,
                                     filter: fadingSlots.has(index)
@@ -88,7 +106,7 @@ const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
                                         : 'blur(0px)',
                                 }}
                             >
-                                {logo}
+                                {logo.name}
                             </span>
                         </div>
                     </div>
