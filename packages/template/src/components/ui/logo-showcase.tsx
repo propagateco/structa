@@ -111,11 +111,13 @@ const LogoShowcase = ({
                             index === 0 &&
                                 'col-start-2 md:col-start-3 lg:col-start-2 border-l',
                             index === 3 && 'md:col-start-1 lg:col-start-auto',
-                            index >= 4 && 'border-t-0 lg:border-t',
-                            index === 3 && 'border-l lg:border-l-0',
+                            index === 4 &&
+                                'md:col-start-3 lg:col-start-auto border-l',
+                            index >= 4 && 'border-t  lg:border-t',
+                            index === 3 && 'border-l lg:border-l-0 border-r-0',
                             index === 5 && 'border-r',
-                            index < 3 && 'border-b md:border-b',
-                            index >= 3 && 'border-b lg:border-b'
+                            index < 2 && 'border-b-0 lg:border-b',
+                            index >= 2 && 'border-b lg:border-b'
                         )}
                     >
                         {index === 0 && (
