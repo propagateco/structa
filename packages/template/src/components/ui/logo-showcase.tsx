@@ -33,9 +33,10 @@ const LogoShowcase = ({
         allLogos.slice(0, NUM_VISIBLE_SLOTS)
     );
     const [fadingSlots, setFadingSlots] = useState<Set<number>>(new Set());
-    const [showingPlaceholder, setShowingPlaceholder] = useState<Set<number>>(new Set());
+    const [showingPlaceholder, setShowingPlaceholder] = useState<Set<number>>(
+        new Set()
+    );
     const nextIndexRef = useRef(NUM_VISIBLE_SLOTS);
-    const timeoutRef = useRef<NodeJS.Timeout>();
 
     useEffect(() => {
         const normalized = normalizeLogos(rawLogos);
@@ -75,13 +76,16 @@ const LogoShowcase = ({
             }, FADE_OUT_DURATION + PLACEHOLDER_DURATION);
 
             // Stage 4: Fade in the new logo
-            setTimeout(() => {
-                setFadingSlots(prev => {
-                    const newSet = new Set(prev);
-                    newSet.delete(slotToReplace);
-                    return newSet;
-                });
-            }, FADE_OUT_DURATION + PLACEHOLDER_DURATION + FADE_IN_DURATION);
+            setTimeout(
+                () => {
+                    setFadingSlots(prev => {
+                        const newSet = new Set(prev);
+                        newSet.delete(slotToReplace);
+                        return newSet;
+                    });
+                },
+                FADE_OUT_DURATION + PLACEHOLDER_DURATION + FADE_IN_DURATION
+            );
 
             nextIndexRef.current = (nextIndexRef.current + 1) % allLogos.length;
         }, TRANSITION_DURATION);
@@ -105,10 +109,9 @@ const LogoShowcase = ({
                             'md:col-span-2 lg:col-span-1 border-t',
                             logo.colSpan === 2 && 'col-span-2',
                             index === 0 &&
-                                'col-start-2 md:col-start-3 lg:col-start-2',
+                                'col-start-2 md:col-start-3 lg:col-start-2 border-l',
                             index === 3 && 'md:col-start-1 lg:col-start-auto',
                             index >= 4 && 'border-t-0 lg:border-t',
-                            index === 0 && 'border-l',
                             index === 3 && 'border-l lg:border-l-0',
                             index === 5 && 'border-r',
                             index < 3 && 'border-b md:border-b',
@@ -117,7 +120,7 @@ const LogoShowcase = ({
                     >
                         {index === 0 && (
                             <svg
-                                className="absolute text-ds-powder pointer-events-none"
+                                className="absolute text-ds-azure pointer-events-none"
                                 style={{ top: '-10.5px', left: '-10px' }}
                                 width="20"
                                 height="21"
@@ -131,7 +134,7 @@ const LogoShowcase = ({
                         )}
                         {index === 5 && (
                             <svg
-                                className="absolute text-ds-powder pointer-events-none"
+                                className="absolute text-ds-azure pointer-events-none"
                                 style={{ bottom: '-10.5px', right: '-10px' }}
                                 width="20"
                                 height="21"
@@ -144,7 +147,9 @@ const LogoShowcase = ({
                             </svg>
                         )}
                         <div className="flex items-center justify-center w-full h-full">
-                            <DiagonalPattern show={showingPlaceholder.has(index)} />
+                            <DiagonalPattern
+                                show={showingPlaceholder.has(index)}
+                            />
                             <span
                                 className={cn(
                                     'text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight text-muted-foreground/70 text-center',

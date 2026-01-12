@@ -42,21 +42,21 @@ const Landing = () => {
                     showDiamonds={false}
                     showGridBackground={true}
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-8 space-y-8 py-8">
+                    <div className="col-span-4 sm:col-span-6 lg:col-span-8 space-y-6 py-8">
                         {/* Hero Title */}
-                        <TypographyHeader size="h1" className="text-center">
+                        <h1 className="font-header font-medium tracking-tight text-4xl lg:text-5xl text-center">
                             Tools for the modern renovator.
-                        </TypographyHeader>
+                        </h1>
 
                         {/* Hero Description */}
-                        <p className="mx-auto max-w-2xl text-center text-muted-foreground">
-                            Structa eliminates the guesswork from home
-                            renovation with an AI-powered Clerk that brings
-                            context, clarity, and confidence to every project.
+                        <p className="text-lg mx-auto max-w-2xl text-center text-muted-foreground">
+                            Eliminate the guesswork from home renovation with an
+                            AI-powered Clerk that brings context, clarity, and
+                            confidence to every project.
                         </p>
 
                         {/* CTA Buttons */}
-                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+                        <div className="flex flex-row items-center justify-center gap-4 pt-2 md:pt-3">
                             <Button
                                 onClick={() =>
                                     window.open(
@@ -112,11 +112,12 @@ const Landing = () => {
                         </div>
 
                         {/* Logo Showcase Section */}
-                        <div className="mt-16 space-y-6">
-                            <p className="text-center text-muted-foreground">
-                                Built for renovators, trades and designers
-                                alike.
-                            </p>
+                        <div className="mt-20 space-y-6">
+                            <h3 className="pt-6 text-lg text-left lg:text-center text-muted-foreground">
+                                Structa searches trusted platforms to find
+                                specialists matched to your property type and
+                                project.
+                            </h3>
                             <LogoShowcase
                                 logos={[
                                     'TrustATrader',
@@ -148,18 +149,14 @@ const Landing = () => {
                         <div className="p-12">
                             {/* Header */}
                             <div className="space-y-4">
-                                <span className="text-base text-muted-foreground">
-                                    From zero lines of code to your first
-                                    customer
-                                </span>
-                                <TypographyHeader size="h2">
+                                <h2 className="font-header font-medium tracking-tight text-3xl lg:text-4xl text-text">
                                     A Full-Stack, modern MVP + actual revenue
-                                </TypographyHeader>
-                                <p className="text-xl text-muted-foreground max-w-3xl">
+                                </h2>
+                                <h3 className="text-muted-foreground text-lg max-w-3xl">
                                     Acme has built 20+ apps with React,
                                     Supabase, Vercel & Stripe, then won 1,000+
                                     customers for those apps.
-                                </p>
+                                </h3>
 
                                 {/* Stats Grid */}
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-6">
