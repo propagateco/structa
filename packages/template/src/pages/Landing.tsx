@@ -15,7 +15,7 @@ const Landing = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen flex flex-col relative bg-ds-paper dark:bg-[hsl(218,13%,7.5%)]">
+        <div className="text-text min-h-screen flex flex-col relative bg-ds-paper dark:bg-[hsl(218,13%,7.5%)]">
             <Header />
 
             {/* Side gutters with noise texture */}
@@ -44,7 +44,7 @@ const Landing = () => {
                 >
                     <div className="col-span-4 sm:col-span-6 lg:col-span-8 space-y-6 py-8">
                         {/* Hero Title */}
-                        <h1 className="font-header font-medium tracking-tight text-4xl md:text-5xl lg:text-6xl text-center">
+                        <h1 className="text-text font-header font-medium tracking-tight text-4xl lg:text-5xl text-center">
                             Tools for the modern renovator.
                         </h1>
 
@@ -113,10 +113,10 @@ const Landing = () => {
                         </div>
 
                         {/* Logo Showcase Section */}
-                        <div className="py-16">
+                        <div className="py-16 md:py-24">
                             <div className="w-full grid grid-cols-4 lg:grid-cols-8">
                                 <div className="space-y-4 py-8 col-span-4 lg:col-start-2 lg:col-span-6">
-                                    <h2 className="text-left lg:text-left font-header font-medium tracking-tight text-3xl lg:text-4xl text-text">
+                                    <h2 className="text-left lg:text-left font-header font-medium tracking-tight text-2xl lg:text-3xl text-text">
                                         Loved by renovators, designers, and
                                         trades
                                     </h2>
@@ -160,20 +160,21 @@ const Landing = () => {
                         <div className="py-16">
                             {/* Header */}
                             <div className="space-y-4">
-                                <h2 className="font-header font-medium tracking-tight text-3xl lg:text-4xl text-text">
-                                    A Full-Stack, modern MVP + actual revenue
+                                <h2 className="font-header font-medium tracking-tight text-2xl lg:text-3xl text-text">
+                                    Your AI renovation partner
                                 </h2>
                                 <h3 className="text-text-secondary text-lg max-w-3xl">
-                                    Acme has built 20+ apps with React,
-                                    Supabase, Vercel & Stripe, then won 1,000+
-                                    customers for those apps.
+                                    Never feel lost again. Ask questions about
+                                    your specific property, get instant answers
+                                    from your surveys and documents, and catch
+                                    expensive problems before they happen.
                                 </h3>
 
                                 {/* Stats Grid */}
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-6">
                                     {/* Stat 1 */}
                                     <div className="space-y-2">
-                                        <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
+                                        <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
                                             500K+
                                         </h3>
                                         <h4 className="font-medium font-header tracking-tight">
@@ -188,7 +189,7 @@ const Landing = () => {
 
                                     {/* Stat 2 */}
                                     <div className="space-y-2">
-                                        <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
+                                        <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
                                             4M+
                                         </h3>
                                         <h4 className="font-medium font-header tracking-tight">
@@ -204,7 +205,7 @@ const Landing = () => {
 
                                     {/* Stat 3 */}
                                     <div className="space-y-2">
-                                        <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
+                                        <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
                                             Infinite
                                         </h3>
                                         <h4 className="font-medium font-header tracking-tight">
@@ -220,7 +221,7 @@ const Landing = () => {
 
                                     {/* Stat 4 */}
                                     <div className="space-y-2">
-                                        <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
+                                        <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
                                             100%
                                         </h3>
                                         <h4 className="font-medium font-header tracking-tight">
@@ -250,15 +251,14 @@ const Landing = () => {
                     <div className="col-span-4 md:col-span-8 space-y-12 py-20">
                         {/* Section Header */}
                         <div className="text-center space-y-4">
-                            <h2 className="font-header font-medium tracking-tight text-3xl lg:text-4xl text-text">
-                                An MVP agency responsible for code <br />
-                                <span className="font-light italic">
-                                    and
-                                </span>{' '}
-                                customer acquisition.
+                            <h2 className="font-header font-medium tracking-tight text-2xl lg:text-3xl text-text">
+                                Intelligent digital workspace
                             </h2>
-                            <h3 className="text-muted-foreground text-lg max-w-3xl">
-                                From idea to code to launch and customers.
+                            <h3 className="text-text-secondary text-center mx-auto text-lg max-w-3xl">
+                                Upload property listings, planning documents,
+                                architect drawings, and surveys—the AI
+                                transforms static PDFs into a ready-to-use
+                                workspace.
                             </h3>
                         </div>
 
@@ -274,13 +274,13 @@ const Landing = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
-                                        Modern, hyper-reliable stack
+                                    <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                        PDF to floor plans in seconds
                                     </h3>
                                     <p className="text-muted-foreground">
-                                        Acme builds insanely fast with the help
-                                        of software powerhouses. No bugs, no
-                                        fluff.
+                                        Upload your property listing documents
+                                        and have scaled floor plans ready for
+                                        editing your dream layout.
                                     </p>
                                     <div
                                         className="flex items-center text-text hover:text-text-link cursor-pointer group"
@@ -292,7 +292,7 @@ const Landing = () => {
                                         }
                                     >
                                         <span className="text-sm font-medium">
-                                            Let's talk ideas
+                                            Start with Layout
                                         </span>
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                     </div>
@@ -309,13 +309,13 @@ const Landing = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
-                                        Start to finish, code-to-customer.
+                                    <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                        Track your finacial runway
                                     </h3>
                                     <p className="text-muted-foreground">
-                                        We don't hand you the code & disappear.
-                                        We code, deploy, & sell it. We source
-                                        the leads, build the systems, eveything.
+                                        See your remaining budget in real-time
+                                        and forecast what's left to spend. Catch
+                                        cost overruns before they spiral.
                                     </p>
                                     <div
                                         className="flex items-center text-text hover:text-text-link eursor-pointer group"
@@ -327,7 +327,7 @@ const Landing = () => {
                                         }
                                     >
                                         <span className="text-sm font-medium">
-                                            Get started
+                                            Start with Tracker
                                         </span>
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                     </div>
@@ -344,14 +344,13 @@ const Landing = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
-                                        Done-for-you systems.
+                                    <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                        Get quotes from matched specialists
                                     </h3>
                                     <p className="text-muted-foreground">
-                                        Not just outbound. We'll build organic
-                                        content funnels within popular
-                                        communities to get your first customers,
-                                        too.
+                                        Using your project brief, AI gathers
+                                        quotes from people who understand your
+                                        requirements and timelines.
                                     </p>
                                     <div
                                         className="flex items-center text-text hover:text-text-link cursor-pointer group"
@@ -363,7 +362,7 @@ const Landing = () => {
                                         }
                                     >
                                         <span className="text-sm font-medium">
-                                            Build your MVP
+                                            Start with Workspace
                                         </span>
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                     </div>
