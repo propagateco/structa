@@ -1,47 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-
-const DiagonalPlaceholder = ({ show }: { show: boolean }) => {
-    const patternId = Math.random().toString(36).substring(2, 9);
-
-    return (
-        <div
-            className={cn(
-                'absolute inset-0 transition-all duration-1500 ease-out pointer-events-none',
-                show ? 'opacity-100 blur-0' : 'opacity-0 blur-4'
-            )}
-        >
-            <svg
-                className="size-full text-ds-powder/50"
-                style={{ opacity: '0.30' }}
-            >
-                <defs>
-                    <pattern
-                        id={patternId}
-                        width="4"
-                        height="4"
-                        patternUnits="userSpaceOnUse"
-                        patternTransform="rotate(45)"
-                    >
-                        <line
-                            x1="0"
-                            y1="0"
-                            x2="0"
-                            y2="4"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                        />
-                    </pattern>
-                </defs>
-                <rect
-                    width="100%"
-                    height="100%"
-                    fill={`url(#${patternId})`}
-                />
-            </svg>
-        </div>
-    );
-};
+import { DiagonalPattern } from './DiagonalPattern';
 
 interface LogoItem {
     name: string;
@@ -96,10 +55,10 @@ const LogoShowcase = ({
             // Stage 1: Start fading out the current logo
             setFadingSlots(prev => new Set(prev).add(slotToReplace));
 
-            // Stage 2: After fade out completes, show diagonal placeholder
+            // Stage 2: Start showing placeholder shortly after logo fade begins (small buffer)
             setTimeout(() => {
                 setShowingPlaceholder(prev => new Set(prev).add(slotToReplace));
-            }, FADE_OUT_DURATION);
+            }, 200);
 
             // Stage 3: After placeholder is shown, fade it out and swap in new logo
             setTimeout(() => {
@@ -140,7 +99,8 @@ const LogoShowcase = ({
                         key={`slot-${index}`}
                         className={cn(
                             'aspect-square',
-                            'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative dark:bg-gray-950 overflow-hidden',
+                            'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative dark:bg-gray-950',
+                            index !== 0 && index !== 5 && 'overflow-hidden',
                             'border-r border-ds-powder/50 dark:border-ds-powder/[0.08]',
                             'md:col-span-2 lg:col-span-1 border-t',
                             logo.colSpan === 2 && 'col-span-2',
@@ -155,8 +115,36 @@ const LogoShowcase = ({
                             index >= 3 && 'border-b lg:border-b'
                         )}
                     >
+                        {index === 0 && (
+                            <svg
+                                className="absolute text-ds-powder pointer-events-none"
+                                style={{ top: '-10.5px', left: '-10px' }}
+                                width="20"
+                                height="21"
+                                viewBox="0 0 20 21"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path d="M10 0.332031V20.332" />
+                                <path d="M0 10.332L20 10.332" />
+                            </svg>
+                        )}
+                        {index === 5 && (
+                            <svg
+                                className="absolute text-ds-powder pointer-events-none"
+                                style={{ bottom: '-10.5px', right: '-10px' }}
+                                width="20"
+                                height="21"
+                                viewBox="0 0 20 21"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path d="M10 0.332031V20.332" />
+                                <path d="M0 10.332L20 10.332" />
+                            </svg>
+                        )}
                         <div className="flex items-center justify-center w-full h-full">
-                            <DiagonalPlaceholder show={showingPlaceholder.has(index)} />
+                            <DiagonalPattern show={showingPlaceholder.has(index)} />
                             <span
                                 className={cn(
                                     'text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight text-muted-foreground/70 text-center',
