@@ -5,27 +5,6 @@
 
 declare module "sst" {
   export interface Resource {
-    "Domain": {
-      "api": string
-      "platform": string
-      "type": "sst.sst.Linkable"
-    }
-    "NODE_TLS_REJECT_UNAUTHORIZED": {
-      "type": "sst.sst.Secret"
-      "value": string
-    }
-    "OptimisedStorage": {
-      "name": string
-      "type": "sst.aws.Bucket"
-    }
-    "Stage": {
-      "cookiePrefix": string
-      "type": "sst.sst.Linkable"
-    }
-    "Storage": {
-      "name": string
-      "type": "sst.aws.Bucket"
-    }
   }
 }
 /// <reference path="sst-env.d.ts" />
