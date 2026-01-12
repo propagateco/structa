@@ -74,10 +74,10 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
                 <Container className="relative z-10">
                     <Grid
                         showGrid={showGrid}
-                        cols={4}
-                        smCols={4}
-                        mdCols={8}
-                        lgCols={8}
+                        cols={2}
+                        smCols={2}
+                        mdCols={2}
+                        lgCols={4}
                     >
                         {children}
                     </Grid>

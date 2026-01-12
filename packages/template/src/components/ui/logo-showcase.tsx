@@ -104,7 +104,6 @@ const LogoShowcase = ({
                         className={cn(
                             'aspect-square',
                             'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative dark:bg-gray-950',
-                            index !== 0 && index !== 5 && 'overflow-hidden',
                             'border-r border-ds-powder/50 dark:border-ds-powder/[0.08]',
                             'md:col-span-2 lg:col-span-1 border-t',
                             logo.colSpan === 2 && 'col-span-2',
@@ -113,17 +112,17 @@ const LogoShowcase = ({
                             index === 3 && 'md:col-start-1 lg:col-start-auto',
                             index === 4 &&
                                 'md:col-start-3 lg:col-start-auto border-l',
-                            index >= 4 && 'border-t  lg:border-t',
+                            index >= 4 && 'border-t lg:border-t',
                             index === 3 && 'border-l lg:border-l-0 border-r-0',
                             index === 5 && 'border-r',
-                            index < 2 && 'border-b-0 lg:border-b',
-                            index >= 2 && 'border-b lg:border-b'
+                            index < 3 && 'border-b-0 lg:border-b',
+                            index >= 3 && 'border-b lg:border-b'
                         )}
                     >
                         {index === 0 && (
                             <svg
-                                className="absolute text-ds-azure pointer-events-none"
-                                style={{ top: '-10.5px', left: '-10px' }}
+                                className="lg:hidden absolute text-ds-azure pointer-events-none z-20"
+                                style={{ top: '-11px', left: '-10.5px' }}
                                 width="20"
                                 height="21"
                                 viewBox="0 0 20 21"
@@ -136,8 +135,36 @@ const LogoShowcase = ({
                         )}
                         {index === 5 && (
                             <svg
-                                className="absolute text-ds-azure pointer-events-none"
-                                style={{ bottom: '-10.5px', right: '-10px' }}
+                                className="lg:hidden absolute text-ds-azure pointer-events-none z-20"
+                                style={{ bottom: '-11px', right: '-10.5px' }}
+                                width="20"
+                                height="21"
+                                viewBox="0 0 20 21"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path d="M10 0.332031V20.332" />
+                                <path d="M0 10.332L20 10.332" />
+                            </svg>
+                        )}
+                        {index === 1 && (
+                            <svg
+                                className="hidden lg:block absolute text-ds-azure pointer-events-none z-20"
+                                style={{ top: '-11px', left: '-10.5px' }}
+                                width="20"
+                                height="21"
+                                viewBox="0 0 20 21"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path d="M10 0.332031V20.332" />
+                                <path d="M0 10.332L20 10.332" />
+                            </svg>
+                        )}
+                        {index === 4 && (
+                            <svg
+                                className="hidden lg:block absolute text-ds-azure pointer-events-none z-20"
+                                style={{ bottom: '-11px', right: '-10.5px' }}
                                 width="20"
                                 height="21"
                                 viewBox="0 0 20 21"
@@ -169,6 +196,10 @@ const LogoShowcase = ({
                         </div>
                     </div>
                 ))}
+                <div
+                    className="lg:hidden md:col-span-2 col-span-1 border-t border-ds-powder/50 dark:border-ds-powder/[0.08]"
+                    aria-hidden="true"
+                />
             </div>
         </div>
     );
