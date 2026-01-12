@@ -1,86 +1,189 @@
 import { useState, useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
+import { DiagonalPattern } from './DiagonalPattern';
+
+interface LogoItem {
+    name: string;
+    colSpan?: 1 | 2;
+}
 
 interface LogoShowcaseProps {
-    logos: string[];
+    logos: (string | LogoItem)[];
     className?: string;
 }
 
-const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
-    const NUM_SLOTS = 5; // Number of visible logo slots (5 logos to fit flexbox layout)
-    const TRANSITION_DURATION = 3000; // Time each logo is visible (ms)
+const normalizeLogos = (logos: (string | LogoItem)[]): LogoItem[] => {
+    return logos.map(logo =>
+        typeof logo === 'string' ? { name: logo, colSpan: 1 } : logo
+    );
+};
 
-    // Initialize with first N logos
-    const [currentLogos, setCurrentLogos] = useState<string[]>(
-        logos.slice(0, NUM_SLOTS)
+const LogoShowcase = ({
+    logos: rawLogos,
+    className = '',
+}: LogoShowcaseProps) => {
+    const allLogos = normalizeLogos(rawLogos);
+    const NUM_VISIBLE_SLOTS = 6;
+    const TRANSITION_DURATION = 3000;
+    const FADE_OUT_DURATION = 1500;
+    const PLACEHOLDER_DURATION = 1000;
+    const FADE_IN_DURATION = 1500;
+
+    const [currentLogos, setCurrentLogos] = useState<LogoItem[]>(
+        allLogos.slice(0, NUM_VISIBLE_SLOTS)
     );
     const [fadingSlots, setFadingSlots] = useState<Set<number>>(new Set());
-    const nextIndexRef = useRef(NUM_SLOTS);
-    const timeoutRef = useRef<NodeJS.Timeout>();
-
-    // Reinitialize when logos prop changes
-    useEffect(() => {
-        setCurrentLogos(logos.slice(0, NUM_SLOTS));
-        nextIndexRef.current = NUM_SLOTS;
-    }, [logos, NUM_SLOTS]);
+    const [showingPlaceholder, setShowingPlaceholder] = useState<Set<number>>(
+        new Set()
+    );
+    const nextIndexRef = useRef(NUM_VISIBLE_SLOTS);
 
     useEffect(() => {
-        if (logos.length < NUM_SLOTS) {
-            // If we have fewer logos than slots, just show them all
+        const normalized = normalizeLogos(rawLogos);
+        setCurrentLogos(normalized.slice(0, NUM_VISIBLE_SLOTS));
+        nextIndexRef.current = NUM_VISIBLE_SLOTS;
+    }, [rawLogos]);
+
+    useEffect(() => {
+        if (allLogos.length <= NUM_VISIBLE_SLOTS) {
             return;
         }
 
         const interval = setInterval(() => {
-            // Pick a random slot to replace
-            const slotToReplace = Math.floor(Math.random() * NUM_SLOTS);
+            const slotToReplace = Math.floor(Math.random() * NUM_VISIBLE_SLOTS);
+            const logoToShow = allLogos[nextIndexRef.current % allLogos.length];
 
-            // Get the next logo (cycling through the array)
-            const logoToShow = logos[nextIndexRef.current % logos.length];
-
-            // Start fade out
+            // Stage 1: Start fading out the current logo
             setFadingSlots(prev => new Set(prev).add(slotToReplace));
 
-            // After fade out completes, swap logo and fade in
-            timeoutRef.current = setTimeout(() => {
+            // Stage 2: Start showing placeholder shortly after logo fade begins (small buffer)
+            setTimeout(() => {
+                setShowingPlaceholder(prev => new Set(prev).add(slotToReplace));
+            }, 200);
+
+            // Stage 3: After placeholder is shown, fade it out and swap in new logo
+            setTimeout(() => {
+                setShowingPlaceholder(prev => {
+                    const newSet = new Set(prev);
+                    newSet.delete(slotToReplace);
+                    return newSet;
+                });
                 setCurrentLogos(prev => {
                     const newLogos = [...prev];
                     newLogos[slotToReplace] = logoToShow;
                     return newLogos;
                 });
+            }, FADE_OUT_DURATION + PLACEHOLDER_DURATION);
 
-                // Remove from fading set to trigger fade in
-                setTimeout(() => {
+            // Stage 4: Fade in the new logo
+            setTimeout(
+                () => {
                     setFadingSlots(prev => {
                         const newSet = new Set(prev);
                         newSet.delete(slotToReplace);
                         return newSet;
                     });
-                }, 50);
-            }, 500); // Half of transition duration for smooth effect
+                },
+                FADE_OUT_DURATION + PLACEHOLDER_DURATION + FADE_IN_DURATION
+            );
 
-            // Move to next logo
-            nextIndexRef.current = (nextIndexRef.current + 1) % logos.length;
+            nextIndexRef.current = (nextIndexRef.current + 1) % allLogos.length;
         }, TRANSITION_DURATION);
 
         return () => {
             clearInterval(interval);
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
         };
-    }, [logos, NUM_SLOTS]);
+    }, [allLogos]);
 
     return (
-        <div className={`${className}`}>
-            <div className="flex w-full border-l border-t border-ds-powder/50">
+        <div className={cn('w-full', className)}>
+            <div className={cn('grid w-full', 'grid-cols-4 md:grid-cols-8')}>
                 {currentLogos.map((logo, index) => (
                     <div
-                        key={`${logo}-${index}`}
-                        className="flex-1 aspect-square border-r border-b border-ds-powder/50 flex items-center justify-center p-8 relative bg-white overflow-hidden"
+                        key={`slot-${index}`}
+                        className={cn(
+                            'aspect-square',
+                            'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative dark:bg-gray-950',
+                            'border-r border-ds-powder/50 dark:border-ds-powder/[0.08]',
+                            'md:col-span-2 lg:col-span-1 border-t',
+                            logo.colSpan === 2 && 'col-span-2',
+                            index === 0 &&
+                                'col-start-2 md:col-start-3 lg:col-start-2 border-l',
+                            index === 3 && 'md:col-start-1 lg:col-start-auto',
+                            index === 4 &&
+                                'md:col-start-3 lg:col-start-auto border-l',
+                            index >= 4 && 'border-t lg:border-t',
+                            index === 3 && 'border-l lg:border-l-0 border-r-0',
+                            index === 5 && 'border-r',
+                            index < 3 && 'border-b-0 lg:border-b',
+                            index >= 3 && 'border-b lg:border-b'
+                        )}
                     >
+                        {index === 0 && (
+                            <svg
+                                className="lg:hidden absolute text-ds-azure pointer-events-none z-20"
+                                style={{ top: '-11px', left: '-10.5px' }}
+                                width="20"
+                                height="21"
+                                viewBox="0 0 20 21"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path d="M10 0.332031V20.332" />
+                                <path d="M0 10.332L20 10.332" />
+                            </svg>
+                        )}
+                        {index === 5 && (
+                            <svg
+                                className="lg:hidden absolute text-ds-azure pointer-events-none z-20"
+                                style={{ bottom: '-11px', right: '-10.5px' }}
+                                width="20"
+                                height="21"
+                                viewBox="0 0 20 21"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path d="M10 0.332031V20.332" />
+                                <path d="M0 10.332L20 10.332" />
+                            </svg>
+                        )}
+                        {index === 1 && (
+                            <svg
+                                className="hidden lg:block absolute text-ds-azure pointer-events-none z-20"
+                                style={{ top: '-11px', left: '-10.5px' }}
+                                width="20"
+                                height="21"
+                                viewBox="0 0 20 21"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path d="M10 0.332031V20.332" />
+                                <path d="M0 10.332L20 10.332" />
+                            </svg>
+                        )}
+                        {index === 4 && (
+                            <svg
+                                className="hidden lg:block absolute text-ds-azure pointer-events-none z-20"
+                                style={{ bottom: '-11px', right: '-10.5px' }}
+                                width="20"
+                                height="21"
+                                viewBox="0 0 20 21"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path d="M10 0.332031V20.332" />
+                                <path d="M0 10.332L20 10.332" />
+                            </svg>
+                        )}
                         <div className="flex items-center justify-center w-full h-full">
+                            <DiagonalPattern
+                                show={showingPlaceholder.has(index)}
+                            />
                             <span
-                                key={logo}
-                                className="text-2xl font-semibold tracking-tight text-muted-foreground/50 text-center transition-all duration-1000 ease-in-out"
+                                className={cn(
+                                    'text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight text-muted-foreground/70 text-center',
+                                    'transition-all duration-1000 ease-in-out'
+                                )}
                                 style={{
                                     opacity: fadingSlots.has(index) ? 0 : 1,
                                     filter: fadingSlots.has(index)
@@ -88,11 +191,15 @@ const LogoShowcase = ({ logos, className = '' }: LogoShowcaseProps) => {
                                         : 'blur(0px)',
                                 }}
                             >
-                                {logo}
+                                {logo.name}
                             </span>
                         </div>
                     </div>
                 ))}
+                <div
+                    className="lg:hidden md:col-span-2 col-span-1 border-t border-ds-powder/50 dark:border-ds-powder/[0.08]"
+                    aria-hidden="true"
+                />
             </div>
         </div>
     );

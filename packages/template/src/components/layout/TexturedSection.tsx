@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { DiamondCorner } from './DiamondCorner';
 import { Container } from './Container';
+import { Grid } from './Grid';
 
 interface TexturedSectionProps {
     children: React.ReactNode;
@@ -10,6 +11,7 @@ interface TexturedSectionProps {
     showBottomDivider?: boolean;
     showTopDiamonds?: boolean;
     showBottomDiamonds?: boolean;
+    showGrid?: boolean;
     padding?: 'none' | 'sm' | 'md' | 'lg';
     grainIntensity?: 'subtle' | 'light' | 'medium' | 'strong';
     bgColor?: string;
@@ -26,6 +28,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
     showBottomDivider = true,
     showTopDiamonds = false,
     showBottomDiamonds = false,
+    showGrid = false,
     padding = 'md',
     bgColor = 'bg-ds-paper dark:bg-gray-950',
 }) => {
@@ -69,9 +72,15 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
 
                 {/* Content Container */}
                 <Container className="relative z-10">
-                    <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-0">
+                    <Grid
+                        showGrid={showGrid}
+                        cols={2}
+                        smCols={2}
+                        mdCols={2}
+                        lgCols={4}
+                    >
                         {children}
-                    </div>
+                    </Grid>
                 </Container>
             </div>
 

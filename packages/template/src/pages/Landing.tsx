@@ -42,21 +42,21 @@ const Landing = () => {
                     showDiamonds={false}
                     showGridBackground={true}
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
+                    <div className="col-span-4 sm:col-span-6 lg:col-span-8 space-y-6 py-8">
                         {/* Hero Title */}
-                        <TypographyHeader size="h1" className="text-center">
+                        <h1 className="font-header font-medium tracking-tight text-4xl md:text-5xl lg:text-6xl text-center">
                             Tools for the modern renovator.
-                        </TypographyHeader>
+                        </h1>
 
                         {/* Hero Description */}
-                        <p className="mx-auto max-w-2xl text-center text-muted-foreground">
-                            Structa eliminates the guesswork from home
-                            renovation with an AI-powered Clerk that brings
-                            context, clarity, and confidence to every project.
+                        <p className="text-lg mx-auto max-w-2xl text-center text-text-secondary">
+                            Eliminate the guesswork from home renovation with an
+                            AI-powered Clerk that brings context, clarity, and
+                            confidence to every project.
                         </p>
 
                         {/* CTA Buttons */}
-                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+                        <div className="flex flex-row items-center justify-center gap-4 pt-2 md:pt-3">
                             <Button
                                 onClick={() =>
                                     window.open(
@@ -79,7 +79,7 @@ const Landing = () => {
                                 }
                                 className="inline-flex h-11 items-center justify-center rounded-none border border-gray-200 dark:border-gray-800 px-8 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                             >
-                                Book a demo
+                                Download for mobile
                             </Button>
                         </div>
                     </div>
@@ -89,9 +89,10 @@ const Landing = () => {
                     showTopDivider={false}
                     showBottomDivider={false}
                     showTopDiamonds={true}
+                    showGrid={true}
                     padding="none"
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-8 py-8">
+                    <div className="col-span-4 md:col-span-8 space-y-8 py-8">
                         {/* Video Section */}
                         <div className="relative -mt-36">
                             <div className="relative w-full rounded-xl overflow-hidden">
@@ -112,18 +113,32 @@ const Landing = () => {
                         </div>
 
                         {/* Logo Showcase Section */}
-                        <div className="mt-16 space-y-6">
-                            <p className="text-center text-muted-foreground">
-                                Built for renovators, trades and designers
-                                alike.
-                            </p>
+                        <div className="py-16">
+                            <div className="w-full grid grid-cols-4 lg:grid-cols-8">
+                                <div className="space-y-4 py-8 col-span-4 lg:col-start-2 lg:col-span-6">
+                                    <h2 className="text-left lg:text-left font-header font-medium tracking-tight text-3xl lg:text-4xl text-text">
+                                        Loved by renovators, designers, and
+                                        trades
+                                    </h2>
+                                    <h3 className="text-lg text-text-secondary text-left lg:text-left">
+                                        Structa&apos;s AI searches trusted
+                                        platforms to gather quotes from
+                                        specialists matched to your unique
+                                        property type and project specification.
+                                    </h3>
+                                </div>
+                            </div>
                             <LogoShowcase
                                 logos={[
-                                    'Response AI',
-                                    'Saral Influencers',
-                                    'GreatLab',
-                                    'Quolum',
-                                    'DataFlow Pro',
+                                    'TrustATrader',
+                                    'MyBuilder',
+                                    'Bark',
+                                    'MyJobQuote',
+                                    'Yelp',
+                                    'Checkatrade',
+                                    'Rated People',
+                                    'Houzz',
+                                    'Thumbtack',
                                 ]}
                                 className="mx-auto w-full"
                             />
@@ -138,33 +153,30 @@ const Landing = () => {
                 <TexturedSection
                     showTopDivider={false}
                     showBottomDivider={false}
+                    showGrid={true}
                     padding="none"
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-12">
-                        <div className="p-12">
+                    <div className="col-span-4 md:col-span-8">
+                        <div className="py-16">
                             {/* Header */}
                             <div className="space-y-4">
-                                <span className="text-base text-muted-foreground">
-                                    From zero lines of code to your first
-                                    customer
-                                </span>
-                                <TypographyHeader size="h2">
+                                <h2 className="font-header font-medium tracking-tight text-3xl lg:text-4xl text-text">
                                     A Full-Stack, modern MVP + actual revenue
-                                </TypographyHeader>
-                                <p className="text-xl text-muted-foreground max-w-3xl">
+                                </h2>
+                                <h3 className="text-text-secondary text-lg max-w-3xl">
                                     Acme has built 20+ apps with React,
                                     Supabase, Vercel & Stripe, then won 1,000+
                                     customers for those apps.
-                                </p>
+                                </h3>
 
                                 {/* Stats Grid */}
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-6">
                                     {/* Stat 1 */}
                                     <div className="space-y-2">
-                                        <TypographyHeader size="h3">
+                                        <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
                                             500K+
-                                        </TypographyHeader>
-                                        <h4 className="font-medium">
+                                        </h3>
+                                        <h4 className="font-medium font-header tracking-tight">
                                             Lines of code
                                         </h4>
                                         <p className="text-muted-foreground text-sm leading-relaxed">
@@ -176,11 +188,11 @@ const Landing = () => {
 
                                     {/* Stat 2 */}
                                     <div className="space-y-2">
-                                        <TypographyHeader size="h3">
+                                        <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
                                             4M+
-                                        </TypographyHeader>
-                                        <h4 className="font-medium">
-                                            Cold Emails
+                                        </h3>
+                                        <h4 className="font-medium font-header tracking-tight">
+                                            Cold emails
                                         </h4>
                                         <p className="text-muted-foreground text-sm leading-relaxed">
                                             We'll build & deploy your outbound
@@ -192,11 +204,11 @@ const Landing = () => {
 
                                     {/* Stat 3 */}
                                     <div className="space-y-2">
-                                        <TypographyHeader size="h3">
+                                        <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
                                             Infinite
-                                        </TypographyHeader>
-                                        <h4 className="font-medium">
-                                            Revisions & Updates
+                                        </h3>
+                                        <h4 className="font-medium font-header tracking-tight">
+                                            Revisions
                                         </h4>
                                         <p className="text-muted-foreground text-sm leading-relaxed">
                                             We're not a one-and-done agency.
@@ -208,11 +220,11 @@ const Landing = () => {
 
                                     {/* Stat 4 */}
                                     <div className="space-y-2">
-                                        <TypographyHeader size="h3">
+                                        <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
                                             100%
-                                        </TypographyHeader>
-                                        <h4 className="font-medium">
-                                            Ownership of the code
+                                        </h3>
+                                        <h4 className="font-medium font-header tracking-tight">
+                                            Code ownership
                                         </h4>
                                         <p className="text-muted-foreground text-sm leading-relaxed">
                                             Obviously. You own every single line
@@ -226,7 +238,6 @@ const Landing = () => {
                     </div>
                 </TexturedSection>
 
-                {/* Diagonal Slash Divider */}
                 <DiagonalDivider />
 
                 {/* Features Section - Textured */}
@@ -236,20 +247,19 @@ const Landing = () => {
                     padding="none"
                     className=""
                 >
-                    <div className="col-span-4 sm:col-span-6 lg:col-span-12 space-y-12 py-20">
+                    <div className="col-span-4 md:col-span-8 space-y-12 py-20">
                         {/* Section Header */}
                         <div className="text-center space-y-4">
-                            <TypographyHeader size="h2">
+                            <h2 className="font-header font-medium tracking-tight text-3xl lg:text-4xl text-text">
                                 An MVP agency responsible for code <br />
                                 <span className="font-light italic">
                                     and
                                 </span>{' '}
                                 customer acquisition.
-                            </TypographyHeader>
-                            <p className="text-xl text-muted-foreground">
-                                From idea - to code - to launch - to customers.
-                                In that order.
-                            </p>
+                            </h2>
+                            <h3 className="text-muted-foreground text-lg max-w-3xl">
+                                From idea to code to launch and customers.
+                            </h3>
                         </div>
 
                         {/* Features Grid */}
@@ -264,16 +274,16 @@ const Landing = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <TypographyHeader size="h3">
+                                    <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
                                         Modern, hyper-reliable stack
-                                    </TypographyHeader>
+                                    </h3>
                                     <p className="text-muted-foreground">
                                         Acme builds insanely fast with the help
                                         of software powerhouses. No bugs, no
                                         fluff.
                                     </p>
                                     <div
-                                        className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer group"
+                                        className="flex items-center text-text hover:text-text-link cursor-pointer group"
                                         onClick={() =>
                                             window.open(
                                                 'https://calendly.com/harrison-from-acme/30min',
@@ -299,17 +309,16 @@ const Landing = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <TypographyHeader size="h3">
+                                    <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
                                         Start to finish, code-to-customer.
-                                    </TypographyHeader>
+                                    </h3>
                                     <p className="text-muted-foreground">
                                         We don't hand you the code & disappear.
-                                        We code it, deploy it, & sell it. We
-                                        source the leads, build the systems,
-                                        eveything.
+                                        We code, deploy, & sell it. We source
+                                        the leads, build the systems, eveything.
                                     </p>
                                     <div
-                                        className="flex items-center text-gray-600 hover:text-gray-900 eursor-pointer group"
+                                        className="flex items-center text-text hover:text-text-link eursor-pointer group"
                                         onClick={() =>
                                             window.open(
                                                 'https://calendly.com/harrison-from-acme/30min',
@@ -335,9 +344,9 @@ const Landing = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <TypographyHeader size="h3">
-                                        Done-for-you marketing systems.
-                                    </TypographyHeader>
+                                    <h3 className="font-header text-2xl font-medium tracking-tight lg:text-3xl">
+                                        Done-for-you systems.
+                                    </h3>
                                     <p className="text-muted-foreground">
                                         Not just outbound. We'll build organic
                                         content funnels within popular
@@ -345,7 +354,7 @@ const Landing = () => {
                                         too.
                                     </p>
                                     <div
-                                        className="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer group"
+                                        className="flex items-center text-text hover:text-text-link cursor-pointer group"
                                         onClick={() =>
                                             window.open(
                                                 'https://calendly.com/harrison-from-acme/30min',
