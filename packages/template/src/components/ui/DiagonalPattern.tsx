@@ -11,24 +11,19 @@ interface DiagonalPatternProps {
 export const DiagonalPattern = ({
     show = true,
     className,
-    color = 'text-ds-powder',
-    transitionDuration = 2000
+    color = 'text-ds-powder dark:text-ds-teal/80',
+    transitionDuration = 2000,
 }: DiagonalPatternProps) => {
     const patternId = useId();
 
     return (
-        <div
-            className={cn(
-                'absolute inset-0 pointer-events-none',
-                className
-            )}
-        >
-            <svg 
+        <div className={cn('absolute inset-0 pointer-events-none', className)}>
+            <svg
                 className={cn('size-full transition-all ease-out', color)}
                 style={{
                     opacity: show ? 0.5 : 0,
                     filter: show ? 'blur(0px)' : 'blur(4px)',
-                    transitionDuration: `${transitionDuration}ms`
+                    transitionDuration: `${transitionDuration}ms`,
                 }}
             >
                 <defs>
@@ -49,11 +44,7 @@ export const DiagonalPattern = ({
                         />
                     </pattern>
                 </defs>
-                <rect
-                    width="100%"
-                    height="100%"
-                    fill={`url(#${patternId})`}
-                />
+                <rect width="100%" height="100%" fill={`url(#${patternId})`} />
             </svg>
         </div>
     );

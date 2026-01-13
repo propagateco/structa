@@ -53,16 +53,16 @@ const XL_GRID_COL_CLASSES: Record<GridColCount, string> = {
     12: 'xl:grid-cols-12',
 };
 
-const generateGridLineGradient = (cols: number): string => {
+const generateGridLineGradient = (cols: number, opacity: number): string => {
     if (cols <= 1) return 'none';
-    
-    const color = 'hsl(var(--ds-powder) / 0.5)';
+
+    const color = `hsl(var(--ds-powder) / ${opacity})`;
     const stops: string[] = [];
-    
+
     stops.push(`${color} 0px`);
     stops.push(`${color} 1px`);
     stops.push(`transparent 1px`);
-    
+
     for (let i = 1; i < cols; i++) {
         const pos = (i / cols) * 100;
         stops.push(`transparent calc(${pos}% - 0.5px)`);
@@ -70,11 +70,11 @@ const generateGridLineGradient = (cols: number): string => {
         stops.push(`${color} calc(${pos}% + 0.5px)`);
         stops.push(`transparent calc(${pos}% + 0.5px)`);
     }
-    
+
     stops.push(`transparent calc(100% - 1px)`);
     stops.push(`${color} calc(100% - 1px)`);
     stops.push(`${color} 100%`);
-    
+
     return `linear-gradient(to right, ${stops.join(', ')})`;
 };
 
@@ -98,7 +98,7 @@ export const Grid: React.FC<GridProps> = ({
     showGrid = false,
     fadeTop = false,
     fadeBottom = false,
-    fadeColor = 'bg-ds-paper dark:bg-gray-950',
+    fadeColor = 'bg-background',
     cols = 4,
     smCols = 6,
     mdCols,
@@ -106,7 +106,7 @@ export const Grid: React.FC<GridProps> = ({
     xlCols,
 }) => {
     const gridId = React.useId();
-    
+
     const gridClasses = cn(
         'grid gap-0 relative',
         GRID_COL_CLASSES[cols],
@@ -125,43 +125,81 @@ export const Grid: React.FC<GridProps> = ({
     const gridLineStyles = showGrid
         ? `
           [data-grid-id="${gridId}"] {
-            background-image: ${generateGridLineGradient(cols)};
+            background-image: ${generateGridLineGradient(cols, 0.5)};
           }
           @media (min-width: 640px) {
             [data-grid-id="${gridId}"] {
-              background-image: ${generateGridLineGradient(smCols)};
+              background-image: ${generateGridLineGradient(smCols, 0.5)};
             }
           }
           ${
               mdCols
                   ? `@media (min-width: 768px) {
               [data-grid-id="${gridId}"] {
-                background-image: ${generateGridLineGradient(mdCols)};
+                background-image: ${generateGridLineGradient(mdCols, 0.5)};
               }
             }`
                   : ''
           }
           @media (min-width: 1024px) {
             [data-grid-id="${gridId}"] {
-              background-image: ${generateGridLineGradient(lgCols)};
+              background-image: ${generateGridLineGradient(lgCols, 0.5)};
             }
           }
           ${
               xlCols
                   ? `@media (min-width: 1280px) {
               [data-grid-id="${gridId}"] {
-                background-image: ${generateGridLineGradient(xlCols)};
+                background-image: ${generateGridLineGradient(xlCols, 0.5)};
               }
             }`
                   : ''
+          }
+          @media (prefers-color-scheme: dark) {
+            [data-grid-id="${gridId}"] {
+              background-image: ${generateGridLineGradient(cols, 0.08)};
+            }
+            @media (min-width: 640px) {
+              [data-grid-id="${gridId}"] {
+                background-image: ${generateGridLineGradient(smCols, 0.08)};
+              }
+            }
+            ${
+                mdCols
+                    ? `@media (min-width: 768px) {
+                [data-grid-id="${gridId}"] {
+                  background-image: ${generateGridLineGradient(mdCols, 0.08)};
+                }
+              }`
+                    : ''
+            }
+            @media (min-width: 1024px) {
+              [data-grid-id="${gridId}"] {
+                background-image: ${generateGridLineGradient(lgCols, 0.08)};
+              }
+            }
+            ${
+                xlCols
+                    ? `@media (min-width: 1280px) {
+                [data-grid-id="${gridId}"] {
+                  background-image: ${generateGridLineGradient(xlCols, 0.08)};
+                }
+              }`
+                    : ''
+            }
           }
         `
         : '';
 
     return (
         <>
-            {showGrid && <style dangerouslySetInnerHTML={{ __html: gridLineStyles }} />}
-            <div className={gridClasses} data-grid-id={showGrid ? gridId : undefined}>
+            {showGrid && (
+                <style dangerouslySetInnerHTML={{ __html: gridLineStyles }} />
+            )}
+            <div
+                className={gridClasses}
+                data-grid-id={showGrid ? gridId : undefined}
+            >
                 {children}
 
                 {fadeTop && (

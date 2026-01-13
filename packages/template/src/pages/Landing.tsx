@@ -5,6 +5,7 @@ import { Header } from '@/components/landing/Header';
 import { Header as TypographyHeader } from '@/components/ui/typography';
 import LogoShowcase from '@/components/ui/logo-showcase';
 import { useTheme } from '@/components/theme-provider';
+import { DiagonalPattern } from '@/components/ui/DiagonalPattern';
 import {
     GridBackgroundSection,
     TexturedSection,
@@ -17,19 +18,19 @@ const Landing = () => {
     const { resolvedTheme } = useTheme();
 
     return (
-        <div className="text-text min-h-screen flex flex-col relative bg-ds-paper dark:bg-[hsl(218,13%,7.5%)]">
+        <div className="text-text min-h-screen flex flex-col relative bg-background">
             <Header />
 
             {/* Side gutters with noise texture */}
-            <div className="fixed left-0 top-0 bottom-0 w-3 sm:w-4 md:w-8 z-0 pointer-events-none bg-ds-mono-100">
+            <div className="fixed left-0 top-0 bottom-0 w-3 sm:w-4 md:w-8 z-0 pointer-events-none bg-ds-mono-100 dark:bg-background">
                 <div
-                    className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.05] dark:opacity-[0.04]"
+                    className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.05] dark:opacity-[0.02]"
                     style={{ backgroundImage: `url('/noise.png')` }}
                 />
             </div>
-            <div className="fixed right-0 top-0 bottom-0 w-3 sm:w-4 md:w-8 z-0 pointer-events-none bg-ds-mono-100">
+            <div className="fixed right-0 top-0 bottom-0 w-3 sm:w-4 md:w-8 z-0 pointer-events-none bg-ds-mono-100 dark:bg-background">
                 <div
-                    className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.05] dark:opacity-[0.04]"
+                    className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.05] dark:opacity-[0.02]"
                     style={{ backgroundImage: `url('/noise.png')` }}
                 />
             </div>
@@ -66,7 +67,8 @@ const Landing = () => {
                                         '_blank'
                                     )
                                 }
-                                className="inline-flex h-11 items-center justify-center rounded-none bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 group"
+                                className="inline-flex items-center justify-center group"
+                                size="lg"
                             >
                                 Start for free
                                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -79,7 +81,7 @@ const Landing = () => {
                                         '_blank'
                                     )
                                 }
-                                className="inline-flex h-11 items-center justify-center rounded-none border border-gray-200 dark:border-gray-800 px-8 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                                className="inline-flex h-11 items-center justify-center rounded-none border border-border dark:border-gray-800 px-8 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                             >
                                 Download for mobile
                             </Button>
@@ -104,7 +106,7 @@ const Landing = () => {
                                         loop
                                         muted
                                         playsInline
-                                        className="w-full h-full object-cover rounded-xl border border-gray-200"
+                                        className="w-full h-full object-cover rounded-xl border border-border"
                                         src="/lovable-uploads/seerexample.mp4"
                                     >
                                         Your browser does not support the video
@@ -247,8 +249,8 @@ const Landing = () => {
                 <TexturedSection
                     showTopDivider={false}
                     showBottomDivider={false}
+                    showGrid={true}
                     padding="none"
-                    className=""
                 >
                     <div className="col-span-4 md:col-span-8 space-y-12 py-20">
                         {/* Section Header */}
@@ -268,11 +270,16 @@ const Landing = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
                             {/* Feature 1 */}
                             <div className="space-y-6">
-                                <div className="aspect-square bg-gray-50 dark:bg-gray-900 rounded-xl p-8 relative">
+                                <div className="aspect-square rounded-xl p-4 relative">
+                                    <DiagonalPattern
+                                        color={
+                                            'text-ds-powder/50 dark:text-ds-powder/10'
+                                        }
+                                    />
                                     <img
                                         src={`/images/maquettes/terrace-house${resolvedTheme === 'dark' ? '-dark' : ''}.png`}
                                         alt="PDF to floor plans"
-                                        className="w-full h-full object-cover rounded-lg"
+                                        className="w-full h-full object-cover relative z-10"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -285,7 +292,7 @@ const Landing = () => {
                                         editing your dream layout.
                                     </p>
                                     <div
-                                        className="flex items-center text-text hover:text-text-link cursor-pointer group"
+                                        className="flex items-center text-text dark:text-ds-powder hover:text-text-link cursor-pointer group"
                                         onClick={() =>
                                             window.open(
                                                 'https://calendly.com/harrison-from-acme/30min',
@@ -303,11 +310,16 @@ const Landing = () => {
 
                             {/* Feature 2 */}
                             <div className="space-y-6">
-                                <div className="aspect-square bg-gray-50 dark:bg-gray-900 rounded-xl p-8 relative">
+                                <div className="aspect-square p-4 relative">
+                                    <DiagonalPattern
+                                        color={
+                                            'text-ds-powder/50 dark:text-ds-powder/10'
+                                        }
+                                    />
                                     <img
                                         src={`/images/maquettes/runway${resolvedTheme === 'dark' ? '-dark' : ''}.png`}
                                         alt="Track your financial runway"
-                                        className="w-full h-full object-cover rounded-lg"
+                                        className="w-full h-full object-cover relative z-10"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -320,7 +332,7 @@ const Landing = () => {
                                         cost overruns before they spiral.
                                     </p>
                                     <div
-                                        className="flex items-center text-text hover:text-text-link eursor-pointer group"
+                                        className="flex items-center text-text dark:text-ds-powder hover:text-text-link eursor-pointer group"
                                         onClick={() =>
                                             window.open(
                                                 'https://calendly.com/harrison-from-acme/30min',
@@ -338,11 +350,16 @@ const Landing = () => {
 
                             {/* Feature 3 */}
                             <div className="space-y-6">
-                                <div className="aspect-square bg-gray-50 dark:bg-gray-900 rounded-xl p-8 relative">
+                                <div className="aspect-square p-4 relative">
+                                    <DiagonalPattern
+                                        color={
+                                            'text-ds-powder/50 dark:text-ds-powder/10'
+                                        }
+                                    />
                                     <img
                                         src={`/images/maquettes/specialists${resolvedTheme === 'dark' ? '-dark' : ''}.png`}
                                         alt="Get quotes from matched specialists"
-                                        className="w-full h-full object-cover rounded-lg"
+                                        className="w-full h-full object-cover relative z-10"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -355,7 +372,7 @@ const Landing = () => {
                                         requirements and timelines.
                                     </p>
                                     <div
-                                        className="flex items-center text-text hover:text-text-link cursor-pointer group"
+                                        className="flex items-center text-text dark:text-ds-powder hover:text-text-link cursor-pointer group"
                                         onClick={() =>
                                             window.open(
                                                 'https://calendly.com/harrison-from-acme/30min',

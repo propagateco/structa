@@ -30,7 +30,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
     showBottomDiamonds = false,
     showGrid = false,
     padding = 'md',
-    bgColor = 'bg-ds-paper dark:bg-gray-950',
+    bgColor = 'bg-background',
 }) => {
     const paddingClasses = {
         none: '',

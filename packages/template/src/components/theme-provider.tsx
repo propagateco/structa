@@ -63,6 +63,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('theme', newTheme);
   };
 
+  // Update favicon based on theme
+  useEffect(() => {
+    const updateFavicon = (theme: 'light' | 'dark') => {
+      const favicon = document.querySelector("link[rel~='icon']");
+      if (favicon instanceof HTMLLinkElement) {
+        favicon.href = `/logo-${theme}.svg`;
+      }
+    };
+    updateFavicon(resolvedTheme);
+  }, [resolvedTheme]);
+
   return (
     <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
       {children}

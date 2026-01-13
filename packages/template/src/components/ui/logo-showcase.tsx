@@ -103,7 +103,7 @@ const LogoShowcase = ({
                         key={`slot-${index}`}
                         className={cn(
                             'aspect-square',
-                            'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative dark:bg-gray-950',
+                            'flex items-center justify-center p-4 sm:p-6 lg:p-8 relative',
                             'border-r border-ds-powder/50 dark:border-ds-powder/[0.08]',
                             'md:col-span-2 lg:col-span-1 border-t',
                             logo.colSpan === 2 && 'col-span-2',
@@ -121,7 +121,7 @@ const LogoShowcase = ({
                     >
                         {index === 0 && (
                             <svg
-                                className="lg:hidden absolute text-ds-azure pointer-events-none z-20"
+                                className="lg:hidden absolute text-ds-azure dark:text-ds-teal pointer-events-none z-20"
                                 style={{ top: '-11px', left: '-10.5px' }}
                                 width="20"
                                 height="21"
@@ -135,7 +135,7 @@ const LogoShowcase = ({
                         )}
                         {index === 5 && (
                             <svg
-                                className="lg:hidden absolute text-ds-azure pointer-events-none z-20"
+                                className="lg:hidden absolute text-ds-azure dark:text-ds-teal pointer-events-none z-20"
                                 style={{ bottom: '-11px', right: '-10.5px' }}
                                 width="20"
                                 height="21"
@@ -149,7 +149,7 @@ const LogoShowcase = ({
                         )}
                         {index === 1 && (
                             <svg
-                                className="hidden lg:block absolute text-ds-azure pointer-events-none z-20"
+                                className="hidden lg:block absolute text-ds-azure dark:text-ds-teal pointer-events-none z-20"
                                 style={{ top: '-11px', left: '-10.5px' }}
                                 width="20"
                                 height="21"
@@ -163,7 +163,7 @@ const LogoShowcase = ({
                         )}
                         {index === 4 && (
                             <svg
-                                className="hidden lg:block absolute text-ds-azure pointer-events-none z-20"
+                                className="hidden lg:block absolute text-ds-azure dark:text-ds-teal pointer-events-none z-20"
                                 style={{ bottom: '-11px', right: '-10.5px' }}
                                 width="20"
                                 height="21"
