@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Header } from '@/components/landing/Header';
 import { Header as TypographyHeader } from '@/components/ui/typography';
 import LogoShowcase from '@/components/ui/logo-showcase';
+import { useTheme } from '@/components/theme-provider';
 import {
     GridBackgroundSection,
     TexturedSection,
@@ -13,6 +14,7 @@ import {
 
 const Landing = () => {
     const navigate = useNavigate();
+    const { resolvedTheme } = useTheme();
 
     return (
         <div className="text-text min-h-screen flex flex-col relative bg-ds-paper dark:bg-[hsl(218,13%,7.5%)]">
@@ -268,8 +270,8 @@ const Landing = () => {
                             <div className="space-y-6">
                                 <div className="aspect-square bg-gray-50 dark:bg-gray-900 rounded-xl p-8 relative">
                                     <img
-                                        src="/lovable-uploads/1.png"
-                                        alt="Tools Integration"
+                                        src={`/images/maquettes/terrace-house${resolvedTheme === 'dark' ? '-dark' : ''}.png`}
+                                        alt="PDF to floor plans"
                                         className="w-full h-full object-cover rounded-lg"
                                     />
                                 </div>
@@ -303,8 +305,8 @@ const Landing = () => {
                             <div className="space-y-6">
                                 <div className="aspect-square bg-gray-50 dark:bg-gray-900 rounded-xl p-8 relative">
                                     <img
-                                        src="/lovable-uploads/2.png"
-                                        alt="Global Companies"
+                                        src={`/images/maquettes/runway${resolvedTheme === 'dark' ? '-dark' : ''}.png`}
+                                        alt="Track your financial runway"
                                         className="w-full h-full object-cover rounded-lg"
                                     />
                                 </div>
@@ -338,8 +340,8 @@ const Landing = () => {
                             <div className="space-y-6">
                                 <div className="aspect-square bg-gray-50 dark:bg-gray-900 rounded-xl p-8 relative">
                                     <img
-                                        src="/lovable-uploads/3.png"
-                                        alt="Social Data"
+                                        src={`/images/maquettes/specialists${resolvedTheme === 'dark' ? '-dark' : ''}.png`}
+                                        alt="Get quotes from matched specialists"
                                         className="w-full h-full object-cover rounded-lg"
                                     />
                                 </div>
