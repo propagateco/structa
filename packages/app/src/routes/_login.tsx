@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_login")({
     },
     component: LayoutComponent,
     head: () => ({
-        meta: [{ title: "Login | Propagate" }],
+        meta: [{ title: "Login | Structa" }],
     }),
 });
 

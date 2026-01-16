@@ -69,7 +69,7 @@ const WIZARD_STEPS = [
     id: "intro",
     title: "Generate an App Store Connect API Key",
     description:
-      "We'll generate an API key to allow Propagate to publish apps to the App Store on your behalf",
+      "We'll generate an API key to allow Structa to publish apps to the App Store on your behalf",
   },
   {
     id: "credentials",
@@ -211,7 +211,7 @@ export function AppleWizard({ open, onOpenChange }: AppleWizardProps) {
                 <h4 className="font-medium text-sm">Before we begin:</h4>
                 <p className="text-sm text-muted-foreground mt-3">
                   You'll need to sign the necessary agreements in App Store
-                  Connect to publish apps through Propagate.
+                  Connect to publish apps through Structa.
                 </p>
 
                 <div className="space-y-4 mt-3">
@@ -400,7 +400,7 @@ export function AppleWizard({ open, onOpenChange }: AppleWizardProps) {
                       </p>
                       <p className="text-sm text-muted-foreground">
                         Click the <span className="font-medium">+</span> button
-                        to create a new key. Give it a name (e.g., "Propagate")
+                        to create a new key. Give it a name (e.g., "Structa")
                         and select <span className="font-medium">Admin</span>{" "}
                         role
                       </p>

@@ -7,7 +7,7 @@ import { useMutationState } from "@tanstack/react-query";
 export const Route = createFileRoute("/_authenticated/_dashboard/_sales")({
   component: RouteComponent,
   head: () => ({
-    meta: [{ title: "Sales | Propagate" }],
+    meta: [{ title: "Sales | Structa" }],
   }),
 });
 

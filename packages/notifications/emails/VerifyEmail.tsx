@@ -72,7 +72,7 @@ export const VerifyEmail = ({
                 `}</style>
             </Head>
             <Preview>
-                {validationCode} - Propagate{" "}
+                {validationCode} - Structa{" "}
                 {formattedType.toUpperCaseHyphenated()} Verification
             </Preview>
             <Body style={main}>
@@ -80,15 +80,15 @@ export const VerifyEmail = ({
                     <Container style={container}>
                         <Img
                             src={
-                                "https://app.propagate.so/logo/outline/logo-light-sm.svg"
+                                "https://app.structa.so/logo/outline/logo-light-sm.svg"
                             }
-                            alt="Propagate Logo"
+                            alt="Structa Logo"
                             style={logo}
                             className="logo"
                         />
                         <Heading style={heading} className="heading">
                             Verify your email to {formattedType.toBody()} to{" "}
-                            <span style={{ fontWeight: 600 }}>Propagate</span>
+                            <span style={{ fontWeight: 600 }}>Structa</span>
                         </Heading>
 
                         <Text style={paragraph} className="paragraph">
@@ -130,11 +130,11 @@ export const VerifyEmail = ({
                             forward the 6-digit code with anyone. You are
                             receiving this email because you signed up to{" "}
                             <Link
-                                href="https://propagate.so"
+                                href="https://structa.so"
                                 style={footerTextLink}
                                 className="footer-link"
                             >
-                                Propagate
+                                Structa
                             </Link>
                             .
                         </Text>

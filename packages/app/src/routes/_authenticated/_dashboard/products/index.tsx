@@ -14,7 +14,7 @@ import { NavigationHeader } from "@/components/nav/nav-header";
 export const Route = createFileRoute("/_authenticated/_dashboard/products/")({
   component: RouteComponent,
   head: () => ({
-    meta: [{ title: "Products | Propagate" }],
+    meta: [{ title: "Products | Structa" }],
   }),
   staticData: {
     title: "Products",

@@ -17,7 +17,7 @@ export function ErrorScreen({ className, onRetry }: ErrorScreenProps = {}) {
             <div className="flex flex-col items-center">
                 <img
                     src="/logo/outline/logo-light-sm.svg"
-                    alt="Propagate"
+                    alt="Structa"
                     className="opacity-60 w-auto h-8 dark:invert mb-5"
                 />
                 <p className="text-md font-medium text-muted-foreground max-w-sm text-center mb-8">
@@ -29,7 +29,7 @@ export function ErrorScreen({ className, onRetry }: ErrorScreenProps = {}) {
                         Retry
                     </Button>
                     <a
-                        href="mailto:support@propagate.so"
+                        href="mailto:support@structa.so"
                         target="_blank"
                         rel="noopener noreferrer"
                     >

@@ -13,7 +13,7 @@ export function NotFoundScreen({ className }: { className?: string }) {
             <div className="flex flex-col items-center">
                 <img
                     src="/logo/outline/logo-light-sm.svg"
-                    alt="Propagate"
+                    alt="Structa"
                     className="opacity-60 w-auto h-8 dark:invert mb-5"
                 />
                 <p className="text-md font-medium text-muted-foreground max-w-sm text-center mb-8">

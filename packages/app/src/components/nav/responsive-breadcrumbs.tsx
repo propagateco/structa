@@ -26,7 +26,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { PropagateIcon } from '@/components/ui/icons';
+import { StructaIcon } from '@/components/ui/icons';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
 import { Slash } from 'lucide-react';

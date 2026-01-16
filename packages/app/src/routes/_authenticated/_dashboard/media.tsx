@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_authenticated/_dashboard/media')({
 		title: 'Media',
 	},
 	head: () => ({
-		meta: [{ title: 'Media Library | Propagate' }],
+		meta: [{ title: 'Media Library | Structa' }],
 	}),
 });
 

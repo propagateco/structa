@@ -40,7 +40,7 @@ function RouteComponent() {
             Coming soon
           </Button>
           <a
-            href="https://docs.propagate.so/feature-requests"
+            href="https://docs.structa.so/feature-requests"
             target="_blank"
             rel="noopener noreferrer"
           >

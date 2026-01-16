@@ -6,7 +6,7 @@ import { useNavigate } from "@tanstack/react-router";
 export const Route = createFileRoute("/_authenticated/_onboarding")({
     component: LayoutComponent,
     head: () => ({
-        meta: [{ title: "Welcome | Propagate" }],
+        meta: [{ title: "Welcome | Structa" }],
     }),
 });
 

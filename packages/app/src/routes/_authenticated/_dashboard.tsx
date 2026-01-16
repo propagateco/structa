@@ -12,7 +12,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 export const Route = createFileRoute("/_authenticated/_dashboard")({
     component: RouteComponent,
     head: () => ({
-        meta: [{ title: "Dashboard | Propagate" }],
+        meta: [{ title: "Dashboard | Structa" }],
     }),
 });
 

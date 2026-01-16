@@ -1,101 +1,39 @@
-import { IS_DEPLOYED_STAGE, BRANCH_NAME } from './dns';
+import { RESOURCE_ENVIRONMENT, BRANCH_NAME, PROJECT_NAME } from './dns';
 import { secret } from './secret';
+
+// Autoscaling
+const autoscalingLimitMinCu = $app.stage === 'production' ? 1 : 0.25;
+const autoscalingLimitMaxCu = $app.stage === 'production' ? 2 : 0.25;
 
 // Create Neon provider with API key
 const neonProvider = new neon.Provider('NeonProvider', {
     apiKey: secret.NeonApiKey.value,
 });
 
-const project =
-    $app.stage === 'production'
-        ? new neon.Project(
-              'NeonProject',
-              {
-                  name: 'structa',
-              },
-              {
-                  provider: neonProvider,
-              }
-          )
-        : neon.Project.get(
-              'NeonProject',
-              secret.NeonProjectId.value,
-              undefined,
-              {
-                  provider: neonProvider,
-              }
-          );
-
-const branch =
-    $app.stage !== 'production'
-        ? new neon.Branch(
-              'NeonBranch',
-              {
-                  name: BRANCH_NAME,
-                  projectId: project.id,
-                  parentId: project.defaultBranchId,
-              },
-              {
-                  provider: neonProvider,
-              }
-          )
-        : neon.Branch.get('NeonBranch', project.defaultBranchId, undefined, {
-              provider: neonProvider,
-          });
-
-const endpoint =
-    $app.stage !== 'production'
-        ? new neon.Endpoint(
-              'NeonEndpoint',
-              {
-                  projectId: project.id,
-                  branchId: branch.id,
-              },
-              {
-                  provider: neonProvider,
-              }
-          )
-        : neon.Endpoint.get(
-              'NeonEndpoint',
-              project.defaultEndpointId,
-              undefined,
-              {
-                  provider: neonProvider,
-              }
-          );
-
-const role = new neon.Role(
-    'NeonRole',
+const neonProject = new neon.Project(
+    `NeonProject`,
     {
-        name: 'neondb-owner',
-        projectId: project.id,
-        branchId: branch.id,
+        name: `${PROJECT_NAME}-${RESOURCE_ENVIRONMENT}`,
+        pgVersion: 17,
+        regionId: 'aws-eu-west-2',
+        orgId: secret.NeonOrgId.value,
+        historyRetentionSeconds: 21600,
+        branch: {
+            name: BRANCH_NAME,
+            databaseName: `${PROJECT_NAME}-${RESOURCE_ENVIRONMENT}-db`,
+        },
+        defaultEndpointSettings: {
+            autoscalingLimitMinCu,
+            autoscalingLimitMaxCu,
+        },
     },
     {
         provider: neonProvider,
     }
 );
 
-const db = new neon.Database(
-    'NeonDatabase',
-    {
-        name: 'neondb',
-        projectId: project.id,
-        branchId: branch.id,
-        ownerName: role.name,
-    },
-    {
-        provider: neonProvider,
-    }
-);
-
-// Create a Linkable resource to use in your app
-export const database = new sst.Linkable('Database', {
+export const database = new sst.Linkable(`Database`, {
     properties: {
-        username: role.name,
-        password: role.password,
-        host: endpoint.host,
-        dbname: db.name,
-        url: $interpolate`postgresql://${role.name}:${role.password}@${endpoint.host}/${db.name}?sslmode=require`,
+        url: neonProject.connectionUri,
     },
 });

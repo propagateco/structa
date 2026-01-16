@@ -43,7 +43,7 @@ export const Route = createFileRoute('/_authenticated/_dashboard/products/$produ
 		title: 'Product Details',
 	},
 	head: () => ({
-		meta: [{ title: 'Product | Propagate' }],
+		meta: [{ title: 'Product | Structa' }],
 	}),
 });
 
