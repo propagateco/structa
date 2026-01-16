@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LoginCodeForm } from "@/components/auth/login-code-form";
 import { LoginGoogleForm } from "@/components/auth/login-google-form";
 import { LoginAppleForm } from "@/components/auth/login-apple-form";
-import { PropagateIcon } from "@/components/ui/icons";
+import { StructaIcon } from "@/components/ui/icons";
 import { Divider } from "@/components/layout/divider";
 
 export const Route = createFileRoute("/_login/login/")({
@@ -17,12 +17,12 @@ function RouteComponent() {
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col items-start gap-2">
                             <div className="mb-10">
-                                <a href="https://propagate.so">
-                                    <PropagateIcon size="sm" mode="light" />
+                                <a href="https://structa.so">
+                                    <StructaIcon size="sm" mode="light" />
                                 </a>
                             </div>
                             <h1 className="text-2xl font-bold">
-                                Welcome to Propagate
+                                Welcome to Structa
                             </h1>
                             <h2 className="text-lg font-semibold text-text-muted">
                                 Get started with the simplest way to create a
@@ -42,11 +42,11 @@ function RouteComponent() {
 
                     <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:font-medium [&_a]:transition-colors [&_a]:ease-in-out [&_a]:duration-200 hover:[&_a]:text-accent">
                         By clicking continue, you agree to our{" "}
-                        <a href="https://propagate.so/terms-of-service">
+                        <a href="https://structa.so/terms-of-service">
                             Terms of Service
                         </a>{" "}
                         and{" "}
-                        <a href="https://propagate.so/privacy-policy">
+                        <a href="https://structa.so/privacy-policy">
                             Privacy Policy
                         </a>
                         .

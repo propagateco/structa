@@ -54,7 +54,7 @@ function RouteComponent() {
                 <div className="flex flex-col items-start gap-2">
                     <h1 className="text-2xl font-bold">Create a profile</h1>
                     <h2 className="text-lg font-semibold text-text-muted">
-                        This is how you&apos;ll appear in Propagate.
+                        This is how you&apos;ll appear in Structa.
                     </h2>
                 </div>
 

@@ -22,8 +22,8 @@ export async function generateTenantProject({
   const tenantConfig = {
     name: appName,
     slug: slug,
-    bundleIdentifier: `com.propagate.${slug}`,
-    package: `com.propagate.${slug}`,
+    bundleIdentifier: `com.structa.${slug}`,
+    package: `com.structa.${slug}`,
     icon: `./assets/${slug}/icon.png`,
     adaptiveIcon: {
       foregroundImage: `./assets/${slug}/adaptive-icon.png`,

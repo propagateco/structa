@@ -5,7 +5,7 @@ import { PageContainer } from "@/components/layout/container";
 export const Route = createFileRoute("/_authenticated/_dashboard/_members")({
   component: RouteComponent,
   head: () => ({
-    meta: [{ title: "Members | Propagate" }],
+    meta: [{ title: "Members | Structa" }],
   }),
 });
 

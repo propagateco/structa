@@ -25,7 +25,7 @@ function RouteComponent() {
 	return (
 		<>
 			{/* <Helmet>
-				<title>Apple App Store | Propagate</title>
+				<title>Apple App Store | Structa</title>
 			</Helmet> */}
 			<p>App Store</p>
 		</>

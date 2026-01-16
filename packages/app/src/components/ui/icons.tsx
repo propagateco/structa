@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-interface PropagateIconProps extends React.HTMLAttributes<HTMLDivElement> {
+interface StructaIconProps extends React.HTMLAttributes<HTMLDivElement> {
 	mode: 'light' | 'dark';
 	size: 'xs' | 'sm';
 }
 
-const PropagateIcon = React.forwardRef<HTMLDivElement, PropagateIconProps>((props, ref) => {
+const StructaIcon = React.forwardRef<HTMLDivElement, StructaIconProps>((props, ref) => {
 	const { size, mode, className } = props;
 
 	const xsIcon = (
@@ -60,6 +60,6 @@ const PropagateIcon = React.forwardRef<HTMLDivElement, PropagateIconProps>((prop
 	);
 });
 
-PropagateIcon.displayName = 'PropagateIcon';
+StructaIcon.displayName = 'StructaIcon';
 
-export { PropagateIcon };
+export { StructaIcon };

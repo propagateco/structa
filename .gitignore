@@ -13,6 +13,8 @@ node_modules
 # env 
 .env*.local
 .env
+.env-dev
+.env-production
 
 # opennext
 .open-next

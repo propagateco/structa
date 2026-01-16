@@ -1,16 +1,16 @@
-import { Resource } from "sst";
-import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
-import type { SendEmailCommandInput } from "@aws-sdk/client-sesv2";
-import { render } from "@react-email/components";
-import { db } from "../../../core/src/drizzle";
-import { verification } from "../../../core/src/auth/auth.sql";
-import { eq, desc } from "drizzle-orm";
+import { Resource } from 'sst';
+import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
+import type { SendEmailCommandInput } from '@aws-sdk/client-sesv2';
+import { render } from '@react-email/components';
+import { db } from '../../../core/src/drizzle';
+import { verification } from '../../../core/src/auth/auth.sql';
+import { eq, desc } from 'drizzle-orm';
 
-import { VerifyEmail } from "../../../notifications/emails/VerifyEmail";
+import { VerifyEmail } from '../../../notifications/emails/VerifyEmail';
 
 const ses = new SESv2Client();
 
-type OTPType = "sign-in" | "email-verification" | "forget-password";
+type OTPType = 'sign-in' | 'email-verification' | 'forget-password';
 type SendOTPProps = {
     email: string;
     otp: string;
@@ -18,8 +18,8 @@ type SendOTPProps = {
 };
 
 export async function sendVerificationOTP({ email, otp, type }: SendOTPProps) {
-    console.log("Sending code: ", otp, "to email: ", email, "for type: ", type);
-    const sender = "Propagate <auth@" + Resource.Email.sender + ">";
+    console.log('Sending code: ', otp, 'to email: ', email, 'for type: ', type);
+    const sender = 'Structa <auth@' + Resource.Email.sender + '>';
 
     // Query verification table for location data
     let location: { city: string; country: string } | null = null;
@@ -43,29 +43,29 @@ export async function sendVerificationOTP({ email, otp, type }: SendOTPProps) {
             );
         }
     } catch (error) {
-        console.warn("Failed to fetch verification location:", error);
+        console.warn('Failed to fetch verification location:', error);
     }
 
     let emailHTML: string;
     let subject: string;
 
-    if (type === "sign-in") {
+    if (type === 'sign-in') {
         emailHTML = await render(
             VerifyEmail({ type: type, validationCode: otp, location }),
             {
                 pretty: true,
             }
         );
-        subject = `${otp} - Propagate Sign-in Verification`;
-    } else if (type === "email-verification") {
+        subject = `${otp} - Structa Sign-in Verification`;
+    } else if (type === 'email-verification') {
         emailHTML = await render(
             VerifyEmail({ type: type, validationCode: otp, location }),
             {
                 pretty: true,
             }
         );
-        subject = `${otp} - Propagate Sign-up Verification`;
-    } else if (type === "forget-password") {
+        subject = `${otp} - Structa Sign-up Verification`;
+    } else if (type === 'forget-password') {
         throw new Error(`Unsupported OTP type: ${type}`);
     } else {
         throw new Error(`Unsupported OTP type: ${type}`);

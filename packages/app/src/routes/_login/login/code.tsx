@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { VerifyCodeForm } from "@/components/auth/verify-code-form";
-import { PropagateIcon } from "@/components/ui/icons";
+import { StructaIcon } from "@/components/ui/icons";
 import { Divider } from "@/components/layout/divider";
 import { z } from "zod";
 
@@ -22,8 +22,8 @@ function RouteComponent() {
                 <div className="flex flex-col gap-6 items-center">
                     <div className="flex flex-col items-start gap-2">
                         <div className="mb-10">
-                            <a href="https://propagate.so">
-                                <PropagateIcon size="sm" mode="light" />
+                            <a href="https://structa.so">
+                                <StructaIcon size="sm" mode="light" />
                             </a>
                         </div>
                         <h1 className="text-2xl font-bold">

@@ -1,18 +1,17 @@
-import { Domain, domain } from "./dns";
-import { Stage } from "./dns";
-import { apiRouter } from "./api";
-import { database } from "./database";
-import { email } from "./email";
-import { bucket, optimisedBucket } from "./storage";
-import { cdn } from "./cloudfront";
-import { secret } from "./secret";
-import { buildTask, buildQueue } from "./build-queue";
+import { Domain, domain } from './dns';
+import { Stage } from './dns';
+import { apiRouter } from './api';
+import { database } from './database';
+import { email } from './email';
+import { bucket, optimisedBucket } from './storage';
+import { cdn } from './cloudfront';
+import { secret } from './secret';
 
-export const app = new sst.aws.TanStackStart("Web", {
-    path: "packages/app",
+export const app = new sst.aws.TanStackStart('Web', {
+    path: 'packages/app',
     domain: {
-        name: "app." + domain,
-        redirects: ["www.app." + domain],
+        name: 'app.' + domain,
+        redirects: ['www.app.' + domain],
     },
     link: [
         Stage,
@@ -22,8 +21,6 @@ export const app = new sst.aws.TanStackStart("Web", {
         bucket,
         optimisedBucket,
         cdn,
-        buildQueue,
-        buildTask,
         secret.GoogleClientId,
         secret.GoogleClientSecret,
         secret.StripeSecretKey,

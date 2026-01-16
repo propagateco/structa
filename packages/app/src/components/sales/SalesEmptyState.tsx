@@ -21,7 +21,7 @@ export function SalesEmptyState() {
             <Button size="sm">Connect Stripe Account</Button>
           </Link>
           <a
-            href="https://docs.propagate.so/stripe-integration"
+            href="https://docs.structa.so/stripe-integration"
             target="_blank"
             rel="noopener noreferrer"
           >

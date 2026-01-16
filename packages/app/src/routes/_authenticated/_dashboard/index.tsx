@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_authenticated/_dashboard/')({
 		title: 'Dashboard',
 	},
 	head: () => ({
-		meta: [{ title: 'Dashboard | Propagate' }],
+		meta: [{ title: 'Dashboard | Structa' }],
 	}),
 });
 
@@ -27,7 +27,7 @@ function RouteComponent() {
 						<HeaderTitle>Welcome back {user.name}!</HeaderTitle>
 						<HeaderSubSection>
 							Follow the getting started guides below or watch a tutorial video to
-							start using Propagate.
+							start using Structa.
 						</HeaderSubSection>
 					</HeaderMain>
 				</Header>

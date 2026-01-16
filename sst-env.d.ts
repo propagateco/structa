@@ -5,6 +5,111 @@
 
 declare module "sst" {
   export interface Resource {
+    "BetterAuthSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "Cdn": {
+      "type": "sst.sst.Linkable"
+      "url": string
+    }
+    "Database": {
+      "type": "sst.sst.Linkable"
+      "url": string
+    }
+    "Domain": {
+      "api": string
+      "platform": string
+      "type": "sst.sst.Linkable"
+    }
+    "Email": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
+    "EncryptionKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ExpoOwner": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ExpoProjectId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ExpoToken": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "GoogleOAuthClientId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "GoogleOAuthClientSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ImageProcessorFunction": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
+    "MarketingEmail": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
+    "NODE_TLS_REJECT_UNAUTHORIZED": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "NeonApiKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "NeonOrgId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "NeonProjectId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "OptimisedStorage": {
+      "name": string
+      "type": "sst.aws.Bucket"
+    }
+    "PersonalEmail": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
+    "Stage": {
+      "cookiePrefix": string
+      "type": "sst.sst.Linkable"
+    }
+    "Storage": {
+      "name": string
+      "type": "sst.aws.Bucket"
+    }
+    "StripeClientId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "StripePublishableKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "StripeSecretKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "StripeWebhookSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
   }
 }
 /// <reference path="sst-env.d.ts" />

@@ -6,7 +6,7 @@ import { NavigationTabs } from "@/components/nav/nav-tabs";
 export const Route = createFileRoute("/_authenticated/_dashboard/_releases")({
   component: RouteComponent,
   head: () => ({
-    meta: [{ title: "Releases | Propagate" }],
+    meta: [{ title: "Releases | Structa" }],
   }),
 });
 

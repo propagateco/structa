@@ -37,7 +37,7 @@ export const Route = createFileRoute(
 )({
   component: RouteComponent,
   head: () => ({
-    meta: [{ title: "Branding | Propagate" }],
+    meta: [{ title: "Branding | Structa" }],
   }),
 });
 

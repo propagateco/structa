@@ -9,7 +9,7 @@ import { appQueryOptions } from "@/clients/app/app.query.client";
 export const Route = createFileRoute("/_authenticated/_dashboard/_design")({
   component: RouteComponent,
   head: () => ({
-    meta: [{ title: "Design | Propagate" }],
+    meta: [{ title: "Design | Structa" }],
     links: [
       {
         rel: "stylesheet",

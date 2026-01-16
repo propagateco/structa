@@ -25,9 +25,9 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
     const patternId = useId();
 
     const variantClasses = {
-        hero: 'bg-gradient-to-t from-ds-azure/20 dark:from-ds-azure/5 py-12 md:py-0 md:py-12 md:pb-36',
+        hero: 'bg-gradient-to-t from-ds-azure/20 dark:from-ds-azure/10 py-12 md:py-0 md:py-12 md:pb-36',
         content:
-            'bg-gradient-to-b from-ds-azure/10 via-ds-azure/40 to-ds-azure/[0.03] dark:from-ds-azure/[0.03] dark:via-transparent dark:to-ds-azure/[0.02]',
+            'bg-gradient-to-b from-ds-azure/10 via-ds-azure/40 to-ds-azure/[0.03] dark:from-ds-azure/[0.03] dark:via-transparent dark:to-ds-azure/10',
     };
 
     return (
@@ -54,13 +54,13 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
                     variantClasses[variant]
                 )}
             >
-                {/* Grid Background SVG Pattern - matches zed.dev exactly with fade mask */}
+                {/* Grid Background SVG Pattern */}
                 {showGridBackground && (
                     <svg
                         className={cn(
                             'pointer-events-none absolute inset-0 z-0 size-full',
-                            'text-ds-azure',
-                            'opacity-[.30] dark:opacity-[.15]'
+                            'text-accent',
+                            'opacity-[.30] dark:opacity-[.25]'
                         )}
                         aria-hidden="true"
                         style={{
@@ -101,7 +101,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
 
                 {/* Content Container - full width with centered content */}
                 <Container className="relative z-20">
-                    <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-0">
+                    <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-0">
                         {children}
                     </div>
                 </Container>

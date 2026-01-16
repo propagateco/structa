@@ -8,12 +8,12 @@ This file gives opencode agents repo-specific guidance. Scope: this root file ap
 - Data sync: ElectricSQL with TanStack DB; client cache via TanStack Query.
 - UI: shadcn/ui components with Tailwind.
 - ORM/DB: Drizzle for schema and migrations.
-- Auth: Better Auth setup consistent with `../propagate/packages/app`.
+- Auth: Better Auth setup consistent with `../structa/packages/app`.
 - Packages:
   - `packages/template`: Vite + React + Tailwind UI template (may transition to TanStack Start).
-  - `packages/core`: Shared core utilities; mirror structure from `../propagate/packages/core`.
+  - `packages/core`: Shared core utilities; mirror structure from `../structa/packages/core`.
   - `packages/scripts`: Small TS scripts.
-- Infra with SST: `sst.config.ts` and `infra/*.ts` define stacks (API, DB, storage, email, DNS, secrets). Cross-project: see `../propagate` for similar SST patterns.
+- Infra with SST: `sst.config.ts` and `infra/*.ts` define stacks (API, DB, storage, email, DNS, secrets). Cross-project: see `../structa` for similar SST patterns.
 
 ## Coding Conventions
 - TypeScript preferred. Enable strict options consistent with existing `tsconfig.json`.
@@ -30,7 +30,7 @@ This file gives opencode agents repo-specific guidance. Scope: this root file ap
 - Styling:
   - Tailwind + shadcn/ui; reuse existing primitives.
 - Auth:
-  - Better Auth patterns consistent with `../propagate/packages/app`.
+  - Better Auth patterns consistent with `../structa/packages/app`.
 - Imports:
   - Prefer configured aliases; otherwise use relative paths.
 - Linting/formatting:

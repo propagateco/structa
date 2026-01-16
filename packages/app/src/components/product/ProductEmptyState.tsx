@@ -24,7 +24,7 @@ export function ProductEmptyState({ onCreateClick }: ProductEmptyStateProps) {
             <span className="text-xs">⌘ C</span>
           </Button>
           <a
-            href="https://docs.propagate.so/products"
+            href="https://docs.structa.so/products"
             target="_blank"
             rel="noopener noreferrer"
           >
