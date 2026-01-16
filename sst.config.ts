@@ -21,11 +21,11 @@ export default $config({
     },
     async run() {
         const dns = await import('./infra/dns');
-        // await import('./infra/api');
+        await import('./infra/api');
         const database = await import('./infra/database');
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
-        // await import('./infra/app');
+        await import('./infra/app');
         await import('./infra/email');
         return {
             Api: dns.Domain.properties.api,

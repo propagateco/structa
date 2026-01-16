@@ -1,5 +1,4 @@
-import { Domain, domain } from './dns';
-import { Stage } from './dns';
+import { Stage, Domain, domain } from './dns';
 import { apiRouter } from './api';
 import { database } from './database';
 import { email } from './email';
