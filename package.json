@@ -6,7 +6,12 @@
     "node": ">=22.0.0"
   },
   "workspaces": [
-    "packages/*"
+    "packages/app",
+    "packages/backend",
+    "packages/core",
+    "packages/functions",
+    "packages/notifications",
+    "packages/scripts"
   ],
   "scripts": {
     "test": "vitest run --config vitest.config.js --disableConsoleIntercept",
