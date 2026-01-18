@@ -89,18 +89,7 @@ This file gives opencode agents repo-specific guidance. Scope: this root file ap
 - Playwright: add test run commands when tests are added.
 
 ## Ways of Working
-- Issue-first workflow via slash commands:
-  - `create-issue`: generates a PRD-style issue with sections (Context, Problem, Goals/Non-Goals, Requirements, Acceptance Criteria, Risks, Rollback Plan). Automatically creates a git worktree and branch for implementation, and opens a draft PR.
-  - `complete-issue`: validates acceptance criteria, ensures linked PR is merged and deployment verified, then cleans up the worktree and deletes the local branch.
-- Git worktrees
-  - Use dedicated worktrees under `worktrees/issue-<id>-<slug>`; branch name `issue/<id>-<slug>` based off `main` (configurable).
-  - One worktree per issue; delete after merge. Avoid mixing scopes.
-- PR practices
-  - Open a draft PR early; link to the issue. Keep granular commits.
-  - Use checklists in the issue; update as you progress.
-- Code hygiene
-  - Scope changes tightly; avoid drive-by fixes.
-  - Add or adjust tests near changes; use Playwright for UI flows when applicable.
+
 
 ## How to Use
 - Agents: read this file before editing.
