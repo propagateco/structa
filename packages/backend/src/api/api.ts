@@ -1,22 +1,11 @@
-import { Hono } from "hono";
-import { cors } from "hono/cors";
-import { handle } from "hono/aws-lambda";
-import { logger } from "hono/logger";
-import { HTTPException } from "hono/http-exception";
-import { ZodError } from "zod";
-import { UserRoute } from "./routes/user";
-import { OAuthRoute } from "./routes/oauth";
-import { AuthRoute } from "./routes/auth";
-import { BrandingRoute } from "./routes/branding";
-import { AppRoute } from "./routes/app";
-import { StorageRoute } from "./routes/storage";
-import { ProductRoute } from "./routes/product";
-import { WebhookRoute } from "./routes/webhook";
-import { StripeRoute } from "./routes/stripe";
-import { SalesRoute } from "./routes/sales";
-import { AppleRoute } from "./routes/apple";
-import { ExpoRoute } from "./routes/expo";
-import { TestRoute } from "./routes/test";
+import { Hono } from 'hono';
+import { handle } from 'hono/aws-lambda';
+import { logger } from 'hono/logger';
+import { HTTPException } from 'hono/http-exception';
+import { ZodError } from 'zod';
+import { UserRoute } from './routes/user';
+import { AuthRoute } from './routes/auth';
+import { StorageRoute } from './routes/storage';
 
 export class VisibleError extends Error {
     constructor(
@@ -68,27 +57,17 @@ const app = new Hono().use(logger()).onError((error, c) => {
     }
     return c.json(
         {
-            code: "internal",
-            message: "Internal server error",
+            code: 'internal',
+            message: 'Internal server error',
         },
         500
     );
 });
 
 const routes = app
-    .route("/auth", AuthRoute)
-    .route("/oauth", OAuthRoute)
-    .route("/user", UserRoute)
-    .route("/app", AppRoute)
-    .route("/branding", BrandingRoute)
-    .route("/storage", StorageRoute)
-    .route("/product", ProductRoute)
-    .route("/webhook", WebhookRoute)
-    .route("/stripe", StripeRoute)
-    .route("/sales", SalesRoute)
-    .route("/apple", AppleRoute)
-    .route("/expo", ExpoRoute)
-    .route("/test", TestRoute);
+    .route('/auth', AuthRoute)
+    .route('/user', UserRoute)
+    .route('/storage', StorageRoute);
 
 export const handler = handle(routes);
 export type RoutesType = typeof routes;
