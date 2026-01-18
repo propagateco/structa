@@ -1,97 +1,120 @@
-# AGENTS.md
+# Structa – AGENTS GUIDE
 
-This file gives opencode agents repo-specific guidance. Scope: this root file applies to the entire repo. Subdirectories may include their own AGENTS.md to override or extend these rules.
+Welcome, agent 👋
+This document provides guidance on how to work within the Structa monorepo.
 
-## Repo Overview
-- Monorepo managed via npm workspaces: see `package.json` workspaces.
-- Main web app: TanStack Start (router + server-side).
-- Data sync: ElectricSQL with TanStack DB; client cache via TanStack Query.
-- UI: shadcn/ui components with Tailwind.
-- ORM/DB: Drizzle for schema and migrations.
-- Auth: Better Auth setup consistent with `../structa/packages/app`.
-- Packages:
-  - `packages/template`: Vite + React + Tailwind UI template (may transition to TanStack Start).
-  - `packages/core`: Shared core utilities; mirror structure from `../structa/packages/core`.
-  - `packages/scripts`: Small TS scripts.
-- Infra with SST: `sst.config.ts` and `infra/*.ts` define stacks (API, DB, storage, email, DNS, secrets). Cross-project: see `../structa` for similar SST patterns.
+Before you write _any_ code, understand the structure:
+- **Main Web App**: `packages/web` – The primary application (TanStack Start, UI, Auth).
+- **Core Logic**: `packages/core` – Business logic, DB schemas, and shared utilities.
+- **API Layer**: `packages/backend` – Backend API services.
+- **Infrastructure**: Root level `infra/` and `sst.config.ts` (SST).
 
-## Coding Conventions
-- TypeScript preferred. Enable strict options consistent with existing `tsconfig.json`.
-- TanStack Start + Router:
-  - Use file-based routes and Start server handlers where applicable.
-  - Keep loaders/actions typed; prefer `zod` or TS types for inputs.
-- Data: ElectricSQL + TanStack DB + Query:
-  - Define sync models in Drizzle; map to Electric schemas.
-  - Use Query for client caching; invalidate keys consistently.
-- React components:
-  - Functional components and hooks.
-  - File naming: `PascalCase.tsx` for components.
-  - Props typed explicitly; avoid `any`.
-- Styling:
-  - Tailwind + shadcn/ui; reuse existing primitives.
-- Auth:
-  - Better Auth patterns consistent with `../structa/packages/app`.
-- Imports:
-  - Prefer configured aliases; otherwise use relative paths.
-- Linting/formatting:
-  - Respect `eslint.config.js` in `packages/template`.
-  - Keep changes minimal and aligned with existing style.
+---
 
-## Directory Layout
-- Root
-  - `infra/*.ts`: SST constructs and infrastructure helpers
-  - `sst.config.ts`: SST app configuration
-  - `README.md`: high-level docs
-- `packages/template`
-  - `src/components/ui/*`: shared UI primitives
-  - `src/components/layout/*`: layout components
-  - `src/pages/*`: page-level components
-  - `vite.config.ts`, `tailwind.config.ts`: build and styling configs
-- `packages/core` and `packages/scripts`: shared libraries and scripts
+## Reference Projects
 
-## Run & Test Commands
-- Install dependencies (root + workspaces):
-  - `npm install`
-- Development (template app):
-  - Check if dev server is already running before starting: `lsof -i :5173` (or whichever port)
-  - Only start if not already running: `npm run -w packages/template dev`
-- Build (template app):
-  - `npm run -w packages/template build`
-- Lint (template app):
-  - `npm run -w packages/template lint` (if configured)
-- Playwright tests (if present):
-  - Configure via `playwright.config.ts` (tests may be added later). Use workspace-specific scripts.
-- SST (infrastructure):
-  - Deploy/Dev: use SST CLI scripts as defined in `package.json` when available. Avoid creating new infra without explicit user request.
+The following directories contain example projects. **Use these as your primary source for UI components, design patterns, and coding style.**
 
-## Commit Message Style
+- `packages/app-example/` (@structa/app)
+- `packages/marketing-site-example/`
+
+**Guidance:**
+- **Study** these projects to understand how to build components and structure files.
+- **Copy** patterns and components from here into `packages/web` as needed.
+- **Do not modify** these example projects unless explicitly instructed to update the examples themselves.
+
+---
+
+## 1. Your Responsibilities
+
+As an agent, your job is to:
+
+1. **Implement incrementally**: Follow the user's plan step-by-step.
+2. **Respect Architecture**: Keep business logic in Core, UI in Web, and API definitions in Backend.
+3. **Use the Examples**: Don't invent new UI patterns if a suitable one exists in the example packages.
+
+---
+
+## 2. Package & Layer Rules
+
+### `packages/web` (The Main App)
+This is the consumer-facing application.
+- **Framework**: TanStack Start (Router + Server-side).
+- **Auth**: Better Auth. **Note**: Auth configuration lives here, NOT in the backend.
+- **UI**: Shadcn UI + Tailwind CSS.
+- **Data**: TanStack Query for client-side caching.
+- **Database Access**: Direct DB access via Drizzle (server functions) or API calls to Backend.
+
+### `packages/core` (Business Logic)
+This package contains the domain logic and shared definitions.
+- **Responsibility**: Pure business logic, Data transformations, Drizzle Schema definitions.
+- **Constraints**: Keep this environment-agnostic where possible. Avoid heavy UI dependencies.
+- **Testing**: Rigorous unit testing via Vitest.
+
+### `packages/backend` (API Layer)
+This package handles the server-side API.
+- **Responsibility**: API Endpoints, external service integrations.
+- **Auth**: Relies on the authentication context established by the Web app.
+
+---
+
+## 3. Preferred Libraries & Tooling
+
+When building features, use these approved libraries:
+
+### UI & Styling
+- **Shadcn UI**: Use the components in `src/components/ui`.
+- **Tailwind CSS**: Utility-first styling.
+
+### Data & State
+- **TanStack Query**: For async state management.
+- **Drizzle ORM**: For all database interactions and schema definitions.
+- **Zod**: For schema validation and type inference.
+
+### Infrastructure
+- **SST**: For deploying and managing infrastructure (defined in `sst.config.ts`).
+
+---
+
+## 4. Coding Style Guide (TypeScript)
+
+- **Strict TypeScript**: No `any`. Use explicit types.
+- **Functional Components**: Use React functional components with hooks.
+- **Naming**: `PascalCase` for components, `camelCase` for functions/variables.
+- **Imports**: Prefer absolute imports (configured aliases) over relative paths where possible.
+- **Linting**: Respect the existing `eslint` and `prettier` configurations.
+
+---
+
+## 5. Testing Expectations
+
+- **Unit Tests**: Use **Vitest** for logic in `packages/core` and utility functions in `packages/web`.
+- **E2E/Integration**: Use **Playwright** (if configured) for critical user flows.
+- **Run Tests**: `npm test` (or workspace specific `npm run test -w packages/core`).
+
+---
+
+## 6. Commit Message Style
+
 - Keep commits focused and scoped to the requested task.
 - Format:
   - Short imperative subject (max ~72 chars)
   - Optional body: one or two sentences describing why, not just what.
 - Do not commit secrets (`infra/secret.ts` is a helper; never add real secrets or .env files).
 
-## Agent Rules
-- Follow these conventions for any file you touch.
-- Prefer root-cause fixes; avoid unrelated changes.
-- Never add licenses or headers unless asked.
-- Minimal edits; match existing patterns and naming.
-- Validate with existing build/test scripts where applicable.
+---
 
-## Subdirectory Overrides
+## 7. Subdirectory Overrides
+
 - If a subdirectory includes its own `AGENTS.md`, its instructions take precedence for files within that subtree.
 - Example future overrides:
-  - `packages/template/AGENTS.md` may add UI-specific style guidelines.
+  - `packages/web/AGENTS.md` may add UI-specific style guidelines.
 
-## Notes & Placeholders (to be refined)
-- `packages/core`: document actual modules and usage once populated.
-- SST commands: add exact scripts when they exist in `package.json`.
-- Playwright: add test run commands when tests are added.
+---
 
-## Ways of Working
+## 8. Summary
 
-
-## How to Use
-- Agents: read this file before editing.
-- Humans: update this file when conventions change; add `AGENTS.md` to subdirs for specialized rules.
-
+- **Web** = UI + Auth + App wiring.
+- **Core** = Logic + DB Schema.
+- **Backend** = API.
+- **Examples** = Source of Truth for patterns.
