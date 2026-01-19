@@ -112,9 +112,80 @@ When building features, use these approved libraries:
 
 ---
 
-## 8. Summary
+## 6. Deployment Guidelines
+
+**CRITICAL**: Deployment commands must follow these strict rules.
+
+### Allowed Command
+- ✅ `npx sst deploy` – Deploys to your **personal stage** for testing
+  - **If this fails**, note the failure clearly for investigation (service name, error details, what was changed)
+
+### FORBIDDEN COMMANDS (NEVER RUN THESE)
+- ❌ `npx sst deploy --stage dev` – Deployed by CI only
+- ❌ `npx sst deploy --stage production` – Deployed by CI only
+
+**Why?** Deployments to `dev` and `production` are triggered by **CI pipelines** after:
+- All tests pass
+- Pre-commit hooks pass
+- Linting and type checking passes
+
+**Never manually deploy to these stages** – it bypasses the automated safety checks.
+
+---
+
+## 7. Log Visibility & Debugging
+
+### SST Logs Available to Agents
+
+| Log Type | Location | Can I Read? | Shows |
+|-----------|-----------|--------------|-------|
+| **Deployment logs** | `.sst/log/pulumi.log` | ✅ Yes | Resources created/updated, deployment errors, stack outputs, duration |
+| **Orchestration logs** | `.sst/log/sst.log` | ✅ Yes | File watcher events, service starts, infrastructure changes |
+| **Runtime logs (dev)** | Terminal only | ❌ No | Vite/TanStack Start logs, server-side `console.log()`, HMR events |
+
+### Reading Logs
+
+To check deployment logs:
+```bash
+cat .sst/log/pulumi.log | tail -50
+```
+
+To check SST orchestration logs:
+```bash
+cat .sst/log/sst.log | tail -100
+```
+
+### Important: SST Dev Server
+
+- **Do NOT run** `npx sst dev` yourself – it will **always** be running when you work on this project
+- The dev server logs (Vite, HMR, runtime console output) are **not captured** in log files
+- For runtime debugging issues, ask the user to paste terminal output or set up log redirection
+
+---
+
+## 8. Commit Message Style
+
+- Keep commits focused and scoped to the requested task.
+- Format:
+  - Short imperative subject (max ~72 chars)
+  - Optional body: one or two sentences describing why, not just what.
+- Do not commit secrets (`infra/secret.ts` is a helper; never add real secrets or .env files).
+
+---
+
+## 9. Subdirectory Overrides
+
+- If a subdirectory includes its own `AGENTS.md`, its instructions take precedence for files within that subtree.
+- Example future overrides:
+  - `packages/web/AGENTS.md` may add UI-specific style guidelines.
+
+---
+
+## 10. Summary
 
 - **Web** = UI + Auth + App wiring.
 - **Core** = Logic + DB Schema.
 - **Backend** = API.
 - **Examples** = Source of Truth for patterns.
+- **Deployment** = Only `npx sst deploy` to personal stage; never use `--stage dev` or `--stage production`.
+- **Logs** = Can read deployment (`.sst/log/pulumi.log`) and orchestration (`.sst/log/sst.log`), but NOT runtime dev server logs.

@@ -1,0 +1,27 @@
+# AGENTS.md
+
+Single, canonical "heart of the loop" - a concise, operational "how to run/build" guide.
+
+## Build & Run
+
+Succinct rules for how to BUILD the project:
+- Install: `npm install`
+- Dev: `npm run dev`
+- Build: `npm run build`
+
+## Validation
+
+Run these after implementing to get immediate feedback:
+- Tests: `npm test`
+- Typecheck: `npm run typecheck`
+- Lint: `npm run lint`
+
+## Operational Notes
+
+Succinct learnings about how to RUN the project (discovered during development):
+- [Note about env vars]
+- [Note about specific port requirements]
+
+## Codebase Patterns
+- [Pattern 1]
+- [Pattern 2]

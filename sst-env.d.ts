@@ -114,6 +114,10 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "Web": {
+      "type": "sst.aws.TanstackStart"
+      "url": string
+    }
   }
 }
 /// <reference path="sst-env.d.ts" />
