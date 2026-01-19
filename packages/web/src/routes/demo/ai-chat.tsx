@@ -9,7 +9,6 @@ import {
 	VolumeX,
 	Loader2,
 } from "lucide-react";
-import { Streamdown } from "streamdown";
 
 import { useGuitarRecommendationChat } from "@/lib/demo-ai-hook";
 import type { ChatMessages } from "@/lib/demo-ai-hook";
@@ -118,7 +117,7 @@ function Messages({
 													className="flex-1 min-w-0 prose dark:prose-invert max-w-none prose-sm"
 													key={index}
 												>
-													<Streamdown>{part.content}</Streamdown>
+													<div className="whitespace-pre-wrap">{part.content}</div>
 												</div>
 											);
 										}

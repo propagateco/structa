@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import "highlight.js/styles/github-dark.css";
-@source "../../../../node_modules/streamdown/dist/*.js";
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
@@ -32,8 +30,8 @@ html {
 }
 
 /* .prose p {
-  margin-top: 1.25em;
-  margin-bottom: 1.25em;
+   margin-top: 1.25em;
+   margin-bottom: 1.25em;
 } */
 
 .prose code {
@@ -205,7 +203,7 @@ html {
 	color: #d1d5db; /* text-gray-300 */
 }
 
-/* Ensure code blocks match the AI's formatting */
+/* Ensure code blocks match AI's formatting */
 .prose code {
 	color: #e5e7eb;
 	background-color: rgba(31, 41, 55, 0.5);

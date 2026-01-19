@@ -3,7 +3,6 @@ import { useStore } from "@tanstack/react-store";
 import { Store } from "@tanstack/store";
 
 import { Send, X, ChevronRight, BotIcon } from "lucide-react";
-import { Streamdown } from "streamdown";
 
 import { useGuitarRecommendationChat } from "@/lib/demo-ai-hook";
 import type { ChatMessages } from "@/lib/demo-ai-hook";
@@ -55,7 +54,7 @@ function Messages({ messages }: { messages: ChatMessages }) {
 										</div>
 									)}
 									<div className="flex-1 min-w-0 text-white prose dark:prose-invert max-w-none prose-sm">
-										<Streamdown>{part.content}</Streamdown>
+										<div className="whitespace-pre-wrap">{part.content}</div>
 									</div>
 								</div>
 							);
