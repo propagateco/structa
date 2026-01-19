@@ -6,10 +6,14 @@
     "dev": "vite dev --port 3000",
     "build": "vite build",
     "serve": "vite preview",
-    "test": "vitest run",
-    "test:watch": "vitest watch",
     "typecheck": "tsc --noEmit",
-    "typecheck:local": "tsc --noEmit --skipLibCheck"
+    "typecheck:local": "tsc --noEmit --skipLibCheck",
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "format": "biome format --write",
+    "format:check": "biome format",
+    "check": "biome check",
+    "check:fix": "biome check --write"
   },
   "dependencies": {
     "@aws-sdk/client-sesv2": "^3.779.0",
@@ -81,21 +85,16 @@
   },
   "devDependencies": {
     "@tanstack/devtools-vite": "^0.3.11",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.2.0",
     "@types/node": "^22.19.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "autoprefixer": "^10.4.22",
-    "jsdom": "^27.0.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
     "typescript": "^5.8.3",
     "vite": "^7.2.4",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.5",
     "web-vitals": "^5.1.0"
   }
 }

@@ -7,24 +7,23 @@
     },
     "workspaces": [
         "packages/web",
-        "packages/app",
+        "packages/app-example",
         "packages/backend",
         "packages/core",
         "packages/functions",
-        "packages/notifications",
-        "packages/scripts"
+        "packages/notifications"
     ],
     "scripts": {
         "test": "vitest run",
         "test:watch": "vitest watch",
         "test:coverage": "vitest run --coverage",
         "test:core": "cd packages/core && npm run test",
-        "test:app": "cd packages/app && npm run test",
+        "test:app": "cd packages/app-example && npm run test",
         "test:web": "cd packages/web && npm run test",
         "typecheck": "npm run typecheck:core && npm run typecheck:backend && npm run typecheck:app && npm run typecheck:web",
         "typecheck:core": "cd packages/core && npm run typecheck",
         "typecheck:backend": "cd packages/backend && npm run typecheck",
-        "typecheck:app": "cd packages/app && npm run typecheck",
+        "typecheck:app": "cd packages/app-example && npm run typecheck",
         "typecheck:web": "cd packages/web && npm run typecheck",
         "lint": "npm run lint:web; npm run lint:app || true; npm run lint:core || true; npm run lint:backend || true",
         "lint:fix": "npm run lint:web:fix; npm run lint:app:fix || true; npm run lint:core:fix || true; npm run lint:backend:fix || true",
