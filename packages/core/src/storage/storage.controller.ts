@@ -14,7 +14,6 @@ import {
 import { buildObjectKey } from "./storage.utils";
 import { convertMegabytesToBytes } from "@/utils/conversion";
 import { BASIC_IMAGE_TYPES, SHORT_HASH_LENGTH } from "@/utils/constants";
-import { BrandingModel } from "@/branding";
 
 export async function canEdit(
   appId: AppModel.AppType["id"],
@@ -64,83 +63,6 @@ export async function getUploadAvatarFromId(
     baseDirectory: "users",
     relativeDirectory: `user-${userId}/images`,
     objectName: `image-${createId()}`,
-  };
-  const object: ObjectProperties = {
-    reference,
-    size,
-    contentType,
-    checksum,
-    metadata,
-  };
-
-  const { url, key } = await getUploadUrlAndKey(
-    maxFileSize,
-    allowedFileTypes,
-    object,
-  );
-  return { url, key };
-}
-
-export async function getUploadIconUrlFromId(
-  userId: UserModel.UserType["id"],
-  appId: AppModel.AppType["id"],
-  size: number,
-  contentType: string,
-  checksum: string,
-): Promise<{ url: string; key: string }> {
-  const maxFileSize = convertMegabytesToBytes(
-    BrandingModel.MAX_BRANDING_ASSET_SIZE,
-  );
-  const createId = init({ length: SHORT_HASH_LENGTH });
-  const allowedFileTypes = BASIC_IMAGE_TYPES;
-
-  const metadata: Metadata = {
-    userId: userId,
-    ...(appId && { appId: appId }),
-  };
-  const reference: ObjectReference = {
-    baseDirectory: "apps",
-    relativeDirectory: `app-${appId}/images`,
-    objectName: `icon-${createId()}`,
-  };
-  const object: ObjectProperties = {
-    reference,
-    size,
-    contentType,
-    checksum,
-    metadata,
-  };
-
-  const { url, key } = await getUploadUrlAndKey(
-    maxFileSize,
-    allowedFileTypes,
-    object,
-  );
-  return { url, key };
-}
-
-export async function getUploadLogoUrlFromId(
-  userId: UserModel.UserType["id"],
-  appId: AppModel.AppType["id"],
-  mode: "light" | "dark",
-  size: number,
-  contentType: string,
-  checksum: string,
-): Promise<{ url: string; key: string }> {
-  const maxFileSize = convertMegabytesToBytes(
-    BrandingModel.MAX_BRANDING_ASSET_SIZE,
-  );
-  const createId = init({ length: SHORT_HASH_LENGTH });
-  const allowedFileTypes = BASIC_IMAGE_TYPES;
-
-  const metadata: Metadata = {
-    userId: userId,
-    ...(appId && { appId: appId }),
-  };
-  const reference: ObjectReference = {
-    baseDirectory: "apps",
-    relativeDirectory: `app-${appId}/images`,
-    objectName: `${mode}-large-logo-${createId()}`,
   };
   const object: ObjectProperties = {
     reference,

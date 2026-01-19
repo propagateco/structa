@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "@react-email/components": "^1.0.1",
+        "@tsconfig/node20": "^20.1.8",
         "browserslist": "^4.22.2",
         "react": "19.2.0",
         "react-dom": "19.2.0"

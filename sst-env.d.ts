@@ -5,6 +5,15 @@
 
 declare module "sst" {
   export interface Resource {
+    "Api": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
+    "ApiRouter": {
+      "type": "sst.aws.Router"
+      "url": string
+    }
     "BetterAuthSecret": {
       "type": "sst.sst.Secret"
       "value": string
@@ -56,11 +65,6 @@ declare module "sst" {
       "type": "sst.aws.Function"
       "url": string
     }
-    "MarketingEmail": {
-      "configSet": string
-      "sender": string
-      "type": "sst.aws.Email"
-    }
     "NODE_TLS_REJECT_UNAUTHORIZED": {
       "type": "sst.sst.Secret"
       "value": string
@@ -109,6 +113,10 @@ declare module "sst" {
     "StripeWebhookSecret": {
       "type": "sst.sst.Secret"
       "value": string
+    }
+    "Web": {
+      "type": "sst.aws.TanstackStart"
+      "url": string
     }
   }
 }

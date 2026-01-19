@@ -5,12 +5,19 @@
     "license": "UNLICENSED",
     "scripts": {
         "test": "sst shell vitest",
-        "typecheck": "bash ../../scripts/typecheck-monorepo.sh",
-        "typecheck:local": "bash ../../scripts/typecheck-local.sh",
+        "test:watch": "sst shell vitest watch",
+        "typecheck": "npx sst shell -- tsc --noEmit",
+        "typecheck:local": "tsc --noEmit --skipLibCheck",
         "auth-generate": "sst shell -- npx @better-auth/cli@latest generate --config ../app/src/lib/auth.tsx --output ./src/auth/auth.sql.ts",
         "db": "sst shell drizzle-kit",
         "db:dev": "sst shell --stage dev drizzle-kit",
-        "db:prod": "sst shell --stage production drizzle-kit"
+        "db:prod": "sst shell --stage production drizzle-kit",
+        "lint": "biome check",
+        "lint:fix": "biome check --write",
+        "format": "biome format --write",
+        "format:check": "biome format",
+        "check": "biome check",
+        "check:fix": "biome check --write"
     },
     "exports": {
         "./*": [

@@ -3,10 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
-  "scripts": {
-    "typecheck": "bash ../../scripts/typecheck-monorepo.sh",
-    "typecheck:local": "bash ../../scripts/typecheck-local.sh"
-  },
+    "scripts": {
+        "typecheck": "npx sst shell -- tsc --noEmit",
+        "typecheck:local": "tsc --noEmit --skipLibCheck",
+        "lint": "biome check",
+        "lint:fix": "biome check --write",
+        "format": "biome format --write",
+        "format:check": "biome format",
+        "check": "biome check",
+        "check:fix": "biome check --write"
+    },
   "dependencies": {
     "@aws-sdk/client-sesv2": "^3.779.0",
     "@aws-sdk/client-sqs": "^3.883.0",
