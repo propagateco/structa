@@ -401,9 +401,17 @@ This commonly occurs when running:
 **Current Version:** MVP - Requires manual invocation by agent or user.
 
 **How to invoke:**
-```
-User or Agent: "Please run the aws-sso-login skill to refresh AWS credentials"
-```
+
+You can use any of these natural phrases:
+- "Run the aws-sso-login skill"
+- "Log me in to AWS"
+- "Log in to AWS SSO"  
+- "Refresh my AWS credentials"
+- "Refresh my AWS SSO token"
+- "My AWS credentials are expired, can you refresh them?"
+- "Can you handle the AWS SSO login?"
+
+The agent should recognize these and invoke the skill automatically.
 
 **What the skill does:**
 1. Runs helper script to get device code: `./scripts/aws-sso-login.sh structa`
