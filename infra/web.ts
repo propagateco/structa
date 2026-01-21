@@ -1,4 +1,4 @@
-import { Stage, Domain, domain } from './dns';
+import { Domain, domain, Stage } from './dns';
 import { apiRouter } from './api';
 import { database } from './database';
 import { email } from './email';
@@ -6,6 +6,7 @@ import { bucket, optimisedBucket } from './storage';
 import { cdn } from './cloudfront';
 import { secret } from './secret';
 
+// Simplified for testing - minimal TanStack Start deployment
 export const app = new sst.aws.TanStackStart('Web', {
     path: 'packages/web',
     domain: {

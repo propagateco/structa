@@ -1,35 +1,25 @@
-import { defineConfig } from "vite";
-import { devtools } from "@tanstack/devtools-vite";
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import viteReact from "@vitejs/plugin-react";
-import viteTsConfigPaths from "vite-tsconfig-paths";
-import { fileURLToPath, URL } from "url";
+import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import { defineConfig } from 'vite'
+import tsConfigPaths from 'vite-tsconfig-paths'
+import viteReact from '@vitejs/plugin-react'
+import { nitro } from 'nitro/vite'
 
-import tailwindcss from "@tailwindcss/vite";
-import { nitro } from "nitro/vite";
-
-const config = defineConfig({
-	resolve: {
-		alias: {
-			"@": fileURLToPath(new URL("./src", import.meta.url)),
-		},
-	},
-	plugins: [
-		devtools(),
-		nitro({
-			preset: "aws-lambda",
-			awsLambda: {
-				streaming: true,
-			},
-		}),
-		// this is the plugin that enables path aliases
-		viteTsConfigPaths({
-			projects: ["./tsconfig.json"],
-		}),
-		tailwindcss(),
-		tanstackStart(),
-		viteReact(),
-	],
-});
-
-export default config;
+export default defineConfig({
+  server: {
+    port: 3000,
+  },
+  plugins: [
+    nitro(),
+    tsConfigPaths({
+      projects: ['./tsconfig.json'],
+    }),
+    tanstackStart(),
+    viteReact(),
+  ],
+  nitro: {
+    preset: 'aws-lambda',
+    awsLambda: {
+      streaming: true
+    }
+  }
+})
