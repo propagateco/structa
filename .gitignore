@@ -29,3 +29,7 @@ node_modules
 /playwright/.cache/
 /playwright/.auth/
 
+# TypeScript incremental build cache
+.tsbuildinfo
+*.tsbuildinfo
+

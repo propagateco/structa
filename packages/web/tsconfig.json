@@ -17,6 +17,8 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-    "noEmit": true
+    "noEmit": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
   }
 }

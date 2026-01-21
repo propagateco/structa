@@ -265,7 +265,100 @@ When building features, use these approved libraries:
 
 ---
 
-## 7. Deployment Guidelines
+## 7. Git Workflow & Quality Gates
+
+### Pull Request Workflow
+
+This project uses a **trunk-based development** approach with PRs:
+
+- **Feature branches** are created from `production`
+- **PRs** are opened to merge back into `production`
+- **CI checks** must pass before merge
+- **Human approval** required for production PRs
+- **SST Console** autodeploys after merge
+
+### Quality Gates
+
+#### Gate 1: Pre-commit Hook (Local)
+Runs automatically on every `git commit`:
+- ✅ Lint & format staged files (auto-fixes)
+- ✅ TypeScript type check (full repo)
+- ✅ Related tests only (fast)
+
+**Performance:** ~20-45 seconds per commit
+
+**Bypass:** `git commit --no-verify` (emergency only)
+
+#### Gate 2: GitHub Actions CI (PR)
+Runs automatically when PR opened/updated:
+- ✅ Full TypeScript type check
+- ✅ Complete linting check
+- ✅ Full test suite
+- ✅ Security audit (warning only)
+
+**Performance:** ~1-3 minutes per PR update
+
+**Cannot bypass:** Required by branch protection
+
+#### Gate 3: Code Review (PR)
+Human reviewer must:
+- ✅ Review code changes
+- ✅ Verify CI passed
+- ✅ Approve PR before merge
+
+### Branch Protection
+
+- 🔒 **Production branch:** Protected
+  - Cannot push directly
+  - Requires PR with 1 approval
+  - Requires passing CI checks
+  - Even admins cannot bypass
+
+- 🔒 **Dev branch (optional):** Protected
+  - Requires PR (no approval needed)
+  - Requires passing CI checks
+
+### CI Configuration
+
+**Workflow files:**
+- `.github/workflows/pr-checks.yml` - Quality checks on PRs
+
+**What CI checks:**
+```bash
+npm run typecheck  # All packages
+npm run check      # Biome lint (check only, no fixes)
+npm test           # Full test suite
+```
+
+**CI optimizations:**
+- Caches npm dependencies
+- Skips draft PRs
+- Cancels outdated runs
+- Comments results on PR
+
+### Troubleshooting CI
+
+**CI fails but works locally:**
+```bash
+# Reproduce CI environment locally
+npm ci  # Clean install
+npm run typecheck
+npm run check
+npm test
+```
+
+**CI is slow:**
+- Check Actions tab for bottlenecks
+- Consider caching improvements
+- Tests should be < 2 minutes total
+
+**CI is stuck:**
+- Check GitHub Actions status page
+- May need to cancel and restart
+
+---
+
+## 8. Deployment Guidelines
 
 **CRITICAL**: Deployment commands must follow these strict rules.
 
@@ -286,7 +379,7 @@ When building features, use these approved libraries:
 
 ---
 
-## 8. Log Visibility & Debugging
+## 9. Log Visibility & Debugging
 
 ### SST Logs Available to Agents
 
@@ -316,7 +409,7 @@ cat .sst/log/sst.log | tail -100
 
 ---
 
-## 9. Commit Message Style
+## 10. Commit Message Style
 
 - Keep commits focused and scoped to the requested task.
 - Format:
@@ -326,7 +419,7 @@ cat .sst/log/sst.log | tail -100
 
 ---
 
-## 10. Subdirectory Overrides
+## 11. Subdirectory Overrides
 
 - If a subdirectory includes its own `AGENTS.md`, its instructions take precedence for files within that subtree.
 - Example future overrides:
@@ -334,7 +427,7 @@ cat .sst/log/sst.log | tail -100
 
 ---
 
-## 11. Summary
+## 12. Summary
 
 - **Web** = UI + Auth + App wiring.
 - **Core** = Logic + DB Schema.
@@ -347,7 +440,7 @@ cat .sst/log/sst.log | tail -100
 
 ---
 
-## 12. Quick Reference
+## 13. Quick Reference
 
 ### Common Quality Commands
 

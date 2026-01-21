@@ -1,78 +1,90 @@
 {
-    "name": "structa",
-    "version": "0.0.0",
-    "private": true,
-    "engines": {
-        "node": ">=22.0.0"
-    },
-    "workspaces": [
-        "packages/web",
-        "packages/app-example",
-        "packages/backend",
-        "packages/core",
-        "packages/functions",
-        "packages/notifications"
+  "name": "structa",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "workspaces": [
+    "packages/web",
+    "packages/app-example",
+    "packages/backend",
+    "packages/core",
+    "packages/functions",
+    "packages/notifications"
+  ],
+  "scripts": {
+    "prepare": "husky",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "test:related": "vitest related --run",
+    "test:core": "cd packages/core && npm run test",
+    "test:app": "cd packages/app-example && npm run test",
+    "test:web": "cd packages/web && npm run test",
+    "typecheck": "npm run typecheck:core && npm run typecheck:backend && npm run typecheck:app && npm run typecheck:web",
+    "typecheck:core": "cd packages/core && npm run typecheck",
+    "typecheck:backend": "cd packages/backend && npm run typecheck",
+    "typecheck:app": "cd packages/app-example && npm run typecheck",
+    "typecheck:web": "cd packages/web && npm run typecheck",
+    "lint": "npm run lint:web; npm run lint:app || true; npm run lint:core || true; npm run lint:backend || true",
+    "lint:fix": "npm run lint:web:fix; npm run lint:app:fix || true; npm run lint:core:fix || true; npm run lint:backend:fix || true",
+    "format": "npm run format:web; npm run format:app || true; npm run format:core || true; npm run format:backend || true",
+    "format:check": "npm run format:web:check; npm run format:app:check || true; npm run format:core:check || true; npm run format:backend:check || true",
+    "check": "npm run check:web; npm run check:app || true; npm run check:core || true; npm run check:backend || true",
+    "check:fix": "npm run check:web:fix; npm run check:app:fix || true; npm run check:core:fix || true; npm run check:backend:fix || true",
+    "lint:web": "cd packages/web && npm run lint",
+    "lint:web:fix": "cd packages/web && npm run lint:fix",
+    "lint:app": "cd packages/app-example && npm run lint || true",
+    "lint:app:fix": "cd packages/app-example && npm run lint:fix || true",
+    "lint:core": "cd packages/core && npm run lint || true",
+    "lint:core:fix": "cd packages/core && npm run lint:fix || true",
+    "lint:backend": "cd packages/backend && npm run lint || true",
+    "lint:backend:fix": "cd packages/backend && npm run lint:fix || true",
+    "format:web": "cd packages/web && npm run format",
+    "format:web:check": "cd packages/web && npm run format:check",
+    "format:app": "cd packages/app-example && npm run format || true",
+    "format:app:check": "cd packages/app-example && npm run format:check || true",
+    "format:core": "cd packages/core && npm run format || true",
+    "format:core:check": "cd packages/core && npm run format:check || true",
+    "format:backend": "cd packages/backend && npm run format || true",
+    "format:backend:check": "cd packages/backend && npm run format:check || true",
+    "check:web": "cd packages/web && npm run check",
+    "check:web:fix": "cd packages/web && npm run check:fix",
+    "check:app": "cd packages/app-example && npm run check || true",
+    "check:app:fix": "cd packages/app-example && npm run check:fix || true",
+    "check:core": "cd packages/core && npm run check || true",
+    "check:core:fix": "cd packages/core && npm run check:fix || true",
+    "check:backend": "cd packages/backend && npm run check || true",
+    "check:backend:fix": "cd packages/backend && npm run check:fix || true",
+    "dev:email": "npm run dev --workspace=@structa/notifications"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@tanstack/devtools": "^0.7.0",
+    "@tsconfig/node22": "^22",
+    "@types/node": "^25.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  },
+  "dependencies": {
+    "hono": "^4.10.4",
+    "sst": "^3.17.25",
+    "stripe": "^18.1.1",
+    "zod": "^3.24.1"
+  },
+  "overrides": {
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "lint-staged": {
+    "packages/**/*.{ts,tsx,js,jsx}": [
+      "biome check --write --files-ignore-unknown=true"
     ],
-    "scripts": {
-        "test": "vitest run",
-        "test:watch": "vitest watch",
-        "test:coverage": "vitest run --coverage",
-        "test:core": "cd packages/core && npm run test",
-        "test:app": "cd packages/app-example && npm run test",
-        "test:web": "cd packages/web && npm run test",
-        "typecheck": "npm run typecheck:core && npm run typecheck:backend && npm run typecheck:app && npm run typecheck:web",
-        "typecheck:core": "cd packages/core && npm run typecheck",
-        "typecheck:backend": "cd packages/backend && npm run typecheck",
-        "typecheck:app": "cd packages/app-example && npm run typecheck",
-        "typecheck:web": "cd packages/web && npm run typecheck",
-        "lint": "npm run lint:web; npm run lint:app || true; npm run lint:core || true; npm run lint:backend || true",
-        "lint:fix": "npm run lint:web:fix; npm run lint:app:fix || true; npm run lint:core:fix || true; npm run lint:backend:fix || true",
-        "format": "npm run format:web; npm run format:app || true; npm run format:core || true; npm run format:backend || true",
-        "format:check": "npm run format:web:check; npm run format:app:check || true; npm run format:core:check || true; npm run format:backend:check || true",
-        "check": "npm run check:web; npm run check:app || true; npm run check:core || true; npm run check:backend || true",
-        "check:fix": "npm run check:web:fix; npm run check:app:fix || true; npm run check:core:fix || true; npm run check:backend:fix || true",
-        "lint:web": "cd packages/web && npm run lint",
-        "lint:web:fix": "cd packages/web && npm run lint:fix",
-        "lint:app": "cd packages/app-example && npm run lint || true",
-        "lint:app:fix": "cd packages/app-example && npm run lint:fix || true",
-        "lint:core": "cd packages/core && npm run lint || true",
-        "lint:core:fix": "cd packages/core && npm run lint:fix || true",
-        "lint:backend": "cd packages/backend && npm run lint || true",
-        "lint:backend:fix": "cd packages/backend && npm run lint:fix || true",
-        "format:web": "cd packages/web && npm run format",
-        "format:web:check": "cd packages/web && npm run format:check",
-        "format:app": "cd packages/app-example && npm run format || true",
-        "format:app:check": "cd packages/app-example && npm run format:check || true",
-        "format:core": "cd packages/core && npm run format || true",
-        "format:core:check": "cd packages/core && npm run format:check || true",
-        "format:backend": "cd packages/backend && npm run format || true",
-        "format:backend:check": "cd packages/backend && npm run format:check || true",
-        "check:web": "cd packages/web && npm run check",
-        "check:web:fix": "cd packages/web && npm run check:fix",
-        "check:app": "cd packages/app-example && npm run check || true",
-        "check:app:fix": "cd packages/app-example && npm run check:fix || true",
-        "check:core": "cd packages/core && npm run check || true",
-        "check:core:fix": "cd packages/core && npm run check:fix || true",
-        "check:backend": "cd packages/backend && npm run check || true",
-        "check:backend:fix": "cd packages/backend && npm run check:fix || true",
-        "dev:email": "npm run dev --workspace=@structa/notifications"
-    },
-    "devDependencies": {
-        "@playwright/test": "^1.57.0",
-        "@tanstack/devtools": "^0.7.0",
-        "@tsconfig/node22": "^22",
-        "@types/node": "^25.0.3",
-        "typescript": "^5.8.3",
-        "vitest": "^3.1.2"
-    },
-    "dependencies": {
-        "hono": "^4.10.4",
-        "sst": "^3.17.25",
-        "stripe": "^18.1.1",
-        "zod": "^3.24.1"
-    },
-    "overrides": {
-        "react": "19.2.0",
-        "react-dom": "19.2.0"
-    }
+    "*.{json,md}": [
+      "biome format --write"
+    ]
+  }
 }
