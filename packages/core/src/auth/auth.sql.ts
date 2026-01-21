@@ -68,7 +68,7 @@ export const verification = pgTable(
         id: text('id').primaryKey(),
         identifier: text('identifier').notNull(),
         value: text('value').notNull(),
-        // 3 custom fields for location tracking
+        // 3 next custom fields for location tracking
         ipAddress: text('ip_address'),
         city: text('city'),
         country: text('country'),
