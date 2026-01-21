@@ -34,6 +34,7 @@ cat <<EOF
   "device_url": "$DEVICE_URL",
   "device_code": "$CODE",
   "sso_session": "$SSO_SESSION",
+  "email": "harrison@structa.so",
   "instructions": "Navigate to the URL and sign in. The browser should auto-fill credentials if saved."
 }
 EOF

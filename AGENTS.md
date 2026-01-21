@@ -389,38 +389,65 @@ When AWS SSO credentials expire, agents will see errors like:
 ```
 
 This commonly occurs when running:
-- `npm run typecheck:core` (uses sst shell)
-- `npm run typecheck:backend` (uses sst shell)
+- `npm run typecheck:core` (uses sst shell with AWS credentials)
+- `npm run typecheck:backend` (uses sst shell with AWS credentials)
 - Any `sst shell` commands
+- AWS CLI commands requiring authentication
 
-### Automated Credential Refresh
+### Automated Credential Refresh (MVP - Manual Invocation)
 
-**Use the aws-sso-login skill** to automate credential refresh:
+**Use the aws-sso-login skill** to automate credential refresh via browser automation.
 
-```bash
-# Step 1: Run the helper script
-./scripts/aws-sso-login.sh structa
+**Current Version:** MVP - Requires manual invocation by agent or user.
 
-# Step 2: Use dev-browser agent to complete authentication
-# The script outputs a device URL that the browser agent can navigate to
-# Browser should auto-fill credentials if saved
-
-# Step 3: Verify success
-aws sts get-caller-identity --profile structa-dev
+**How to invoke:**
+```
+User or Agent: "Please run the aws-sso-login skill to refresh AWS credentials"
 ```
 
-**For agents:** When detecting AWS credential errors:
-1. Invoke the `aws-sso-login` skill
-2. Use dev-browser agent to automate browser login
-3. Browser will navigate to device URL (code pre-filled)
-4. If credentials are saved in browser, they auto-fill
-5. Click sign-in button and wait for success
-6. Retry the original command
+**What the skill does:**
+1. Runs helper script to get device code: `./scripts/aws-sso-login.sh structa`
+2. Opens Chromium browser in headless mode
+3. Navigates to AWS SSO device URL (code pre-filled)
+4. Enters email: `harrison@structa.so`
+5. Waits for password auto-fill from saved browser credentials (3 seconds)
+6. **CRITICAL:** Fails immediately if password doesn't auto-fill (user must save credentials first)
+7. Clicks through authentication flow (Sign In → Confirm → Allow)
+8. Verifies success with AWS CLI: `aws sts get-caller-identity --profile structa-dev`
+9. Closes browser and reports success/failure
 
-**Manual fallback:** If automation fails, provide user with:
-- Device URL to visit
-- Device code to enter
-- Wait for user to complete login manually
+**Expected duration:** 20-30 seconds (if credentials are saved in browser)
+
+**Prerequisites:**
+- Chromium browser installed: `/snap/bin/chromium`
+- `jq` installed for JSON parsing
+- Credentials saved in Chromium browser (email + password)
+- Helper script exists: `./scripts/aws-sso-login.sh`
+
+### First-Time Setup
+
+**If credentials not saved in browser yet:**
+
+The skill will fail with clear instructions:
+```
+❌ ERROR: Password did not auto-fill
+
+Please save credentials in Chromium browser:
+  1. Open Chromium: /snap/bin/chromium
+  2. Visit: https://structa.awsapps.com/start
+  3. Sign in with:
+     Email: harrison@structa.so
+     Password: [your password]
+  4. Click 'Save password' when prompted
+
+Then retry this skill.
+```
+
+**Manual fallback (always works):**
+```bash
+aws sso login --sso-session=structa --no-browser --use-device-code
+# Follow prompts to complete login manually
+```
 
 ### SSO Configuration
 
@@ -428,10 +455,33 @@ aws sts get-caller-identity --profile structa-dev
 - **Profiles:** 
   - `structa-dev` - Development environment
   - `structa-production` - Production environment
+- **Email:** `harrison@structa.so` (hardcoded in helper script)
 - **Token Duration:** 8-12 hours typically
-- **Device Code Validity:** 5-10 minutes
+- **Device Code Validity:** 5-10 minutes (single-use)
 
-See `.claude/skills/aws-sso-login/SKILL.md` for detailed automation instructions.
+### Error Handling
+
+**The skill uses fail-fast approach:**
+- **Password not auto-filled:** Exit immediately with setup instructions
+- **Selector not found:** Exit with error (AWS UI may have changed)
+- **Timeout:** Exit with network error message
+- **CLI verification failed:** Exit with configuration error
+
+**All failures exit with code 1 and close browser gracefully.**
+
+### Future Enhancements (Post-MVP)
+
+- Automatic detection of credential errors (no manual invocation needed)
+- Integration with pre-commit hooks (auto-refresh before commit)
+- Support for visible browser mode (debugging)
+- Retry logic for transient failures
+- MFA/2FA support
+
+### Documentation
+
+**Skill location:** `.opencode/skills/aws-sso-login/SKILL.md`
+
+The skill uses Playwright MCP tools for browser automation and is configured for OpenCode project-level usage.
 
 ---
 
