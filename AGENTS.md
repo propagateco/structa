@@ -379,7 +379,63 @@ npm test
 
 ---
 
-## 9. Log Visibility & Debugging
+## 9. AWS SSO Authentication
+
+### Handling Expired Credentials
+
+When AWS SSO credentials expire, agents will see errors like:
+```
+✕ cached SSO token is expired, refresh cached SSO token failed
+```
+
+This commonly occurs when running:
+- `npm run typecheck:core` (uses sst shell)
+- `npm run typecheck:backend` (uses sst shell)
+- Any `sst shell` commands
+
+### Automated Credential Refresh
+
+**Use the aws-sso-login skill** to automate credential refresh:
+
+```bash
+# Step 1: Run the helper script
+./scripts/aws-sso-login.sh structa
+
+# Step 2: Use dev-browser agent to complete authentication
+# The script outputs a device URL that the browser agent can navigate to
+# Browser should auto-fill credentials if saved
+
+# Step 3: Verify success
+aws sts get-caller-identity --profile structa-dev
+```
+
+**For agents:** When detecting AWS credential errors:
+1. Invoke the `aws-sso-login` skill
+2. Use dev-browser agent to automate browser login
+3. Browser will navigate to device URL (code pre-filled)
+4. If credentials are saved in browser, they auto-fill
+5. Click sign-in button and wait for success
+6. Retry the original command
+
+**Manual fallback:** If automation fails, provide user with:
+- Device URL to visit
+- Device code to enter
+- Wait for user to complete login manually
+
+### SSO Configuration
+
+- **SSO Session:** `structa`
+- **Profiles:** 
+  - `structa-dev` - Development environment
+  - `structa-production` - Production environment
+- **Token Duration:** 8-12 hours typically
+- **Device Code Validity:** 5-10 minutes
+
+See `.claude/skills/aws-sso-login/SKILL.md` for detailed automation instructions.
+
+---
+
+## 10. Log Visibility & Debugging
 
 ### SST Logs Available to Agents
 
