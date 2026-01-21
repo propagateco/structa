@@ -1,0 +1,17 @@
+{
+  "date": "2026-01-21T14:55:28.244Z",
+  "preset": "aws-lambda",
+  "framework": {
+    "name": "nitro",
+    "version": ""
+  },
+  "versions": {
+    "nitro": "3.0.1-alpha.1"
+  },
+  "commands": {},
+  "config": {
+    "awsLambda": {
+      "streaming": true
+    }
+  }
+}

@@ -6,6 +6,7 @@ import { ZodError } from 'zod';
 import { UserRoute } from './routes/user';
 import { AuthRoute } from './routes/auth';
 import { StorageRoute } from './routes/storage';
+import { HealthRoute } from './routes/health';
 
 export class VisibleError extends Error {
     constructor(
@@ -67,7 +68,8 @@ const app = new Hono().use(logger()).onError((error, c) => {
 const routes = app
     .route('/auth', AuthRoute)
     .route('/user', UserRoute)
-    .route('/storage', StorageRoute);
+    .route('/storage', StorageRoute)
+    .route('/health', HealthRoute);
 
 export const handler = handle(routes);
 export type RoutesType = typeof routes;
