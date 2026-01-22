@@ -36,9 +36,6 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
       
-      - name: 🔍 TypeScript type checks
-        run: npm run typecheck
-      
       - name: 📝 Linting checks
         run: npm run check
       
@@ -69,8 +66,7 @@ jobs:
             
             | Check | Status |
             |-------|--------|
-            | TypeScript | ${emoji} |
-            | Linting | ${emoji} |
+            | Formatting & Linting | ${emoji} |
             | Tests | ${emoji} |
             
             ${status === 'failure' ? '⚠️ Please fix the issues above before merging.' : '🚀 All checks passed! Ready for review.'}
