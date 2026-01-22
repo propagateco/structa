@@ -1,10 +1,11 @@
 // Helpers for repeated SQL functionality
-import { sql } from 'drizzle-orm';
-import { char, timestamp, foreignKey, uuid } from 'drizzle-orm/pg-core';
-export { createId } from '@paralleldrive/cuid2';
+import { sql } from "drizzle-orm";
+import { char, foreignKey, timestamp, uuid } from "drizzle-orm/pg-core";
+
+export { createId } from "@paralleldrive/cuid2";
 
 export function enumToPgEnum<T extends Record<string, any>>(
-	myEnum: T
+	myEnum: T,
 ): [T[keyof T], ...T[keyof T][]] {
 	return Object.values(myEnum).map((value: any) => `${value}`) as any;
 }
@@ -14,16 +15,16 @@ export const cuid = (name: string) => char(name, { length: 24 });
 
 export const id = {
 	get id() {
-		return cuid('id').primaryKey().notNull();
+		return cuid("id").primaryKey().notNull();
 	},
 };
 
 export const workspaceID = {
 	get id() {
-		return cuid('id').notNull();
+		return cuid("id").notNull();
 	},
 	get workspaceID() {
-		return cuid('workspace_id').notNull();
+		return cuid("workspace_id").notNull();
 	},
 };
 

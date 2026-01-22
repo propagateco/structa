@@ -1,4 +1,4 @@
-export * as StorageInterfaces from './storage.interfaces';
+export * as StorageInterfaces from "./storage.interfaces";
 
 /**
  * Object Storage Interfaces
@@ -72,7 +72,7 @@ export type TimingMetrics = {
 
 export interface ValidationResult {
 	valid: boolean;
-	errorType?: 'EMPTY_FILE' | 'FILE_TOO_LARGE' | 'INVALID_FILE_TYPE';
+	errorType?: "EMPTY_FILE" | "FILE_TOO_LARGE" | "INVALID_FILE_TYPE";
 	errorMessage?: string;
 }
 
@@ -96,10 +96,10 @@ export class StorageServiceError extends Error implements StorageError {
 			errorCode: string;
 			context?: Record<string, unknown>;
 			cause?: unknown;
-		}
+		},
 	) {
 		super(message);
-		this.name = 'StorageServiceError';
+		this.name = "StorageServiceError";
 		this.statusCode = options.statusCode;
 		this.errorCode = options.errorCode;
 		this.context = options.context;

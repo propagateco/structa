@@ -1,5 +1,5 @@
-import { drizzle as drizzleWs } from "drizzle-orm/neon-serverless";
 import { neon, neonConfig, Pool } from "@neondatabase/serverless";
+import { drizzle as drizzleWs } from "drizzle-orm/neon-serverless";
 import { Resource } from "sst";
 import ws from "ws";
 
