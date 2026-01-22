@@ -1,10 +1,10 @@
-export * as UserController from './user.controller';
+export * as UserController from "./user.controller";
 
-import { UserModel } from './user.model';
-import { UserService } from './user.service';
-import { buildObjectKey } from '@/storage/storage.utils';
-import { StorageController } from '@/storage';
-import { Resource } from 'sst';
+import { Resource } from "sst";
+import { StorageController } from "../storage/storage.controller";
+import { buildObjectKey } from "../storage/storage.utils";
+import type { UserModel } from "./user.model";
+import { UserService } from "./user.service";
 
 export async function updateProfileFromSettings({
 	id,
@@ -12,12 +12,12 @@ export async function updateProfileFromSettings({
 	workspaceName,
 	avatarKey,
 }: {
-	id: UserModel.UserType['id'];
-	name: UserModel.UserType['name'];
-	workspaceName: UserModel.UserType['workspaceName'];
+	id: UserModel.UserType["id"];
+	name: UserModel.UserType["name"];
+	workspaceName: UserModel.UserType["workspaceName"];
 	avatarKey?: string;
 }): Promise<UserModel.UserType> {
-	console.log('Updating profile from settings...');
+	console.log("Updating profile from settings...");
 	if (!avatarKey) {
 		const user = await UserService.updateProfileNamesFromId({
 			id,
@@ -39,7 +39,7 @@ export async function updateProfileFromSettings({
 
 	if (oldAvatarKey) {
 		const key = buildObjectKey({
-			baseDirectory: 'users',
+			baseDirectory: "users",
 			relativeDirectory: `user-${id}/images`,
 			objectName: oldAvatarKey,
 		});

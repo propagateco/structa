@@ -1,5 +1,3 @@
-import { and } from 'drizzle-orm';
-import { BrandingModel } from '../branding/branding.model';
 import {
 	clampChroma,
 	converter,
@@ -8,11 +6,11 @@ import {
 	modeLrgb,
 	modeOklch,
 	modeRgb,
-	useMode,
-	wcagContrast,
 	type Oklch,
 	type Rgb,
-} from 'culori/fn';
+	useMode,
+	wcagContrast,
+} from "culori/fn";
 
 const rgb = useMode(modeRgb);
 const oklch = useMode(modeOklch);
@@ -27,7 +25,7 @@ export class Colour {
 	public l!: number;
 
 	constructor(colour: string | Oklch) {
-		if (typeof colour === 'string') {
+		if (typeof colour === "string") {
 			this.setColourFromHex(colour);
 		} else {
 			this.setColourFromOklch(colour);
@@ -39,7 +37,7 @@ export class Colour {
 	}
 
 	private toRgb(alpha?: number): Rgb {
-		const rgbColour = rgb(clampChroma(this._oklch, 'oklch'));
+		const rgbColour = rgb(clampChroma(this._oklch, "oklch"));
 		if (!rgbColour) {
 			throw new Error(`Invalid RGB conversion for OKLCH: ${this._oklch}`);
 		}
@@ -51,7 +49,7 @@ export class Colour {
 	 * Convert a Culori OKLCH color object to a hex string
 	 */
 	oklchToHex(oklchColor: Oklch): string {
-		const rgbColour = rgb(clampChroma(oklchColor, 'oklch'));
+		const rgbColour = rgb(clampChroma(oklchColor, "oklch"));
 		if (!rgbColour) {
 			throw new Error(`Invalid RGB conversion for OKLCH: ${oklchColor}`);
 		}
@@ -62,7 +60,7 @@ export class Colour {
 	 * Convert a hex string to a Culori OKLCH color object
 	 */
 	hexToOklch(hex: string): Oklch {
-		let oklchConverter = converter('oklch');
+		const oklchConverter = converter("oklch");
 		const oklch = oklchConverter(hex);
 		if (!oklch) {
 			throw new Error(`Invalid OKLCH conversion for hex: ${hex}`);
@@ -75,7 +73,7 @@ export class Colour {
 	 * @param alpha - Optional alpha value for transparency
 	 */
 	formatCss(alpha?: number): string {
-		let colour = this.toRgb(alpha);
+		const colour = this.toRgb(alpha);
 		return formatCss(colour);
 	}
 
@@ -83,7 +81,7 @@ export class Colour {
 	 * Convert this color to a hex string
 	 */
 	formatHex(): string {
-		let colour = this.toRgb();
+		const colour = this.toRgb();
 		return formatHex(colour);
 	}
 
@@ -121,7 +119,7 @@ export class Colour {
 	 * Convert this color to a Culori OKLCH color object
 	 */
 	toOklch(): Oklch {
-		let oklch = converter('oklch');
+		const oklch = converter("oklch");
 
 		const result = oklch(this.hex);
 		if (!result) {
@@ -139,7 +137,11 @@ export class Colour {
 		const fgColor = { ...text };
 		// Brighten text in dark mode, darken text in light mode.
 		const increment = fgColor.l > bg.l ? 0.005 : -0.005;
-		while (wcagContrast(fgColor, bg) < threshold && fgColor.l < 100 && fgColor.l > 0) {
+		while (
+			wcagContrast(fgColor, bg) < threshold &&
+			fgColor.l < 100 &&
+			fgColor.l > 0
+		) {
 			fgColor.l += increment;
 		}
 		return fgColor;
@@ -153,7 +155,7 @@ export abstract class ColourComposition {
 
 	constructor(baseColour: Colour | string) {
 		// Initialize with a Colour object or create one from the input
-		if (typeof baseColour === 'string') {
+		if (typeof baseColour === "string") {
 			this.baseColour = new Colour(baseColour);
 		} else {
 			this.baseColour = baseColour;
@@ -242,29 +244,45 @@ export class AccentColour extends ColourComposition {
 		const minimumContrast = 4.5; // WCAG AA standard
 
 		// Generate light mode accent colors
-		const lightAccentLowOklch = Colour.lchToOklch(87.81, accentChroma / 4, accentHue);
+		const lightAccentLowOklch = Colour.lchToOklch(
+			87.81,
+			accentChroma / 4,
+			accentHue,
+		);
 		const lightAccentOklch = this.baseColour._oklch; // Use the base color directly
-		const lightAccentHighOklch = Colour.lchToOklch(31.77, accentChroma / 2, accentHue);
+		const lightAccentHighOklch = Colour.lchToOklch(
+			31.77,
+			accentChroma / 2,
+			accentHue,
+		);
 
 		// Generate dark mode accent colors
-		const darkAccentLowOklch = Colour.lchToOklch(25.94, accentChroma / 3, accentHue);
+		const darkAccentLowOklch = Colour.lchToOklch(
+			25.94,
+			accentChroma / 3,
+			accentHue,
+		);
 		const darkAccentOklch = Colour.lchToOklch(52.28, accentChroma, accentHue);
-		const darkAccentHighOklch = Colour.lchToOklch(83.38, accentChroma / 3, accentHue);
+		const darkAccentHighOklch = Colour.lchToOklch(
+			83.38,
+			accentChroma / 3,
+			accentHue,
+		);
 
 		// Apply contrast adjustments if needed (example for light accent against dark background)
 		const darkBgOklch = Colour.lchToOklch(20.94, 0.01, accentHue);
 		const lightBgOklch = Colour.lchToOklch(94.77, 0.008, accentHue);
 
 		// Ensure sufficient contrast
-		const adjustedLightAccentOklch = Colour.contrastColor(
+		const _adjustedLightAccentOklch = Colour.contrastColor(
 			lightAccentOklch,
 			lightBgOklch,
-			minimumContrast
+			minimumContrast,
 		);
-		const adjustedDarkAccentOklch = Colour.contrastColor(
+		const _adjustedDarkAccentOklch = Colour.contrastColor(
 			darkAccentOklch,
 			darkBgOklch,
-			minimumContrast
+			minimumContrast,
 		);
 
 		return {
@@ -296,24 +314,24 @@ export class AccentColour extends ColourComposition {
 
 type GreyColourPalette = {
 	light: {
-		'grey-1': Oklch;
-		'grey-2': Oklch;
-		'grey-3': Oklch;
-		'grey-4': Oklch;
-		'grey-5': Oklch;
-		'grey-6': Oklch;
-		'grey-7': Oklch;
+		"grey-1": Oklch;
+		"grey-2": Oklch;
+		"grey-3": Oklch;
+		"grey-4": Oklch;
+		"grey-5": Oklch;
+		"grey-6": Oklch;
+		"grey-7": Oklch;
 		background: Oklch;
 		foreground: Oklch;
 	};
 	dark: {
-		'grey-1': Oklch;
-		'grey-2': Oklch;
-		'grey-3': Oklch;
-		'grey-4': Oklch;
-		'grey-5': Oklch;
-		'grey-6': Oklch;
-		'grey-7': Oklch;
+		"grey-1": Oklch;
+		"grey-2": Oklch;
+		"grey-3": Oklch;
+		"grey-4": Oklch;
+		"grey-5": Oklch;
+		"grey-6": Oklch;
+		"grey-7": Oklch;
 		background: Oklch;
 		foreground: Oklch;
 	};
@@ -347,24 +365,24 @@ export class GreyColour extends ColourComposition {
 		const palette = this.generatePalette();
 
 		// Initialize all grey variants from the generated palette
-		this.lightGrey1 = new Colour(palette.light['grey-1']!);
-		this.lightGrey2 = new Colour(palette.light['grey-2']!);
-		this.lightGrey3 = new Colour(palette.light['grey-3']!);
-		this.lightGrey4 = new Colour(palette.light['grey-4']!);
-		this.lightGrey5 = new Colour(palette.light['grey-5']!);
-		this.lightGrey6 = new Colour(palette.light['grey-6']!);
-		this.lightGrey7 = new Colour(palette.light['grey-7']!);
+		this.lightGrey1 = new Colour(palette.light["grey-1"]!);
+		this.lightGrey2 = new Colour(palette.light["grey-2"]!);
+		this.lightGrey3 = new Colour(palette.light["grey-3"]!);
+		this.lightGrey4 = new Colour(palette.light["grey-4"]!);
+		this.lightGrey5 = new Colour(palette.light["grey-5"]!);
+		this.lightGrey6 = new Colour(palette.light["grey-6"]!);
+		this.lightGrey7 = new Colour(palette.light["grey-7"]!);
 		this.lightBackground = new Colour(palette.light.background);
 		this.lightForeground = new Colour(palette.light.foreground);
 
 		// Dark mode versions
-		this.darkGrey1 = new Colour(palette.dark['grey-1']);
-		this.darkGrey2 = new Colour(palette.dark['grey-2']);
-		this.darkGrey3 = new Colour(palette.dark['grey-3']);
-		this.darkGrey4 = new Colour(palette.dark['grey-4']);
-		this.darkGrey5 = new Colour(palette.dark['grey-5']);
-		this.darkGrey6 = new Colour(palette.dark['grey-6']);
-		this.darkGrey7 = new Colour(palette.dark['grey-7']);
+		this.darkGrey1 = new Colour(palette.dark["grey-1"]);
+		this.darkGrey2 = new Colour(palette.dark["grey-2"]);
+		this.darkGrey3 = new Colour(palette.dark["grey-3"]);
+		this.darkGrey4 = new Colour(palette.dark["grey-4"]);
+		this.darkGrey5 = new Colour(palette.dark["grey-5"]);
+		this.darkGrey6 = new Colour(palette.dark["grey-6"]);
+		this.darkGrey7 = new Colour(palette.dark["grey-7"]);
 		this.darkBackground = new Colour(palette.dark.background);
 		this.darkForeground = new Colour(palette.dark.foreground);
 	}
@@ -377,23 +395,23 @@ export class GreyColour extends ColourComposition {
 
 		// Generate all grey variants
 		const palette = this.generatePalette();
-		this.lightGrey1.setColourFromOklch(palette.light['grey-1']);
-		this.lightGrey2.setColourFromOklch(palette.light['grey-2']);
-		this.lightGrey3.setColourFromOklch(palette.light['grey-3']);
-		this.lightGrey4.setColourFromOklch(palette.light['grey-4']);
-		this.lightGrey5.setColourFromOklch(palette.light['grey-5']);
-		this.lightGrey6.setColourFromOklch(palette.light['grey-6']);
-		this.lightGrey7.setColourFromOklch(palette.light['grey-7']);
+		this.lightGrey1.setColourFromOklch(palette.light["grey-1"]);
+		this.lightGrey2.setColourFromOklch(palette.light["grey-2"]);
+		this.lightGrey3.setColourFromOklch(palette.light["grey-3"]);
+		this.lightGrey4.setColourFromOklch(palette.light["grey-4"]);
+		this.lightGrey5.setColourFromOklch(palette.light["grey-5"]);
+		this.lightGrey6.setColourFromOklch(palette.light["grey-6"]);
+		this.lightGrey7.setColourFromOklch(palette.light["grey-7"]);
 		this.lightBackground.setColourFromOklch(palette.light.background);
 		this.lightForeground.setColourFromOklch(palette.light.foreground);
 
-		this.darkGrey1.setColourFromOklch(palette.dark['grey-1']);
-		this.darkGrey2.setColourFromOklch(palette.dark['grey-2']);
-		this.darkGrey3.setColourFromOklch(palette.dark['grey-3']);
-		this.darkGrey4.setColourFromOklch(palette.dark['grey-4']);
-		this.darkGrey5.setColourFromOklch(palette.dark['grey-5']);
-		this.darkGrey6.setColourFromOklch(palette.dark['grey-6']);
-		this.darkGrey7.setColourFromOklch(palette.dark['grey-7']);
+		this.darkGrey1.setColourFromOklch(palette.dark["grey-1"]);
+		this.darkGrey2.setColourFromOklch(palette.dark["grey-2"]);
+		this.darkGrey3.setColourFromOklch(palette.dark["grey-3"]);
+		this.darkGrey4.setColourFromOklch(palette.dark["grey-4"]);
+		this.darkGrey5.setColourFromOklch(palette.dark["grey-5"]);
+		this.darkGrey6.setColourFromOklch(palette.dark["grey-6"]);
+		this.darkGrey7.setColourFromOklch(palette.dark["grey-7"]);
 		this.darkBackground.setColourFromOklch(palette.dark.background);
 		this.darkForeground.setColourFromOklch(palette.dark.foreground);
 
@@ -410,79 +428,79 @@ export class GreyColour extends ColourComposition {
 		// Generate the dark mode grey palette
 		const darkPalette = {
 			foreground: Colour.lchToOklch(100, 0, 0),
-			'grey-1': Colour.lchToOklch(94.77, greyChroma / 2.5, greyHue),
-			'grey-2': Colour.lchToOklch(81.34, greyChroma / 2, greyHue),
-			'grey-3': Colour.lchToOklch(63.78, greyChroma, greyHue),
-			'grey-4': Colour.lchToOklch(46.01, greyChroma, greyHue),
-			'grey-5': Colour.lchToOklch(34.09, greyChroma, greyHue),
-			'grey-6': Colour.lchToOklch(27.14, greyChroma, greyHue),
-			'grey-7': Colour.lchToOklch(20.94, greyChroma / 2, greyHue), // Use 'black' for grey-7
+			"grey-1": Colour.lchToOklch(94.77, greyChroma / 2.5, greyHue),
+			"grey-2": Colour.lchToOklch(81.34, greyChroma / 2, greyHue),
+			"grey-3": Colour.lchToOklch(63.78, greyChroma, greyHue),
+			"grey-4": Colour.lchToOklch(46.01, greyChroma, greyHue),
+			"grey-5": Colour.lchToOklch(34.09, greyChroma, greyHue),
+			"grey-6": Colour.lchToOklch(27.14, greyChroma, greyHue),
+			"grey-7": Colour.lchToOklch(20.94, greyChroma / 2, greyHue), // Use 'black' for grey-7
 			background: Colour.lchToOklch(20.94, greyChroma / 2, greyHue),
 		};
 
 		// Generate the light mode grey palette (note the flipped order)
 		const lightPalette = {
 			foreground: Colour.lchToOklch(20.94, greyChroma / 2, greyHue),
-			'grey-1': Colour.lchToOklch(27.14, greyChroma, greyHue),
-			'grey-2': Colour.lchToOklch(34.09, greyChroma, greyHue),
-			'grey-3': Colour.lchToOklch(46.01, greyChroma, greyHue),
-			'grey-4': Colour.lchToOklch(63.78, greyChroma, greyHue),
-			'grey-5': Colour.lchToOklch(81.34, greyChroma / 2, greyHue),
-			'grey-6': Colour.lchToOklch(94.77, greyChroma / 2.5, greyHue),
-			'grey-7': Colour.lchToOklch(97.35, greyChroma / 5, greyHue),
+			"grey-1": Colour.lchToOklch(27.14, greyChroma, greyHue),
+			"grey-2": Colour.lchToOklch(34.09, greyChroma, greyHue),
+			"grey-3": Colour.lchToOklch(46.01, greyChroma, greyHue),
+			"grey-4": Colour.lchToOklch(63.78, greyChroma, greyHue),
+			"grey-5": Colour.lchToOklch(81.34, greyChroma / 2, greyHue),
+			"grey-6": Colour.lchToOklch(94.77, greyChroma / 2.5, greyHue),
+			"grey-7": Colour.lchToOklch(97.35, greyChroma / 5, greyHue),
 			background: Colour.lchToOklch(100, 0, 0),
 		};
 
 		// Apply contrast corrections
 		// Dark mode adjustments
 		// `grey-2` is used against `grey-5` in inline code snippets.
-		darkPalette['grey-2'] = Colour.contrastColor(
-			darkPalette['grey-2']!,
-			darkPalette['grey-5']!,
-			minimumContrast
+		darkPalette["grey-2"] = Colour.contrastColor(
+			darkPalette["grey-2"]!,
+			darkPalette["grey-5"]!,
+			minimumContrast,
 		);
 
 		// `grey-3` is used in the table of contents
-		darkPalette['grey-3'] = Colour.contrastColor(
-			darkPalette['grey-3']!,
+		darkPalette["grey-3"] = Colour.contrastColor(
+			darkPalette["grey-3"]!,
 			darkPalette.background!,
-			minimumContrast
+			minimumContrast,
 		);
 
 		// Light mode adjustments
 		// `grey-2` is used against `grey-6` in inline code snippets.
-		lightPalette['grey-2'] = Colour.contrastColor(
-			lightPalette['grey-2']!,
-			lightPalette['grey-6']!,
-			minimumContrast
+		lightPalette["grey-2"] = Colour.contrastColor(
+			lightPalette["grey-2"]!,
+			lightPalette["grey-6"]!,
+			minimumContrast,
 		);
 		// `grey-3` is used in the table of contents.
-		lightPalette['grey-3'] = Colour.contrastColor(
-			lightPalette['grey-3']!,
+		lightPalette["grey-3"] = Colour.contrastColor(
+			lightPalette["grey-3"]!,
 			lightPalette.background!,
-			minimumContrast
+			minimumContrast,
 		);
 
 		return {
 			light: {
-				'grey-1': lightPalette['grey-1'],
-				'grey-2': lightPalette['grey-2'],
-				'grey-3': lightPalette['grey-3'],
-				'grey-4': lightPalette['grey-4'],
-				'grey-5': lightPalette['grey-5'],
-				'grey-6': lightPalette['grey-6'],
-				'grey-7': lightPalette['grey-7'],
+				"grey-1": lightPalette["grey-1"],
+				"grey-2": lightPalette["grey-2"],
+				"grey-3": lightPalette["grey-3"],
+				"grey-4": lightPalette["grey-4"],
+				"grey-5": lightPalette["grey-5"],
+				"grey-6": lightPalette["grey-6"],
+				"grey-7": lightPalette["grey-7"],
 				background: lightPalette.background,
 				foreground: lightPalette.foreground,
 			},
 			dark: {
-				'grey-1': darkPalette['grey-1'],
-				'grey-2': darkPalette['grey-2'],
-				'grey-3': darkPalette['grey-3'],
-				'grey-4': darkPalette['grey-4'],
-				'grey-5': darkPalette['grey-5'],
-				'grey-6': darkPalette['grey-6'],
-				'grey-7': darkPalette['grey-7'],
+				"grey-1": darkPalette["grey-1"],
+				"grey-2": darkPalette["grey-2"],
+				"grey-3": darkPalette["grey-3"],
+				"grey-4": darkPalette["grey-4"],
+				"grey-5": darkPalette["grey-5"],
+				"grey-6": darkPalette["grey-6"],
+				"grey-7": darkPalette["grey-7"],
 				background: darkPalette.background,
 				foreground: darkPalette.foreground,
 			},
