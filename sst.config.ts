@@ -1,4 +1,8 @@
 /// <reference path="./.sst/platform/config.d.ts" />
+// NOTE: Production deployment fix (Jan 23, 2026):
+// Resolved terraform-provider v0.8.1 403 error by running `sst add neon`
+// to regenerate neon provider configuration. Issue was transient Pulumi registry
+// availability problem affecting terraform-provider downloads.
 export default $config({
     app(input) {
         return {
