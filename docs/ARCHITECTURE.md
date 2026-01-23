@@ -9,7 +9,17 @@ The system uses a **hybrid data architecture**:
 2.  **Document Data (Durable Streams)**: Floor plan geometry and spatial metadata stored as Yjs CRDT documents. This enables real-time collaboration and history.
 3.  **Intelligence Layer (FloorPlanEngine)**: A dedicated Web Worker that runs the core 2D geometry engine and "Digital Twin" logic, isolating heavy calculations from the UI thread.
 
-### 1.1 Tech Stack
+### 1.0 Documentation Links
+
+**Related Documentation:**
+- [Tech Stack Details & Official Docs →](../stack/TECH_STACK.md)
+- [Development Practices →](../development/)
+- [Testing Philosophy →](../development/TESTING.md)
+- [Git Workflow →](../workflow/GIT_WORKFLOW.md)
+
+---
+
+### 1.1 Tech Stack (Summary)
 
 -   **Frontend**: TanStack Start (React), Tailwind CSS v4, Shadcn UI.
 -   **State/Sync**:
@@ -18,7 +28,7 @@ The system uses a **hybrid data architecture**:
     -   **Durable Streams**: For document storage and real-time broadcast.
 -   **Engine**: Custom 2D Geometry Engine (TypeScript) running in a Web Worker.
 -   **Backend/Infra**: SST (AWS Lambda, Durable Objects), Drizzle ORM, PostgreSQL.
--   **AI**: Vercel AI SDK (orchestration), Large Language Models (The Clerk).
+-   **AI**: TanStack AI (orchestration), Large Language Models (The Clerk).
 
 ## 2. Directory Structure & Responsibilities
 
