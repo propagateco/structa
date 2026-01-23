@@ -14,13 +14,23 @@
 | **State** | Yjs + Durable Streams | Proven pattern for real-time collaboration. |
 
 ## 3. Phase Overview (The Roadmap)
-| Phase | Focus | Status |
-| :--- | :--- | :--- |
-| **01** | **Project Setup (Web & Auth)** | **Active** |
-| 02 | Electric SQL Integration | Pending |
-| 03 | Durable Streams Setup | Pending |
-| 04 | Tracer Bullet: The Room | Pending |
+| Phase | Focus | Status | Spec File |
+| :--- | :--- | :--- | :--- |
+| **01** | **Project Setup (Web & Auth)** | **Active** | See sub-phases below |
+| 02 | Electric SQL Integration | Pending | (not yet created) |
+| 03 | Durable Streams Setup | Pending | (not yet created) |
+| 04 | Tracer Bullet: The Room | Pending | (not yet created) |
 
-## 4. Current Focus: Phase 01
-**Goal:** Transform `packages/web` into a fully authenticated app with Tailwind v4 and Shadcn.
-**Spec File:** `specs/plan/01-project-setup.md`
+### Phase 01 Sub-Phases
+
+| Sub-Phase | Name | Status | Spec File | Duration |
+|-----------|------|--------|-----------|----------|
+| 01.1 | Foundation & Tailwind v4 Setup | **Ready** | `01-foundation-tailwind.md` | 45-60 min |
+| 01.2 | Authentication Backend | Pending | `02-authentication-backend.md` | 60-90 min |
+| 01.3 | UI Components | Pending | `03-ui-components.md` | 90-120 min |
+| 01.4 | Routes & Protected Pages | Pending | `04-routes-protected-pages.md` | 60-90 min |
+| 01.5 | Testing & Validation | Pending | `05-testing-validation.md` | 30-45 min |
+
+## 4. Current Focus: Phase 01.1
+**Goal:** Set up Tailwind v4 with CSS-first configuration, Shadcn component library, and teal/cyan brand theme.
+**Spec File:** `specs/plan/01-foundation-tailwind.md`
