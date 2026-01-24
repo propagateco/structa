@@ -41,12 +41,13 @@ For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ## Local Development
 
-- Run `sst dev` in mono mode to see all dev server logs in a single stream:
+- Run `sst dev` manually in your terminal before asking agents to diagnose issues:
   ```bash
   npx sst dev --mode=mono
   ```
-- This displays logs from Functions, Tasks, Frontends, and Services in one terminal
-- Avoid `--mode=basic` - it doesn't start child processes and requires manual frontend startup
+- **Important**: Agents assume `sst dev` is already running - they only read and analyze logs
+- Use `--mode=mono` to see all logs (Functions, Tasks, Frontends, Services) in one terminal
+- Agents search logs for errors, warnings, and diagnostic information
 - For more SST dev mode options, see [docs/development/DEVELOPMENT_TOOLS.md](docs/development/DEVELOPMENT_TOOLS.md#sst-dev-mode)
 
 ## Project Context
