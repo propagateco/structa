@@ -24,7 +24,7 @@ For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 | Topic | Location |
 |-------|----------|
-| Quality tools (Biome, Vitest, TypeScript) | [docs/development/QUALITY_TOOLS.md](docs/development/QUALITY_TOOLS.md) |
+| Development tools (Biome, Vitest, TypeScript, SST Dev) | [docs/development/DEVELOPMENT_TOOLS.md](docs/development/DEVELOPMENT_TOOLS.md) |
 | Testing philosophy & TDD workflow | [docs/development/TESTING.md](docs/development/TESTING.md) |
 | Coding conventions & style | [docs/development/CODING_STYLE.md](docs/development/CODING_STYLE.md) |
 | Debugging & log locations | [docs/development/DEBUGGING.md](docs/development/DEBUGGING.md) |
@@ -38,6 +38,16 @@ For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - Study patterns from `packages/app-example/` before coding
 - Only deploy to personal stage: `npx sst deploy`
 - Never run `npx sst deploy --stage dev` or `--stage production` (CI only)
+
+## Local Development
+
+- Run `sst dev` in mono mode to see all dev server logs in a single stream:
+  ```bash
+  npx sst dev --mode=mono
+  ```
+- This displays logs from Functions, Tasks, Frontends, and Services in one terminal
+- Avoid `--mode=basic` - it doesn't start child processes and requires manual frontend startup
+- For more SST dev mode options, see [docs/development/DEVELOPMENT_TOOLS.md](docs/development/DEVELOPMENT_TOOLS.md#sst-dev-mode)
 
 ## Project Context
 

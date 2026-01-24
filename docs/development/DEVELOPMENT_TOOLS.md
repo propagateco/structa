@@ -1,4 +1,4 @@
-# Quality Tools
+# Development Tools
 
 This document describes quality assurance tools used in Structa monorepo.
 
@@ -7,6 +7,7 @@ This document describes quality assurance tools used in Structa monorepo.
 - [TypeScript Type Checking](#typescript-type-checking)
 - [Biome (Linter & Formatter)](#biome-linter--formatter)
 - [Vitest (Unit Testing)](#vitest-unit-testing)
+- [SST Dev Mode](#sst-dev-mode)
 - [Related Documentation](#related-documentation)
 
 ---
@@ -105,7 +106,7 @@ npx biome check --diagnostic-level=error src/components/Header.tsx
 
 ## Vitest (Unit Testing)
 
-Vitest is used for unit testing. It's fast and integrated with the project's TypeScript setup.
+Vitest is used for unit testing. It's fast and integrated with project's TypeScript setup.
 
 ### Running Tests
 
@@ -126,6 +127,50 @@ npm run test:coverage
 ```
 
 **Note**: `packages/core` uses `sst shell vitest` to provide SST environment variables during test runs.
+
+---
+
+## SST Dev Mode
+
+SST's dev mode runs your app locally with infrastructure as code. When running `sst dev --mode=mono`, SST:
+
+### What Happens
+
+1. **Deploys most resources as-is** - Your cloud infrastructure is deployed normally
+2. **Runs components with `dev` props locally:**
+   - **Functions** - Run in Live Lambda mode (in "Functions" tab or mono stream)
+   - **Tasks** - Stub version deployed, proxying to local `dev.command`
+   - **Frontends** (Nextjs, Remix, Astro, StaticSite) - Dev servers started locally, not deployed
+   - **Services** - Not deployed, instead `dev.command` started locally
+   - **Databases** (Postgres, Aurora, Redis) - Link to local database if `dev` prop is set
+3. **Starts tunnel** - If your app has a VPC with `bastion` enabled
+4. **Loads linked resources** - All linked resources available in environment
+5. **Watches for changes** - Automatically redeploys when `sst.config.ts` changes
+
+### Mono Mode
+
+Use `--mode=mono` to see all child process logs in a single stream:
+
+```bash
+# Recommended: View all logs in one terminal
+npx sst dev --mode=mono
+
+# Available alternatives:
+npx sst dev --mode=basic  # Don't spawn child processes (manual frontend startup required)
+npx sst dev                 # Default multiplexed mode with tabbed UI (Linux/macOS/WSL only)
+```
+
+**Why Mono Mode?**
+- Single log stream is easier to read and search
+- Works consistently across all platforms
+- Avoids `.sst/` directory log accumulation
+- Better for debugging issues across multiple dev servers
+
+### Logs and Disk Space
+
+- Logs written to `.sst/` directory accumulate and are **not automatically cleaned**
+- Use `--mode=mono` to avoid log file accumulation (logs go to stdout only)
+- If enabling `--print-logs` or `--verbose`, monitor disk usage: `du -sh .sst/`
 
 ---
 
