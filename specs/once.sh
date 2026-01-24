@@ -2,4 +2,6 @@
 
 issues=$(gh issue list --state open --json number,title,body,comments)
 
-docker sandbox run --credentials host claude --allow-dangerously-skip-permissions "$issues @progress.txt @specs/prompt.md"
+opencode run --agent build "Here are the open issues: $issues
+
+Follow the instructions in specs/prompt.md for task breakdown, selection, and execution."

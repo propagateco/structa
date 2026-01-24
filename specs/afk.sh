@@ -6,31 +6,43 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-# jq filter to extract streaming text from assistant messages
-stream_text='select(.type == "assistant").message.content[]? | select(.type == "text").text // empty | gsub("\n"; "\r\n") | . + "\r\n\n"'
+# Get GitHub issues as JSON
+ISSUES=$(gh issue list --state open --json number,title,body,comments)
 
-# jq filter to extract final result
-final_result='select(.type == "result").result // empty'
+# Progress counters
+COMPLETED=0
+ITERATIONS=0
 
-issues=$(gh issue list --state open --json number,title,body,comments)
-
+# Main loop
 for ((i=1; i<=$1; i++)); do
-  tmpfile=$(mktemp)
-  trap "rm -f $tmpfile" EXIT
+  ITERATIONS=$i
+  echo "=== Iteration $i of $1 ==="
 
-  docker sandbox run --credentials host claude \
-    --verbose \
-    --print \
-    --output-format stream-json \
-    "$issues @progress.txt @specs/prompt.md" \
-  | grep --line-buffered '^{' \
-  | tee "$tmpfile" \
-  | jq --unbuffered -rj "$stream_text"
+  # Run OpenCode with build agent
+  # Pass issues JSON and prompt instructions
+  opencode run --agent build "Here are the open issues: $ISSUES
 
-  result=$(jq -r "$final_result" "$tmpfile")
+Follow the instructions in specs/prompt.md for task breakdown, selection, and execution."
 
-  if [[ "$result" == *"<promise>COMPLETE</promise>"* ]]; then
-    echo "Ralph complete after $i iterations."
-    exit 0
+  # Check for completion signal in progress.txt
+  if grep -q "<promise>COMPLETE</promise>" specs/progress.txt; then
+    COMPLETED=1
+    break
   fi
+
+  echo "---"
 done
+
+# Summary at end
+echo ""
+echo "========================================="
+echo "Summary:"
+echo "  Iterations: $ITERATIONS / $1"
+if [ $COMPLETED -eq 1 ]; then
+  echo "  Status: ✓ Complete"
+  exit 0
+else
+  echo "  Status: Max iterations reached"
+  exit 1
+fi
+echo "========================================="
