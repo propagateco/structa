@@ -47,12 +47,13 @@ export default $config({
         const database = await import('./infra/database');
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
-        await import('./infra/email');
+        const email = await import('./infra/email');
         return {
             Api: dns.Domain.properties.api,
             Platform: dns.Domain.properties.platform,
             DatabaseUrl: database.database.properties.url,
             CloudfrontUrl: cloudfront.imageDistribution.url,
+            Email: email,
         };
     },
 });
