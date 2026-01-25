@@ -58,9 +58,14 @@
 
 - [x] **Task 11**: Create Better Auth client configuration
   - ✅ Completed
+  - Commit: aa46361
   - Notes: Created `src/lib/auth-client.ts` with createAuthClient, emailOTPClient plugin, and convenience exports (signIn, signUp, signOut, getSession)
+
+- [x] **Task 12**: Create auth middleware
+  - ✅ Completed
+  - Notes: Created `src/middleware/auth.ts` with authMiddleware (protects routes, redirects to /login) and loginMiddleware (already logged in users redirect to /app). Used type assertions for non-existent routes.
+
 - [ ] Create Better Auth server configuration (already exists)
-- [ ] Create auth middleware
 - [ ] Create Better Auth API route handler
 
 ### Phase 3: UI Components
