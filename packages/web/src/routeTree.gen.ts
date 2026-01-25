@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TestTailwindRouteImport } from './routes/test-tailwind'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
@@ -18,11 +17,6 @@ import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
 
-const TestTailwindRoute = TestTailwindRouteImport.update({
-  id: '/test-tailwind',
-  path: '/test-tailwind',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -62,7 +56,6 @@ const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/test-tailwind': typeof TestTailwindRoute
   '/login/code': typeof LoginCodeRoute
   '/login/': typeof LoginIndexRoute
   '/app/settings': typeof AuthAppSettingsRoute
@@ -72,7 +65,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/test-tailwind': typeof TestTailwindRoute
   '/login/code': typeof LoginCodeRoute
   '/login': typeof LoginIndexRoute
   '/app/settings': typeof AuthAppSettingsRoute
@@ -83,7 +75,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/test-tailwind': typeof TestTailwindRoute
   '/login/code': typeof LoginCodeRoute
   '/login/': typeof LoginIndexRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
@@ -95,7 +86,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/test-tailwind'
     | '/login/code'
     | '/login/'
     | '/app/settings'
@@ -105,7 +95,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/test-tailwind'
     | '/login/code'
     | '/login'
     | '/app/settings'
@@ -115,7 +104,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
-    | '/test-tailwind'
     | '/login/code'
     | '/login/'
     | '/_auth/app/settings'
@@ -126,7 +114,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  TestTailwindRoute: typeof TestTailwindRoute
   LoginCodeRoute: typeof LoginCodeRoute
   LoginIndexRoute: typeof LoginIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -134,13 +121,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/test-tailwind': {
-      id: '/test-tailwind'
-      path: '/test-tailwind'
-      fullPath: '/test-tailwind'
-      preLoaderRoute: typeof TestTailwindRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -196,7 +176,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  TestTailwindRoute: TestTailwindRoute,
   LoginCodeRoute: LoginCodeRoute,
   LoginIndexRoute: LoginIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
