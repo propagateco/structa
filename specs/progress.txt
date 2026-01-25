@@ -24,3 +24,29 @@ Phase 2: Authentication Backend - Task 1
 - Next task: Create Better Auth client configuration (`src/lib/auth-client.ts`)
 - Need to verify SST Resources are properly configured before testing auth flows
 - Email service requires @structa/notifications package for email templates
+
+---
+
+## Task Completed (2026-01-25): Implement Google OAuth login button functionality
+
+### Issue Reference
+GitHub Issue #8: Setup minimal Tanstack Start app with auth protected routes and tailwind
+Phase 5: Testing & Validation - Task 21
+
+### Key Decisions
+- Used `authClient.signIn.social()` method for Google OAuth
+- Implemented in both login pages (/login and /login/code) for consistency
+- Added loading states with Loader2 spinner for better UX
+- Set callbackURL to "/app" for successful authentication
+- Used toast notifications for error handling
+
+### Files Changed
+- `packages/web/src/routes/login/index.tsx` - Implemented Google OAuth button with loading state
+- `packages/web/src/routes/login/code.tsx` - Implemented Google OAuth button with loading state
+
+### Blockers/Notes for Next Iteration
+- All implementation tasks complete for Issue #8
+- Remaining: Manual testing of auth flows (Email OTP + Google OAuth)
+- Remaining: Manual testing of route protection (redirect unauthenticated users)
+- Typecheck passes for all packages
+- Requires `sst dev` to be running for browser-based testing
