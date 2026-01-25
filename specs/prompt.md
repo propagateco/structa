@@ -38,11 +38,12 @@ Then, find a way to break it into a smaller chunk and only do that chunk (i.e. c
 
 # FEEDBACK LOOPS
 
-Before committing, run feedback loops:
+Before committing, run feedback loops in this order:
 
-- `npx sst deploy` to deploy to current stage (your personal stage) and verify infrastructure works
-- `npm run typecheck` to run type checker
-- `npm run test` to run tests
+1. **UI Changes**: Use dev-browser agent to test and check browser logs for any issues
+2. `npm run typecheck` to run type checker
+3. `npm run test` to run tests (E2E tests focus on browser console log issues)
+4. `npx sst deploy` to deploy to current stage (your personal stage) and verify infrastructure works
 
 Important: Always run `npx sst deploy` before committing to ensure infrastructure changes work and catch runtime errors early.
 
