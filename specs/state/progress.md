@@ -77,9 +77,13 @@
 
 - [x] **Task 14**: Update root layout with QueryClient + Toaster
   - ✅ Completed
+  - Commit: 370ddb8
   - Notes: Updated `src/routes/__root.tsx` to include QueryClientProvider with React.useState for client instance. Added Sonner Toaster component with top-center positioning and rich colors. Fixed missing lang attribute on html element.
 
-- [ ] Create landing page
+- [x] **Task 15**: Create landing page
+  - ✅ Completed
+  - Notes: Created marketing-style landing page with hero section, CTA buttons, and features grid. Used teal/cyan gradient background, responsive typography, and card components for feature display.
+
 - [ ] Create login pages
 - [ ] Create protected layout and routes
 
