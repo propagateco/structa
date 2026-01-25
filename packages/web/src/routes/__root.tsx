@@ -5,12 +5,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
 import {
   HeadContent,
-  Link,
   Outlet,
   Scripts,
   createRootRoute,
 } from '@tanstack/react-router'
 import appCss from '@/styles/app.css?url'
+import { NavigationBar } from '@/components/navigation-bar'
+import { Footer } from '@/components/footer'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -37,13 +38,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
-        <div>
-          <Link to="/">Index</Link>
-          <Link to="/about">About</Link>
+      <body className="min-h-screen flex flex-col">
+        <NavigationBar />
+        <div className="flex-1">
+          {children}
         </div>
-
-        {children}
+        <Footer />
         <Toaster position="top-center" richColors />
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
