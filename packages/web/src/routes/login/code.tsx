@@ -1,96 +1,131 @@
 import * as React from "react";
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter, useSearch } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { OTPInput } from "@/components/ui/input-otp";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 
-export const Route = createFileRoute("/login/")({
-	component: LoginComponent,
+export const Route = createFileRoute("/login/code")({
+	component: VerifyCodeComponent,
 });
 
-function LoginComponent() {
+function VerifyCodeComponent() {
 	const router = useRouter();
-	const [email, setEmail] = React.useState("");
+	const search = useSearch({ from: "/login/code" });
+	const [otp, setOtp] = React.useState("");
 	const [isLoading, setIsLoading] = React.useState(false);
+	const email = (search as any).email as string || "";
+
+	// If no email, redirect to login
+	React.useEffect(() => {
+		if (!email) {
+			toast.error("Please enter your email first");
+			router.navigate({ to: "/login" });
+		}
+	}, [email, router]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setIsLoading(true);
 
 		try {
-			const result = await authClient.emailOtp.sendVerificationOtp({
+			const result = await authClient.signIn.emailOtp({
 				email,
-				type: "sign-in",
+				otp,
 				fetchOptions: {
 					onError: (ctx: any) => {
-						toast.error(ctx.error.message || "Failed to send code");
+						toast.error(ctx.error.message || "Invalid code");
 					},
 				},
 			});
 
 			if (result?.error) {
-				toast.error(result.error.message || "Failed to send code");
+				toast.error(result.error.message || "Invalid code");
 				return;
 			}
 
-			toast.success("Code sent to your email!");
-			router.navigate({ to: ("/login/code") as any, search: { email } as any });
+			toast.success("Successfully logged in!");
+			router.navigate({ to: ("/app") as any });
 		} catch (error) {
 			toast.error("An error occurred. Please try again.");
-			console.error("Login error:", error);
+			console.error("Verify error:", error);
 		} finally {
 			setIsLoading(false);
 		}
 	};
+
+	const handleResend = async () => {
+		try {
+			const result = await authClient.emailOtp.sendVerificationOtp({
+				email,
+				type: "sign-in",
+				fetchOptions: {
+					onError: (ctx: any) => {
+						toast.error(ctx.error.message || "Failed to resend code");
+					},
+				},
+			});
+
+			if (result?.error) {
+				toast.error(result.error.message || "Failed to resend code");
+				return;
+			}
+
+			toast.success("New code sent to your email!");
+			setOtp("");
+		} catch (error) {
+			toast.error("An error occurred. Please try again.");
+			console.error("Resend error:", error);
+		}
+	};
+
+	if (!email) {
+		return null;
+	}
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center px-4">
 			<Card className="w-full max-w-md p-8">
 				<div className="text-center mb-8">
 					<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-						Welcome Back
+						Verify Your Email
 					</h1>
 					<p className="text-gray-600 dark:text-gray-400">
-						Enter your email to receive a login code
+						Enter the 6-digit code sent to{" "}
+						<span className="font-medium">{email}</span>
 					</p>
 				</div>
 
 				<form onSubmit={handleSubmit} className="space-y-6">
-					<div className="space-y-2">
-						<Label htmlFor="email">Email</Label>
-						<Input
-							id="email"
-							type="email"
-							placeholder="you@example.com"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							required
+					<div className="flex justify-center">
+						<OTPInput
+							length={6}
+							value={otp}
+							onChange={setOtp}
 							disabled={isLoading}
-							className="h-12"
 						/>
 					</div>
 
 					<Button
 						type="submit"
 						className="w-full h-12 bg-teal-600 hover:bg-teal-700"
-						disabled={isLoading || !email}
+						disabled={isLoading || otp.length !== 6}
 					>
-						{isLoading ? "Sending..." : "Send Code"}
+						{isLoading ? "Verifying..." : "Verify & Sign In"}
 					</Button>
 				</form>
 
 				<div className="mt-6 text-center">
 					<p className="text-sm text-gray-600 dark:text-gray-400">
-						Don't have an account?{" "}
+						Didn't receive a code?{" "}
 						<button
 							type="button"
 							className="text-teal-600 hover:underline font-medium"
-							onClick={() => toast.info("Sign up coming soon!")}
+							onClick={handleResend}
+							disabled={isLoading}
 						>
-							Sign up
+							Resend code
 						</button>
 					</p>
 				</div>
@@ -139,9 +174,9 @@ function LoginComponent() {
 				</div>
 
 				<div className="mt-6 text-center">
-					<Link to="/">
+					<Link to="/login">
 						<Button variant="ghost" className="text-sm text-gray-600 dark:text-gray-400">
-							← Back to home
+							← Back to login
 						</Button>
 					</Link>
 				</div>

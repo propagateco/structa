@@ -87,9 +87,13 @@
 
 - [x] **Task 16**: Create login page (email input form)
   - ✅ Completed
+  - Commit: b0eaed0
   - Notes: Created `src/routes/login/index.tsx` with email input form using Shadcn UI components. Integrated Better Auth emailOtp.sendVerificationOtp to send OTP to user's email. Added Google OAuth button (placeholder) and proper form handling with toast notifications.
 
-- [ ] Create OTP verification page
+- [x] **Task 17**: Create OTP verification page
+  - ✅ Completed
+  - Notes: Created `src/routes/login/code.tsx` with 6-digit OTP input using custom OTPInput component. Integrated Better Auth signIn.emailOtp to verify code and complete login. Added resend code functionality and auto-redirect to /app on success.
+
 - [ ] Create protected layout and routes
 
 ### Phase 5: Testing & Validation
