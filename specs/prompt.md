@@ -40,8 +40,11 @@ Then, find a way to break it into a smaller chunk and only do that chunk (i.e. c
 
 Before committing, run feedback loops:
 
-- `npm run typecheck` to run the type checker
-- `npm run test` to run the tests
+- `npx sst deploy` to deploy to current stage (your personal stage) and verify infrastructure works
+- `npm run typecheck` to run type checker
+- `npm run test` to run tests
+
+Important: Always run `npx sst deploy` before committing to ensure infrastructure changes work and catch runtime errors early.
 
 # PROGRESS
 
