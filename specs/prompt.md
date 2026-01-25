@@ -65,16 +65,9 @@ Make a git commit with a clear message.
 
 # THE ISSUE
 
-If you feel all tasks and comments in the GitHub issue have been completed and addressed, close the original GitHub issue.
+If task is complete or all of the comments have been addressed, close the original GitHub issue.
 
-When deciding to close:
-- ✅ All tasks in the issue are marked complete
-- ✅ All acceptance criteria are met
-- ✅ All comments have been addressed
-- ✅ Code is committed and deployed to personal stage
-- ✅ No remaining blockers or open questions
-
-If the task is not complete, leave a comment on the GitHub issue with what was done and what remains.
+If the task is not complete, leave a comment on the GitHub issue with what was done.
 
 # FINAL RULES
 
