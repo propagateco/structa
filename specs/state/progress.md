@@ -68,19 +68,17 @@
 
 - [x] **Task 13**: Create Better Auth API route handler
   - ✅ Completed
+  - Commit: a227561
   - Notes: Created `src/routes/api/auth.$.ts` with handlers for all HTTP methods (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS). Uses `auth.handler(request)` to process Better Auth requests.
 
 - [ ] Create Better Auth server configuration (already exists in src/lib/auth.ts)
 
-### Phase 3: UI Components
-
-- [ ] Auth Components (login forms, verification, account dropdown)
-- [ ] Layout Components (divider, header, tabs)
-- [ ] Landing Components (navigation, hero, features, footer)
-
 ### Phase 4: Routes & Protected Pages
 
-- [ ] Update root layout with QueryClient + Toaster
+- [x] **Task 14**: Update root layout with QueryClient + Toaster
+  - ✅ Completed
+  - Notes: Updated `src/routes/__root.tsx` to include QueryClientProvider with React.useState for client instance. Added Sonner Toaster component with top-center positioning and rich colors. Fixed missing lang attribute on html element.
+
 - [ ] Create landing page
 - [ ] Create login pages
 - [ ] Create protected layout and routes

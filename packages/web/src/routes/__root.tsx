@@ -1,6 +1,8 @@
 /// <reference types="vite/client" />
 import * as React from 'react'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toaster } from 'sonner'
 import {
   HeadContent,
   Link,
@@ -18,16 +20,20 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+  const [queryClient] = React.useState(() => new QueryClient())
+
   return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
+    <QueryClientProvider client={queryClient}>
+      <RootDocument>
+        <Outlet />
+      </RootDocument>
+    </QueryClientProvider>
   )
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
@@ -38,6 +44,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </div>
 
         {children}
+        <Toaster position="top-center" richColors />
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
       </body>
