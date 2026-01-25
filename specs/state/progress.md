@@ -82,9 +82,14 @@
 
 - [x] **Task 15**: Create landing page
   - ✅ Completed
+  - Commit: 96b62c5
   - Notes: Created marketing-style landing page with hero section, CTA buttons, and features grid. Used teal/cyan gradient background, responsive typography, and card components for feature display.
 
-- [ ] Create login pages
+- [x] **Task 16**: Create login page (email input form)
+  - ✅ Completed
+  - Notes: Created `src/routes/login/index.tsx` with email input form using Shadcn UI components. Integrated Better Auth emailOtp.sendVerificationOtp to send OTP to user's email. Added Google OAuth button (placeholder) and proper form handling with toast notifications.
+
+- [ ] Create OTP verification page
 - [ ] Create protected layout and routes
 
 ### Phase 5: Testing & Validation
