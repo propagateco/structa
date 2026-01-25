@@ -1,3 +1,26 @@
 # Metis Progress Log
 Started: Thu Jan 22 05:57:13 PM UTC 2026
 ---
+
+## Task Completed (2026-01-25): Create Better Auth server configuration
+
+### Issue Reference
+GitHub Issue #8: Setup minimal Tanstack Start app with auth protected routes and tailwind
+Phase 2: Authentication Backend - Task 1
+
+### Key Decisions
+- Used Drizzle adapter for database integration with PostgreSQL
+- Configured Email OTP plugin with custom email sender from backend package
+- Integrated Google OAuth with SST Resources for credentials
+- Added location tracking (IP → City/Country) using ip-api.com
+- Configured TanStack Start cookies plugin for session management
+- Added OpenAPI plugin for API documentation
+
+### Files Changed
+- `packages/web/src/lib/auth.ts` - Created Better Auth server configuration
+- `packages/web/tsconfig.json` - Added path mappings for @core and @backend packages
+
+### Blockers/Notes for Next Iteration
+- Next task: Create Better Auth client configuration (`src/lib/auth-client.ts`)
+- Need to verify SST Resources are properly configured before testing auth flows
+- Email service requires @structa/notifications package for email templates
