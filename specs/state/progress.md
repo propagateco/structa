@@ -92,9 +92,14 @@
 
 - [x] **Task 17**: Create OTP verification page
   - ✅ Completed
+  - Commit: a5f5826
   - Notes: Created `src/routes/login/code.tsx` with 6-digit OTP input using custom OTPInput component. Integrated Better Auth signIn.emailOtp to verify code and complete login. Added resend code functionality and auto-redirect to /app on success.
 
-- [ ] Create protected layout and routes
+- [x] **Task 18**: Create protected routes (dashboard & settings)
+  - ✅ Completed
+  - Notes: Created protected /app routes (dashboard and settings) with authMiddleware for route protection. Added dashboard with project cards and onboarding steps. Added settings page with tabs for Profile, Account, and Preferences. Created Avatar and Tabs UI components.
+
+- [ ] Create additional UI components
 
 ### Phase 5: Testing & Validation
 
