@@ -1,7 +1,6 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { redirect } from "@tanstack/react-router";
-import { auth } from "@/lib/auth";
+import { getAuth } from "@/lib/auth-server";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
@@ -12,19 +11,9 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth/app/settings")({
-	beforeLoad: async ({ context }) => {
-		const session = await auth.api.getSession({
-			headers: context.request?.headers,
-		});
-
-		if (!session) {
-			throw redirect({ to: ("/login") as any });
-		}
-
-		return {
-			session: session.session,
-			user: session.user,
-		};
+	beforeLoad: async () => {
+		const context = await getAuth();
+		return context;
 	},
 	component: SettingsComponent,
 });

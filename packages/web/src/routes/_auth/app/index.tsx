@@ -1,23 +1,12 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { redirect } from "@tanstack/react-router";
-import { auth } from "@/lib/auth";
+import { getAuth } from "@/lib/auth-server";
 import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/_auth/app/")({
-	beforeLoad: async ({ context }) => {
-		const session = await auth.api.getSession({
-			headers: context.request?.headers,
-		});
-
-		if (!session) {
-			throw redirect({ to: ("/login") as any });
-		}
-
-		return {
-			session: session.session,
-			user: session.user,
-		};
+	beforeLoad: async () => {
+		const context = await getAuth();
+		return context;
 	},
 	component: DashboardComponent,
 });
