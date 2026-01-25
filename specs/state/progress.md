@@ -120,6 +120,10 @@
 
 ### Phase 5: Testing & Validation
 
+- [x] **Task 21**: Implement Google OAuth login button functionality
+  - ✅ Completed
+  - Notes: Implemented Google OAuth in both login pages (/login and /login/code) using `authClient.signIn.social()` with proper loading states and error handling. Redirects to /app on successful authentication.
+
 - [ ] Verify auth flows
 - [ ] Test route protection
 - [ ] Run quality checks
