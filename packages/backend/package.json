@@ -3,30 +3,30 @@
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
-    "scripts": {
-        "typecheck": "npx sst shell -- tsc --noEmit",
-        "typecheck:local": "tsc --noEmit --skipLibCheck",
-        "lint": "biome check",
-        "lint:fix": "biome check --write",
-        "format": "biome format --write",
-        "format:check": "biome format",
-        "check": "biome check",
-        "check:fix": "biome check --write"
-    },
+  "scripts": {
+    "typecheck": "npx sst shell -- tsc --noEmit",
+    "typecheck:local": "tsc --noEmit --skipLibCheck",
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "format": "biome format --write",
+    "format:check": "biome format",
+    "check": "biome check",
+    "check:fix": "biome check --write"
+  },
   "dependencies": {
     "@aws-sdk/client-sesv2": "^3.779.0",
     "@aws-sdk/client-sqs": "^3.883.0",
     "@hono/zod-validator": "^0.7.6",
     "@openauthjs/openauth": "^0.4.2",
+    "@react-email/components": "^1.0.1",
     "@structa/core": "*",
     "@structa/notifications": "*",
-    "@react-email/components": "^1.0.1",
-    "better-auth": "^1.4.3",
+    "better-auth": "^1.4.17",
     "hono": "^4.8.10",
     "postgres": "^3.4.5",
     "sharp": "^0.34.4",
-    "sst": "3.17.25",
-    "zod": "^3.24.1"
+    "sst": "^3.17.37",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.137"

@@ -74,9 +74,9 @@
 		"class-variance-authority": "^0.7.1",
 		"hono": "^4.10.4",
 		"lucide-react": "^0.563.0",
-		"sst": "^3.17.25",
+		"sst": "^3.17.37",
 		"stripe": "^18.1.1",
-		"zod": "3.25.76"
+		"zod": "^4.3.6"
 	},
 	"overrides": {
 		"react": "19.2.0",

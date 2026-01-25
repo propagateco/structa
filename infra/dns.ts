@@ -34,9 +34,14 @@ export const { domain, platform } = (() => {
             platform: 'https://' + DEV,
         };
 
+    // For personal stages:
+    // - If $dev is true: running locally with sst dev → use localhost
+    // - If $dev is false: deployed with sst deploy → use deployed URL
+    const personalDomain = `${$app.stage}.${DEV}`;
+
     return {
-        domain: `${$app.stage}.${DEV}`,
-        platform: 'http://localhost:3000',
+        domain: personalDomain,
+        platform: $dev ? 'http://localhost:3000' : 'https://' + personalDomain,
     };
 })();
 

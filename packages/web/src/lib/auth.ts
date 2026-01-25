@@ -27,7 +27,7 @@ export const auth = betterAuth({
 	advanced: {
 		cookiePrefix: Resource.Stage.cookiePrefix,
 		crossSubDomainCookies: {
-			enabled: Resource.App.stage !== "local",
+			enabled: Resource.Domain.platform !== "http://localhost:3000",
 		},
 		defaultCookieAttributes: {
 			sameSite: "none",
