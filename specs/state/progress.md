@@ -56,8 +56,10 @@
 
 ### Phase 2: Authentication Backend
 
-- [ ] Create Better Auth server configuration
-- [ ] Create Better Auth client configuration
+- [x] **Task 11**: Create Better Auth client configuration
+  - ✅ Completed
+  - Notes: Created `src/lib/auth-client.ts` with createAuthClient, emailOTPClient plugin, and convenience exports (signIn, signUp, signOut, getSession)
+- [ ] Create Better Auth server configuration (already exists)
 - [ ] Create auth middleware
 - [ ] Create Better Auth API route handler
 
