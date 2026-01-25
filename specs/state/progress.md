@@ -63,10 +63,14 @@
 
 - [x] **Task 12**: Create auth middleware
   - ✅ Completed
+  - Commit: 4428468
   - Notes: Created `src/middleware/auth.ts` with authMiddleware (protects routes, redirects to /login) and loginMiddleware (already logged in users redirect to /app). Used type assertions for non-existent routes.
 
-- [ ] Create Better Auth server configuration (already exists)
-- [ ] Create Better Auth API route handler
+- [x] **Task 13**: Create Better Auth API route handler
+  - ✅ Completed
+  - Notes: Created `src/routes/api/auth.$.ts` with handlers for all HTTP methods (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS). Uses `auth.handler(request)` to process Better Auth requests.
+
+- [ ] Create Better Auth server configuration (already exists in src/lib/auth.ts)
 
 ### Phase 3: UI Components
 
