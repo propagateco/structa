@@ -1,16 +1,18 @@
-import { cn } from '@/lib/utils';
-import React from 'react';
+import type React from "react";
+import { cn } from "@/lib/utils";
 
 interface AppPlaceholderIconProps {
 	className?: string;
 	size?: number;
 }
 
-const AppPlaceholderIcon: React.FC<AppPlaceholderIconProps> = ({ className }) => (
+const AppPlaceholderIcon: React.FC<AppPlaceholderIconProps> = ({
+	className,
+}) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		viewBox="5 5 37.9 38"
-		className={cn('size-full', className)}
+		className={cn("size-full", className)}
 	>
 		<path
 			className="fill-muted"

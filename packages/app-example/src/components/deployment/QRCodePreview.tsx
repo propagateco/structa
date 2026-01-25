@@ -1,22 +1,22 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-	DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
+import { useQuery } from "@tanstack/react-query";
+import { Download, ExternalLink, Eye, QrCode } from "lucide-react";
+import { useState } from "react";
+import { deploymentsQueryOptions } from "@/clients/deployment/deployment.query.client";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from '@/components/ui/dialog';
-import { QrCode, Eye, Download, ExternalLink } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
-import { deploymentsQueryOptions } from '@/clients/deployment/deployment.query.client';
+} from "@/components/ui/dialog";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface QRCodePreviewProps {
 	className?: string;
@@ -25,17 +25,18 @@ interface QRCodePreviewProps {
 export function QRCodePreview({ className }: QRCodePreviewProps) {
 	const [showQRDialog, setShowQRDialog] = useState(false);
 	const [selectedDeployment, setSelectedDeployment] = useState<any>(null);
-	
+
 	const { data: deployments } = useQuery(deploymentsQueryOptions);
-	
-	const completedDeployments = deployments?.filter(
-		(deployment: any) => deployment.status === 'completed' && deployment.buildUrl
-	) || [];
-	
+
+	const completedDeployments =
+		deployments?.filter(
+			(deployment: any) =>
+				deployment.status === "completed" && deployment.buildUrl,
+		) || [];
+
 	// For development: allow preview if any deployment exists, even if not completed
-	const previewableDeployments = deployments?.filter(
-		(deployment: any) => deployment.buildUrl
-	) || [];
+	const previewableDeployments =
+		deployments?.filter((deployment: any) => deployment.buildUrl) || [];
 
 	const handleShowQR = (deployment: any) => {
 		setSelectedDeployment(deployment);
@@ -69,10 +70,15 @@ export function QRCodePreview({ className }: QRCodePreviewProps) {
 					</div>
 					<DropdownMenuSeparator />
 					{previewableDeployments.slice(0, 5).map((deployment: any) => (
-						<DropdownMenuItem key={deployment.id} className="flex-col items-start p-3">
+						<DropdownMenuItem
+							key={deployment.id}
+							className="flex-col items-start p-3"
+						>
 							<div className="w-full">
 								<div className="flex items-center justify-between mb-1">
-									<span className="font-medium truncate">{deployment.appName}</span>
+									<span className="font-medium truncate">
+										{deployment.appName}
+									</span>
 									<span className="text-xs text-muted-foreground">
 										{new Date(deployment.completedAt).toLocaleDateString()}
 									</span>
@@ -91,7 +97,9 @@ export function QRCodePreview({ className }: QRCodePreviewProps) {
 										<Button
 											size="sm"
 											variant="outline"
-											onClick={() => window.open(deployment.downloadUrl, '_blank')}
+											onClick={() =>
+												window.open(deployment.downloadUrl, "_blank")
+											}
 											className="flex-1"
 										>
 											<Download className="h-3 w-3 mr-1" />
@@ -102,7 +110,7 @@ export function QRCodePreview({ className }: QRCodePreviewProps) {
 										<Button
 											size="sm"
 											variant="outline"
-											onClick={() => window.open(deployment.buildUrl, '_blank')}
+											onClick={() => window.open(deployment.buildUrl, "_blank")}
 											className="flex-1"
 										>
 											<ExternalLink className="h-3 w-3 mr-1" />
@@ -121,7 +129,8 @@ export function QRCodePreview({ className }: QRCodePreviewProps) {
 					<DialogHeader>
 						<DialogTitle>Scan with Expo Go</DialogTitle>
 						<DialogDescription>
-							Scan this QR code with the Expo Go app to preview "{selectedDeployment?.appName}"
+							Scan this QR code with the Expo Go app to preview "
+							{selectedDeployment?.appName}"
 						</DialogDescription>
 					</DialogHeader>
 					{selectedDeployment && (
@@ -142,7 +151,9 @@ export function QRCodePreview({ className }: QRCodePreviewProps) {
 								{selectedDeployment.downloadUrl && (
 									<Button
 										variant="outline"
-										onClick={() => window.open(selectedDeployment.downloadUrl, '_blank')}
+										onClick={() =>
+											window.open(selectedDeployment.downloadUrl, "_blank")
+										}
 										className="flex-1"
 									>
 										<Download className="h-4 w-4 mr-2" />
@@ -151,7 +162,9 @@ export function QRCodePreview({ className }: QRCodePreviewProps) {
 								)}
 								<Button
 									variant="outline"
-									onClick={() => window.open(selectedDeployment.buildUrl, '_blank')}
+									onClick={() =>
+										window.open(selectedDeployment.buildUrl, "_blank")
+									}
 									className="flex-1"
 								>
 									<ExternalLink className="h-4 w-4 mr-2" />

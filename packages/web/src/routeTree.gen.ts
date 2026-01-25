@@ -38,9 +38,9 @@ const LoginCodeRoute = LoginCodeRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
-  id: '/app/',
+  id: '/_auth/app/',
   path: '/app/',
-  getParentRoute: () => AuthRouteRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -48,9 +48,9 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
-  id: '/app/settings',
+  id: '/_auth/app/settings',
   path: '/app/settings',
-  getParentRoute: () => AuthRouteRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -116,7 +116,9 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   LoginCodeRoute: typeof LoginCodeRoute
   LoginIndexRoute: typeof LoginIndexRoute
+  AuthAppSettingsRoute: typeof AuthAppSettingsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -154,7 +156,7 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app/'
       preLoaderRoute: typeof AuthAppIndexRouteImport
-      parentRoute: typeof AuthRouteRoute
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -168,7 +170,7 @@ declare module '@tanstack/react-router' {
       path: '/app/settings'
       fullPath: '/app/settings'
       preLoaderRoute: typeof AuthAppSettingsRouteImport
-      parentRoute: typeof AuthRouteRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -178,7 +180,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   LoginCodeRoute: LoginCodeRoute,
   LoginIndexRoute: LoginIndexRoute,
+  AuthAppSettingsRoute: AuthAppSettingsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  AuthAppIndexRoute: AuthAppIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

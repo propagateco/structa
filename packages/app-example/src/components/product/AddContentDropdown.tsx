@@ -1,13 +1,13 @@
+import { ProductInterface } from "@core/product/product.interface";
+import { Plus } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { ProductInterface } from '@core/product/product.interface';
-import { toast } from 'sonner';
+} from "@/components/ui/dropdown-menu";
 
 interface AddContentDropdownProps {
 	onAddContent: (type: ProductInterface.ContentType) => void;
@@ -16,7 +16,9 @@ interface AddContentDropdownProps {
 export function AddContentDropdown({ onAddContent }: AddContentDropdownProps) {
 	const handleAddContent = (type: ProductInterface.ContentType) => {
 		// For now, show coming soon message
-		toast.info(`${ProductInterface.ContentTypeConfig[type].label} creation coming soon!`);
+		toast.info(
+			`${ProductInterface.ContentTypeConfig[type].label} creation coming soon!`,
+		);
 
 		// In the future, this will call onAddContent(type)
 		// For now, we'll create placeholder content
@@ -32,19 +34,19 @@ export function AddContentDropdown({ onAddContent }: AddContentDropdownProps) {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="start" className="w-48">
-				<DropdownMenuItem onClick={() => handleAddContent('workout')}>
+				<DropdownMenuItem onClick={() => handleAddContent("workout")}>
 					<span className="mr-2">💪</span>
 					Add Workout
 				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => handleAddContent('audio')}>
+				<DropdownMenuItem onClick={() => handleAddContent("audio")}>
 					<span className="mr-2">🎧</span>
 					Add Audio Content
 				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => handleAddContent('video')}>
+				<DropdownMenuItem onClick={() => handleAddContent("video")}>
 					<span className="mr-2">▶️</span>
 					Add Video Content
 				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => handleAddContent('assessment')}>
+				<DropdownMenuItem onClick={() => handleAddContent("assessment")}>
 					<span className="mr-2">📋</span>
 					Add Assessment
 				</DropdownMenuItem>

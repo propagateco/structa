@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface InlineEditableTextAreaProps {
 	value: string;
@@ -13,7 +13,7 @@ interface InlineEditableTextAreaProps {
 export function InlineEditableTextArea({
 	value,
 	onUpdate,
-	placeholder = 'Click to edit',
+	placeholder = "Click to edit",
 	className,
 	minRows = 1,
 	maxRows = 10,
@@ -45,7 +45,7 @@ export function InlineEditableTextArea({
 	const adjustHeight = () => {
 		if (textareaRef.current) {
 			// Reset height to minimal (1 line) to get accurate scrollHeight
-			textareaRef.current.style.height = '1.5rem';
+			textareaRef.current.style.height = "1.5rem";
 
 			const scrollHeight = textareaRef.current.scrollHeight;
 			const lineHeight = 24; // Approximate line height in pixels
@@ -72,9 +72,9 @@ export function InlineEditableTextArea({
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (e.key === 'Escape') {
+		if (e.key === "Escape") {
 			handleCancel();
-		} else if (e.key === 'Enter' && !e.shiftKey) {
+		} else if (e.key === "Enter" && !e.shiftKey) {
 			e.preventDefault();
 			handleSave();
 		}
@@ -93,11 +93,11 @@ export function InlineEditableTextArea({
 				onBlur={handleSave}
 				onKeyDown={handleKeyDown}
 				className={cn(
-					'w-full bg-white shadow-md rounded px-2 py-1 border border-border outline-none ring-0 focus:ring-0 resize-none overflow-hidden',
-					className
+					"w-full bg-white shadow-md rounded px-2 py-1 border border-border outline-none ring-0 focus:ring-0 resize-none overflow-hidden",
+					className,
 				)}
 				placeholder={placeholder}
-				style={{ minHeight: '1.5rem' }}
+				style={{ minHeight: "1.5rem" }}
 			/>
 		);
 	}
@@ -107,11 +107,11 @@ export function InlineEditableTextArea({
 		<div
 			onClick={() => setIsEditing(true)}
 			className={cn(
-				'cursor-pointer rounded px-2 py-1 hover:bg-muted/50 transition-colors whitespace-pre-wrap w-full',
-				!value && 'text-muted-foreground',
-				className
+				"cursor-pointer rounded px-2 py-1 hover:bg-muted/50 transition-colors whitespace-pre-wrap w-full",
+				!value && "text-muted-foreground",
+				className,
 			)}
-			style={{ minHeight: '1.5rem' }}
+			style={{ minHeight: "1.5rem" }}
 		>
 			{value || placeholder}
 		</div>

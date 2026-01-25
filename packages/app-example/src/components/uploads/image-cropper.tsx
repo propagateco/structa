@@ -1,17 +1,21 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { CircleStencil, DefaultSize, RectangleStencil } from 'react-advanced-cropper';
-import 'react-advanced-cropper/dist/style.css';
-import { Button } from '@/components/ui/button';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import {
+	CircleStencil,
+	type DefaultSize,
+	RectangleStencil,
+} from "react-advanced-cropper";
+import "react-advanced-cropper/dist/style.css";
+import { getFileMimeContentType } from "@core/storage/storage.utils";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
+	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogFooter,
-	DialogDescription,
-} from '@/components/ui/dialog';
-import { Cropper, CropperRef } from './cropper';
-import { getFileMimeContentType } from '@core/storage/storage.utils';
+} from "@/components/ui/dialog";
+import { Cropper, type CropperRef } from "./cropper";
 
 interface ImageCropperProps {
 	description: string;
@@ -20,7 +24,7 @@ interface ImageCropperProps {
 	imageUrl: string | null;
 	onCropComplete: (croppedImage: string) => void;
 	aspectRatio?: number;
-	stencilType?: 'circle' | 'rectangle';
+	stencilType?: "circle" | "rectangle";
 }
 
 export function ImageCropper({
@@ -30,11 +34,11 @@ export function ImageCropper({
 	imageUrl,
 	onCropComplete,
 	aspectRatio = 1,
-	stencilType = 'circle',
+	stencilType = "circle",
 }: ImageCropperProps) {
 	const cropperRef = useRef<CropperRef>(null);
 	const [imageLoaded, setImageLoaded] = useState(false);
-	const [contentType, setContentType] = useState('');
+	const [contentType, setContentType] = useState("");
 
 	// Reset when dialog opens or image changes
 	useEffect(() => {
@@ -55,25 +59,25 @@ export function ImageCropper({
 			const canvas = cropperRef.current.getCanvas();
 			if (canvas) {
 				// Create a new canvas with white background for transparent images
-				const ctx = canvas.getContext('2d');
-				if (ctx && contentType === 'image/png') {
+				const ctx = canvas.getContext("2d");
+				if (ctx && contentType === "image/png") {
 					// Save the current canvas content
-					const tempCanvas = document.createElement('canvas');
+					const tempCanvas = document.createElement("canvas");
 					tempCanvas.width = canvas.width;
 					tempCanvas.height = canvas.height;
-					const tempCtx = tempCanvas.getContext('2d');
+					const tempCtx = tempCanvas.getContext("2d");
 					if (tempCtx) {
 						tempCtx.drawImage(canvas, 0, 0);
-						
+
 						// Fill the original canvas with white
-						ctx.fillStyle = '#ffffff';
+						ctx.fillStyle = "#ffffff";
 						ctx.fillRect(0, 0, canvas.width, canvas.height);
-						
+
 						// Draw the image back on top of the white background
 						ctx.drawImage(tempCanvas, 0, 0);
 					}
 				}
-				
+
 				const croppedImageUrl = canvas.toDataURL(contentType);
 				onCropComplete(croppedImageUrl);
 				onClose();
@@ -103,14 +107,14 @@ export function ImageCropper({
 						// defaultSize={defaultSize}
 						stencilProps={{
 							aspectRatio,
-							previewClassName: 'border-2 border-white/50',
+							previewClassName: "border-2 border-white/50",
 						}}
 						stencilSize={{
 							width: 500,
 							height: 500,
 						}}
 						stencilComponent={
-							stencilType === 'circle' ? CircleStencil : RectangleStencil
+							stencilType === "circle" ? CircleStencil : RectangleStencil
 						}
 						onReady={handleReady}
 					/>

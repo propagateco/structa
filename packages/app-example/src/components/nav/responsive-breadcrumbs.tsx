@@ -1,6 +1,16 @@
-import { useState } from 'react';
-import { Fragment } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Link } from "@tanstack/react-router";
+import { Slash } from "lucide-react";
+import { Fragment, useState } from "react";
+import {
+	Breadcrumb,
+	BreadcrumbEllipsis,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
 	Drawer,
 	DrawerClose,
@@ -10,26 +20,15 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 	DrawerTrigger,
-} from '@/components/ui/drawer';
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-	BreadcrumbEllipsis,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/drawer";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { StructaIcon } from '@/components/ui/icons';
-import { Button } from '@/components/ui/button';
-import { Link } from '@tanstack/react-router';
-import { Slash } from 'lucide-react';
+} from "@/components/ui/dropdown-menu";
+import { StructaIcon } from "@/components/ui/icons";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function ResponsiveBreadcrumbs({
 	crumbs,

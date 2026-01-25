@@ -1,5 +1,9 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useQuery } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import { appQueryOptions } from "@/clients/app/app.query.client";
+import { useCreateProjectMutation } from "@/clients/expo/expo.mutation.client";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -7,11 +11,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/ui/dialog';
-import { useCreateProjectMutation } from '@/clients/expo/expo.mutation.client';
-import { useQuery } from '@tanstack/react-query';
-import { appQueryOptions } from '@/clients/app/app.query.client';
-import { Plus } from 'lucide-react';
+} from "@/components/ui/dialog";
 
 interface CreateProjectButtonProps {
 	className?: string;
@@ -49,9 +49,9 @@ export function CreateProjectButton({ className }: CreateProjectButtonProps) {
 				<DialogHeader>
 					<DialogTitle>Create Expo Project</DialogTitle>
 					<DialogDescription>
-						This will create a new Expo project for "{app.name}" that can be used for
-						mobile app deployments. This is a one-time setup required before you can
-						deploy your app.
+						This will create a new Expo project for "{app.name}" that can be
+						used for mobile app deployments. This is a one-time setup required
+						before you can deploy your app.
 					</DialogDescription>
 				</DialogHeader>
 

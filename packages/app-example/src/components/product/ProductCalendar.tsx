@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import * as ProductContentModel from '@core/product/product-content.model';
-import * as ProductInterface from '@core/product/product.interface';
-import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import type * as ProductInterface from "@core/product/product.interface";
+import type * as ProductContentModel from "@core/product/product-content.model";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 // API response type (dates as strings)
 type ContentAPIResponse = Omit<
 	ProductContentModel.SchemaType,
-	'createdAt' | 'updatedAt' | 'deletedAt'
+	"createdAt" | "updatedAt" | "deletedAt"
 > & {
 	createdAt: string;
 	updatedAt: string;
@@ -24,17 +24,17 @@ interface ProductCalendarProps {
 	onAddContent: (
 		weekNumber: number,
 		dayNumber: number,
-		type: ProductInterface.ContentType
+		type: ProductInterface.ContentType,
 	) => void;
 	onUpdateContent: (
 		contentId: string,
-		updates: ProductContentModel.UpdateProductContentType
+		updates: ProductContentModel.UpdateProductContentType,
 	) => void;
 	onDeleteContent: (contentId: string) => void;
 }
 
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const MONTHS = ['June 2025'];
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const MONTHS = ["June 2025"];
 
 export function ProductCalendar({
 	productId,
@@ -44,7 +44,7 @@ export function ProductCalendar({
 	onUpdateContent,
 	onDeleteContent,
 }: ProductCalendarProps) {
-	const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
+	const [viewMode, setViewMode] = useState<"month" | "week">("month");
 	const [currentMonth, setCurrentMonth] = useState(0);
 
 	// For demo purposes, we'll show a June 2025 calendar
@@ -126,7 +126,8 @@ export function ProductCalendar({
 				{weeks.map((week, weekIndex) => (
 					<div key={weekIndex} className="grid grid-cols-7">
 						{week.map((dayInfo, dayIndex) => {
-							const isToday = dayInfo && !dayInfo.isOtherMonth && dayInfo.day === 27;
+							const isToday =
+								dayInfo && !dayInfo.isOtherMonth && dayInfo.day === 27;
 							const hasContent =
 								dayInfo && !dayInfo.isOtherMonth && dayInfo.day === 27;
 
@@ -134,17 +135,17 @@ export function ProductCalendar({
 								<div
 									key={dayIndex}
 									className={cn(
-										'min-h-[100px] p-2 border-r border-b last:border-r-0',
-										dayInfo?.isOtherMonth && 'bg-muted/10'
+										"min-h-[100px] p-2 border-r border-b last:border-r-0",
+										dayInfo?.isOtherMonth && "bg-muted/10",
 									)}
 								>
 									{dayInfo && (
 										<>
 											<div
 												className={cn(
-													'text-sm mb-1',
-													dayInfo.isOtherMonth && 'text-muted-foreground',
-													isToday && 'font-bold'
+													"text-sm mb-1",
+													dayInfo.isOtherMonth && "text-muted-foreground",
+													isToday && "font-bold",
 												)}
 											>
 												{dayInfo.day}
