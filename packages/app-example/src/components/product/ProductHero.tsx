@@ -1,36 +1,51 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-import * as ProductModel from '@core/product/product.model';
-import { ImageCropper } from '@/components/uploads/image-cropper';
-import { ImageUploadOverlay } from '@/components/uploads/image-overlay';
-import { dataURLtoFile } from '@core/storage/storage.utils';
-import { convertMegabytesToBytes } from '@core/utils/conversion';
-import { toast } from 'sonner';
-import { getImageUrl } from '@/components/ui/image';
-import { InlineEditableField } from './InlineEditableField';
-import { InlineEditableSelect } from './InlineEditableSelect';
-import { InlineEditableTextArea } from './InlineEditableTextarea';
-import { Calendar, Target, Trophy, Clock, ImageIcon, Activity, Shapes } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import type * as ProductModel from "@core/product/product.model";
+import { dataURLtoFile } from "@core/storage/storage.utils";
+import { convertMegabytesToBytes } from "@core/utils/conversion";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+	Activity,
+	Calendar,
+	Clock,
+	ImageIcon,
+	Shapes,
+	Target,
+	Trophy,
+} from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { getImageUrl } from "@/components/ui/image";
+import { ImageCropper } from "@/components/uploads/image-cropper";
+import { ImageUploadOverlay } from "@/components/uploads/image-overlay";
+import { InlineEditableField } from "./InlineEditableField";
+import { InlineEditableSelect } from "./InlineEditableSelect";
+import { InlineEditableTextArea } from "./InlineEditableTextarea";
 
 // Constants for image upload
 const MAX_IMAGE_SIZE = 5; // 5MB
 const IMAGE_FILE_TYPES = {
-	'image/png': ['.png'],
-	'image/jpeg': ['.jpg', '.jpeg'],
-	'image/webp': ['.webp'],
+	"image/png": [".png"],
+	"image/jpeg": [".jpg", ".jpeg"],
+	"image/webp": [".webp"],
 };
 
 // Form schema
 const ProductHeroFormSchema = z.object({
 	name: z.string().min(1),
 	durationWeeks: z.number().min(4).max(16),
-	difficultyLevel: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
+	difficultyLevel: z.enum(["beginner", "intermediate", "advanced", "expert"]),
 	daysPerWeek: z.number().min(3).max(7),
-	trainingStyle: z.enum(['strength', 'cardio', 'hiit', 'yoga', 'pilates', 'mixed']),
+	trainingStyle: z.enum([
+		"strength",
+		"cardio",
+		"hiit",
+		"yoga",
+		"pilates",
+		"mixed",
+	]),
 	prerequisites: z.string().optional().nullable(),
 	goals: z.string().optional().nullable(),
 	image: z.instanceof(File).optional(),
@@ -48,7 +63,9 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 	const [isCropperOpen, setIsCropperOpen] = useState<boolean>(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | null>(
-		product.coverImage ? getImageUrl(product.coverImage, '?height=600&format=webp') : null
+		product.coverImage
+			? getImageUrl(product.coverImage, "?height=600&format=webp")
+			: null,
 	);
 
 	// Initialize form with product data
@@ -60,8 +77,8 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 			difficultyLevel: product.difficultyLevel,
 			daysPerWeek: product.daysPerWeek,
 			trainingStyle: product.trainingStyle,
-			prerequisites: product.prerequisites || '',
-			goals: product.goals || '',
+			prerequisites: product.prerequisites || "",
+			goals: product.goals || "",
 		},
 	});
 
@@ -73,13 +90,13 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 			difficultyLevel: product.difficultyLevel,
 			daysPerWeek: product.daysPerWeek,
 			trainingStyle: product.trainingStyle,
-			prerequisites: product.prerequisites || '',
-			goals: product.goals || '',
+			prerequisites: product.prerequisites || "",
+			goals: product.goals || "",
 		});
 
 		// Update preview
 		if (product.coverImage) {
-			setPreview(getImageUrl(product.coverImage, '?height=600&format=webp'));
+			setPreview(getImageUrl(product.coverImage, "?height=600&format=webp"));
 		}
 	}, [product, form]);
 
@@ -92,7 +109,7 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 			// Don't include image in regular field updates - it's handled separately
 			onUpdate(updates);
 		},
-		[form, onUpdate]
+		[form, onUpdate],
 	);
 
 	// Handle image crop completion
@@ -115,7 +132,7 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 
 			const reader = new FileReader();
 			reader.onload = () => {
-				if (typeof reader.result === 'string') {
+				if (typeof reader.result === "string") {
 					setOriginalImage(reader.result);
 					setIsCropperOpen(true);
 				}
@@ -135,31 +152,33 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 	useEffect(() => {
 		if (fileRejections.length > 0) {
 			const errorType = fileRejections[0].errors[0].code;
-			if (errorType === 'file-invalid-type') {
-				toast.error('Image must be a PNG, JPG, JPEG, or WebP');
-			} else if (errorType === 'file-too-large') {
-				toast.error(`File too large. Image must be less than ${MAX_IMAGE_SIZE} MB`);
+			if (errorType === "file-invalid-type") {
+				toast.error("Image must be a PNG, JPG, JPEG, or WebP");
+			} else if (errorType === "file-too-large") {
+				toast.error(
+					`File too large. Image must be less than ${MAX_IMAGE_SIZE} MB`,
+				);
 			} else {
-				toast.error('Uh oh! Something went wrong. Please try again.');
+				toast.error("Uh oh! Something went wrong. Please try again.");
 			}
 		}
 	}, [fileRejections]);
 
 	// Options for select fields
 	const difficultyOptions = [
-		{ value: 'beginner', label: 'Beginner' },
-		{ value: 'intermediate', label: 'Intermediate' },
-		{ value: 'advanced', label: 'Advanced' },
-		{ value: 'expert', label: 'Expert' },
+		{ value: "beginner", label: "Beginner" },
+		{ value: "intermediate", label: "Intermediate" },
+		{ value: "advanced", label: "Advanced" },
+		{ value: "expert", label: "Expert" },
 	];
 
 	const trainingStyleOptions = [
-		{ value: 'strength', label: 'Strength' },
-		{ value: 'cardio', label: 'Cardio' },
-		{ value: 'hiit', label: 'HIIT' },
-		{ value: 'yoga', label: 'Yoga' },
-		{ value: 'pilates', label: 'Pilates' },
-		{ value: 'mixed', label: 'Mixed' },
+		{ value: "strength", label: "Strength" },
+		{ value: "cardio", label: "Cardio" },
+		{ value: "hiit", label: "HIIT" },
+		{ value: "yoga", label: "Yoga" },
+		{ value: "pilates", label: "Pilates" },
+		{ value: "mixed", label: "Mixed" },
 	];
 
 	return (
@@ -176,7 +195,11 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 						buttonText="Change cover"
 						showIcon={false}
 					/>
-					<img src={preview} alt="Product hero" className="object-cover w-full h-full" />
+					<img
+						src={preview}
+						alt="Product hero"
+						className="object-cover w-full h-full"
+					/>
 				</div>
 			)}
 
@@ -200,8 +223,8 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 			{/* Title */}
 			<div className="my-4">
 				<InlineEditableField
-					value={form.watch('name')}
-					onUpdate={(value) => handleFieldUpdate('name', value)}
+					value={form.watch("name")}
+					onUpdate={(value) => handleFieldUpdate("name", value)}
 					placeholder="Untitled"
 					className="text-[40px] font-bold leading-[1.2]"
 				/>
@@ -216,12 +239,16 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 						<span>Duration</span>
 					</div>
 					<InlineEditableSelect
-						value={form.watch('durationWeeks').toString()}
-						onUpdate={(value) => handleFieldUpdate('durationWeeks', parseInt(value))}
-						options={Array.from({ length: 13 }, (_, i) => i + 4).map((weeks) => ({
-							value: weeks.toString(),
-							label: `${weeks} weeks`,
-						}))}
+						value={form.watch("durationWeeks").toString()}
+						onUpdate={(value) =>
+							handleFieldUpdate("durationWeeks", parseInt(value))
+						}
+						options={Array.from({ length: 13 }, (_, i) => i + 4).map(
+							(weeks) => ({
+								value: weeks.toString(),
+								label: `${weeks} weeks`,
+							}),
+						)}
 						className="font-medium text-foreground"
 					/>
 				</div>
@@ -233,8 +260,10 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 						<span>Difficulty</span>
 					</div>
 					<InlineEditableSelect
-						value={form.watch('difficultyLevel')}
-						onUpdate={(value: any) => handleFieldUpdate('difficultyLevel', value)}
+						value={form.watch("difficultyLevel")}
+						onUpdate={(value: any) =>
+							handleFieldUpdate("difficultyLevel", value)
+						}
 						options={difficultyOptions}
 						className="font-medium text-foreground capitalize"
 					/>
@@ -247,8 +276,10 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 						<span>Days/Week</span>
 					</div>
 					<InlineEditableSelect
-						value={form.watch('daysPerWeek').toString()}
-						onUpdate={(value) => handleFieldUpdate('daysPerWeek', parseInt(value))}
+						value={form.watch("daysPerWeek").toString()}
+						onUpdate={(value) =>
+							handleFieldUpdate("daysPerWeek", parseInt(value))
+						}
 						options={Array.from({ length: 5 }, (_, i) => i + 3).map((days) => ({
 							value: days.toString(),
 							label: `${days}`,
@@ -264,8 +295,8 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 						<span>Training Style</span>
 					</div>
 					<InlineEditableSelect
-						value={form.watch('trainingStyle')}
-						onUpdate={(value: any) => handleFieldUpdate('trainingStyle', value)}
+						value={form.watch("trainingStyle")}
+						onUpdate={(value: any) => handleFieldUpdate("trainingStyle", value)}
 						options={trainingStyleOptions}
 						className="font-medium text-foreground capitalize"
 					/>
@@ -278,8 +309,8 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 						<span>Prerequisites</span>
 					</div>
 					<InlineEditableTextArea
-						value={form.watch('prerequisites') || ''}
-						onUpdate={(value) => handleFieldUpdate('prerequisites', value)}
+						value={form.watch("prerequisites") || ""}
+						onUpdate={(value) => handleFieldUpdate("prerequisites", value)}
 						placeholder="None"
 						className="font-medium text-foreground"
 						minRows={1}
@@ -294,8 +325,8 @@ export function ProductHero({ product, onUpdate }: ProductHeroProps) {
 						<span>Goal</span>
 					</div>
 					<InlineEditableTextArea
-						value={form.watch('goals') || ''}
-						onUpdate={(value) => handleFieldUpdate('goals', value)}
+						value={form.watch("goals") || ""}
+						onUpdate={(value) => handleFieldUpdate("goals", value)}
 						placeholder="None"
 						className="font-medium text-foreground"
 						minRows={1}

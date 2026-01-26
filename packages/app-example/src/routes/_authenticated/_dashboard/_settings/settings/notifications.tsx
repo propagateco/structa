@@ -1,9 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_authenticated/_dashboard/_settings/settings/notifications')({
+export const Route = createFileRoute(
+	"/_authenticated/_dashboard/_settings/settings/notifications",
+)({
 	component: RouteComponent,
 	staticData: {
-		title: 'Notifications',
+		title: "Notifications",
 	},
 });
 

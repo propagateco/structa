@@ -1,5 +1,5 @@
-import { Link } from '@tanstack/react-router';
-import { type LucideIcon } from 'lucide-react';
+import { Link } from "@tanstack/react-router";
+import type { LucideIcon } from "lucide-react";
 
 import {
 	SidebarGroup,
@@ -8,7 +8,7 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
-} from '@/components/ui/sidebar';
+} from "@/components/ui/sidebar";
 
 export function NavMain({
 	title,
@@ -33,7 +33,7 @@ export function NavMain({
 						<SidebarMenuItem key={item.title}>
 							<SidebarMenuButton
 								asChild
-								isActive={currentPathname.split('/')[1] === item.parent}
+								isActive={currentPathname.split("/")[1] === item.parent}
 							>
 								<Link to={item.url}>
 									<item.icon />

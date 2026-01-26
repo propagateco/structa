@@ -1,7 +1,7 @@
-import React, { FC, useState, PureComponent } from 'react';
-import { cn } from '@/lib/utils';
-import { isNumber } from 'advanced-cropper';
-import { ZoomIn, ZoomOut } from 'lucide-react';
+import { isNumber } from "advanced-cropper";
+import { ZoomIn, ZoomOut } from "lucide-react";
+import React, { FC, PureComponent, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface Props {
 	className?: string;
@@ -17,33 +17,33 @@ export class Slider extends PureComponent<Props> {
 	};
 
 	componentDidMount() {
-		window.addEventListener('mouseup', this.onStop, { passive: false });
-		window.addEventListener('mousemove', this.onDrag, { passive: false });
-		window.addEventListener('touchmove', this.onDrag, { passive: false });
-		window.addEventListener('touchend', this.onStop, { passive: false });
+		window.addEventListener("mouseup", this.onStop, { passive: false });
+		window.addEventListener("mousemove", this.onDrag, { passive: false });
+		window.addEventListener("touchmove", this.onDrag, { passive: false });
+		window.addEventListener("touchend", this.onStop, { passive: false });
 
 		const line = this.line.current;
 		if (line) {
-			line.addEventListener('mousedown', this.onStart);
-			line.addEventListener('touchstart', this.onStart);
+			line.addEventListener("mousedown", this.onStart);
+			line.addEventListener("touchstart", this.onStart);
 		}
 	}
 	componentWillUnmount() {
-		window.removeEventListener('mouseup', this.onStop);
-		window.removeEventListener('mousemove', this.onDrag);
-		window.removeEventListener('touchmove', this.onDrag);
-		window.removeEventListener('touchend', this.onStop);
+		window.removeEventListener("mouseup", this.onStop);
+		window.removeEventListener("mousemove", this.onDrag);
+		window.removeEventListener("touchmove", this.onDrag);
+		window.removeEventListener("touchend", this.onStop);
 
 		const line = this.line.current;
 		if (line) {
-			line.removeEventListener('mousedown', this.onStart);
-			line.removeEventListener('touchstart', this.onStart);
+			line.removeEventListener("mousedown", this.onStart);
+			line.removeEventListener("touchstart", this.onStart);
 		}
 	}
 	onDrag = (e: MouseEvent | TouchEvent) => {
 		const { onChange } = this.props;
 		if (this.state.focus) {
-			const position = 'touches' in e ? e.touches[0].clientX : e.clientX;
+			const position = "touches" in e ? e.touches[0].clientX : e.clientX;
 			const line = this.line.current;
 
 			if (line) {
@@ -74,8 +74,8 @@ export class Slider extends PureComponent<Props> {
 		return (
 			<div
 				className={cn(
-					'w-[200px] h-5 flex items-center flex-col justify-center rounded-md cursor-pointer',
-					className
+					"w-[200px] h-5 flex items-center flex-col justify-center rounded-md cursor-pointer",
+					className,
 				)}
 				ref={this.line}
 			>
@@ -88,8 +88,8 @@ export class Slider extends PureComponent<Props> {
 					/>
 					<div
 						className={cn(
-							'absolute-zoom-cropper-slider__circle',
-							this.state.focus && 'absolute-zoom-cropper-slider__circle--focus'
+							"absolute-zoom-cropper-slider__circle",
+							this.state.focus && "absolute-zoom-cropper-slider__circle--focus",
 						)}
 						style={{
 							left: `${value * 100}%`,
@@ -97,19 +97,19 @@ export class Slider extends PureComponent<Props> {
 					>
 						<div
 							className={cn(
-								'absolute-zoom-cropper-slider__inner-circle',
+								"absolute-zoom-cropper-slider__inner-circle",
 								this.state.focus &&
-									'absolute-zoom-cropper-slider__inner-circle--focus'
+									"absolute-zoom-cropper-slider__inner-circle--focus",
 							)}
 						/>
 					</div>
 					<div
 						className={cn(
-							'w-6 h-6 -ml-2.5 rounded-full flex items-center justify-center absolute',
-							'transition-colors duration-200',
-							'bg-transparent',
-							'hover:bg-muted-foreground/10',
-							this.state.focus ? 'bg-muted/20' : ''
+							"w-6 h-6 -ml-2.5 rounded-full flex items-center justify-center absolute",
+							"transition-colors duration-200",
+							"bg-transparent",
+							"hover:bg-muted-foreground/10",
+							this.state.focus ? "bg-muted/20" : "",
 						)}
 						style={{
 							left: `${value * 100}%`,
@@ -117,10 +117,10 @@ export class Slider extends PureComponent<Props> {
 					>
 						<div
 							className={cn(
-								'w-3 h-3 rounded-full bg-sidebar-primary',
-								'scale-100 transition-transform duration-100',
-								'shadow-[0_0_7px_rgba(var(--accent-rgb),0.2),0_1px_3px_1px_rgba(var(--accent-rgb),0.15)]',
-								this.state.focus ? 'scale-120' : ''
+								"w-3 h-3 rounded-full bg-sidebar-primary",
+								"scale-100 transition-transform duration-100",
+								"shadow-[0_0_7px_rgba(var(--accent-rgb),0.2),0_1px_3px_1px_rgba(var(--accent-rgb),0.15)]",
+								this.state.focus ? "scale-120" : "",
 							)}
 						/>
 					</div>

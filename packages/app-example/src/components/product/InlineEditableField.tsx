@@ -1,21 +1,21 @@
-import { useState, useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface InlineEditableFieldProps {
 	value: string;
 	onUpdate: (value: string) => void;
 	placeholder?: string;
 	className?: string;
-	as?: 'input' | 'textarea';
+	as?: "input" | "textarea";
 	rows?: number;
 }
 
 export function InlineEditableField({
 	value,
 	onUpdate,
-	placeholder = 'Click to edit',
+	placeholder = "Click to edit",
 	className,
-	as = 'input',
+	as = "input",
 	rows = 2,
 }: InlineEditableFieldProps) {
 	const [isEditing, setIsEditing] = useState(false);
@@ -48,10 +48,10 @@ export function InlineEditableField({
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (e.key === 'Enter' && as === 'input') {
+		if (e.key === "Enter" && as === "input") {
 			e.preventDefault();
 			handleSave();
-		} else if (e.key === 'Escape') {
+		} else if (e.key === "Escape") {
 			handleCancel();
 		}
 	};
@@ -60,18 +60,19 @@ export function InlineEditableField({
 		const sharedProps = {
 			ref: inputRef as any,
 			value: localValue,
-			onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-				setLocalValue(e.target.value),
+			onChange: (
+				e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+			) => setLocalValue(e.target.value),
 			onBlur: handleSave,
 			onKeyDown: handleKeyDown,
 			className: cn(
-				'w-full bg-transparent border-none outline-none ring-0 focus:ring-0 p-0',
-				className
+				"w-full bg-transparent border-none outline-none ring-0 focus:ring-0 p-0",
+				className,
 			),
 			placeholder,
 		};
 
-		if (as === 'textarea') {
+		if (as === "textarea") {
 			return <textarea {...sharedProps} rows={rows} />;
 		}
 
@@ -82,9 +83,9 @@ export function InlineEditableField({
 		<div
 			onClick={() => setIsEditing(true)}
 			className={cn(
-				'cursor-pointer rounded px-2 py-1 -mx-2 -my-1 hover:bg-muted/50 transition-colors',
-				!value && 'text-muted-foreground',
-				className
+				"cursor-pointer rounded px-2 py-1 -mx-2 -my-1 hover:bg-muted/50 transition-colors",
+				!value && "text-muted-foreground",
+				className,
 			)}
 		>
 			{value || placeholder}

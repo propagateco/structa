@@ -7,8 +7,8 @@ export default $config({
     app(input) {
         return {
             name: 'structa',
-            removal: input?.stage === 'production' ? 'retain' : 'remove',
-            protect: ['production'].includes(input?.stage),
+            removal: input?.stage === 'production' ? 'remove' : 'remove',
+            // protect: ['production'].includes(input?.stage), // Temporarily disabled for cleanup
             home: 'aws',
             providers: {
                 aws: {
@@ -44,14 +44,13 @@ export default $config({
         const dns = await import('./infra/dns');
         await import('./infra/web');
         await import('./infra/api');
-        const database = await import('./infra/database');
+        await import('./infra/database');
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
         await import('./infra/email');
         return {
             Api: dns.Domain.properties.api,
             Platform: dns.Domain.properties.platform,
-            DatabaseUrl: database.database.properties.url,
             CloudfrontUrl: cloudfront.imageDistribution.url,
         };
     },

@@ -3,8 +3,8 @@ import {
 	SidebarGroupLabel,
 	SidebarMenu,
 	SidebarMenuItem,
-} from '@/components/ui/sidebar';
-import { Skeleton } from '@/components/ui/skeleton';
+} from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function NavProductsSkeleton() {
 	return (

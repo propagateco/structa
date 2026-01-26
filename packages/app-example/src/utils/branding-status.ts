@@ -1,10 +1,10 @@
-import { BrandingModel } from "@core/branding/branding.model";
-import { AppModel } from "@core/app/app.model";
+import type { AppModel } from "@core/app/app.model";
+import type { BrandingModel } from "@core/branding/branding.model";
 
 export interface BrandingStatusInfo {
-  type: "success" | "warning" | "info";
-  label: string;
-  detail: string;
+	type: "success" | "warning" | "info";
+	label: string;
+	detail: string;
 }
 
 /**
@@ -12,55 +12,58 @@ export interface BrandingStatusInfo {
  * Similar to getProductStatusInfo but for branding/app data
  */
 export const getBrandingStatusInfo = (
-  branding: BrandingModel.BrandingQueryType | null | undefined,
-  app: AppModel.QueryType | null | undefined,
+	branding: BrandingModel.BrandingQueryType | null | undefined,
+	app: AppModel.QueryType | null | undefined,
 ): BrandingStatusInfo => {
-  // If either data is missing, can't determine status
-  if (!branding || !app) {
-    return {
-      type: "info",
-      label: "Loading",
-      detail: "Status information is loading.",
-    };
-  }
+	// If either data is missing, can't determine status
+	if (!branding || !app) {
+		return {
+			type: "info",
+			label: "Loading",
+			detail: "Status information is loading.",
+		};
+	}
 
-  // Both branding and app are published and up to date
-  const brandingPublished = branding.publishedAt && branding.updatedAt <= branding.publishedAt;
-  const appPublished = app.publishedAt && app.updatedAt <= app.publishedAt;
-  
-  if (brandingPublished && appPublished) {
-    return {
-      type: "success",
-      label: "Published",
-      detail: "Branding and app information are published and visible to users.",
-    };
-  }
+	// Both branding and app are published and up to date
+	const brandingPublished =
+		branding.publishedAt && branding.updatedAt <= branding.publishedAt;
+	const appPublished = app.publishedAt && app.updatedAt <= app.publishedAt;
 
-  // Either has unpublished changes
-  const brandingHasChanges = branding.publishedAt && branding.updatedAt > branding.publishedAt;
-  const appHasChanges = app.publishedAt && app.updatedAt > app.publishedAt;
-  
-  if (brandingHasChanges || appHasChanges) {
-    return {
-      type: "warning",
-      label: "Draft",
-      detail: "There are unpublished changes to branding or app information.",
-    };
-  }
+	if (brandingPublished && appPublished) {
+		return {
+			type: "success",
+			label: "Published",
+			detail:
+				"Branding and app information are published and visible to users.",
+		};
+	}
 
-  // Either has never been published
-  if (!branding.publishedAt || !app.publishedAt) {
-    return {
-      type: "info",
-      label: "Draft",
-      detail: "Branding or app information has not been published yet.",
-    };
-  }
+	// Either has unpublished changes
+	const brandingHasChanges =
+		branding.publishedAt && branding.updatedAt > branding.publishedAt;
+	const appHasChanges = app.publishedAt && app.updatedAt > app.publishedAt;
 
-  // Default case (shouldn't reach here)
-  return {
-    type: "info",
-    label: "Draft",
-    detail: "Status unknown.",
-  };
+	if (brandingHasChanges || appHasChanges) {
+		return {
+			type: "warning",
+			label: "Draft",
+			detail: "There are unpublished changes to branding or app information.",
+		};
+	}
+
+	// Either has never been published
+	if (!branding.publishedAt || !app.publishedAt) {
+		return {
+			type: "info",
+			label: "Draft",
+			detail: "Branding or app information has not been published yet.",
+		};
+	}
+
+	// Default case (shouldn't reach here)
+	return {
+		type: "info",
+		label: "Draft",
+		detail: "Status unknown.",
+	};
 };

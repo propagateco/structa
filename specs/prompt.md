@@ -38,10 +38,16 @@ Then, find a way to break it into a smaller chunk and only do that chunk (i.e. c
 
 # FEEDBACK LOOPS
 
-Before committing, run feedback loops:
+Before committing, run feedback loops in this order:
 
-- `npm run typecheck` to run the type checker
-- `npm run test` to run the tests
+1. **UI Changes**: Use dev-browser agent to test and check browser logs for any issues
+2. `npm run typecheck` to run type checker
+   - Works without AWS credentials - uses committed `sst-env.d.ts` type files
+   - Regenerate type files with `npx sst dev` when infrastructure changes
+3. `npm run test` to run tests (E2E tests focus on browser console log issues)
+4. `npx sst deploy` to deploy to current stage (your personal stage) and verify infrastructure works
+
+Important: Always run `npx sst deploy` before committing to ensure infrastructure changes work and catch runtime errors early.
 
 # PROGRESS
 
@@ -61,7 +67,7 @@ Make a git commit with a clear message.
 
 # THE ISSUE
 
-If the task is complete, close the original GitHub issue.
+If task is complete or all of the comments have been addressed, close the original GitHub issue.
 
 If the task is not complete, leave a comment on the GitHub issue with what was done.
 
