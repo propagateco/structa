@@ -1,8 +1,15 @@
-import { UserModel } from '@core/user/user.model';
-import { Link, useRouter } from '@tanstack/react-router';
-import { Bell, ChevronsUpDown, CreditCard, LogOut, Settings, Sparkles } from 'lucide-react';
-
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import type { UserModel } from "@core/user/user.model";
+import { formatPlan, formatToInitials } from "@core/utils/string";
+import { Link, useRouter } from "@tanstack/react-router";
+import {
+	Bell,
+	ChevronsUpDown,
+	CreditCard,
+	LogOut,
+	Settings,
+	Sparkles,
+} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -10,11 +17,14 @@ import {
 	DropdownMenuItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { authClient } from '@/lib/auth-client';
-import { formatPlan, formatToInitials } from '@core/utils/string';
-import { getImageUrl } from '../ui/image';
+} from "@/components/ui/dropdown-menu";
+import {
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { authClient } from "@/lib/auth-client";
+import { getImageUrl } from "../ui/image";
 
 export function NavUser({ user }: { user: UserModel.UserType }) {
 	const router = useRouter();
@@ -22,7 +32,7 @@ export function NavUser({ user }: { user: UserModel.UserType }) {
 	const handleSignOut = async () => {
 		await authClient.signOut();
 		router.invalidate();
-		window.location.href = '/login';
+		window.location.href = "/login";
 	};
 
 	return (
@@ -38,7 +48,7 @@ export function NavUser({ user }: { user: UserModel.UserType }) {
 								<AvatarImage
 									src={getImageUrl(
 										user.image,
-										'?width=400&height=400&format=webp'
+										"?width=400&height=400&format=webp",
 									)}
 									alt={user.name}
 								/>
@@ -46,7 +56,9 @@ export function NavUser({ user }: { user: UserModel.UserType }) {
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-semibold">{user.name}</span>
-								<span className="truncate text-xs">{formatPlan(user.plan)}</span>
+								<span className="truncate text-xs">
+									{formatPlan(user.plan)}
+								</span>
 							</div>
 							<ChevronsUpDown className="ml-auto size-4" />
 						</SidebarMenuButton>
@@ -63,7 +75,7 @@ export function NavUser({ user }: { user: UserModel.UserType }) {
 									<AvatarImage
 										src={getImageUrl(
 											user.image,
-											'?width=400&height=400&format=webp'
+											"?width=400&height=400&format=webp",
 										)}
 										alt={user.name}
 									/>
@@ -77,7 +89,7 @@ export function NavUser({ user }: { user: UserModel.UserType }) {
 							<DropdownMenuSeparator />
 						</DropdownMenuGroup>
 						<DropdownMenuGroup>
-							{user.plan !== 'pro' && (
+							{user.plan !== "pro" && (
 								<>
 									<DropdownMenuItem>
 										<Sparkles />

@@ -1,155 +1,155 @@
-export * as UserService from './user.service';
+export * as UserService from "./user.service";
 
-import { user } from '../auth/auth.sql';
-import { UserModel } from './user.model';
-import { zod } from '../utils/zod';
-import { db } from '../drizzle';
-import { eq } from 'drizzle-orm';
-import { createId } from '@paralleldrive/cuid2';
+import { createId } from "@paralleldrive/cuid2";
+import { eq } from "drizzle-orm";
+import { user } from "../auth/auth.sql";
+import { db } from "../drizzle";
+import { zod } from "../utils/zod";
+import { UserModel } from "./user.model";
 
 export const initialise = async () => {
-    await db.transaction(async tx => {
-        await tx.select().from(user).limit(1).execute();
-    });
-    return;
+	await db.transaction(async (tx) => {
+		await tx.select().from(user).limit(1).execute();
+	});
+	return;
 };
 
-export const fromID = zod(UserModel.Schema.shape.id, async id =>
-    db.transaction(async tx => {
-        const result = await tx
-            .select()
-            .from(user)
-            .where(eq(user.id, id))
-            .execute();
-        return UserModel.User.parse(result[0]);
-    })
+export const fromID = zod(UserModel.Schema.shape.id, async (id) =>
+	db.transaction(async (tx) => {
+		const result = await tx
+			.select()
+			.from(user)
+			.where(eq(user.id, id))
+			.execute();
+		return UserModel.User.parse(result[0]);
+	}),
 );
 
-export const fromEmail = zod(UserModel.User.shape.email, async email =>
-    db.transaction(async tx => {
-        const result = await tx
-            .select({
-                id: user.id,
-                workspaceId: user.workspaceId,
-                email: user.email,
-            })
-            .from(user)
-            .where(eq(user.email, email))
-            .execute();
+export const fromEmail = zod(UserModel.User.shape.email, async (email) =>
+	db.transaction(async (tx) => {
+		const result = await tx
+			.select({
+				id: user.id,
+				workspaceId: user.workspaceId,
+				email: user.email,
+			})
+			.from(user)
+			.where(eq(user.email, email))
+			.execute();
 
-        // This will return when a user is first created
-        if (!result[0]) {
-            return null;
-        }
+		// This will return when a user is first created
+		if (!result[0]) {
+			return null;
+		}
 
-        return UserModel.Subject.parse(result[0]);
-    })
+		return UserModel.Subject.parse(result[0]);
+	}),
 );
 
-export const avatarKeyFromId = zod(UserModel.User.shape.id, async id =>
-    db.transaction(async tx => {
-        const result = await tx
-            .select()
-            .from(user)
-            .where(eq(user.id, id))
-            .execute();
-        const avatarUrl = result[0]?.image ?? null;
-        if (!avatarUrl) {
-            return null;
-        }
-        return avatarUrl.split('/').pop();
-    })
+export const avatarKeyFromId = zod(UserModel.User.shape.id, async (id) =>
+	db.transaction(async (tx) => {
+		const result = await tx
+			.select()
+			.from(user)
+			.where(eq(user.id, id))
+			.execute();
+		const avatarUrl = result[0]?.image ?? null;
+		if (!avatarUrl) {
+			return null;
+		}
+		return avatarUrl.split("/").pop();
+	}),
 );
 
 export const updateNameFromId = zod(
-    UserModel.User.pick({ id: true, name: true }),
-    async input =>
-        db.transaction(async tx => {
-            const result = await tx
-                .update(user)
-                .set({
-                    name: input.name,
-                    updatedAt: new Date(),
-                })
-                .where(eq(user.id, input.id))
-                .returning()
-                .execute();
-            return UserModel.User.parse(result[0]);
-        })
+	UserModel.User.pick({ id: true, name: true }),
+	async (input) =>
+		db.transaction(async (tx) => {
+			const result = await tx
+				.update(user)
+				.set({
+					name: input.name,
+					updatedAt: new Date(),
+				})
+				.where(eq(user.id, input.id))
+				.returning()
+				.execute();
+			return UserModel.User.parse(result[0]);
+		}),
 );
 
 export const updateProfileFromOnboarding = zod(
-    UserModel.User.pick({
-        id: true,
-        name: true,
-        workspaceId: true,
-        workspaceName: true,
-        product: true,
-        plan: true,
-    }).partial({
-        workspaceId: true,
-    }),
-    async input =>
-        db.transaction(async tx => {
-            // Generate a new workspaceId if not provided (user is creating new workspace)
-            // If workspaceId is provided, user is joining existing workspace via invitation
-            const workspaceId = input.workspaceId ?? createId();
+	UserModel.User.pick({
+		id: true,
+		name: true,
+		workspaceId: true,
+		workspaceName: true,
+		product: true,
+		plan: true,
+	}).partial({
+		workspaceId: true,
+	}),
+	async (input) =>
+		db.transaction(async (tx) => {
+			// Generate a new workspaceId if not provided (user is creating new workspace)
+			// If workspaceId is provided, user is joining existing workspace via invitation
+			const workspaceId = input.workspaceId ?? createId();
 
-            const result = await tx
-                .update(user)
-                .set({
-                    name: input.name,
-                    workspaceId: workspaceId,
-                    workspaceName: input.workspaceName,
-                    product: input.product,
-                    plan: input.plan,
-                    updatedAt: new Date(),
-                })
-                .where(eq(user.id, input.id))
-                .returning()
-                .execute();
-            return UserModel.User.parse(result[0]);
-        })
+			const result = await tx
+				.update(user)
+				.set({
+					name: input.name,
+					workspaceId: workspaceId,
+					workspaceName: input.workspaceName,
+					product: input.product,
+					plan: input.plan,
+					updatedAt: new Date(),
+				})
+				.where(eq(user.id, input.id))
+				.returning()
+				.execute();
+			return UserModel.User.parse(result[0]);
+		}),
 );
 
 export const updateProfileNamesFromId = zod(
-    UserModel.User.pick({ id: true, name: true, workspaceName: true }),
-    async input =>
-        db.transaction(async tx => {
-            const result = await tx
-                .update(user)
-                .set({
-                    name: input.name,
-                    workspaceName: input.workspaceName,
-                    updatedAt: new Date(),
-                })
-                .where(eq(user.id, input.id))
-                .returning()
-                .execute();
-            return UserModel.User.parse(result[0]);
-        })
+	UserModel.User.pick({ id: true, name: true, workspaceName: true }),
+	async (input) =>
+		db.transaction(async (tx) => {
+			const result = await tx
+				.update(user)
+				.set({
+					name: input.name,
+					workspaceName: input.workspaceName,
+					updatedAt: new Date(),
+				})
+				.where(eq(user.id, input.id))
+				.returning()
+				.execute();
+			return UserModel.User.parse(result[0]);
+		}),
 );
 
 export const updateProfileNamesAndAvatarFromId = zod(
-    UserModel.User.pick({
-        id: true,
-        name: true,
-        workspaceName: true,
-        image: true,
-    }),
-    async input =>
-        db.transaction(async tx => {
-            const result = await tx
-                .update(user)
-                .set({
-                    name: input.name,
-                    workspaceName: input.workspaceName,
-                    image: input.image,
-                    updatedAt: new Date(),
-                })
-                .where(eq(user.id, input.id))
-                .returning()
-                .execute();
-            return UserModel.User.parse(result[0]);
-        })
+	UserModel.User.pick({
+		id: true,
+		name: true,
+		workspaceName: true,
+		image: true,
+	}),
+	async (input) =>
+		db.transaction(async (tx) => {
+			const result = await tx
+				.update(user)
+				.set({
+					name: input.name,
+					workspaceName: input.workspaceName,
+					image: input.image,
+					updatedAt: new Date(),
+				})
+				.where(eq(user.id, input.id))
+				.returning()
+				.execute();
+			return UserModel.User.parse(result[0]);
+		}),
 );

@@ -1,4 +1,8 @@
 /// <reference path="./.sst/platform/config.d.ts" />
+// NOTE: Production deployment fix (Jan 23, 2026):
+// Resolved terraform-provider v0.8.1 403 error by running `sst add neon`
+// to regenerate neon provider configuration. Issue was transient Pulumi registry
+// availability problem affecting terraform-provider downloads.
 export default $config({
     app(input) {
         return {
@@ -40,14 +44,13 @@ export default $config({
         const dns = await import('./infra/dns');
         await import('./infra/web');
         await import('./infra/api');
-        const database = await import('./infra/database');
+        await import('./infra/database');
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
         await import('./infra/email');
         return {
             Api: dns.Domain.properties.api,
             Platform: dns.Domain.properties.platform,
-            DatabaseUrl: database.database.properties.url,
             CloudfrontUrl: cloudfront.imageDistribution.url,
         };
     },

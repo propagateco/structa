@@ -1,31 +1,17 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useDropzone } from 'react-dropzone';
-import { z } from 'zod';
-import { toast } from 'sonner';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { useAtomValue, useSetAtom } from 'jotai';
-
-import { Input } from '@/components/ui/input';
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { ImageCropper } from '@/components/uploads/image-cropper';
-import {
-	ImageUploadOverlay,
-	ImageUploadOverlayWithRemove,
-} from '@/components/uploads/image-overlay';
-import { BrandingModel } from '@core/branding/branding.model';
-import { dataURLtoFile } from '@core/storage/storage.utils';
-import { Card } from '@/components/ui/card';
+import { BrandingModel } from "@core/branding/branding.model";
+import { dataURLtoFile } from "@core/storage/storage.utils";
+import { convertMegabytesToBytes } from "@core/utils/conversion";
+import { FONTS } from "@core/utils/font";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAtomValue, useSetAtom } from "jotai";
+import { Check, ChevronsUpDown } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
 	Command,
 	CommandEmpty,
@@ -33,14 +19,38 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
-} from '@/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { brandingChangesAtom, updateBrandingChangeAtom } from '@/state/branding';
-import { FONTS } from '@core/utils/font';
-import { convertMegabytesToBytes } from '@core/utils/conversion';
-import { getImageUrl } from '../ui/image';
+} from "@/components/ui/command";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import { ImageCropper } from "@/components/uploads/image-cropper";
+import {
+	ImageUploadOverlay,
+	ImageUploadOverlayWithRemove,
+} from "@/components/uploads/image-overlay";
+import { cn } from "@/lib/utils";
+import {
+	brandingChangesAtom,
+	updateBrandingChangeAtom,
+} from "@/state/branding";
+import { getImageUrl } from "../ui/image";
 
-export function LogoFontCard({ branding }: { branding: BrandingModel.BrandingQueryType }) {
+export function LogoFontCard({
+	branding,
+}: {
+	branding: BrandingModel.BrandingQueryType;
+}) {
 	return (
 		<Card variant="ghost" className="p-4 lg:p-6 overflow-hidden w-full h-full">
 			<div className="flex flex-col gap-4">
@@ -51,7 +61,11 @@ export function LogoFontCard({ branding }: { branding: BrandingModel.BrandingQue
 	);
 }
 
-export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQueryType }) {
+export function LargeLogoForm({
+	branding,
+}: {
+	branding: BrandingModel.BrandingQueryType;
+}) {
 	// Use Jotai atoms for state management
 	const changes = useAtomValue(brandingChangesAtom);
 	const updateChange = useSetAtom(updateBrandingChangeAtom);
@@ -70,7 +84,7 @@ export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQu
 
 	const form = useForm<BrandingModel.LargeLogoFileType>({
 		resolver: zodResolver(BrandingModel.LargeLogoFile),
-		mode: 'onBlur',
+		mode: "onBlur",
 		defaultValues: {
 			image: changes.lightLargeLogo || undefined,
 		},
@@ -81,7 +95,7 @@ export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQu
 		// Convert the cropped image URL to a File object
 		if (selectedFile) {
 			const croppedFile = dataURLtoFile(croppedImageUrl, selectedFile.name);
-			form.setValue('image', croppedFile, {
+			form.setValue("image", croppedFile, {
 				shouldDirty: true,
 			});
 			handleImageUpdate(croppedFile);
@@ -97,7 +111,7 @@ export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQu
 
 				const reader = new FileReader();
 				reader.onload = () => {
-					if (typeof reader.result === 'string') {
+					if (typeof reader.result === "string") {
 						setOriginalImage(reader.result);
 						setIsCropperOpen(true);
 					}
@@ -105,7 +119,7 @@ export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQu
 				reader.readAsDataURL(file);
 			}
 		},
-		[form]
+		[form],
 	);
 
 	const { getRootProps, getInputProps, fileRejections } = useDropzone({
@@ -119,14 +133,14 @@ export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQu
 	useEffect(() => {
 		if (fileRejections.length > 0) {
 			const errorType = fileRejections[0].errors[0].code;
-			if (errorType === 'file-invalid-type') {
-				toast.error('Image must be a PNG, JPG or JPEG');
-			} else if (errorType === 'file-too-large') {
+			if (errorType === "file-invalid-type") {
+				toast.error("Image must be a PNG, JPG or JPEG");
+			} else if (errorType === "file-too-large") {
 				toast.error(
-					`File too large. Image must be less than ${BrandingModel.MAX_BRANDING_ASSET_SIZE} MB`
+					`File too large. Image must be less than ${BrandingModel.MAX_BRANDING_ASSET_SIZE} MB`,
 				);
 			} else {
-				toast.error('Uh oh! Something went wrong. Please try again.');
+				toast.error("Uh oh! Something went wrong. Please try again.");
 			}
 		}
 	}, [fileRejections]);
@@ -134,7 +148,7 @@ export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQu
 	// Handle image removal
 	const handleRemove = () => {
 		handleImageUpdate(null);
-		form.setValue('image', undefined);
+		form.setValue("image", undefined);
 	};
 
 	return (
@@ -146,13 +160,15 @@ export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQu
 					render={() => (
 						<FormItem className="flex flex-col">
 							<FormLabel
-								className={cn(fileRejections.length !== 0 && 'text-destructive')}
+								className={cn(
+									fileRejections.length !== 0 && "text-destructive",
+								)}
 							>
 								Header Logo
 								<span
 									className={cn(
 										form.formState.errors.image ||
-											(fileRejections.length !== 0 && 'text-destructive')
+											(fileRejections.length !== 0 && "text-destructive"),
 									)}
 								></span>
 							</FormLabel>
@@ -183,14 +199,14 @@ export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQu
 											<img
 												src={getImageUrl(
 													branding.lightLargeLogo,
-													'?height=300&format=webp'
+													"?height=300&format=webp",
 												)}
 												alt="Uploaded image"
 												className="object-contain w-full h-full"
 											/>
 										</>
 									) : (
-										<Button size={'sm'} variant={'outline'} type="button">
+										<Button size={"sm"} variant={"outline"} type="button">
 											Upload File
 										</Button>
 									)}
@@ -199,7 +215,9 @@ export function LargeLogoForm({ branding }: { branding: BrandingModel.BrandingQu
 							</FormControl>
 							<FormMessage>
 								{fileRejections.length !== 0 && (
-									<p>Image must be less than 1MB and of type png, jpg, or jpeg</p>
+									<p>
+										Image must be less than 1MB and of type png, jpg, or jpeg
+									</p>
 								)}
 							</FormMessage>
 						</FormItem>
@@ -257,13 +275,13 @@ export const FontForm: React.FC<FontFormProps> = ({ branding }) => {
 
 	// Update form value when context changes
 	useEffect(() => {
-		form.setValue('font', selectedFont.value);
+		form.setValue("font", selectedFont.value);
 	}, [changes, selectedFont.value, form]);
 
 	const handleFontSelect = (value: string) => {
 		const font = FONTS.find((f) => f.value === value);
 		if (font) {
-			form.setValue('font', value);
+			form.setValue("font", value);
 
 			// Update the branding context with changes only
 			updateChange({ font: value });
@@ -294,11 +312,11 @@ export const FontForm: React.FC<FontFormProps> = ({ branding }) => {
 											className="w-full justify-between"
 											style={{
 												fontFamily: selectedFont?.family,
-												fontStyle: 'normal',
-												fontWeight: '400',
+												fontStyle: "normal",
+												fontWeight: "400",
 											}}
 										>
-											{selectedFont ? selectedFont.name : 'Select font...'}
+											{selectedFont ? selectedFont.name : "Select font..."}
 											<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 										</Button>
 									</PopoverTrigger>
@@ -323,10 +341,10 @@ export const FontForm: React.FC<FontFormProps> = ({ branding }) => {
 															{font.name}
 															<Check
 																className={cn(
-																	'ml-auto',
+																	"ml-auto",
 																	field.value === font.value
-																		? 'opacity-100'
-																		: 'opacity-0'
+																		? "opacity-100"
+																		: "opacity-0",
 																)}
 															/>
 														</CommandItem>

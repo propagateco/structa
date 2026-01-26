@@ -1,6 +1,9 @@
-import sharp from 'sharp';
-import { TimingMetrics, StorageServiceError } from '@/storage/storage.interfaces';
-import { ImageOperations } from './image.interfaces';
+import sharp from "sharp";
+import {
+	StorageServiceError,
+	type TimingMetrics,
+} from "../storage/storage.interfaces";
+import type { ImageOperations } from "./image.interfaces";
 
 /**
  * Image Transformation
@@ -12,13 +15,13 @@ export async function transformImage(
 	image: Buffer,
 	operations: ImageOperations,
 	originalContentType: string,
-	metrics: TimingMetrics
+	metrics: TimingMetrics,
 ): Promise<{ image: Buffer; contentType: string }> {
 	const startTime = performance.now();
 	try {
 		// Initialize Sharp with support for animations and more lenient error handling
 		let sharpInstance = sharp(image, {
-			failOn: 'none',
+			failOn: "none",
 			animated: true,
 		});
 
@@ -32,7 +35,7 @@ export async function transformImage(
 			sharpInstance = sharpInstance.resize({
 				width: operations.width,
 				height: operations.height,
-				fit: 'inside',
+				fit: "inside",
 				withoutEnlargement: true,
 			});
 		}
@@ -44,7 +47,7 @@ export async function transformImage(
 
 		// Format conversion with quality settings for lossy formats
 		if (operations.format) {
-			const isLossy = ['jpeg', 'webp', 'avif'].includes(operations.format);
+			const isLossy = ["jpeg", "webp", "avif"].includes(operations.format);
 
 			if (isLossy && operations.quality) {
 				sharpInstance = sharpInstance.toFormat(operations.format, {
@@ -66,9 +69,9 @@ export async function transformImage(
 			contentType,
 		};
 	} catch (error) {
-		throw new StorageServiceError('Error transforming image', {
+		throw new StorageServiceError("Error transforming image", {
 			statusCode: 500,
-			errorCode: 'TRANSFORM_FAILED',
+			errorCode: "TRANSFORM_FAILED",
 			context: { operations },
 			cause: error,
 		});

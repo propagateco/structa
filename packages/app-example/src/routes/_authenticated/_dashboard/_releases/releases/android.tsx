@@ -1,9 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_authenticated/_dashboard/_releases/releases/android')({
+export const Route = createFileRoute(
+	"/_authenticated/_dashboard/_releases/releases/android",
+)({
 	component: RouteComponent,
 	staticData: {
-		title: 'Google Play Store',
+		title: "Google Play Store",
 	},
 });
 

@@ -1,9 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_authenticated/_dashboard/_settings/settings/billing')({
+export const Route = createFileRoute(
+	"/_authenticated/_dashboard/_settings/settings/billing",
+)({
 	component: RouteComponent,
 	staticData: {
-		title: 'Billing',
+		title: "Billing",
 	},
 });
 

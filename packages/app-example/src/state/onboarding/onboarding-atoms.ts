@@ -1,6 +1,6 @@
+import type { UserModel } from "@core/user/user.model";
 import { atom } from "jotai";
 import { atomWithStorage, RESET } from "jotai/utils";
-import { UserModel } from "@core/user/user.model";
 
 /**
  * Onboarding Form State Atoms
@@ -13,10 +13,10 @@ export const ONBOARDING_STORAGE_KEY = "onboarding-form-data";
 
 // Initial form data constant
 const initialFormData: UserModel.OnboardingType = {
-    name: "",
-    workspaceName: "",
-    product: "course",
-    plan: "onboarding",
+	name: "",
+	workspaceName: "",
+	product: "course",
+	plan: "onboarding",
 };
 
 /**
@@ -24,10 +24,10 @@ const initialFormData: UserModel.OnboardingType = {
  * SSR-safe: Uses getOnInit: false to defer localStorage access to client mount
  */
 export const onboardingFormAtom = atomWithStorage<UserModel.OnboardingType>(
-    ONBOARDING_STORAGE_KEY,
-    initialFormData,
-    undefined,
-    { getOnInit: false }
+	ONBOARDING_STORAGE_KEY,
+	initialFormData,
+	undefined,
+	{ getOnInit: false },
 );
 
 /**
@@ -35,12 +35,12 @@ export const onboardingFormAtom = atomWithStorage<UserModel.OnboardingType>(
  * Replicates Context's updateFormData() behavior
  */
 export const updateOnboardingFormAtom = atom(
-    null,
-    (get, set, updates: Partial<UserModel.OnboardingType>) => {
-        const currentData = get(onboardingFormAtom);
-        const updatedData = { ...currentData, ...updates };
-        set(onboardingFormAtom, updatedData);
-    }
+	null,
+	(get, set, updates: Partial<UserModel.OnboardingType>) => {
+		const currentData = get(onboardingFormAtom);
+		const updatedData = { ...currentData, ...updates };
+		set(onboardingFormAtom, updatedData);
+	},
 );
 
 /**
@@ -48,5 +48,5 @@ export const updateOnboardingFormAtom = atom(
  * Replicates Context's clearFormData() behavior
  */
 export const clearOnboardingFormAtom = atom(null, (_get, set) => {
-    set(onboardingFormAtom, RESET); // atomWithStorage handles localStorage.removeItem
+	set(onboardingFormAtom, RESET); // atomWithStorage handles localStorage.removeItem
 });

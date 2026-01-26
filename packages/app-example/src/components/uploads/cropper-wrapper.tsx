@@ -1,8 +1,12 @@
-import React, { CSSProperties } from 'react';
-import { cn } from '@/lib/utils';
-import { CropperRef, CropperFade } from 'react-advanced-cropper';
-import { getAbsoluteZoom, getZoomFactor } from 'advanced-cropper/extensions/absolute-zoom';
-import { CropperNavigation } from './cropper-navigation';
+import {
+	getAbsoluteZoom,
+	getZoomFactor,
+} from "advanced-cropper/extensions/absolute-zoom";
+import type React from "react";
+import type { CSSProperties } from "react";
+import { CropperFade, type CropperRef } from "react-advanced-cropper";
+import { cn } from "@/lib/utils";
+import { CropperNavigation } from "./cropper-navigation";
 
 interface CropperWrapperProps {
 	cropper: CropperRef;
@@ -37,8 +41,8 @@ export const CropperWrapper: React.FC<CropperWrapperProps> = ({
 	return (
 		<CropperFade
 			className={cn(
-				'flex-grow min-h-0 h-full flex cursor-move bg-white',
-				className
+				"flex-grow min-h-0 h-full flex cursor-move bg-white",
+				className,
 			)}
 			visible={state && loaded}
 		>

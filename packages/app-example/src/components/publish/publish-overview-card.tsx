@@ -1,17 +1,25 @@
-import { Card, CardSection, CardContent, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import type { AppType } from "@core/app/app.model";
+import { useState } from "react";
+import AppPlaceholderIcon from "@/assets/icons/AppPlaceholderIcon";
+import {
+	type AppInfoType,
+	BrandingForm,
+} from "@/components/forms/branding-form";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardSection,
+} from "@/components/ui/card";
 import {
 	Dialog,
 	DialogContent,
+	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogDescription,
 	DialogTrigger,
-} from '@/components/ui/dialog';
-import { AppInfoType, BrandingForm } from '@/components/forms/branding-form';
-import AppPlaceholderIcon from '@/assets/icons/AppPlaceholderIcon';
-import { useState } from 'react';
-import { AppType } from '@core/app/app.model';
+} from "@/components/ui/dialog";
 
 export function PublishOverviewCard({ app }: { app: AppType }) {
 	const [appInfo, setAppInfo] = useState<AppInfoType>(app);
@@ -46,7 +54,9 @@ export function PublishOverviewCard({ app }: { app: AppType }) {
 							</div>
 							<div>
 								<h3 className="text-lg font-medium">{appInfo.name}</h3>
-								<p className="text-sm text-muted-foreground">Ready to publish</p>
+								<p className="text-sm text-muted-foreground">
+									Ready to publish
+								</p>
 							</div>
 						</div>
 						<DialogTrigger asChild>

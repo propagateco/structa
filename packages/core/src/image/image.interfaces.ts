@@ -1,4 +1,4 @@
-export * as ImageInterfaces from './image.interfaces';
+export * as ImageInterfaces from "./image.interfaces";
 
 /**
  * Image Processing Interfaces
@@ -6,7 +6,7 @@ export * as ImageInterfaces from './image.interfaces';
  * Types for image processing operations with Sharp
  */
 
-export type ImageFormat = 'jpeg' | 'gif' | 'webp' | 'png' | 'avif';
+export type ImageFormat = "jpeg" | "gif" | "webp" | "png" | "avif";
 
 export interface ImageOperations {
 	width?: number;

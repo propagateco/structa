@@ -32,7 +32,8 @@ const neonProject = new neon.Project(
     }
 );
 
-export const database = new sst.Linkable(`Database`, {
+export const database = neonProject;
+export const Database = new sst.Linkable('Database', {
     properties: {
         url: neonProject.connectionUri,
     },

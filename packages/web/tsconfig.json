@@ -15,8 +15,13 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@structa/*": ["../../*"],
+      "@backend/*": ["../backend/src/*"],
+      "@core/*": ["../core/src/*"]
     },
-    "noEmit": true
+    "noEmit": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
   }
 }

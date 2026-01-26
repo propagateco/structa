@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { useEffect, useRef, useState } from "react";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 interface InlineEditableSelectProps {
 	value: string;
@@ -20,7 +20,7 @@ export function InlineEditableSelect({
 	value,
 	onUpdate,
 	options,
-	placeholder = 'Select...',
+	placeholder = "Select...",
 	className,
 }: InlineEditableSelectProps) {
 	const [isOpen, setIsOpen] = useState(false);
@@ -36,9 +36,9 @@ export function InlineEditableSelect({
 	return (
 		<div
 			className={cn(
-				'cursor-pointer rounded px-2 py-1 -my-1 hover:bg-muted transition-colors inline-block w-full',
-				!value && 'text-muted-foreground',
-				className
+				"cursor-pointer rounded px-2 py-1 -my-1 hover:bg-muted transition-colors inline-block w-full",
+				!value && "text-muted-foreground",
+				className,
 			)}
 			onClick={() => setIsOpen(true)}
 		>

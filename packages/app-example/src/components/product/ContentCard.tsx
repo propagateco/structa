@@ -1,14 +1,17 @@
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import * as ProductContentModel from '@core/product/product-content.model';
-import { ProductInterface } from '@core/product/product.interface';
-import { GripVertical, Pencil, Trash2, Clock } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { ProductInterface } from "@core/product/product.interface";
+import type * as ProductContentModel from "@core/product/product-content.model";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { Clock, GripVertical, Pencil, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 // API response type (dates as strings)
-type ContentAPIResponse = Omit<ProductContentModel.SchemaType, 'createdAt' | 'updatedAt' | 'deletedAt'> & {
+type ContentAPIResponse = Omit<
+	ProductContentModel.SchemaType,
+	"createdAt" | "updatedAt" | "deletedAt"
+> & {
 	createdAt: string;
 	updatedAt: string;
 	deletedAt: string | null;
@@ -21,8 +24,20 @@ interface ContentCardProps {
 	isEditing: boolean;
 }
 
-export function ContentCard({ content, onEdit, onDelete, isEditing }: ContentCardProps) {
-	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+export function ContentCard({
+	content,
+	onEdit,
+	onDelete,
+	isEditing,
+}: ContentCardProps) {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({
 		id: content.id,
 		disabled: !isEditing,
 	});
@@ -37,13 +52,13 @@ export function ContentCard({ content, onEdit, onDelete, isEditing }: ContentCar
 	// Get the appropriate icon component based on content type
 	const getIcon = () => {
 		switch (content.contentType) {
-			case 'workout':
+			case "workout":
 				return <span className="text-lg">💪</span>;
-			case 'audio':
+			case "audio":
 				return <span className="text-lg">🎧</span>;
-			case 'video':
+			case "video":
 				return <span className="text-lg">▶️</span>;
-			case 'assessment':
+			case "assessment":
 				return <span className="text-lg">📋</span>;
 		}
 	};
@@ -52,9 +67,9 @@ export function ContentCard({ content, onEdit, onDelete, isEditing }: ContentCar
 		<div ref={setNodeRef} style={style}>
 			<Card
 				className={cn(
-					'transition-all',
-					isDragging && 'opacity-50',
-					isEditing && 'cursor-move hover:shadow-md'
+					"transition-all",
+					isDragging && "opacity-50",
+					isEditing && "cursor-move hover:shadow-md",
 				)}
 			>
 				<CardContent className="p-3">
@@ -77,7 +92,9 @@ export function ContentCard({ content, onEdit, onDelete, isEditing }: ContentCar
 						</div>
 
 						<div className="flex-1 min-w-0">
-							<h4 className="font-medium text-sm line-clamp-1">{content.title}</h4>
+							<h4 className="font-medium text-sm line-clamp-1">
+								{content.title}
+							</h4>
 							{content.description && (
 								<p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
 									{content.description}

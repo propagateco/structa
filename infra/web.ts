@@ -1,6 +1,6 @@
 import { Domain, domain, Stage } from './dns';
 import { apiRouter } from './api';
-import { database } from './database';
+import { Database } from './database';
 import { email } from './email';
 import { bucket, optimisedBucket } from './storage';
 import { cdn } from './cloudfront';
@@ -16,8 +16,8 @@ export const app = new sst.aws.TanStackStart('Web', {
     link: [
         Stage,
         Domain,
+        Database,
         email,
-        database,
         bucket,
         optimisedBucket,
         cdn,
@@ -34,8 +34,6 @@ export const app = new sst.aws.TanStackStart('Web', {
         secret.BetterAuthSecret,
     ],
     environment: {
-        BETTER_AUTH_URL: Domain.properties.platform,
-        VITE_BETTER_AUTH_URL: Domain.properties.platform,
         VITE_API_URL: apiRouter.url,
         VITE_PLATFORM_URL: Domain.properties.platform,
         PLATFORM_URL: Domain.properties.platform,
