@@ -1,1 +1,0 @@
-import{r as e,j as t}from"./main-Coq88dZ-.js";function s(){const[n,o]=e.useState(0);return t.jsxs("button",{className:"increment",onClick:()=>o(n+1),type:"button",children:["Clicks: ",n]})}function c(){return t.jsxs("main",{children:[t.jsx("h1",{children:"About"}),t.jsx(s,{})]})}export{c as component};

@@ -14,7 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as LoginCodeRouteImport } from './routes/login/code'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
 
 const AboutRoute = AboutRouteImport.update({
