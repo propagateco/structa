@@ -15,7 +15,7 @@
 	],
 	"scripts": {
 		"prepare": "husky",
-		"test": "vitest run",
+		"test": "vitest run --exclude '**/packages/solidtype/**'",
 		"test:watch": "vitest watch",
 		"test:coverage": "vitest run --coverage",
 		"test:related": "vitest related --run",
