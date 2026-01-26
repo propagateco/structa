@@ -1,3 +1,39 @@
 # Metis Progress Log
 Started: Thu Jan 22 05:57:13 PM UTC 2026
 ---
+
+## 2026-01-26 18:58: Fixed Duplicate Header Issue (Issue #11)
+
+**Task**: Remove duplicate header on landing page
+
+**Problem**:
+- Old NavigationBar and Footer components from starter template were being rendered in __root.tsx
+- New landing page has its own Header component
+- This caused TWO headers visible on landing page (critical bug)
+
+**Solution**:
+- Removed NavigationBar and Footer imports from __root.tsx
+- Removed rendering of these components from RootDocument function
+- Simplified body structure to just render {children}
+
+**Key Decision**:
+- Each route handles its own navigation as needed (flexible approach)
+- Landing page uses its new Header component
+- Authenticated routes will add their own app navigation later
+- Other routes (login, about) don't need the old navigation
+
+**Files Changed**:
+- `packages/web/src/routes/__root.tsx` (removed old components)
+
+**Verification**:
+- ✓ TypeScript typecheck passed
+- ✓ Build succeeded
+- ✓ Commit created: 763a238
+
+**Related**: Issue #11 - Phase 6 (Duplicate Header Issue)
+
+**Next Steps**:
+- Visual verification in browser (user responsibility)
+- Color consistency fixes
+- Footer background investigation
+- Phase 7: Refactor landing page into reusable components
