@@ -42,6 +42,8 @@ Before committing, run feedback loops in this order:
 
 1. **UI Changes**: Use dev-browser agent to test and check browser logs for any issues
 2. `npm run typecheck` to run type checker
+   - Works without AWS credentials - uses committed `sst-env.d.ts` type files
+   - Regenerate type files with `npx sst dev` when infrastructure changes
 3. `npm run test` to run tests (E2E tests focus on browser console log issues)
 4. `npx sst deploy` to deploy to current stage (your personal stage) and verify infrastructure works
 

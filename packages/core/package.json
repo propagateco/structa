@@ -6,7 +6,7 @@
     "scripts": {
         "test": "sst shell vitest",
         "test:watch": "sst shell vitest watch",
-        "typecheck": "npx sst shell -- tsc --noEmit",
+        "typecheck": "npx tsc --noEmit",
         "typecheck:local": "tsc --noEmit --skipLibCheck",
         "auth-generate": "sst shell -- npx @better-auth/cli@latest generate --config ../app/src/lib/auth.tsx --output ./src/auth/auth.sql.ts",
         "db": "sst shell drizzle-kit",

@@ -4,7 +4,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "typecheck": "npx sst shell -- tsc --noEmit",
+    "typecheck": "npx tsc --noEmit",
     "typecheck:local": "tsc --noEmit --skipLibCheck",
     "lint": "biome check",
     "lint:fix": "biome check --write",

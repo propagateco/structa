@@ -17,7 +17,13 @@ jobs:
     name: Quality Gate
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
+    # Add required permissions
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+
     # Skip draft PRs
     if: github.event.pull_request.draft == false
     
@@ -37,7 +43,10 @@ jobs:
         run: npm ci
       
       - name: 🔍 TypeScript type checks
-        run: npm run typecheck
+        run: |
+          cd packages/core && npx tsc --noEmit
+          cd ../backend && npx tsc --noEmit
+          cd ../web && npx tsc --noEmit
       
       - name: 📝 Linting checks
         run: npm run check
