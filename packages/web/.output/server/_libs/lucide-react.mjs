@@ -75,6 +75,11 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
+const __iconNode$2 = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$2);
 const __iconNode$1 = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
 const LoaderCircle = createLucideIcon("loader-circle", __iconNode$1);
 const __iconNode = [
@@ -84,6 +89,7 @@ const __iconNode = [
 ];
 const Menu = createLucideIcon("menu", __iconNode);
 export {
+  ArrowRight as A,
   LoaderCircle as L,
   Menu as M
 };

@@ -10,6 +10,7 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import appCss from '@/styles/app.css?url'
+import { ThemeProvider } from '@/components/theme-provider'
 import { NavigationBar } from '@/components/navigation-bar'
 import { Footer } from '@/components/footer'
 
@@ -25,9 +26,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RootDocument>
-        <Outlet />
-      </RootDocument>
+      <ThemeProvider defaultTheme="system">
+        <RootDocument>
+          <Outlet />
+        </RootDocument>
+      </ThemeProvider>
     </QueryClientProvider>
   )
 }
