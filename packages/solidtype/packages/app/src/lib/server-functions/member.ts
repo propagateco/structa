@@ -1,0 +1,376 @@
+/**
+ * Server Functions - Member Management
+ *
+ * Workspace and project member operations.
+ * All functions use session-based authentication via middleware.
+ *
+ * TanStack Start automatically code-splits server function handlers
+ * so top-level imports of server-only modules are safe here.
+ */
+
+import { createServerFn } from "@tanstack/react-start";
+import { eq, and, asc } from "drizzle-orm";
+import { authMiddleware } from "../server-fn-middleware";
+import { db } from "../db";
+import { workspaceMembers, projectMembers } from "../../db/schema";
+import { user } from "../../db/schema/better-auth";
+import {
+  requireWorkspaceMember,
+  requireWorkspaceRole,
+  requireProjectAccess,
+  requireProjectRole,
+} from "../authz";
+import { NotFoundError, ForbiddenError, ConflictError } from "../http/errors";
+import {
+  listWorkspaceMembersSchema,
+  addWorkspaceMemberSchema,
+  updateWorkspaceMemberRoleSchema,
+  removeWorkspaceMemberSchema,
+  listProjectMembersSchema,
+  addProjectMemberSchema,
+  updateProjectMemberSchema,
+  removeProjectMemberSchema,
+} from "../../validators/member";
+
+// ============================================================================
+// Workspace Member Management
+// ============================================================================
+
+/**
+ * List all members of a workspace
+ */
+export const listWorkspaceMembersMutation = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .inputValidator(listWorkspaceMembersSchema)
+  .handler(async ({ context, data }) => {
+    const { session } = context;
+
+    // Verify user has access to this workspace
+    await requireWorkspaceMember(session, data.workspaceId);
+
+    // Get all members with user details
+    const members = await db
+      .select({
+        userId: workspaceMembers.userId,
+        role: workspaceMembers.role,
+        joinedAt: workspaceMembers.joinedAt,
+        userName: user.name,
+        userEmail: user.email,
+        userImage: user.image,
+      })
+      .from(workspaceMembers)
+      .innerJoin(user, eq(workspaceMembers.userId, user.id))
+      .where(eq(workspaceMembers.workspaceId, data.workspaceId))
+      .orderBy(asc(workspaceMembers.joinedAt));
+
+    return { members };
+  });
+
+/**
+ * Add a member to a workspace by email
+ */
+export const addWorkspaceMemberMutation = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .inputValidator(addWorkspaceMemberSchema)
+  .handler(async ({ context, data }) => {
+    const { session } = context;
+
+    // Verify user is admin or owner
+    await requireWorkspaceRole(session, data.workspaceId, ["owner", "admin"]);
+
+    // Find user by email
+    const targetUser = await db.query.user.findFirst({
+      where: eq(user.email, data.email.toLowerCase().trim()),
+    });
+
+    if (!targetUser) {
+      throw new NotFoundError("No user found with that email address");
+    }
+
+    // Check if already a member
+    const existingMembership = await db.query.workspaceMembers.findFirst({
+      where: and(
+        eq(workspaceMembers.workspaceId, data.workspaceId),
+        eq(workspaceMembers.userId, targetUser.id)
+      ),
+    });
+
+    if (existingMembership) {
+      throw new ConflictError("User is already a member of this workspace");
+    }
+
+    // Add member
+    await db.insert(workspaceMembers).values({
+      workspaceId: data.workspaceId,
+      userId: targetUser.id,
+      role: data.role,
+    });
+
+    return {
+      member: {
+        userId: targetUser.id,
+        userName: targetUser.name,
+        userEmail: targetUser.email,
+        userImage: targetUser.image,
+        role: data.role,
+        joinedAt: new Date(),
+      },
+    };
+  });
+
+/**
+ * Update a workspace member's role
+ */
+export const updateWorkspaceMemberRoleMutation = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .inputValidator(updateWorkspaceMemberRoleSchema)
+  .handler(async ({ context, data }) => {
+    const { session } = context;
+
+    // Verify user is admin or owner
+    await requireWorkspaceRole(session, data.workspaceId, ["owner", "admin"]);
+
+    // Can't change owner role
+    const targetMembership = await db.query.workspaceMembers.findFirst({
+      where: and(
+        eq(workspaceMembers.workspaceId, data.workspaceId),
+        eq(workspaceMembers.userId, data.userId)
+      ),
+    });
+
+    if (!targetMembership) {
+      throw new NotFoundError("Member not found");
+    }
+
+    if (targetMembership.role === "owner") {
+      throw new ForbiddenError("Cannot change owner role");
+    }
+
+    // Update role
+    await db
+      .update(workspaceMembers)
+      .set({ role: data.role })
+      .where(
+        and(
+          eq(workspaceMembers.workspaceId, data.workspaceId),
+          eq(workspaceMembers.userId, data.userId)
+        )
+      );
+
+    return { success: true };
+  });
+
+/**
+ * Remove a member from a workspace
+ */
+export const removeWorkspaceMemberMutation = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .inputValidator(removeWorkspaceMemberSchema)
+  .handler(async ({ context, data }) => {
+    const { session } = context;
+
+    // Verify user is admin or owner
+    await requireWorkspaceRole(session, data.workspaceId, ["owner", "admin"]);
+
+    // Can't remove the owner
+    const targetMembership = await db.query.workspaceMembers.findFirst({
+      where: and(
+        eq(workspaceMembers.workspaceId, data.workspaceId),
+        eq(workspaceMembers.userId, data.userId)
+      ),
+    });
+
+    if (!targetMembership) {
+      throw new NotFoundError("Member not found");
+    }
+
+    if (targetMembership.role === "owner") {
+      throw new ForbiddenError("Cannot remove workspace owner");
+    }
+
+    // Remove member
+    await db
+      .delete(workspaceMembers)
+      .where(
+        and(
+          eq(workspaceMembers.workspaceId, data.workspaceId),
+          eq(workspaceMembers.userId, data.userId)
+        )
+      );
+
+    return { success: true };
+  });
+
+// ============================================================================
+// Project Member Management
+// ============================================================================
+
+/**
+ * List all members of a project
+ */
+export const listProjectMembersMutation = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .inputValidator(listProjectMembersSchema)
+  .handler(async ({ context, data }) => {
+    const { session } = context;
+
+    // Verify user has access to this project
+    await requireProjectAccess(session, data.projectId);
+
+    // Get all members with user details
+    const members = await db
+      .select({
+        userId: projectMembers.userId,
+        role: projectMembers.role,
+        canEdit: projectMembers.canEdit,
+        joinedAt: projectMembers.joinedAt,
+        userName: user.name,
+        userEmail: user.email,
+        userImage: user.image,
+      })
+      .from(projectMembers)
+      .innerJoin(user, eq(projectMembers.userId, user.id))
+      .where(eq(projectMembers.projectId, data.projectId))
+      .orderBy(asc(projectMembers.joinedAt));
+
+    return { members };
+  });
+
+/**
+ * Add a member to a project by email
+ */
+export const addProjectMemberMutation = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .inputValidator(addProjectMemberSchema)
+  .handler(async ({ context, data }) => {
+    const { session } = context;
+
+    // Verify user is admin or owner
+    await requireProjectRole(session, data.projectId, ["owner", "admin"]);
+
+    // Find user by email
+    const targetUser = await db.query.user.findFirst({
+      where: eq(user.email, data.email.toLowerCase().trim()),
+    });
+
+    if (!targetUser) {
+      throw new NotFoundError("No user found with that email address");
+    }
+
+    // Check if already a member
+    const existingMembership = await db.query.projectMembers.findFirst({
+      where: and(
+        eq(projectMembers.projectId, data.projectId),
+        eq(projectMembers.userId, targetUser.id)
+      ),
+    });
+
+    if (existingMembership) {
+      throw new ConflictError("User is already a member of this project");
+    }
+
+    // Add member
+    await db.insert(projectMembers).values({
+      projectId: data.projectId,
+      userId: targetUser.id,
+      role: data.role,
+      canEdit: data.canEdit,
+    });
+
+    return {
+      member: {
+        userId: targetUser.id,
+        userName: targetUser.name,
+        userEmail: targetUser.email,
+        userImage: targetUser.image,
+        role: data.role,
+        canEdit: data.canEdit,
+        joinedAt: new Date(),
+      },
+    };
+  });
+
+/**
+ * Update a project member's role or permissions
+ */
+export const updateProjectMemberMutation = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .inputValidator(updateProjectMemberSchema)
+  .handler(async ({ context, data }) => {
+    const { session } = context;
+
+    // Verify user is admin or owner
+    await requireProjectRole(session, data.projectId, ["owner", "admin"]);
+
+    // Can't change owner
+    const targetMembership = await db.query.projectMembers.findFirst({
+      where: and(
+        eq(projectMembers.projectId, data.projectId),
+        eq(projectMembers.userId, data.userId)
+      ),
+    });
+
+    if (!targetMembership) {
+      throw new NotFoundError("Member not found");
+    }
+
+    if (targetMembership.role === "owner") {
+      throw new ForbiddenError("Cannot modify owner permissions");
+    }
+
+    // Build update object
+    const updates: { role?: "admin" | "member" | "guest"; canEdit?: boolean } = {};
+    if (data.role !== undefined) updates.role = data.role;
+    if (data.canEdit !== undefined) updates.canEdit = data.canEdit;
+
+    if (Object.keys(updates).length === 0) {
+      return { success: true };
+    }
+
+    await db
+      .update(projectMembers)
+      .set(updates)
+      .where(
+        and(eq(projectMembers.projectId, data.projectId), eq(projectMembers.userId, data.userId))
+      );
+
+    return { success: true };
+  });
+
+/**
+ * Remove a member from a project
+ */
+export const removeProjectMemberMutation = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .inputValidator(removeProjectMemberSchema)
+  .handler(async ({ context, data }) => {
+    const { session } = context;
+
+    // Verify user is admin or owner
+    await requireProjectRole(session, data.projectId, ["owner", "admin"]);
+
+    // Can't remove the owner
+    const targetMembership = await db.query.projectMembers.findFirst({
+      where: and(
+        eq(projectMembers.projectId, data.projectId),
+        eq(projectMembers.userId, data.userId)
+      ),
+    });
+
+    if (!targetMembership) {
+      throw new NotFoundError("Member not found");
+    }
+
+    if (targetMembership.role === "owner") {
+      throw new ForbiddenError("Cannot remove project owner");
+    }
+
+    // Remove member
+    await db
+      .delete(projectMembers)
+      .where(
+        and(eq(projectMembers.projectId, data.projectId), eq(projectMembers.userId, data.userId))
+      );
+
+    return { success: true };
+  });

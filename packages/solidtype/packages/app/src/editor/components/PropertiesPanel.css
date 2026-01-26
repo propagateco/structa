@@ -1,0 +1,625 @@
+.properties-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-bg-light);
+  user-select: none;
+}
+
+.properties-panel-floating {
+  position: absolute;
+  top: 12px; /* 25% closer to top (was 16px, now 12px) */
+  right: 16px;
+  width: 224px; /* Reverted to original width */
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 80px);
+  height: auto;
+  background: rgba(37, 37, 38, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 13px;
+  padding: 0; /* Padding moved to header */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Restore hidden since dropdown is portaled */
+  backdrop-filter: blur(8px);
+}
+
+[data-theme="light"] .properties-panel-floating {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.properties-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px; /* Padding moved here from panel */
+  flex-shrink: 0;
+}
+
+.properties-panel-header-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.properties-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Reduced gap for tighter spacing like Figma */
+}
+
+.properties-panel-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.properties-panel-header-icon-button {
+  width: 28px; /* Consistent with other buttons */
+  height: 28px; /* Consistent with other buttons */
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--color-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s ease;
+}
+
+.properties-panel-header-icon-button:hover {
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+}
+
+.properties-panel-header-icon-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* User avatar button - circular, no square background on hover */
+.properties-panel-header-icon-button.properties-panel-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.properties-panel-header-icon-button.properties-panel-user-avatar:hover {
+  background: transparent;
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+.properties-panel-header-button {
+  height: 28px; /* Consistent button height */
+  padding: 0 12px;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--color-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s ease;
+  font-size: 11px; /* Smaller text */
+  white-space: nowrap;
+}
+
+.properties-panel-header-button:hover {
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+}
+
+.properties-panel-header-button.active {
+  background: var(--color-accent-bg-hover);
+  color: var(--color-accent);
+}
+
+.properties-panel-header-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.properties-panel-header-tooltip {
+  background: var(--color-bg-light);
+  color: var(--color-text);
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+}
+
+.properties-panel-header-chat {
+  height: 28px; /* Consistent button height */
+  padding: 0 10px; /* Reduced padding */
+  border: 1px solid var(--color-border); /* Add border for clarity */
+  display: flex;
+  align-items: center;
+  gap: 4px; /* Reduced gap between icon and text */
+}
+
+.properties-panel-header-share {
+  background: var(--color-accent);
+  color: white;
+  font-weight: 500;
+}
+
+.properties-panel-header-share:hover {
+  background: var(--color-accent-hover);
+  color: white;
+}
+
+.properties-panel-header-create {
+  padding-right: 6px !important;
+}
+
+.properties-panel-header-display-dropdown,
+.properties-panel-header-create-dropdown {
+  position: relative;
+}
+
+.properties-panel-header-dropdown {
+  min-width: 180px;
+  background: #252526; /* Solid dark background */
+  border: 1px solid rgba(255, 255, 255, 0.15); /* Match toolbar border */
+  border-radius: 13px; /* Match toolbar border radius */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Matching shadow */
+  padding: 8px; /* Match toolbar padding */
+}
+
+.properties-panel-header-dropdown-section {
+  margin-bottom: 8px;
+}
+
+.properties-panel-header-dropdown-section:last-child {
+  margin-bottom: 0;
+}
+
+.properties-panel-header-dropdown-label {
+  padding: 4px 8px 2px;
+  font-size: 10px; /* Smaller text */
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.properties-panel-header-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 8px; /* Tighter padding */
+  background: transparent;
+  border: none;
+  border-radius: 5px; /* Match button border radius */
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 11px; /* Smaller text */
+  text-align: left;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.properties-panel-header-dropdown-item:hover {
+  background: var(--color-accent-bg);
+}
+
+.properties-panel-header-dropdown-item.active,
+.properties-panel-header-dropdown-item[data-highlighted] {
+  background: var(--color-accent);
+  color: white;
+}
+
+.properties-panel-header-dropdown-item.active svg {
+  color: white;
+}
+
+.properties-panel-header-dropdown-item svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.15s ease;
+}
+
+[data-theme="light"] .properties-panel-header-dropdown-item svg {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.properties-panel-content {
+  flex: 1;
+  overflow: auto;
+  padding: 0; /* No padding - let child panels choose their own */
+  overflow-x: hidden; /* Prevent horizontal scroll, but allow vertical */
+}
+
+/* When containing AI panel, don't scroll - let AI panel handle its own scrolling */
+.properties-panel-content:has(.ai-panel) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.properties-panel-content:not(:empty) {
+  border-top: 1px solid var(--color-border);
+}
+
+/* Edit forms need padding */
+.properties-panel-content form {
+  padding: 8px 0; /* Vertical padding for forms */
+}
+
+.properties-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 16px;
+  text-align: center;
+}
+
+.properties-empty svg {
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+.empty-title {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.empty-hint {
+  margin: 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* Property Groups */
+.property-group {
+  margin-bottom: 12px;
+  padding: 0 8px; /* Add padding since parent no longer has it */
+}
+
+.property-group:first-child {
+  padding-top: 8px; /* Add top padding to first group */
+}
+
+.property-group:last-child {
+  margin-bottom: 0;
+  padding-bottom: 8px; /* Add bottom padding to last group */
+}
+
+.property-group-title {
+  display: none; /* Hide group titles for Figma-like appearance */
+}
+
+/* Property Rows */
+.property-row {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  font-size: 12px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+}
+
+.property-label {
+  flex: 0 0 80px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.property-value {
+  flex: 1;
+  min-width: 0;
+}
+
+.readonly-value {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+/* Input Components */
+.text-input,
+.select-input {
+  width: 100%;
+  padding: 4px 8px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--color-text);
+}
+
+.text-input:focus,
+.select-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.text-input:disabled,
+.select-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.number-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.number-input input {
+  width: 60px;
+  padding: 4px 8px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--color-text);
+  text-align: right;
+}
+
+.number-input input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.number-input input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.number-input .unit {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.select-input {
+  cursor: pointer;
+}
+
+/* Checkbox Input */
+.checkbox-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--color-text);
+}
+
+.checkbox-input input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.checkbox-input input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Color Input */
+.color-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-input input[type="color"] {
+  width: 32px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  background: none;
+}
+
+.color-input input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.color-input input[type="color"]::-webkit-color-swatch {
+  border-radius: 2px;
+  border: none;
+}
+
+.color-input .color-value {
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--color-text-muted);
+}
+
+.color-input .reset-color {
+  font-size: 11px;
+  padding: 2px 6px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.color-input .reset-color:hover {
+  background: var(--color-bg-hover);
+}
+
+/* Properties Panel Editing Mode */
+.properties-panel-editing {
+  border: 2px solid var(--color-accent);
+}
+
+.properties-panel-actions {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.properties-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.properties-btn-cancel {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.properties-btn-cancel:hover {
+  background: var(--color-bg-hover);
+}
+
+.properties-btn-accept {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+
+.properties-btn-accept:hover {
+  background: var(--color-accent-hover, #1c8ae6);
+}
+
+.properties-btn-accept:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Face Selector (Phase 14) */
+.face-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.face-selector-value {
+  flex: 1;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.face-selector-prompt {
+  flex: 1;
+  font-size: 11px;
+  color: var(--color-accent);
+  font-style: italic;
+}
+
+.face-selector-btn,
+.face-selector-cancel {
+  padding: 2px 8px;
+  font-size: 11px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.face-selector-btn:hover {
+  background: var(--color-bg-hover);
+}
+
+.face-selector-cancel {
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+}
+
+.face-selector-cancel:hover {
+  background: var(--color-bg-hover);
+}
+
+/* Field with validation error */
+.field-with-error {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.field-error {
+  font-size: 10px;
+  color: var(--color-error, #dc2626);
+}
+
+/* Input error state */
+.field-with-error .number-input input.has-error,
+.field-with-error .text-input.has-error,
+.field-with-error .select-input.has-error {
+  border-color: var(--color-error, #dc2626);
+}
+
+/* Body Selector (Multi-body support) */
+.body-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.body-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--color-text);
+}
+
+.body-option:hover {
+  background: var(--color-bg-hover);
+}
+
+.body-option input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.body-option span {
+  font-size: 14px;
+  line-height: 1;
+}

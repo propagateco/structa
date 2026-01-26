@@ -1,33 +1,33 @@
-import { api } from '@/lib/api';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
-import { ProductModel } from '@core/product/product.model';
-import { useNavigate, useRouterState } from '@tanstack/react-router';
-import { computeSHA256Checksum } from '@core/storage/storage.utils';
-import { productQueryOptions } from './product.query.client';
+import type { ProductModel } from "@core/product/product.model";
+import { computeSHA256Checksum } from "@core/storage/storage.utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { toast } from "sonner";
+import { api } from "@/lib/api";
+import { productQueryOptions } from "./product.query.client";
 
 export const useCreateProduct = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationKey: ['createProduct'],
+		mutationKey: ["createProduct"],
 		mutationFn: async (
-			data: Omit<ProductModel.MutateServerType, 'userId' | 'appId'> & {
+			data: Omit<ProductModel.MutateServerType, "userId" | "appId"> & {
 				id?: string;
-			}
+			},
 		) => {
 			const response = await api.product.$post({ json: data });
 			if (!response.ok) {
-				throw new Error('Failed to create product');
+				throw new Error("Failed to create product");
 			}
 			return response.json();
 		},
 		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: ['products'] });
-			queryClient.invalidateQueries({ queryKey: ['product', data.id] });
+			queryClient.invalidateQueries({ queryKey: ["products"] });
+			queryClient.invalidateQueries({ queryKey: ["product", data.id] });
 		},
 		onError: () => {
-			toast.error('Failed to create product');
+			toast.error("Failed to create product");
 		},
 	});
 };
@@ -36,7 +36,7 @@ export const useUpdateProduct = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationKey: ['updateProduct'],
+		mutationKey: ["updateProduct"],
 		mutationFn: async ({
 			id,
 			updates,
@@ -45,12 +45,14 @@ export const useUpdateProduct = () => {
 			updates: ProductModel.MutateClientType;
 		}) => {
 			let coverImageKey: string | undefined;
-			console.log('Mutation updates: ', updates);
+			console.log("Mutation updates: ", updates);
 
 			// Handle image upload if provided
 			if (updates.coverImage) {
 				// Get the pre-signed URL from the API
-				const urlResponse = await api.storage.upload.product.cover[':productId'].$put({
+				const urlResponse = await api.storage.upload.product.cover[
+					":productId"
+				].$put({
 					param: { productId: id },
 					json: {
 						contentType: updates.coverImage.type,
@@ -60,25 +62,25 @@ export const useUpdateProduct = () => {
 				});
 
 				if (!urlResponse.ok) {
-					throw new Error('Failed to get pre-signed URL');
+					throw new Error("Failed to get pre-signed URL");
 				}
 
 				// Extract the pre-signed URL from the response
 				const { url, key } = await urlResponse.json();
 				coverImageKey = key;
-				console.log('Cover image key: ', coverImageKey);
+				console.log("Cover image key: ", coverImageKey);
 
 				// Upload the file to S3 using the pre-signed URL
 				const uploadResponse = await fetch(url, {
-					method: 'PUT',
+					method: "PUT",
 					body: updates.coverImage,
 					headers: {
-						'Content-Type': updates.coverImage.type,
+						"Content-Type": updates.coverImage.type,
 					},
 				});
 
 				if (!uploadResponse.ok) {
-					throw new Error('Failed to upload cover image to storage');
+					throw new Error("Failed to upload cover image to storage");
 				}
 			}
 
@@ -89,23 +91,25 @@ export const useUpdateProduct = () => {
 				: productUpdates;
 
 			// Update product data
-			const response = await api.product[':id'].$patch({
+			const response = await api.product[":id"].$patch({
 				param: { id },
 				json: updateData,
 			});
 
 			if (!response.ok) {
-				throw new Error('Failed to update product');
+				throw new Error("Failed to update product");
 			}
 
 			return response.json();
 		},
 		onMutate: async ({ id, updates }) => {
 			// Cancel any outgoing refetches
-			await queryClient.cancelQueries({ queryKey: ['product', id] });
+			await queryClient.cancelQueries({ queryKey: ["product", id] });
 
 			// Snapshot the previous value
-			const previousProduct = queryClient.getQueryData(productQueryOptions(id).queryKey);
+			const previousProduct = queryClient.getQueryData(
+				productQueryOptions(id).queryKey,
+			);
 
 			// Optimistically update to the new value
 			if (previousProduct) {
@@ -121,7 +125,9 @@ export const useUpdateProduct = () => {
 
 				// If there's an image, create a temporary URL for preview
 				if (updates.coverImage) {
-					optimisticProduct.coverImage = URL.createObjectURL(updates.coverImage);
+					optimisticProduct.coverImage = URL.createObjectURL(
+						updates.coverImage,
+					);
 				}
 
 				queryClient.setQueryData(productQueryOptions(id).queryKey, {
@@ -138,18 +144,18 @@ export const useUpdateProduct = () => {
 			if (context) {
 				queryClient.setQueryData(
 					productQueryOptions(context.id).queryKey,
-					context.previousProduct
+					context.previousProduct,
 				);
 			}
 			const errorMessage =
-				error instanceof Error ? error.message : 'Failed to update pricing';
+				error instanceof Error ? error.message : "Failed to update pricing";
 			console.log(errorMessage);
-			toast.error('Failed to update product. Please try again.');
+			toast.error("Failed to update product. Please try again.");
 		},
 		onSettled: (data, error, variables) => {
 			// Always refetch after error or success
-			queryClient.invalidateQueries({ queryKey: ['products'] });
-			queryClient.invalidateQueries({ queryKey: ['product', variables.id] });
+			queryClient.invalidateQueries({ queryKey: ["products"] });
+			queryClient.invalidateQueries({ queryKey: ["product", variables.id] });
 		},
 	});
 };
@@ -161,28 +167,30 @@ export const useDeleteProduct = (options?: { skipNavigation?: boolean }) => {
 
 	return useMutation({
 		mutationFn: async (id: string) => {
-			const response = await api.product[':id'].$delete({ param: { id } });
+			const response = await api.product[":id"].$delete({ param: { id } });
 			if (!response.ok) {
-				throw new Error('Failed to delete product');
+				throw new Error("Failed to delete product");
 			}
 			return response.json();
 		},
 		onSuccess: (_, deletedProductId) => {
-			queryClient.invalidateQueries({ queryKey: ['products'] });
-			toast.success('Product deleted successfully');
-			
+			queryClient.invalidateQueries({ queryKey: ["products"] });
+			toast.success("Product deleted successfully");
+
 			// Check if we're currently on the deleted product's page
 			const currentLocation = router.location;
-			const isOnDeletedProductPage = currentLocation.pathname.includes(`/products/${deletedProductId}`);
-			
+			const isOnDeletedProductPage = currentLocation.pathname.includes(
+				`/products/${deletedProductId}`,
+			);
+
 			// Always redirect if we're on the deleted product's page (can't stay on deleted product)
 			// Otherwise, only redirect if skipNavigation is not explicitly set to true
 			if (isOnDeletedProductPage || !options?.skipNavigation) {
-				navigate({ to: '/products' });
+				navigate({ to: "/products" });
 			}
 		},
 		onError: () => {
-			toast.error('Failed to delete product');
+			toast.error("Failed to delete product");
 		},
 	});
 };
@@ -198,9 +206,9 @@ export const usePublishProduct = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationKey: ['publishProduct'],
+		mutationKey: ["publishProduct"],
 		mutationFn: async (productId: string) => {
-			const response = await api.product[':id'].publish.$post({
+			const response = await api.product[":id"].publish.$post({
 				param: { id: productId },
 			});
 			if (!response.ok) {
@@ -210,11 +218,11 @@ export const usePublishProduct = () => {
 		},
 		onMutate: async (productId) => {
 			// Cancel any outgoing refetches
-			await queryClient.cancelQueries({ queryKey: ['product', productId] });
+			await queryClient.cancelQueries({ queryKey: ["product", productId] });
 
 			// Snapshot the previous value
 			const previousProduct = queryClient.getQueryData(
-				productQueryOptions(productId).queryKey
+				productQueryOptions(productId).queryKey,
 			);
 
 			// Optimistically update to published state
@@ -248,10 +256,10 @@ export const usePublishProduct = () => {
 		onSuccess: (data, productId) => {
 			// Invalidate queries to refresh data
 			queryClient.invalidateQueries({
-				queryKey: ['product', productId],
+				queryKey: ["product", productId],
 			});
 			queryClient.invalidateQueries({
-				queryKey: ['products'],
+				queryKey: ["products"],
 			});
 		},
 		onError: (error, productId, context) => {
@@ -259,11 +267,11 @@ export const usePublishProduct = () => {
 			if (context) {
 				queryClient.setQueryData(
 					productQueryOptions(context.productId).queryKey,
-					context.previousProduct
+					context.previousProduct,
 				);
 			}
-			toast.error('Failed to publish product. Please try again.');
-			console.error('Failed to publish product:', error);
+			toast.error("Failed to publish product. Please try again.");
+			console.error("Failed to publish product:", error);
 		},
 	});
 };

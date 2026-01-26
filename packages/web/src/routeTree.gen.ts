@@ -11,6 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
+import { Route as LoginCodeRouteImport } from './routes/login/code'
+import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -22,31 +27,98 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginCodeRoute = LoginCodeRouteImport.update({
+  id: '/login/code',
+  path: '/login/code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
+  id: '/_auth/app/',
+  path: '/app/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
+  id: '/_auth/app/settings',
+  path: '/app/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/login/code': typeof LoginCodeRoute
+  '/login/': typeof LoginIndexRoute
+  '/app/settings': typeof AuthAppSettingsRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/app/': typeof AuthAppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/login/code': typeof LoginCodeRoute
+  '/login': typeof LoginIndexRoute
+  '/app/settings': typeof AuthAppSettingsRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/app': typeof AuthAppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/login/code': typeof LoginCodeRoute
+  '/login/': typeof LoginIndexRoute
+  '/_auth/app/settings': typeof AuthAppSettingsRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_auth/app/': typeof AuthAppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/login/code'
+    | '/login/'
+    | '/app/settings'
+    | '/api/auth/$'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to:
+    | '/'
+    | '/about'
+    | '/login/code'
+    | '/login'
+    | '/app/settings'
+    | '/api/auth/$'
+    | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/login/code'
+    | '/login/'
+    | '/_auth/app/settings'
+    | '/api/auth/$'
+    | '/_auth/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  LoginCodeRoute: typeof LoginCodeRoute
+  LoginIndexRoute: typeof LoginIndexRoute
+  AuthAppSettingsRoute: typeof AuthAppSettingsRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +137,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/code': {
+      id: '/login/code'
+      path: '/login/code'
+      fullPath: '/login/code'
+      preLoaderRoute: typeof LoginCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/app/': {
+      id: '/_auth/app/'
+      path: '/app'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AuthAppIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/app/settings': {
+      id: '/_auth/app/settings'
+      path: '/app/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AuthAppSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  LoginCodeRoute: LoginCodeRoute,
+  LoginIndexRoute: LoginIndexRoute,
+  AuthAppSettingsRoute: AuthAppSettingsRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  AuthAppIndexRoute: AuthAppIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

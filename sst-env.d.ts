@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /* deno-fmt-ignore-file */
+/* biome-ignore-all lint: auto-generated */
 
 declare module "sst" {
   export interface Resource {
@@ -64,11 +65,6 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Function"
       "url": string
-    }
-    "MarketingEmail": {
-      "configSet": string
-      "sender": string
-      "type": "sst.aws.Email"
     }
     "NODE_TLS_REJECT_UNAUTHORIZED": {
       "type": "sst.sst.Secret"

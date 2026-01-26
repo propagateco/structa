@@ -1,23 +1,25 @@
-import { PageContainer } from '@/components/layout/container';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from "@tanstack/react-router";
+import { PageContainer } from "@/components/layout/container";
+import { Button } from "@/components/ui/button";
 // import { Helmet } from 'react-helmet';
 import {
+	Dialog,
 	DialogContent,
+	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogDescription,
 	DialogTrigger,
-} from '@/components/ui/dialog';
-import { Dialog } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-export const Route = createFileRoute('/_authenticated/_dashboard/_releases/releases/ios')({
+export const Route = createFileRoute(
+	"/_authenticated/_dashboard/_releases/releases/ios",
+)({
 	component: RouteComponent,
 	staticData: {
-		title: 'Apple App Store',
+		title: "Apple App Store",
 	},
 });
 

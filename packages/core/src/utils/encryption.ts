@@ -1,5 +1,5 @@
-import { Resource } from "sst";
 import crypto from "crypto";
+import { Resource } from "sst";
 
 /**
  * Encryption Utilities
@@ -24,27 +24,27 @@ const KEY = crypto.createHash("sha256").update(ENCRYPTION_KEY).digest();
  * Encrypts a string using AES-256-GCM with a random IV
  */
 export async function encrypt(text: string): Promise<string> {
-  // Generate a random initialization vector
-  const iv = crypto.randomBytes(16);
+	// Generate a random initialization vector
+	const iv = crypto.randomBytes(16);
 
-  // Create cipher
-  const cipher = crypto.createCipheriv("aes-256-gcm", KEY, iv);
+	// Create cipher
+	const cipher = crypto.createCipheriv("aes-256-gcm", KEY, iv);
 
-  // Encrypt the text
-  const encrypted = Buffer.concat([
-    cipher.update(text, "utf8"),
-    cipher.final(),
-  ]);
+	// Encrypt the text
+	const encrypted = Buffer.concat([
+		cipher.update(text, "utf8"),
+		cipher.final(),
+	]);
 
-  // Get the authentication tag
-  const authTag = cipher.getAuthTag();
+	// Get the authentication tag
+	const authTag = cipher.getAuthTag();
 
-  // Combine iv, authTag, and encrypted data
-  // Format: iv (16 bytes) + authTag (16 bytes) + encrypted data
-  const combined = Buffer.concat([iv, authTag, encrypted]);
+	// Combine iv, authTag, and encrypted data
+	// Format: iv (16 bytes) + authTag (16 bytes) + encrypted data
+	const combined = Buffer.concat([iv, authTag, encrypted]);
 
-  // Return as base64 string
-  return combined.toString("base64");
+	// Return as base64 string
+	return combined.toString("base64");
 }
 
 /**
@@ -54,23 +54,23 @@ export async function encrypt(text: string): Promise<string> {
  * Decrypts a string that was encrypted with the encrypt function
  */
 export async function decrypt(encryptedText: string): Promise<string> {
-  // Decode from base64
-  const combined = Buffer.from(encryptedText, "base64");
+	// Decode from base64
+	const combined = Buffer.from(encryptedText, "base64");
 
-  // Extract components
-  const iv = combined.subarray(0, 16);
-  const authTag = combined.subarray(16, 32);
-  const encrypted = combined.subarray(32);
+	// Extract components
+	const iv = combined.subarray(0, 16);
+	const authTag = combined.subarray(16, 32);
+	const encrypted = combined.subarray(32);
 
-  // Create decipher
-  const decipher = crypto.createDecipheriv("aes-256-gcm", KEY, iv);
-  decipher.setAuthTag(authTag);
+	// Create decipher
+	const decipher = crypto.createDecipheriv("aes-256-gcm", KEY, iv);
+	decipher.setAuthTag(authTag);
 
-  // Decrypt the text
-  const decrypted = Buffer.concat([
-    decipher.update(encrypted),
-    decipher.final(),
-  ]);
+	// Decrypt the text
+	const decrypted = Buffer.concat([
+		decipher.update(encrypted),
+		decipher.final(),
+	]);
 
-  return decrypted.toString("utf8");
+	return decrypted.toString("utf8");
 }

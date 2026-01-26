@@ -1,8 +1,8 @@
-import { FC } from 'react';
-import cn from 'classnames';
-import { isNumber } from 'advanced-cropper';
-import { Minus, Plus } from 'lucide-react';
-import { Slider } from './slider';
+import { isNumber } from "advanced-cropper";
+import cn from "classnames";
+import { Minus, Plus } from "lucide-react";
+import type { FC } from "react";
+import { Slider } from "./slider";
 
 interface CropperNavigationProps {
 	zoom?: number;
@@ -11,7 +11,11 @@ interface CropperNavigationProps {
 	disabled?: unknown;
 }
 
-export const CropperNavigation: FC<CropperNavigationProps> = ({ className, onZoom, zoom }) => {
+export const CropperNavigation: FC<CropperNavigationProps> = ({
+	className,
+	onZoom,
+	zoom,
+}) => {
 	const onZoomIn = () => {
 		if (onZoom && isNumber(zoom)) {
 			onZoom(Math.min(1, zoom + 0.1), true);
@@ -28,8 +32,8 @@ export const CropperNavigation: FC<CropperNavigationProps> = ({ className, onZoo
 		<div className="flex flex-col justify-center items-center w-full">
 			<div
 				className={cn(
-					'mx-auto flex justify-center items-center text-primary bg-white',
-					className
+					"mx-auto flex justify-center items-center text-primary bg-white",
+					className,
 				)}
 			>
 				<button

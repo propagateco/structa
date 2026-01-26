@@ -1,19 +1,25 @@
-import { BrandingModel } from '@core/branding';
-import { AccentColour, GreyColour } from '@core/utils/colour';
-import { ColourBlock } from './colour-block';
-import { useAtomValue } from 'jotai';
-import { brandingChangesAtom } from '@/state/branding';
-import { useState } from 'react';
+import type { BrandingModel } from "@core/branding";
+import { AccentColour, GreyColour } from "@core/utils/colour";
+import { useAtomValue } from "jotai";
+import { useState } from "react";
+import { brandingChangesAtom } from "@/state/branding";
+import { ColourBlock } from "./colour-block";
 
-export function ColourCard({ colours }: { colours: BrandingModel.BrandingQueryType['colours'] }) {
-	const [hoveredElement, setHoveredElement] = useState<'accent' | 'grey' | null>(null);
-	
+export function ColourCard({
+	colours,
+}: {
+	colours: BrandingModel.BrandingQueryType["colours"];
+}) {
+	const [hoveredElement, setHoveredElement] = useState<
+		"accent" | "grey" | null
+	>(null);
+
 	// Use Jotai atoms for state management
 	const changes = useAtomValue(brandingChangesAtom);
-	
 
 	const preview = {
-		accent: changes.colours?.accent || new AccentColour(colours.accent.formatHex()),
+		accent:
+			changes.colours?.accent || new AccentColour(colours.accent.formatHex()),
 		grey: changes.colours?.grey || new GreyColour(colours.grey.formatHex()),
 	};
 
@@ -28,7 +34,7 @@ export function ColourCard({ colours }: { colours: BrandingModel.BrandingQueryTy
 					isDefault={true}
 					visibleFor="accent"
 					className="z-10"
-					onMouseEnter={() => setHoveredElement('accent')}
+					onMouseEnter={() => setHoveredElement("accent")}
 					onMouseLeave={() => setHoveredElement(null)}
 				/>
 				<ColourBlock
@@ -47,7 +53,7 @@ export function ColourCard({ colours }: { colours: BrandingModel.BrandingQueryTy
 					isDefault={true}
 					visibleFor="grey"
 					className="z-10"
-					onMouseEnter={() => setHoveredElement('grey')}
+					onMouseEnter={() => setHoveredElement("grey")}
 					onMouseLeave={() => setHoveredElement(null)}
 				/>
 				<ColourBlock

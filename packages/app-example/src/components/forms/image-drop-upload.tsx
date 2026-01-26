@@ -1,9 +1,11 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useDropzone } from 'react-dropzone';
-import { z } from 'zod';
-import { Input } from '@/components/ui/input';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ImagePlus } from "lucide-react";
+import React from "react";
+import { useDropzone } from "react-dropzone";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -11,26 +13,24 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import { ImagePlus } from 'lucide-react';
-import { toast } from 'sonner';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 export const ImageDropUploader: React.FC = () => {
-	const [preview, setPreview] = React.useState<string | ArrayBuffer | null>('');
+	const [preview, setPreview] = React.useState<string | ArrayBuffer | null>("");
 
 	const formSchema = z.object({
 		image: z
 			//Rest of validations done via react dropzone
 			.instanceof(File)
-			.refine((file) => file.size !== 0, 'Please upload an image'),
+			.refine((file) => file.size !== 0, "Please upload an image"),
 	});
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
-		mode: 'onBlur',
+		mode: "onBlur",
 		defaultValues: {
-			image: new File([''], 'filename'),
+			image: new File([""], "filename"),
 		},
 	});
 
@@ -40,22 +40,23 @@ export const ImageDropUploader: React.FC = () => {
 			try {
 				reader.onload = () => setPreview(reader.result);
 				reader.readAsDataURL(acceptedFiles[0]);
-				form.setValue('image', acceptedFiles[0]);
-				form.clearErrors('image');
+				form.setValue("image", acceptedFiles[0]);
+				form.clearErrors("image");
 			} catch (error) {
 				setPreview(null);
-				form.resetField('image');
+				form.resetField("image");
 			}
 		},
-		[form]
+		[form],
 	);
 
-	const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
-		onDrop,
-		maxFiles: 1,
-		maxSize: 1000000,
-		accept: { 'image/png': [], 'image/jpg': [], 'image/jpeg': [] },
-	});
+	const { getRootProps, getInputProps, isDragActive, fileRejections } =
+		useDropzone({
+			onDrop,
+			maxFiles: 1,
+			maxSize: 1000000,
+			accept: { "image/png": [], "image/jpg": [], "image/jpeg": [] },
+		});
 
 	const onSubmit = (values: z.infer<typeof formSchema>) => {
 		console.log(values);
@@ -71,13 +72,13 @@ export const ImageDropUploader: React.FC = () => {
 					render={() => (
 						<FormItem className="md:w-1/2">
 							<FormLabel
-								className={`${fileRejections.length !== 0 && 'text-destructive'}`}
+								className={`${fileRejections.length !== 0 && "text-destructive"}`}
 							>
 								<span
 									className={
 										form.formState.errors.image || fileRejections.length !== 0
-											? 'text-destructive'
-											: 'text-muted-foreground'
+											? "text-destructive"
+											: "text-muted-foreground"
 									}
 								></span>
 							</FormLabel>
@@ -94,7 +95,7 @@ export const ImageDropUploader: React.FC = () => {
 										/>
 									)}
 									<ImagePlus
-										className={`size-8 ${preview ? 'hidden' : 'block'}`}
+										className={`size-8 ${preview ? "hidden" : "block"}`}
 									/>
 									<Input {...getInputProps()} type="file" />
 									{isDragActive ? (
@@ -106,7 +107,9 @@ export const ImageDropUploader: React.FC = () => {
 							</FormControl>
 							<FormMessage>
 								{fileRejections.length !== 0 && (
-									<p>Image must be less than 1MB and of type png, jpg, or jpeg</p>
+									<p>
+										Image must be less than 1MB and of type png, jpg, or jpeg
+									</p>
 								)}
 							</FormMessage>
 						</FormItem>

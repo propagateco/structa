@@ -36,7 +36,7 @@ const app = new Hono().use(logger()).onError((error, c) => {
         );
     }
     if (error instanceof ZodError) {
-        const e = error.errors[0];
+        const e = error.issues[0];
         if (e) {
             return c.json(
                 {

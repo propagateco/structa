@@ -1,0 +1,319 @@
+.workspace-settings-dialog {
+  /* Extends create-dialog-popup */
+  min-width: 450px;
+  max-width: 550px;
+}
+
+.workspace-settings-dialog-content {
+  padding: 24px;
+}
+
+/* Shared settings tabs */
+.settings-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--color-border);
+  margin-top: 12px;
+}
+
+.settings-tab {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  transition: all 0.15s ease;
+  margin-bottom: -1px;
+}
+
+.settings-tab:hover {
+  color: var(--color-text);
+}
+
+.settings-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.settings-tab-danger {
+  color: var(--color-error);
+}
+
+.settings-tab-danger.active {
+  color: var(--color-error);
+  border-bottom-color: var(--color-error);
+}
+
+/* Shared settings section styles */
+.settings-section {
+  margin-bottom: 24px;
+}
+
+.settings-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.settings-members-list {
+  padding: 16px;
+  background: var(--color-muted-bg);
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.settings-empty {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.settings-hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin: 8px 0 0 0;
+  opacity: 0.8;
+}
+
+.settings-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.settings-button-secondary {
+  background: var(--color-muted-bg);
+  color: var(--color-text);
+}
+
+.settings-button-secondary:hover:not(:disabled) {
+  background: var(--color-border);
+}
+
+.settings-button-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.settings-button-danger {
+  background: var(--color-error);
+  color: white;
+}
+
+.settings-button-danger:hover:not(:disabled) {
+  background: var(--color-error-hover);
+}
+
+/* Danger zone */
+.settings-danger-zone {
+  border-top: 1px solid var(--color-border);
+  padding-top: 20px;
+}
+
+.settings-warning {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 0 0 12px 0;
+}
+
+.settings-delete-confirm {
+  padding: 16px;
+  background: rgba(var(--color-error-rgb), 0.1);
+  border-radius: 6px;
+  border: 1px solid var(--color-error);
+}
+
+.settings-delete-warning {
+  font-size: 13px;
+  color: var(--color-error);
+  margin: 0 0 12px 0;
+}
+
+.settings-delete-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Member list styles */
+.settings-member-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-member-item:first-child {
+  padding-top: 0;
+}
+
+.settings-member-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings-member-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-member-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-member-you {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.settings-member-email {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.settings-member-role {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.member-role-icon {
+  flex-shrink: 0;
+}
+
+.member-role-owner {
+  color: var(--color-warning);
+}
+
+.member-role-admin {
+  color: var(--color-primary);
+}
+
+.member-role-member {
+  color: var(--color-text-muted);
+}
+
+.settings-role-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.settings-role-select {
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.settings-role-select:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+.settings-role-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.settings-member-remove {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-member-remove:hover:not(:disabled) {
+  color: var(--color-error);
+  background: rgba(var(--color-error-rgb), 0.1);
+}
+
+.settings-member-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.settings-loading {
+  padding: 24px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.settings-error {
+  padding: 12px;
+  background: rgba(var(--color-error-rgb), 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: 6px;
+  color: var(--color-error);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+/* Permission toggle (for project members) */
+.settings-permission-toggle {
+  background: none;
+  border: 1px solid var(--color-border);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  transition: all 0.15s ease;
+}
+
+.settings-permission-toggle.can-edit {
+  color: var(--color-success);
+  border-color: var(--color-success);
+  background: rgba(var(--color-success-rgb), 0.1);
+}
+
+.settings-permission-toggle.read-only {
+  color: var(--color-warning);
+  border-color: var(--color-warning);
+  background: rgba(var(--color-warning-rgb), 0.1);
+}
+
+.settings-permission-toggle:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.settings-permission-toggle:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.member-role-guest {
+  color: var(--color-warning);
+}

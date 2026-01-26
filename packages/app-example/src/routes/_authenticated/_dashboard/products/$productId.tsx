@@ -1,24 +1,27 @@
-import { createFileRoute, useRouterState, useNavigate, useLocation } from '@tanstack/react-router';
-import { useQuery } from '@tanstack/react-query';
-import { productQueryOptions } from '@/clients/product/product.query.client';
+import type { ProductInterface } from "@core/product/product.interface";
+import type { ProductModel } from "@core/product/product.model";
+import { useQuery } from "@tanstack/react-query";
 import {
-	useUpdateProduct,
-	useDeleteProduct,
+	createFileRoute,
+	useLocation,
+	useNavigate,
+	useRouterState,
+} from "@tanstack/react-router";
+import { Upload } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import {
 	useCreateProduct,
+	useDeleteProduct,
 	usePublishProduct,
-} from '@/clients/product/product.mutation.client';
-import { NavigationHeader } from '@/components/nav/nav-header';
-import { Badge } from '@/components/ui/badge';
-import { ProductHero } from '@/components/product/ProductHero';
-import { ProductCalendar } from '@/components/product/ProductCalendar';
-import { useState, useEffect, useRef } from 'react';
-import { ProductModel } from '@core/product/product.model';
-import { ProductInterface } from '@core/product/product.interface';
-import { toast } from 'sonner';
-import ResponsiveBreadcrumbs from '@/components/nav/responsive-breadcrumbs';
-import { PageContainer } from '@/components/layout/container';
-import { Button } from '@/components/ui/button';
-import { Upload } from 'lucide-react';
+	useUpdateProduct,
+} from "@/clients/product/product.mutation.client";
+import { productQueryOptions } from "@/clients/product/product.query.client";
+import { PageContainer } from "@/components/layout/container";
+import { NavigationHeader } from "@/components/nav/nav-header";
+import ResponsiveBreadcrumbs from "@/components/nav/responsive-breadcrumbs";
+import { ProductCalendar } from "@/components/product/ProductCalendar";
+import { ProductHero } from "@/components/product/ProductHero";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -29,21 +32,25 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { useAutoSave } from '@/hooks/use-auto-save';
-import { Saving } from '@/components/ui/saving';
-import { Skeleton } from '@/components/ui/skeleton';
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Saving } from "@/components/ui/saving";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAutoSave } from "@/hooks/use-auto-save";
 
 // Stub content type for now
 type ContentByWeekAndDay = Record<string, any>;
 
-export const Route = createFileRoute('/_authenticated/_dashboard/products/$productId')({
+export const Route = createFileRoute(
+	"/_authenticated/_dashboard/products/$productId",
+)({
 	component: RouteComponent,
 	staticData: {
-		title: 'Product Details',
+		title: "Product Details",
 	},
 	head: () => ({
-		meta: [{ title: 'Product | Structa' }],
+		meta: [{ title: "Product | Structa" }],
 	}),
 });
 
@@ -58,9 +65,9 @@ function RouteComponent() {
 		}))
 		.filter((crumb) => Boolean(crumb.title));
 	const { productId } = Route.useParams();
-	
+
 	// Check if this is a new product from URL search params
-	const isNewFromSearch = location.search.includes('new=true');
+	const isNewFromSearch = location.search.includes("new=true");
 
 	// Only fetch if not a new product
 	const productQuery = useQuery({
@@ -73,23 +80,24 @@ function RouteComponent() {
 	const publishProductMutation = usePublishProduct();
 
 	// Track if this is a new product
-	const isNewProduct = isNewFromSearch || productQuery.isError || !productQuery.data;
+	const isNewProduct =
+		isNewFromSearch || productQuery.isError || !productQuery.data;
 	const hasCreatedProduct = useRef(false);
 
 	// Default values for new products
 	const defaultProductData: ProductModel.QueryType = {
 		id: productId,
-		userId: '',
-		appId: '',
-		name: 'Untitled Product',
-		description: 'Add a description for your product',
+		userId: "",
+		appId: "",
+		name: "Untitled Product",
+		description: "Add a description for your product",
 		coverImage: null,
 		durationWeeks: 4,
-		difficultyLevel: 'beginner',
+		difficultyLevel: "beginner",
 		daysPerWeek: 3,
-		trainingStyle: 'mixed',
-		prerequisites: '',
-		goals: '',
+		trainingStyle: "mixed",
+		prerequisites: "",
+		goals: "",
 		metadata: null,
 		active: true,
 		publishedAt: null,
@@ -109,14 +117,16 @@ function RouteComponent() {
 	};
 
 	const [productData, setProductData] = useState<ProductModel.QueryType>(
-		productQuery.data?.product || defaultProductData
+		productQuery.data?.product || defaultProductData,
 	);
 	const [contentData, setContentData] = useState<ContentByWeekAndDay>({});
 
 	// Track changes for auto-save
 	const [hasChanges, setHasChanges] = useState(false);
-	const [pendingUpdates, setPendingUpdates] = useState<ProductModel.MutateClientType>({});
-	const isSaving = createProductMutation.isPending || updateProductMutation.isPending;
+	const [pendingUpdates, setPendingUpdates] =
+		useState<ProductModel.MutateClientType>({});
+	const isSaving =
+		createProductMutation.isPending || updateProductMutation.isPending;
 
 	// Track active image upload to prevent duplicates
 	const activeImageUploadRef = useRef<string | null>(null);
@@ -125,7 +135,8 @@ function RouteComponent() {
 	const currentProduct = productQuery.data?.product || productData;
 	const hasUnpublishedChanges =
 		!isNewProduct &&
-		(!currentProduct.publishedAt || currentProduct.updatedAt > currentProduct.publishedAt);
+		(!currentProduct.publishedAt ||
+			currentProduct.updatedAt > currentProduct.publishedAt);
 	const canPublish =
 		!isSaving &&
 		!publishProductMutation.isPending &&
@@ -135,7 +146,11 @@ function RouteComponent() {
 	// Handle publish action with auto-save integration
 	const handlePublish = async () => {
 		// If there are pending changes, trigger auto-save first
-		if (hasChanges && pendingUpdates && Object.keys(pendingUpdates).length > 0) {
+		if (
+			hasChanges &&
+			pendingUpdates &&
+			Object.keys(pendingUpdates).length > 0
+		) {
 			// Wait for auto-save to complete
 			if (isNewProduct && !hasCreatedProduct.current) {
 				// For new products, create first
@@ -174,7 +189,7 @@ function RouteComponent() {
 								resolve();
 							},
 							onError: reject,
-						}
+						},
 					);
 				});
 			}
@@ -214,12 +229,12 @@ function RouteComponent() {
 							// Clear the query param to prevent issues on refresh
 							navigate({ to: `/products/${productId}`, replace: true });
 						},
-					}
+					},
 				);
 			} else {
 				// Check if image is already being uploaded
 				if (data.coverImage && activeImageUploadRef.current) {
-					console.log('Image upload already in progress, skipping duplicate');
+					console.log("Image upload already in progress, skipping duplicate");
 					return;
 				}
 
@@ -241,7 +256,7 @@ function RouteComponent() {
 						onError: () => {
 							activeImageUploadRef.current = null;
 						},
-					}
+					},
 				);
 			}
 		},
@@ -255,7 +270,9 @@ function RouteComponent() {
 		const { coverImage, ...dataUpdates } = updates;
 
 		// Update local state
-		setProductData((prev) => ({ ...prev, ...dataUpdates }) as ProductModel.QueryType);
+		setProductData(
+			(prev) => ({ ...prev, ...dataUpdates }) as ProductModel.QueryType,
+		);
 
 		// Track changes for auto-save
 		setPendingUpdates((prev: ProductModel.MutateClientType) => ({
@@ -277,15 +294,15 @@ function RouteComponent() {
 	const handleAddContent = async (
 		_weekNumber: number,
 		_dayNumber: number,
-		_type: ProductInterface.ContentType
+		_type: ProductInterface.ContentType,
 	) => {
 		// Stub for now
-		toast.info('Content functionality coming soon');
+		toast.info("Content functionality coming soon");
 	};
 
 	const handleDeleteContent = async (_contentId: string) => {
 		// Stub for now
-		toast.info('Content functionality coming soon');
+		toast.info("Content functionality coming soon");
 	};
 
 	// Show loading state only for existing products
@@ -300,7 +317,7 @@ function RouteComponent() {
 					<div className="flex items-center gap-0.5">
 						<ResponsiveBreadcrumbs
 							crumbs={crumbs}
-							base={{ title: 'Products', path: '/products' }}
+							base={{ title: "Products", path: "/products" }}
 							dynamicTitle={productData.name}
 						/>
 						{hasUnpublishedChanges && (
@@ -346,7 +363,9 @@ function RouteComponent() {
 				<div className="mt-12">
 					<ProductCalendar
 						productId={productId}
-						durationWeeks={(productQuery.data?.product || productData).durationWeeks}
+						durationWeeks={
+							(productQuery.data?.product || productData).durationWeeks
+						}
 						content={contentData}
 						onAddContent={handleAddContent}
 						onUpdateContent={() => {}}

@@ -1,12 +1,14 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '@/lib/api';
-import { computeSHA256Checksum } from '@core/storage/storage.utils';
-import { BrandingModel } from '@core/branding/branding.model';
-import { brandingQueryOptions } from './branding.query.client';
-import { appQueryOptions } from '../app/app.query.client';
-import { toast } from 'sonner';
+import type { BrandingModel } from "@core/branding/branding.model";
+import { computeSHA256Checksum } from "@core/storage/storage.utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { api } from "@/lib/api";
+import { appQueryOptions } from "../app/app.query.client";
+import { brandingQueryOptions } from "./branding.query.client";
 
-export async function updateBranding(values: BrandingModel.BrandingContextType) {
+export async function updateBranding(
+	values: BrandingModel.BrandingContextType,
+) {
 	const updatePromises: Promise<any>[] = [];
 	const errors: Error[] = [];
 
@@ -26,7 +28,9 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 					const response = await api.branding.icon.$delete();
 
 					if (!response.ok) {
-						throw new Error(`Failed to remove icon from database: ${response.status}`);
+						throw new Error(
+							`Failed to remove icon from database: ${response.status}`,
+						);
 					}
 
 					return await response.json();
@@ -49,13 +53,15 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 				console.log(url, key);
 
 				const uploadResponse = await fetch(url, {
-					method: 'PUT',
+					method: "PUT",
 					body: values.icon,
-					headers: { 'Content-Type': icon.type },
+					headers: { "Content-Type": icon.type },
 				});
 
 				if (!uploadResponse.ok) {
-					throw new Error(`Failed to upload app icon: ${uploadResponse.status}`);
+					throw new Error(
+						`Failed to upload app icon: ${uploadResponse.status}`,
+					);
 				}
 
 				const response = await api.branding.icon.$put({
@@ -65,7 +71,9 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 				});
 
 				if (!response.ok) {
-					throw new Error(`Failed to update icon in database: ${response.status}`);
+					throw new Error(
+						`Failed to update icon in database: ${response.status}`,
+					);
 				}
 
 				const branding = await response.json();
@@ -96,7 +104,7 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 
 					if (!response.ok) {
 						throw new Error(
-							`Failed to remove light large logo from database: ${response.status}`
+							`Failed to remove light large logo from database: ${response.status}`,
 						);
 					}
 
@@ -104,8 +112,8 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 				}
 
 				// Handle logo upload
-				const urlResponse = await api.storage.upload.app.logo[':mode'].$put({
-					param: { mode: 'light' },
+				const urlResponse = await api.storage.upload.app.logo[":mode"].$put({
+					param: { mode: "light" },
 					json: {
 						contentType: lightLargeLogo.type,
 						size: lightLargeLogo.size,
@@ -120,13 +128,15 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 				const { url, key } = await urlResponse.json();
 
 				const uploadResponse = await fetch(url, {
-					method: 'PUT',
+					method: "PUT",
 					body: values.lightLargeLogo,
-					headers: { 'Content-Type': lightLargeLogo.type },
+					headers: { "Content-Type": lightLargeLogo.type },
 				});
 
 				if (!uploadResponse.ok) {
-					throw new Error(`Failed to upload light large logo: ${uploadResponse.status}`);
+					throw new Error(
+						`Failed to upload light large logo: ${uploadResponse.status}`,
+					);
 				}
 
 				const response = await api.branding.logo.light.large.$put({
@@ -137,7 +147,7 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 
 				if (!response.ok) {
 					throw new Error(
-						`Failed to update light large logo in database: ${response.status}`
+						`Failed to update light large logo in database: ${response.status}`,
 					);
 				}
 
@@ -163,7 +173,9 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 				});
 
 				if (!response.ok) {
-					throw new Error(`Failed to update colours in database: ${response.status}`);
+					throw new Error(
+						`Failed to update colours in database: ${response.status}`,
+					);
 				}
 
 				return await response.json();
@@ -187,7 +199,9 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 					});
 
 					if (!response.ok) {
-						throw new Error(`Failed to update font in database: ${response.status}`);
+						throw new Error(
+							`Failed to update font in database: ${response.status}`,
+						);
 					}
 
 					return await response.json();
@@ -204,7 +218,8 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 			try {
 				const payload: Record<string, any> = {};
 				if (values.name !== undefined) payload.name = values.name;
-				if (values.description !== undefined) payload.description = values.description;
+				if (values.description !== undefined)
+					payload.description = values.description;
 
 				if (Object.keys(payload).length > 0) {
 					const appRes = await api.app.branding.$put({ json: payload });
@@ -227,29 +242,31 @@ export async function updateBranding(values: BrandingModel.BrandingContextType) 
 	await Promise.all(updatePromises);
 
 	if (errors.length > 0) {
-		throw new Error(`Failed to update branding: ${errors.map((e) => e.message).join(', ')}`);
+		throw new Error(
+			`Failed to update branding: ${errors.map((e) => e.message).join(", ")}`,
+		);
 	}
 
-	console.log('Branding updated successfully');
+	console.log("Branding updated successfully");
 }
 
 export function useUpdateBrandingMutation() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationKey: ['updateBranding'],
+		mutationKey: ["updateBranding"],
 		mutationFn: updateBranding,
 		retry: (failureCount, error) => {
 			// Retry up to 2 times for transient errors
 			if (failureCount >= 2) return false;
-			
-			const errorMessage = error instanceof Error ? error.message : '';
-			const isTransientError = 
-				errorMessage.includes('network') || 
-				errorMessage.includes('timeout') ||
-				errorMessage.includes('Failed to fetch') ||
-				errorMessage.includes('409');
-				
+
+			const errorMessage = error instanceof Error ? error.message : "";
+			const isTransientError =
+				errorMessage.includes("network") ||
+				errorMessage.includes("timeout") ||
+				errorMessage.includes("Failed to fetch") ||
+				errorMessage.includes("409");
+
 			return isTransientError;
 		},
 		retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
@@ -261,7 +278,9 @@ export function useUpdateBrandingMutation() {
 			await queryClient.cancelQueries({ queryKey: appQueryOptions.queryKey });
 
 			// Snapshot the previous values
-			const previousBranding = queryClient.getQueryData(brandingQueryOptions.queryKey);
+			const previousBranding = queryClient.getQueryData(
+				brandingQueryOptions.queryKey,
+			);
 			const previousApp = queryClient.getQueryData(appQueryOptions.queryKey);
 
 			// Optimistically update branding data
@@ -290,7 +309,9 @@ export function useUpdateBrandingMutation() {
 							updated.lightLargeLogo = null;
 							break;
 						case newData.lightLargeLogo instanceof File:
-							updated.lightLargeLogo = URL.createObjectURL(newData.lightLargeLogo);
+							updated.lightLargeLogo = URL.createObjectURL(
+								newData.lightLargeLogo,
+							);
 							break;
 					}
 				}
@@ -302,7 +323,9 @@ export function useUpdateBrandingMutation() {
 							updated.darkLargeLogo = null;
 							break;
 						case newData.darkLargeLogo instanceof File:
-							updated.darkLargeLogo = URL.createObjectURL(newData.darkLargeLogo);
+							updated.darkLargeLogo = URL.createObjectURL(
+								newData.darkLargeLogo,
+							);
 							break;
 					}
 				}
@@ -319,7 +342,10 @@ export function useUpdateBrandingMutation() {
 			}
 
 			// Optimistically update app data (name and description)
-			if (previousApp && (newData.name !== undefined || newData.description !== undefined)) {
+			if (
+				previousApp &&
+				(newData.name !== undefined || newData.description !== undefined)
+			) {
 				const updatedApp = { ...previousApp };
 
 				if (newData.name !== undefined) {
@@ -338,37 +364,41 @@ export function useUpdateBrandingMutation() {
 		onError: (error, _newValues, context) => {
 			// Roll back to the previous values if the mutation fails
 			if (context?.previousBranding) {
-				queryClient.setQueryData(brandingQueryOptions.queryKey, context.previousBranding);
+				queryClient.setQueryData(
+					brandingQueryOptions.queryKey,
+					context.previousBranding,
+				);
 			}
 			if (context?.previousApp) {
 				queryClient.setQueryData(appQueryOptions.queryKey, context.previousApp);
 			}
-			
+
 			// Check if this is a transient error that might be retried
-			const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-			const isTransientError = 
-				errorMessage.includes('network') || 
-				errorMessage.includes('timeout') ||
-				errorMessage.includes('Failed to fetch') ||
-				errorMessage.includes('409'); // Conflict errors from race conditions
-			
+			const errorMessage =
+				error instanceof Error ? error.message : "Unknown error";
+			const isTransientError =
+				errorMessage.includes("network") ||
+				errorMessage.includes("timeout") ||
+				errorMessage.includes("Failed to fetch") ||
+				errorMessage.includes("409"); // Conflict errors from race conditions
+
 			// Only show toast for non-transient errors
 			if (!isTransientError) {
-				toast.error('Failed to update branding assets. Please try again.');
+				toast.error("Failed to update branding assets. Please try again.");
 			}
-			
-			console.log('Failed to update branding assets:', error);
+
+			console.log("Failed to update branding assets:", error);
 		},
 		onSuccess: () => {
 			// Invalidate queries immediately on success to get fresh data with updated timestamps
-			console.log('Mutation successful, invalidating queries');
+			console.log("Mutation successful, invalidating queries");
 			queryClient.invalidateQueries({
 				queryKey: brandingQueryOptions.queryKey,
-				refetchType: 'all',
+				refetchType: "all",
 			});
 			queryClient.invalidateQueries({
 				queryKey: appQueryOptions.queryKey,
-				refetchType: 'all',
+				refetchType: "all",
 			});
 		},
 	});
@@ -405,7 +435,9 @@ export async function publishBranding() {
 	}
 
 	if (errors.length > 0) {
-		throw new Error(`Failed to publish: ${errors.map((e) => e.message).join(', ')}`);
+		throw new Error(
+			`Failed to publish: ${errors.map((e) => e.message).join(", ")}`,
+		);
 	}
 }
 
@@ -413,7 +445,7 @@ export function usePublishBrandingMutation() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationKey: ['publishBranding'],
+		mutationKey: ["publishBranding"],
 		mutationFn: publishBranding,
 		onSuccess: () => {
 			// Invalidate queries to refresh data
@@ -425,8 +457,8 @@ export function usePublishBrandingMutation() {
 			});
 		},
 		onError: (error) => {
-			toast.error('Failed to publish changes. Please try again.');
-			console.error('Failed to publish:', error);
+			toast.error("Failed to publish changes. Please try again.");
+			console.error("Failed to publish:", error);
 		},
 	});
 }

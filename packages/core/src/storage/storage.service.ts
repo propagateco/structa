@@ -1,30 +1,30 @@
-export * as StorageService from './storage.service';
+export * as StorageService from "./storage.service";
 
 import {
-	ExpiryOptions,
-	TimingMetrics,
-	ObjectProperties,
-	ValidationResult,
-	StorageServiceError,
-} from './storage.interfaces';
+	DeleteObjectCommand,
+	DeleteObjectsCommand,
+	GetObjectCommand,
+	ListObjectsV2Command,
+	PutObjectCommand,
+	S3Client,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
+import { Resource } from "sst";
 import {
-	getExpiresInSeconds,
-	buildObjectKey,
+	type ExpiryOptions,
+	type ObjectProperties,
+	StorageServiceError,
+	type TimingMetrics,
+	type ValidationResult,
+} from "./storage.interfaces";
+import {
 	assertFileNotEmpty,
 	assertFileSize,
 	assertFileType,
-} from './storage.utils';
-
-import { Resource } from 'sst';
-import {
-	GetObjectCommand,
-	PutObjectCommand,
-	DeleteObjectCommand,
-	DeleteObjectsCommand,
-	ListObjectsV2Command,
-	S3Client,
-} from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+	buildObjectKey,
+	getExpiresInSeconds,
+} from "./storage.utils";
 
 const s3 = new S3Client({});
 
@@ -36,7 +36,7 @@ const s3 = new S3Client({});
 
 export async function getUploadUrl(
 	object: ObjectProperties,
-	expiry?: ExpiryOptions
+	expiry?: ExpiryOptions,
 ): Promise<string> {
 	return getSignedUrl(
 		s3,
@@ -46,13 +46,13 @@ export async function getUploadUrl(
 		}),
 		{
 			expiresIn: getExpiresInSeconds(expiry),
-		}
+		},
 	);
 }
 
 export async function getDownloadUrl(
 	object: ObjectProperties,
-	expiry?: ExpiryOptions
+	expiry?: ExpiryOptions,
 ): Promise<string> {
 	return getSignedUrl(
 		s3,
@@ -62,7 +62,7 @@ export async function getDownloadUrl(
 		}),
 		{
 			expiresIn: getExpiresInSeconds(expiry),
-		}
+		},
 	);
 }
 
@@ -78,7 +78,7 @@ export async function uploadFile(
 	data: Buffer,
 	contentType: string,
 	cacheControl?: string,
-	metrics?: TimingMetrics
+	metrics?: TimingMetrics,
 ): Promise<void> {
 	const startTime = performance.now();
 	try {
@@ -96,9 +96,9 @@ export async function uploadFile(
 			metrics.upload = performance.now() - startTime;
 		}
 	} catch (error) {
-		throw new StorageServiceError('Error uploading file', {
+		throw new StorageServiceError("Error uploading file", {
 			statusCode: 500,
-			errorCode: 'UPLOAD_FAILED',
+			errorCode: "UPLOAD_FAILED",
 			context: { bucket, key, contentType },
 			cause: error,
 		});
@@ -108,7 +108,7 @@ export async function uploadFile(
 export async function downloadFile(
 	bucket: string,
 	key: string,
-	metrics: TimingMetrics
+	metrics: TimingMetrics,
 ): Promise<{
 	image: Buffer;
 	contentType: string;
@@ -122,16 +122,17 @@ export async function downloadFile(
 		const response = await s3.send(getCommand);
 
 		const image = Buffer.from(await response.Body!.transformToByteArray());
-		const contentType = response.ContentType || 'image/jpeg';
+		const contentType = response.ContentType || "image/jpeg";
 
 		metrics.download = performance.now() - startTime;
 
 		return { image, contentType };
 	} catch (error) {
-		const isNoSuchKeyError = error instanceof Error && error.name === 'NoSuchKey';
-		throw new StorageServiceError('Error downloading original image', {
+		const isNoSuchKeyError =
+			error instanceof Error && error.name === "NoSuchKey";
+		throw new StorageServiceError("Error downloading original image", {
 			statusCode: isNoSuchKeyError ? 404 : 500,
-			errorCode: 'DOWNLOAD_FAILED',
+			errorCode: "DOWNLOAD_FAILED",
 			context: { bucket, key },
 			cause: error,
 		});
@@ -153,18 +154,21 @@ export async function deleteFile(bucket: string, key: string): Promise<void> {
 		});
 		await s3.send(deleteCommand);
 	} catch (error) {
-		console.error('Error deleting file from S3', { bucket, key, error });
-		throw new StorageServiceError('Error deleting file', {
+		console.error("Error deleting file from S3", { bucket, key, error });
+		throw new StorageServiceError("Error deleting file", {
 			statusCode: 500,
-			errorCode: 'DELETE_FAILED',
+			errorCode: "DELETE_FAILED",
 			context: { bucket, key },
 			cause: error,
 		});
 	}
 }
 
-export async function deleteFolder(bucket: string, prefix: string): Promise<void> {
-	let continuationToken: string | undefined = undefined;
+export async function deleteFolder(
+	bucket: string,
+	prefix: string,
+): Promise<void> {
+	let continuationToken: string | undefined;
 	let count = 0;
 	try {
 		do {
@@ -183,27 +187,29 @@ export async function deleteFolder(bucket: string, prefix: string): Promise<void
 				});
 
 				// Delete the objects in batches
-				let deleted = await s3.send(deleteCommand);
+				const deleted = await s3.send(deleteCommand);
 				count += deleted.Deleted?.length || 0;
 				if (deleted.Errors) {
 					deleted.Errors.map((error) =>
-						console.log(`${error.Key} could not be deleted - ${error.Code}`)
+						console.log(`${error.Key} could not be deleted - ${error.Code}`),
 					);
 				}
 			}
-			continuationToken = list.IsTruncated ? list.NextContinuationToken : undefined;
+			continuationToken = list.IsTruncated
+				? list.NextContinuationToken
+				: undefined;
 		} while (continuationToken);
 		console.log(`Deleted ${count} files with prefix: ${prefix}`);
 	} catch (error) {
-		console.error('Error deleting files with prefix from S3', {
+		console.error("Error deleting files with prefix from S3", {
 			bucket,
 			prefix,
 			continuationToken,
 			error,
 		});
-		throw new StorageServiceError('Error deleting files with prefix', {
+		throw new StorageServiceError("Error deleting files with prefix", {
 			statusCode: 500,
-			errorCode: 'DELETE_PREFIX_FAILED',
+			errorCode: "DELETE_PREFIX_FAILED",
 			context: { bucket, prefix },
 			cause: error,
 		});
@@ -219,7 +225,7 @@ export async function deleteFolder(bucket: string, prefix: string): Promise<void
 export async function validateFile(
 	object: ObjectProperties,
 	maxFileSize: number,
-	allowedFileTypes: string[]
+	allowedFileTypes: string[],
 ): Promise<ValidationResult> {
 	try {
 		assertFileNotEmpty(object.size!);
@@ -229,18 +235,26 @@ export async function validateFile(
 	} catch (error) {
 		if (error instanceof Error) {
 			// Determine error type based on message or create custom error classes
-			if (error.message.includes('empty')) {
-				return { valid: false, errorType: 'EMPTY_FILE', errorMessage: error.message };
-			} else if (error.message.includes('size')) {
-				return { valid: false, errorType: 'FILE_TOO_LARGE', errorMessage: error.message };
+			if (error.message.includes("empty")) {
+				return {
+					valid: false,
+					errorType: "EMPTY_FILE",
+					errorMessage: error.message,
+				};
+			} else if (error.message.includes("size")) {
+				return {
+					valid: false,
+					errorType: "FILE_TOO_LARGE",
+					errorMessage: error.message,
+				};
 			} else {
 				return {
 					valid: false,
-					errorType: 'INVALID_FILE_TYPE',
+					errorType: "INVALID_FILE_TYPE",
 					errorMessage: error.message,
 				};
 			}
 		}
-		return { valid: false, errorMessage: 'Unknown validation error' };
+		return { valid: false, errorMessage: "Unknown validation error" };
 	}
 }

@@ -1,15 +1,20 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { NavigationHeader } from '@/components/nav/nav-header';
-import { PageContainer } from '@/components/layout/container';
-import { Header, HeaderMain, HeaderTitle, HeaderSubSection } from '@/components/layout/typography';
+import { createFileRoute } from "@tanstack/react-router";
+import { PageContainer } from "@/components/layout/container";
+import {
+	Header,
+	HeaderMain,
+	HeaderSubSection,
+	HeaderTitle,
+} from "@/components/layout/typography";
+import { NavigationHeader } from "@/components/nav/nav-header";
 
-export const Route = createFileRoute('/_authenticated/_dashboard/media')({
+export const Route = createFileRoute("/_authenticated/_dashboard/media")({
 	component: RouteComponent,
 	staticData: {
-		title: 'Media',
+		title: "Media",
 	},
 	head: () => ({
-		meta: [{ title: 'Media Library | Structa' }],
+		meta: [{ title: "Media Library | Structa" }],
 	}),
 });
 
