@@ -1,5 +1,5 @@
 import { T as TSS_SERVER_FUNCTION, c as createServerFn } from "./server-BD523Q-A.mjs";
-import { a as authMiddleware, l as loginMiddleware } from "./auth-DrV9InxQ.mjs";
+import { a as authMiddleware, l as loginMiddleware } from "./auth-0MRmN8T_.mjs";
 import "../_chunks/_libs/@tanstack/history.mjs";
 import "../_chunks/_libs/@tanstack/router-core.mjs";
 import "../_libs/cookie-es.mjs";

@@ -425,7 +425,7 @@ function getResponse() {
   return event.res;
 }
 async function getStartManifest(matchedRoutes) {
-  const { tsrStartManifest } = await import("./_tanstack-start-manifest_v-CJ0XOPe2.mjs");
+  const { tsrStartManifest } = await import("./_tanstack-start-manifest_v-Bly-lQtI.mjs");
   const startManifest = tsrStartManifest();
   const rootRoute = startManifest.routes[rootRouteId] = startManifest.routes[rootRouteId] || {};
   rootRoute.assets = rootRoute.assets || [];
@@ -585,10 +585,10 @@ function createMultiplexedStream(jsonStream, rawStreams) {
 }
 const manifest = { "58b28b0f92992cf730bdfa37e3cb305b95f9fae3fdeee3d5258691d9a8c8d457": {
   functionName: "getAuth_createServerFn_handler",
-  importer: () => import("./auth-server-DoalZEfX.mjs")
+  importer: () => import("./auth-server-DPjiJJE-.mjs")
 }, "7b8af9c9a3dda2d57d8ad7e8566a18f9cdd2b644fbc321bdc07199f776507191": {
   functionName: "getLoginAuth_createServerFn_handler",
-  importer: () => import("./auth-server-DoalZEfX.mjs")
+  importer: () => import("./auth-server-DPjiJJE-.mjs")
 } };
 async function getServerFnById(id) {
   const serverFnInfo = manifest[id];
@@ -903,7 +903,7 @@ function getStartResponseHeaders(opts) {
 let entriesPromise;
 let manifestPromise;
 async function loadEntries() {
-  const routerEntry = await import("./router-ChkCqUXn.mjs").then((n) => n.r);
+  const routerEntry = await import("./router-BY3HhxRU.mjs").then((n) => n.r);
   const startEntry = await import("./start-HYkvq4Ni.mjs");
   return { startEntry, routerEntry };
 }

@@ -3060,7 +3060,7 @@ async function getBaseAdapter(options, handleDirectDatabase) {
       acc[key] = [];
       return acc;
     }, {});
-    const { memoryAdapter } = await import("./index-DD6pV_DF.mjs");
+    const { memoryAdapter } = await import("./index-hUBIB9_H.mjs");
     adapter = memoryAdapter(memoryDB)(options);
   } else if (typeof options.database === "function") adapter = options.database(options);
   else adapter = await handleDirectDatabase(options);
@@ -3074,10 +3074,10 @@ async function getBaseAdapter(options, handleDirectDatabase) {
 }
 async function getAdapter(options) {
   return getBaseAdapter(options, async (opts) => {
-    const { createKyselyAdapter: createKyselyAdapter2 } = await import("./index-DGe0UQaQ.mjs");
+    const { createKyselyAdapter: createKyselyAdapter2 } = await import("./index-DHrdnBVm.mjs");
     const { kysely, databaseType, transaction } = await createKyselyAdapter2(opts);
     if (!kysely) throw new BetterAuthError("Failed to initialize database adapter");
-    const { kyselyAdapter } = await import("./index-DGe0UQaQ.mjs");
+    const { kyselyAdapter } = await import("./index-DHrdnBVm.mjs");
     return kyselyAdapter(kysely, {
       type: databaseType || "sqlite",
       debugLogs: opts.database && "debugLogs" in opts.database ? opts.database.debugLogs : false,

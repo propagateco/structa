@@ -11,8 +11,6 @@ import {
 } from '@tanstack/react-router'
 import appCss from '@/styles/app.css?url'
 import { ThemeProvider } from '@/components/theme-provider'
-import { NavigationBar } from '@/components/navigation-bar'
-import { Footer } from '@/components/footer'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -42,11 +40,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="min-h-screen flex flex-col">
-        <NavigationBar />
-        <div className="flex-1">
-          {children}
-        </div>
-        <Footer />
+        {children}
         <Toaster position="top-center" richColors />
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
