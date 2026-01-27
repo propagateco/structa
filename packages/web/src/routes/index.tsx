@@ -84,6 +84,25 @@ function LandingPage() {
                     padding="none"
                 >
                     <div className="col-span-4 md:col-span-8 space-y-8 py-8">
+                        {/* Video Section */}
+                        <div className="relative -mt-36">
+                            <div className="relative w-full rounded-xl overflow-hidden">
+                                <div className="aspect-[1.91/1]">
+                                    <video
+                                        autoPlay
+                                        loop
+                                        muted
+                                        playsInline
+                                        className="w-full h-full object-cover rounded-xl border border-border"
+                                        src="/lovable-uploads/seerexample.mp4"
+                                    >
+                                        Your browser does not support the video
+                                        tag.
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Logo Showcase Section */}
                         <div className="py-16 md:py-24">
                             <div className="w-full grid grid-cols-4 lg:grid-cols-8">
