@@ -34,6 +34,19 @@
     --ds-neutral-900: 0deg 0% 9%;
     --ds-neutral-950: 0deg 0% 3.9%;
 
+    /* Monochromatic/Mono Scale Aliases */
+    --ds-mono-50: var(--ds-neutral-50);
+    --ds-mono-100: var(--ds-neutral-100);
+    --ds-mono-200: var(--ds-neutral-200);
+    --ds-mono-300: var(--ds-neutral-300);
+    --ds-mono-400: var(--ds-neutral-400);
+    --ds-mono-500: var(--ds-neutral-500);
+    --ds-mono-600: var(--ds-neutral-600);
+    --ds-mono-700: var(--ds-neutral-700);
+    --ds-mono-800: var(--ds-neutral-800);
+    --ds-mono-900: var(--ds-neutral-900);
+    --ds-mono-950: var(--ds-neutral-950);
+
     /* Backgrounds */
     --ds-background-100: var(--ds-white);
     --ds-background-200: var(--ds-paper);
@@ -209,10 +222,6 @@
    ================================================ */
 
 @layer base {
-    * {
-        @apply border-border outline-ring/50;
-    }
-
     body {
         @apply bg-background text-foreground antialiased font-body;
     }
