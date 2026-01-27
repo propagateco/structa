@@ -161,15 +161,26 @@
      FONTS
      ================================================ */
 
-  --font-sans: 'Inter Tight Variable', system-ui, -apple-system, sans-serif;
-  --font-header: 'Lora Variable', 'Inter Tight Variable', system-ui, sans-serif;
+  --font-heading: 'Inter Tight Variable', 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-body: 'Inter Tight Variable', system-ui, sans-serif;
   --font-serif: 'Lora Variable', serif;
 
   /* ================================================
-     SPACING & RADIUS
-     ================================================ */
+      SPACING & RADIUS
+      ================================================ */
 
   --radius: 0.5rem;
+
+  /* ================================================
+      GRID SYSTEM
+      ================================================ */
+
+  --gutter-h: 2rem;
+  --column: calc((100vw - (var(--gutter-h) * 2)) / 16);
+
+  /* Grid Lines (Light Mode) */
+  --theme-border-color: rgba(200, 200, 200, 0.15);
+  --grid-line-rgb: 200, 200, 200;
 }
 
 /* ================================================
@@ -180,8 +191,17 @@
   --ds-background-100: var(--ds-midnight);
   --ds-background-200: var(--ds-carbon);
   --ds-paper: var(--ds-midnight);
+
+  /* Update border color for dark mode */
+  --border: var(--ds-mono-500);
+
+  /* Text colors - flip for dark mode */
   --ds-ink: var(--ds-mono-200);
   --ds-steel: var(--ds-mono-400);
+
+  /* Grid lines for dark mode */
+  --theme-border-color: rgba(255, 255, 255, 0.15);
+  --grid-line-rgb: 255, 255, 255;
 }
 
 /* ================================================
@@ -190,7 +210,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
 
   body {
@@ -203,7 +223,7 @@
   h4,
   h5,
   h6 {
-    @apply font-header;
+    @apply font-heading;
   }
 }
 

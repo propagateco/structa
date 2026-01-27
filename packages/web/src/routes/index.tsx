@@ -48,7 +48,7 @@ function LandingPage() {
                 >
                     <div className="col-span-4 sm:col-span-6 lg:col-span-8 space-y-6 py-8">
                         {/* Hero Title */}
-                        <h1 className="text-text font-header font-medium tracking-tight text-4xl lg:text-5xl text-center">
+                        <h1 className="text-text font-heading font-medium tracking-tight text-4xl lg:text-5xl text-center">
                             Tools for the modern renovator.
                         </h1>
 
@@ -88,7 +88,7 @@ function LandingPage() {
                         <div className="py-16 md:py-24">
                             <div className="w-full grid grid-cols-4 lg:grid-cols-8">
                                 <div className="space-y-4 py-8 col-span-4 lg:col-start-2 lg:col-span-6">
-                                    <h2 className="text-left lg:text-left font-header font-medium tracking-tight text-2xl lg:text-3xl text-text">
+                                    <h2 className="text-left lg:text-left font-heading font-medium tracking-tight text-2xl lg:text-3xl text-text">
                                         Loved by renovators, designers, and
                                         trades
                                     </h2>
@@ -132,7 +132,7 @@ function LandingPage() {
                         <div className="py-16">
                             {/* Header */}
                             <div className="space-y-4">
-                                <h2 className="font-header font-medium tracking-tight text-2xl lg:text-3xl text-text">
+                                <h2 className="font-heading font-medium tracking-tight text-2xl lg:text-3xl text-text">
                                     Your AI renovation partner
                                 </h2>
                                 <h3 className="text-text-secondary text-lg max-w-3xl">
@@ -146,10 +146,10 @@ function LandingPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-6">
                                     {/* Stat 1 */}
                                     <div className="space-y-2">
-                                        <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                        <h3 className="font-heading text-xl font-medium tracking-tight lg:text-2xl">
                                             500K+
                                         </h3>
-                                        <h4 className="font-medium font-header tracking-tight">
+                                        <h4 className="font-medium font-heading tracking-tight">
                                             Lines of code
                                         </h4>
                                         <p className="text-muted-foreground text-sm leading-relaxed">
@@ -161,10 +161,10 @@ function LandingPage() {
 
                                     {/* Stat 2 */}
                                     <div className="space-y-2">
-                                        <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                        <h3 className="font-heading text-xl font-medium tracking-tight lg:text-2xl">
                                             4M+
                                         </h3>
-                                        <h4 className="font-medium font-header tracking-tight">
+                                        <h4 className="font-medium font-heading tracking-tight">
                                             Cold emails
                                         </h4>
                                         <p className="text-muted-foreground text-sm leading-relaxed">
@@ -177,10 +177,10 @@ function LandingPage() {
 
                                     {/* Stat 3 */}
                                     <div className="space-y-2">
-                                        <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                        <h3 className="font-heading text-xl font-medium tracking-tight lg:text-2xl">
                                             Infinite
                                         </h3>
-                                        <h4 className="font-medium font-header tracking-tight">
+                                        <h4 className="font-medium font-heading tracking-tight">
                                             Revisions
                                         </h4>
                                         <p className="text-muted-foreground text-sm leading-relaxed">
@@ -193,10 +193,10 @@ function LandingPage() {
 
                                     {/* Stat 4 */}
                                     <div className="space-y-2">
-                                        <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                        <h3 className="font-heading text-xl font-medium tracking-tight lg:text-2xl">
                                             100%
                                         </h3>
-                                        <h4 className="font-medium font-header tracking-tight">
+                                        <h4 className="font-medium font-heading tracking-tight">
                                             Code ownership
                                         </h4>
                                         <p className="text-muted-foreground text-sm leading-relaxed">
@@ -223,7 +223,7 @@ function LandingPage() {
                     <div className="col-span-4 md:col-span-8 space-y-12 py-20">
                         {/* Section Header */}
                         <div className="text-center space-y-4">
-                            <h2 className="font-header font-medium tracking-tight text-2xl lg:text-3xl text-text">
+                            <h2 className="font-heading font-medium tracking-tight text-2xl lg:text-3xl text-text">
                                 Intelligent digital workspace
                             </h2>
                             <h3 className="text-text-secondary text-center mx-auto text-lg max-w-3xl">
@@ -251,7 +251,7 @@ function LandingPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                    <h3 className="font-heading text-xl font-medium tracking-tight lg:text-2xl">
                                         PDF to floor plans in seconds
                                     </h3>
                                     <p className="text-muted-foreground">
@@ -286,7 +286,7 @@ function LandingPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                    <h3 className="font-heading text-xl font-medium tracking-tight lg:text-2xl">
                                         Track your financial runway
                                     </h3>
                                     <p className="text-muted-foreground">
@@ -321,7 +321,7 @@ function LandingPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="font-header text-xl font-medium tracking-tight lg:text-2xl">
+                                    <h3 className="font-heading text-xl font-medium tracking-tight lg:text-2xl">
                                         Get quotes from matched specialists
                                     </h3>
                                     <p className="text-muted-foreground">
