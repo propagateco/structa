@@ -1,26 +1,26 @@
-import { ArrowRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Link } from '@tanstack/react-router'
-import { GridBackgroundSection } from '@/components/layout'
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from '@tanstack/react-router';
+import { GridBackgroundSection } from '@/components/layout';
 
 export interface HeroProps {
-    title?: string
-    description?: string
+    title?: string;
+    description?: string;
     primaryCTA?: {
-        text: string
-        to: string
-    }
+        text: string;
+        to: string;
+    };
     secondaryCTA?: {
-        text: string
-        to: string
-    }
+        text: string;
+        to: string;
+    };
 }
 
 export function Hero({
-    title = "Tools for the modern renovator.",
-    description = "Eliminate the guesswork from home renovation with an AI-powered Clerk that brings context, clarity, and confidence to every project.",
-    primaryCTA = { text: "Start for free", to: "/login" },
-    secondaryCTA = { text: "Download for mobile", to: "/login" },
+    title = 'Tools for the modern renovator.',
+    description = 'Eliminate the guesswork from home renovation with an AI-powered Clerk that brings context, clarity, and confidence to every project.',
+    primaryCTA = { text: 'Start for free', to: '/login' },
+    secondaryCTA = { text: 'Download for mobile', to: '/login' },
 }: HeroProps) {
     return (
         <GridBackgroundSection
@@ -44,18 +44,25 @@ export function Hero({
                 {/* CTA Buttons */}
                 <div className="flex flex-row items-center justify-center gap-4 pt-2 md:pt-3">
                     <Link to={primaryCTA.to}>
-                        <Button className="inline-flex items-center justify-center group" size="lg">
+                        <Button
+                            className="inline-flex items-center justify-center group"
+                            size="lg"
+                        >
                             {primaryCTA.text}
                             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Button>
                     </Link>
                     <Link to={secondaryCTA.to}>
-                        <Button variant="outline" className="inline-flex h-11 items-center justify-center rounded-none border border-border dark:border-gray-800 px-8 text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <Button
+                            variant="outline"
+                            className="inline-flex items-center justify-center"
+                            size="lg"
+                        >
                             {secondaryCTA.text}
                         </Button>
                     </Link>
                 </div>
             </div>
         </GridBackgroundSection>
-    )
+    );
 }
