@@ -82,7 +82,7 @@
   --color-muted-foreground: hsl(var(--ds-mono-500));
   --color-muted-background: hsl(var(--ds-background-200));
 
-  --color-accent: hsl(var(--ds-azure));
+  --color-accent : hsl(var(--ds-azure));
   --color-accent-foreground: hsl(var(--ds-white));
 
   --color-destructive: hsl(var(--ds-error));
