@@ -37,3 +37,59 @@ Started: Thu Jan 22 05:57:13 PM UTC 2026
 - Color consistency fixes
 - Footer background investigation
 - Phase 7: Refactor landing page into reusable components
+
+---
+
+## 2026-01-27 09:55: Fixed Color System and Removed Dead Components (Issue #11)
+
+**Task**: Fix color inconsistencies and complete CSS setup for Phase 6
+
+**Problems Fixed**:
+1. **Dead code cleanup**: Old navigation-bar.tsx and footer.tsx files still existed after being removed from __root.tsx
+2. **CSS file emptied**: packages/web/src/styles/app.css had been cleared (0 bytes) - no colors were loading
+3. **Missing grid system variables**: --gutter-h, --column, --theme-border-color, --grid-line-rgb were missing
+4. **Incomplete dark mode override**: Border color and grid line variables were not updated for dark mode
+5. **Font mismatch**: Font variables didn't match marketing site (--font-header vs --font-heading, different font stacks)
+6. **Missing base styles**: outline-ring/50 was missing from * selector
+
+**Changes Made**:
+
+**Files Deleted** (dead code cleanup):
+- `packages/web/src/components/navigation-bar.tsx` - removed old header component
+- `packages/web/src/components/footer.tsx` - removed old footer component
+
+**packages/web/src/styles/app.css**:
+- Restored full CSS from last commit (file had been emptied)
+- Added grid system variables: `--gutter-h`, `--column`
+- Added grid line variables: `--theme-border-color`, `--grid-line-rgb` (light mode)
+- Updated dark mode override to include:
+  - `--border: var(--ds-mono-500);`
+  - `--theme-border-color: rgba(255, 255, 255, 0.15);`
+  - `--grid-line-rgb: 255, 255, 255;`
+- Fixed font variables:
+  - Renamed `--font-header` → `--font-heading`
+  - Renamed `--font-sans` → `--font-body`
+  - Updated `--font-heading` font stack to match marketing site: `'Inter Tight Variable', 'Space Grotesk Variable', system-ui, sans-serif`
+- Added missing base styles:
+  - Added `outline-ring/50` to `*` selector
+
+**packages/web/src/routes/index.tsx**:
+- Replaced all `font-header` class instances with `font-heading` (18 occurrences)
+
+**Key Decisions**:
+1. Kept Tailwind v4 `@theme inline` format (not converting to Tailwind v3 :root variable format)
+2. Used `--font-heading` variable name (matches Tailwind v4 utility class generation pattern)
+3. Added all missing dark mode overrides to match marketing site exactly
+
+**Verification**:
+- ✓ TypeScript typecheck passed
+- ✓ Build succeeded
+- ✓ All changes staged for commit
+
+**Remaining Phase 6 Tasks**:
+- [ ] Visual verification in browser (dev-server running on localhost:3000)
+- [ ] Compare with marketing site (localhost:5173) to verify color matching
+- [ ] Check footer background color issue
+- [ ] Verify responsive design
+
+**Related**: Issue #11 - Phase 6 (Color Consistency)
