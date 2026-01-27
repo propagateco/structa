@@ -6,7 +6,6 @@ import { bucket, optimisedBucket } from './storage';
 import { cdn } from './cloudfront';
 import { secret } from './secret';
 
-// Simplified for testing - minimal TanStack Start deployment
 export const app = new sst.aws.TanStackStart('Web', {
     path: 'packages/web',
     domain: {

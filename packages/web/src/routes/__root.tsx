@@ -14,7 +14,26 @@ import { ThemeProvider } from '@/components/theme-provider'
 
 export const Route = createRootRoute({
   head: () => ({
-    links: [{ rel: 'stylesheet', href: appCss }],
+    links: [
+      // Preconnect for better performance
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: '' },
+
+      // 1. Lora (Serif) - from Google Fonts
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap'
+      },
+
+      // 2. Inter Tight (Variable Sans-serif) - from Google Fonts
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap'
+      },
+
+      // App CSS (keep this last)
+      { rel: 'stylesheet', href: appCss }
+    ],
   }),
   component: RootComponent,
 })
