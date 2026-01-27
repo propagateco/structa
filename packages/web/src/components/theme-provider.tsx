@@ -73,6 +73,9 @@ const useTheme = () => {
     const { theme } = context;
 
     const resolvedTheme = React.useMemo(() => {
+        // Check for SSR (server-side rendering)
+        if (typeof window === 'undefined') return 'light';
+
         if (theme === 'system') {
             return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
