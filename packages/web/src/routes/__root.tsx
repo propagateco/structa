@@ -8,6 +8,7 @@ import {
   Outlet,
   Scripts,
   createRootRoute,
+  ScriptOnce,
 } from '@tanstack/react-router'
 import appCss from '@/styles/app.css?url'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -54,9 +55,30 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <ScriptOnce
+          children={`
+            (function() {
+              try {
+                const storedTheme = localStorage.getItem('structa-ui-theme') || 'system';
+                const html = document.documentElement;
+                html.classList.remove('light', 'dark');
+                if (storedTheme === 'system') {
+                  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  html.classList.add(systemTheme);
+                } else {
+                  html.classList.add(storedTheme);
+                }
+              } catch (e) {
+                // Fallback to system theme if localStorage fails
+                const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                document.documentElement.classList.add(systemTheme);
+              }
+            })();
+          `}
+        />
       </head>
       <body className="min-h-screen flex flex-col">
         {children}

@@ -12,6 +12,7 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
     theme: Theme;
+    actualTheme: 'light' | 'dark';
     setTheme: (theme: Theme) => void;
 };
 
@@ -27,6 +28,16 @@ const ThemeProvider = ({ children, defaultTheme = 'system', storageKey = 'struct
         return defaultTheme;
     });
 
+    // Track actual system theme state for useTheme hook
+    const [actualTheme, setActualTheme] = React.useState<'light' | 'dark'>(() => {
+        if (typeof window === 'undefined') return 'light';
+
+        const stored = localStorage.getItem(storageKey) as Theme;
+        if (stored && stored !== 'system') return stored;
+
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    });
+
     React.useEffect(() => {
         const root = window.document.documentElement;
 
@@ -38,10 +49,26 @@ const ThemeProvider = ({ children, defaultTheme = 'system', storageKey = 'struct
                 : 'light';
 
             root.classList.add(systemTheme);
-            return;
+
+            // Listen for system preference changes
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            const handleChange = (e: MediaQueryListEvent) => {
+                const newSystemTheme = e.matches ? 'dark' : 'light';
+                root.classList.remove('light', 'dark');
+                root.classList.add(newSystemTheme);
+                setActualTheme(newSystemTheme); // Update state for useTheme hook
+            };
+
+            mediaQuery.addEventListener('change', handleChange);
+
+            // Cleanup listener on unmount or when theme changes
+            return () => {
+                mediaQuery.removeEventListener('change', handleChange);
+            };
         }
 
         root.classList.add(theme);
+        setActualTheme(theme); // Update state for useTheme hook
     }, [theme]);
 
     const setTheme = React.useCallback(
@@ -54,6 +81,7 @@ const ThemeProvider = ({ children, defaultTheme = 'system', storageKey = 'struct
 
     const value = {
         theme,
+        actualTheme,
         setTheme,
     };
 
@@ -70,18 +98,18 @@ const useTheme = () => {
     if (context === undefined)
         throw new Error('useTheme must be used within a ThemeProvider');
 
-    const { theme } = context;
+    const { theme, actualTheme } = context;
 
     const resolvedTheme = React.useMemo(() => {
         // Check for SSR (server-side rendering)
         if (typeof window === 'undefined') return 'light';
 
         if (theme === 'system') {
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            return actualTheme; // Use the tracked actualTheme from context
         }
 
         return theme;
-    }, [theme]);
+    }, [theme, actualTheme]); // Now depends on actualTheme as well
 
     return { ...context, resolvedTheme };
 };

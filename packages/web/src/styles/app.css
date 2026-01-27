@@ -211,10 +211,31 @@
     /* Text colors - flip for dark mode */
     --ds-ink: var(--ds-mono-200);
     --ds-steel: var(--ds-mono-400);
+    --ds-teal: var(--ds-azure);
 
     /* Grid lines for dark mode */
     --theme-border-color: rgba(255, 255, 255, 0.15);
     --grid-line-rgb: 255, 255, 255;
+
+    --color-primary: hsl(var(--ds-teal));
+    --color-primary-foreground: hsl(var(--ds-background-200));
+
+    --color-secondary: hsl(var(--ds-mono-200));
+    --color-secondary-foreground: hsl(var(--ds-ink));
+
+    --color-muted: hsl(var(--ds-mono-100));
+    --color-muted-foreground: hsl(var(--ds-mono-500));
+    --color-muted-background: hsl(var(--ds-background-200));
+
+    --color-accent: hsl(var(--ds-azure));
+    --color-accent-foreground: hsl(var(--ds-white));
+
+    --color-destructive: hsl(var(--ds-error));
+    --color-destructive-foreground: hsl(var(--ds-paper));
+
+    --color-border: hsl(var(--ds-mono-300));
+    --color-input: hsl(var(--ds-mono-200));
+    --color-ring: hsl(var(--ds-primary));
 }
 
 /* ================================================
@@ -238,6 +259,14 @@
 
 .font-serif {
     @apply font-serif;
+}
+
+.font-heading {
+    @apply text-ds-ink;
+}
+
+.dark .font-heading {
+    @apply text-ds-powder;
 }
 
 /* ================================================
