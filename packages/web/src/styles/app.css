@@ -158,12 +158,12 @@
   --color-error-toast-foreground: hsl(var(--ds-error-toast-foreground));
 
   /* ================================================
-     FONTS
-     ================================================ */
+      FONTS
+      ================================================ */
 
-  --font-heading: 'Inter Tight Variable', system-ui, sans-serif;
-  --font-body: 'Inter Tight Variable', system-ui, sans-serif;
-  --font-serif: 'Lora Variable', serif;
+  --font-heading: 'Inter Tight', system-ui, sans-serif;
+  --font-body: 'Inter Tight', system-ui, sans-serif;
+  --font-serif: 'Lora', serif;
 
   /* ================================================
       SPACING & RADIUS
@@ -214,7 +214,7 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased font-body;
   }
 
   h1,
