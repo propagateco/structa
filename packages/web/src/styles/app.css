@@ -106,13 +106,13 @@
     --color-ring: hsl(var(--ds-primary));
 
     /* ================================================
-     TEXT COLORS
-     ================================================ */
+      TEXT COLORS
+      ================================================ */
 
     --color-text: hsl(var(--ds-ink));
     --color-text-secondary: hsl(var(--ds-steel));
     --color-text-muted: hsl(var(--color-muted-foreground));
-    --color-text-link: hsl(var(--color-accent));
+    --color-link: hsl(var(--color-accent));
     --color-text-dark: hsl(var(--ds-midnight));
 
     /* ================================================
@@ -274,22 +274,6 @@
 
 .dark .font-subheading {
     @apply text-ds-powder;
-}
-
-.link {
-    @apply text-accent;
-}
-
-.dark .link {
-    @apply text-accent;
-}
-
-.text-link {
-    color: hsl(var(--color-text-link));
-}
-
-.dark .text-link {
-    color: hsl(var(--color-accent));
 }
 
 /* ================================================

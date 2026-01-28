@@ -15,13 +15,13 @@ export const ArrowLink = React.forwardRef<HTMLAnchorElement, ArrowLinkProps>(
             <Link
                 to={to}
                 className={cn(
-                    'flex items-center text-text dark:text-ds-powder hover:text-text-link cursor-pointer group',
+                    'flex items-center text-primary dark:text-ds-powder hover:text-link cursor-pointer group',
                     className
                 )}
                 ref={ref}
                 {...props}
             >
-                <span className="text-sm font-medium">
+                <span className="text-link text-sm font-medium">
                     {children}
                 </span>
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
