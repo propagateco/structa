@@ -284,6 +284,14 @@
     @apply text-accent;
 }
 
+.text-link {
+    color: hsl(var(--color-text-link));
+}
+
+.dark .text-link {
+    color: hsl(var(--color-accent));
+}
+
 /* ================================================
    CUSTOM UTILITIES
    ================================================ */
