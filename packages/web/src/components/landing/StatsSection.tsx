@@ -58,10 +58,10 @@ export function StatsSection({
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-6">
                         {stats.map(stat => (
                             <div key={stat.label} className="space-y-2">
-                                <h3 className="font-subheading text-xl font-medium tracking-tight lg:text-2xl">
+                                <h3 className="font-serif text-primary text-xl font-medium tracking-tight lg:text-2xl">
                                     {stat.value}
                                 </h3>
-                                <h4 className="font-subheading font-heading tracking-tight">
+                                <h4 className="font-serif text-primary tracking-tight">
                                     {stat.label}
                                 </h4>
                                 <p className="text-muted-foreground text-sm leading-relaxed">

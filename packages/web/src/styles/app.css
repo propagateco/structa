@@ -102,8 +102,8 @@
     --color-destructive-foreground: var(--ds-paper);
 
     --color-border: var(--ds-mono-300);
-    --color-input: var(--ds-mono-200);
-    --color-ring: var(--ds-primary);
+    --color-input: var(--ds-mono-300);
+    --color-ring: var(--ds-mono-300);
 
     --color-text: var(--color-foreground);
     --color-text-secondary: var(--ds-steel);

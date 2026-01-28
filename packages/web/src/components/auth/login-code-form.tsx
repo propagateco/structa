@@ -31,6 +31,7 @@ export function LoginCodeForm() {
 
     const form = useForm<CodeFormType>({
         resolver: zodResolver(CodeForm),
+        mode: 'onBlur',
         defaultValues: {
             email: '',
         },
