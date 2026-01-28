@@ -7,13 +7,14 @@
 :root {
     /* Primary Design System Colors (HSL values) */
     --ds-white: 0deg 0% 100%;
-    --ds-carbon: 218deg 13% 7.5%;
-    --ds-midnight: 178.78deg 44.069% 6.3734%;
+    --ds-midnight: 218deg 13% 7.5%;
+    --ds-carbon: 180deg 2% 10%;
     --ds-ink: 190.5deg 51.282% 15.294%;
     --ds-steel: 188.94deg 33.813% 27.255%;
     --ds-teal: 188.65deg 62.712% 34.706%;
     --ds-azure: 187.28deg 72.996% 46.471%;
     --ds-powder: 178.38deg 36.634% 80.196%;
+    --ds-mist: 188deg 12% 63%;
     --ds-paper: 60deg 33.333% 98.235;
     --ds-eggshell: 52.941deg 24.638% 86.471%;
     --ds-apricot: 29.663deg 100% 82.549%;
@@ -71,49 +72,146 @@
     --ds-error-foreground: var(--ds-paper);
     --ds-error-toast: var(--ds-error);
     --ds-error-toast-foreground: var(--ds-paper);
+
+    /* ================================================
+      SEMANTIC TOKEN VARIABLES
+      ================================================ */
+
+    --color-background: var(--ds-paper);
+    --color-foreground: var(--ds-ink);
+    --color-card: var(--ds-white);
+    --color-card-foreground: var(--ds-ink);
+    --color-popover: var(--ds-white);
+    --color-popover-foreground: var(--ds-ink);
+
+    --color-primary: var(--ds-teal);
+    --color-primary-foreground: var(--ds-paper);
+
+    --color-secondary: var(--ds-mono-200);
+    --color-secondary-foreground: var(--ds-ink);
+
+    --color-muted: var(--ds-mono-100);
+    --color-muted-foreground: var(--ds-mono-500);
+    --color-muted-background: var(--ds-paper);
+
+    --color-accent: var(--ds-azure);
+    --color-accent-foreground: var(--ds-paper);
+    --color-accent-high: var(--ds-powder);
+
+    --color-destructive: var(--ds-error);
+    --color-destructive-foreground: var(--ds-paper);
+
+    --color-border: var(--ds-mono-300);
+    --color-input: var(--ds-mono-200);
+    --color-ring: var(--ds-primary);
+
+    --color-text: var(--color-foreground);
+    --color-text-secondary: var(--ds-steel);
+    --color-text-muted: var(--color-muted-foreground);
+    --color-link: var(--color-accent);
+    --color-text-dark: var(--ds-midnight);
+}
+
+.dark {
+    --color-background: var(--ds-carbon);
+    --color-foreground: var(--ds-paper);
+    --color-card: var(--ds-midnight);
+    --color-card-foreground: var(--ds-paper);
+    --color-popover: var(--ds-carbon);
+    --color-popover-foreground: var(--ds-paper);
+
+    --color-primary: var(--ds-azure);
+    --color-primary-foreground: var(--ds-carbon);
+
+    --color-secondary: var(--ds-mono-800);
+    --color-secondary-foreground: var(--ds-mist);
+
+    --color-muted: var(--ds-mono-500);
+    --color-muted-foreground: var(--ds-mono-400);
+    --color-muted-background: var(--ds-carbon);
+
+    --color-accent: var(--ds-powder);
+    --color-accent-foreground: var(--ds-carbon);
+
+    --color-destructive: var(--ds-error);
+    --color-destructive-foreground: var(--ds-paper);
+
+    --color-border: var(--ds-mono-600);
+    --color-input: var(--ds-mono-600);
+    --color-ring: var(--ds-primary);
+
+    --color-text: var(--color-foreground);
+    --color-text-secondary: var(--color-secondary-foreground);
+    --color-text-muted: var(--color-muted-foreground);
+    --color-link: var(--color-accent);
+    --color-text-dark: var(--ds-midnight);
+
+    --border: var(--ds-mono-600);
+    --theme-border-color: rgba(255, 255, 255, 0.15);
+    --grid-line-rgb: 255, 255, 255;
 }
 
 @theme inline {
     /* ================================================
-     SEMANTIC COLOR MAPPINGS
+     SEMANTIC TOKEN TAILWIND MAPPINGS
      ================================================ */
 
-    --color-background: hsl(var(--ds-background-200));
-    --color-foreground: hsl(var(--ds-ink));
-    --color-card: hsl(var(--ds-background-200));
-    --color-card-foreground: hsl(var(--ds-ink));
-    --color-popover: hsl(var(--ds-background-200));
-    --color-popover-foreground: hsl(var(--ds-ink));
+    --color-background: hsl(var(--color-background));
+    --color-background-pure: hsl(var(--color-background-pure));
+    --color-foreground: hsl(var(--color-foreground));
+    --color-card: hsl(var(--color-card));
+    --color-card-foreground: hsl(var(--color-card-foreground));
+    --color-popover: hsl(var(--color-popover));
+    --color-popover-foreground: hsl(var(--color-popover-foreground));
 
-    --color-primary: hsl(var(--ds-teal));
-    --color-primary-foreground: hsl(var(--ds-background-200));
+    --color-primary: hsl(var(--color-primary));
+    --color-primary-foreground: hsl(var(--color-primary-foreground));
 
-    --color-secondary: hsl(var(--ds-mono-200));
-    --color-secondary-foreground: hsl(var(--ds-ink));
+    --color-secondary: hsl(var(--color-secondary));
+    --color-secondary-foreground: hsl(var(--color-secondary-foreground));
 
-    --color-muted: hsl(var(--ds-mono-100));
-    --color-muted-foreground: hsl(var(--ds-mono-500));
-    --color-muted-background: hsl(var(--ds-background-200));
+    --color-muted: hsl(var(--color-muted));
+    --color-muted-foreground: hsl(var(--color-muted-foreground));
+    --color-muted-background: hsl(var(--color-muted-background));
 
-    --color-accent: hsl(var(--ds-azure));
-    --color-accent-foreground: hsl(var(--ds-white));
+    --color-accent: hsl(var(--color-accent));
+    --color-accent-foreground: hsl(var(--color-accent-foreground));
+    --color-accent-high: hsl(var(--color-accent-high));
 
-    --color-destructive: hsl(var(--ds-error));
-    --color-destructive-foreground: hsl(var(--ds-paper));
+    --color-border: hsl(var(--color-border));
+    --color-input: hsl(var(--color-input));
+    --color-ring: hsl(var(--color-ring));
 
-    --color-border: hsl(var(--ds-mono-300));
-    --color-input: hsl(var(--ds-mono-200));
-    --color-ring: hsl(var(--ds-primary));
+    /* Status Colors */
+    --color-success: hsl(var(--ds-success));
+    --color-success-foreground: hsl(var(--ds-success-foreground));
+    --color-success-toast: hsl(var(--ds-success-toast));
+    --color-success-toast-foreground: hsl(var(--ds-success-toast-foreground));
 
-    /* ================================================
-      TEXT COLORS
-      ================================================ */
+    --color-info: hsl(var(--ds-info));
+    --color-info-foreground: hsl(var(--ds-info-foreground));
+    --color-info-toast: hsl(var(--ds-info-toast));
+    --color-info-toast-foreground: hsl(var(--ds-info-toast-foreground));
 
-    --color-text: hsl(var(--ds-ink));
-    --color-text-secondary: hsl(var(--ds-steel));
-    --color-text-muted: hsl(var(--color-muted-foreground));
-    --color-link: hsl(var(--color-accent));
-    --color-text-dark: hsl(var(--ds-midnight));
+    --color-warning: hsl(var(--ds-warning));
+    --color-warning-foreground: hsl(var(--ds-warning-foreground));
+    --color-warning-toast: hsl(var(--ds-warning-toast));
+    --color-warning-toast-foreground: hsl(var(--ds-warning-toast-foreground));
+
+    --color-error: hsl(var(--ds-error));
+    --color-error-foreground: hsl(var(--ds-error-foreground));
+    --color-error-toast: hsl(var(--ds-error-toast));
+    --color-error-toast-foreground: hsl(var(--ds-error-toast-foreground));
+
+    --color-destructive: hsl(var(--color-destructive));
+    --color-destructive-foreground: hsl(var(--color-destructive-foreground));
+
+    /* Text Colors */
+    --color-text: hsl(var(--color-text));
+    --color-text-secondary: hsl(var(--color-text-secondary));
+    --color-text-muted: hsl(var(--color-text-muted));
+    --color-link: hsl(var(--color-link));
+    --color-text-dark: hsl(var(--color-text-dark));
 
     /* ================================================
      DESIGN SYSTEM DIRECT ACCESS (for Tailwind utilities)
@@ -149,27 +247,6 @@
     --color-ds-background-100: hsl(var(--ds-background-100));
     --color-ds-background-200: hsl(var(--ds-background-200));
 
-    /* Status Colors */
-    --color-success: hsl(var(--ds-success));
-    --color-success-foreground: hsl(var(--ds-success-foreground));
-    --color-success-toast: hsl(var(--ds-success-toast));
-    --color-success-toast-foreground: hsl(var(--ds-success-toast-foreground));
-
-    --color-info: hsl(var(--ds-info));
-    --color-info-foreground: hsl(var(--ds-info-foreground));
-    --color-info-toast: hsl(var(--ds-info-toast));
-    --color-info-toast-foreground: hsl(var(--ds-info-toast-foreground));
-
-    --color-warning: hsl(var(--ds-warning));
-    --color-warning-foreground: hsl(var(--ds-warning-foreground));
-    --color-warning-toast: hsl(var(--ds-warning-toast));
-    --color-warning-toast-foreground: hsl(var(--ds-warning-toast-foreground));
-
-    --color-error: hsl(var(--ds-error));
-    --color-error-foreground: hsl(var(--ds-error-foreground));
-    --color-error-toast: hsl(var(--ds-error-toast));
-    --color-error-toast-foreground: hsl(var(--ds-error-toast-foreground));
-
     /* ================================================
       FONTS
       ================================================ */
@@ -200,44 +277,6 @@
    DARK MODE OVERRIDES
    ================================================ */
 
-.dark {
-    --ds-background-100: var(--ds-midnight);
-    --ds-background-200: var(--ds-carbon);
-    --ds-paper: var(--ds-midnight);
-
-    /* Update border color for dark mode */
-    --border: var(--ds-mono-500);
-
-    /* Text colors - flip for dark mode */
-    --ds-ink: var(--ds-mono-200);
-    --ds-steel: var(--ds-mono-400);
-    --ds-teal: var(--ds-azure);
-
-    /* Grid lines for dark mode */
-    --theme-border-color: rgba(255, 255, 255, 0.15);
-    --grid-line-rgb: 255, 255, 255;
-
-    --color-primary: hsl(var(--ds-teal));
-    --color-primary-foreground: hsl(var(--ds-background-200));
-
-    --color-secondary: hsl(var(--ds-mono-200));
-    --color-secondary-foreground: hsl(var(--ds-ink));
-
-    --color-muted: hsl(var(--ds-mono-100));
-    --color-muted-foreground: hsl(var(--ds-mono-500));
-    --color-muted-background: hsl(var(--ds-background-200));
-
-    --color-accent: hsl(var(--ds-azure));
-    --color-accent-foreground: hsl(var(--ds-white));
-
-    --color-destructive: hsl(var(--ds-error));
-    --color-destructive-foreground: hsl(var(--ds-paper));
-
-    --color-border: hsl(var(--ds-mono-300));
-    --color-input: hsl(var(--ds-mono-200));
-    --color-ring: hsl(var(--ds-primary));
-}
-
 /* ================================================
    BASE STYLES
    ================================================ */
@@ -261,7 +300,7 @@
 }
 
 .font-heading {
-    @apply text-ds-ink font-serif;
+    @apply text-foreground font-serif;
 }
 
 .dark .font-heading {
@@ -279,6 +318,19 @@
 /* ================================================
    CUSTOM UTILITIES
    ================================================ */
+
+.without-ring:focus:not(:focus-visible) {
+    @apply focus:ring-0 focus:ring-offset-0;
+}
+.without-ring:focus-visible {
+    @apply ring-1 ring-offset-1;
+}
+[type='checkbox']:focus:not(:focus-visible) {
+    @apply focus:ring-0 focus:ring-offset-0;
+}
+[type='checkbox']:focus-visible {
+    @apply ring-2 ring-offset-2;
+}
 
 .scrollbar-custom {
     scrollbar-width: thin;

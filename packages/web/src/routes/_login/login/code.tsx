@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { VerifyCodeForm } from "@/components/auth/verify-code-form";
 import { Divider } from "@/components/layout/divider";
-import { StructaIcon } from "@/components/ui/icons";
+import { HomeIconLink } from "@/components/ui/link";
 
 const searchSchema = z.object({
 	email: z.string().email(),
@@ -22,9 +22,7 @@ function RouteComponent() {
 				<div className="flex flex-col gap-6 items-center">
 					<div className="flex flex-col items-start gap-2">
 						<div className="mb-10">
-							<a href="https://structa.so">
-								<StructaIcon size="sm" mode="light" />
-							</a>
+							<HomeIconLink />
 						</div>
 						<h1 className="text-2xl font-bold">Let&apos;s verify your email</h1>
 						<h2 className="text-lg text-text-muted">

@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-none text-sm font-medium hover:cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 transition-colors duration-300 ease-in-out',
+    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm font-medium hover:cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 transition-colors duration-300 ease-in-out',
     {
         variants: {
             variant: {
@@ -16,10 +16,10 @@ const buttonVariants = cva(
                     'bg-destructive text-destructive-foreground hover:bg-destructive/90',
                 remove: 'border border-input bg-background text-text-secondary hover:bg-muted hover:text-text active:bg-muted',
                 outline:
-                    'bg-background hover:bg-foreground hover:text-primary-foreground',
+                    'bg-background border border-input hover:bg-foreground hover:text-primary-foreground',
                 secondary:
-                    'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-                ghost: 'hover:bg-ds-powder/40 hover:text-primary dark:hover:bg-accent/20 dark:hover:text-ds-powder',
+                    'bg-secondary text-foreground hover:bg-foreground hover:text-primary-foreground',
+                ghost: 'hover:bg-ds-powder/40 hover:text-primary dark:hover:bg-primary/20 dark:hover:text-ds-powder',
                 link: 'text-primary underline-offset-4 hover:underline',
             },
             size: {

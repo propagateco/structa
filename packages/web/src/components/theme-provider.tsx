@@ -19,24 +19,32 @@ type ThemeProviderState = {
 const ThemeProviderContext = React.createContext<ThemeProviderState | undefined>(undefined);
 
 const ThemeProvider = ({ children, defaultTheme = 'system', storageKey = 'structa-ui-theme' }: ThemeProviderProps) => {
-    const [theme, setThemeState] = React.useState<Theme>(() => {
-        if (typeof window === 'undefined') return defaultTheme;
-
-        const stored = localStorage.getItem(storageKey) as Theme;
-        if (stored) return stored;
-
-        return defaultTheme;
-    });
+    // Initialize with consistent defaults to prevent hydration mismatches
+    const [theme, setThemeState] = React.useState<Theme>(defaultTheme);
 
     // Track actual system theme state for useTheme hook
-    const [actualTheme, setActualTheme] = React.useState<'light' | 'dark'>(() => {
-        if (typeof window === 'undefined') return 'light';
+    // Start with 'light' on both server and client for consistency
+    const [actualTheme, setActualTheme] = React.useState<'light' | 'dark'>('light');
 
+    // Load stored theme from localStorage after hydration completes
+    React.useEffect(() => {
         const stored = localStorage.getItem(storageKey) as Theme;
-        if (stored && stored !== 'system') return stored;
+        if (stored && stored !== defaultTheme) {
+            setThemeState(stored);
+        }
+    }, [storageKey, defaultTheme]);
 
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    });
+    // Load actual theme from localStorage or system preference after hydration completes
+    React.useEffect(() => {
+        const stored = localStorage.getItem(storageKey) as Theme;
+
+        if (stored && stored !== 'system') {
+            setActualTheme(stored);
+        } else {
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            setActualTheme(systemTheme);
+        }
+    }, [storageKey]);
 
     React.useEffect(() => {
         const root = window.document.documentElement;
