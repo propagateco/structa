@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
-export const Route = createFileRoute("/login/code")({
+export const Route = createFileRoute("/_login/login/code")({
 	component: VerifyCodeComponent,
 });
 
@@ -40,11 +40,11 @@ function VerifyCodeComponent() {
 						toast.error(ctx.error.message || "Invalid code");
 					},
 				},
-			});
+			})
 
 			if (result?.error) {
 				toast.error(result.error.message || "Invalid code");
-				return;
+				return
 			}
 
 			toast.success("Successfully logged in!");
@@ -55,7 +55,7 @@ function VerifyCodeComponent() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}
 
 	const handleResend = async () => {
 		try {
@@ -67,11 +67,11 @@ function VerifyCodeComponent() {
 						toast.error(ctx.error.message || "Failed to resend code");
 					},
 				},
-			});
+			})
 
 			if (result?.error) {
 				toast.error(result.error.message || "Failed to resend code");
-				return;
+				return
 			}
 
 			toast.success("New code sent to your email!");
@@ -80,7 +80,7 @@ function VerifyCodeComponent() {
 			toast.error("An error occurred. Please try again.");
 			console.error("Resend error:", error);
 		}
-	};
+	}
 
 	const handleGoogleSignIn = async () => {
 		setIsGoogleLoading(true);
@@ -93,14 +93,14 @@ function VerifyCodeComponent() {
 						toast.error(ctx.error.message || "Google sign-in failed");
 					},
 				},
-			});
+			})
 		} catch (error) {
 			toast.error("Google sign-in failed");
 			console.error("Google sign-in error:", error);
 		} finally {
 			setIsGoogleLoading(false);
 		}
-	};
+	}
 
 	if (!email) {
 		return null;
@@ -207,5 +207,5 @@ function VerifyCodeComponent() {
 				</div>
 			</Card>
 		</div>
-	);
+	)
 }

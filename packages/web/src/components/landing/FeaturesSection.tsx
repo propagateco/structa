@@ -1,7 +1,6 @@
-import { ArrowRight } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
 import { useTheme } from '@/components/theme-provider'
 import { DiagonalPattern } from '@/components/ui/DiagonalPattern'
+import { ArrowLink } from '@/components/ui/link'
 
 export interface Feature {
     title: string
@@ -77,15 +76,9 @@ export function FeaturesSection({
                             <p className="text-muted-foreground">
                                 {feature.description}
                             </p>
-                            <Link
-                                to="/login"
-                                className="flex items-center text-text dark:text-ds-powder hover:text-text-link cursor-pointer group"
-                            >
-                                <span className="text-sm font-medium">
-                                    {feature.cta}
-                                </span>
-                                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                            </Link>
+                            <ArrowLink to="/login">
+                                {feature.cta}
+                            </ArrowLink>
                         </div>
                     </div>
                 ))}

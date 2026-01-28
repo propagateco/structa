@@ -253,7 +253,6 @@
     h4,
     h5,
     h6 {
-        @apply font-heading;
     }
 }
 
@@ -262,11 +261,27 @@
 }
 
 .font-heading {
-    @apply text-ds-ink;
+    @apply text-ds-ink font-serif;
 }
 
 .dark .font-heading {
+    @apply text-foreground;
+}
+
+.font-subheading {
+    @apply font-serif text-text-secondary;
+}
+
+.dark .font-subheading {
     @apply text-ds-powder;
+}
+
+.link {
+    @apply text-accent;
+}
+
+.dark .link {
+    @apply text-accent;
 }
 
 /* ================================================
