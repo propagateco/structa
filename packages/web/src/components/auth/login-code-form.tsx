@@ -36,6 +36,8 @@ export function LoginCodeForm() {
         },
     });
 
+    const { isValid } = form.formState;
+
     const onSubmit = async (values: CodeFormType) => {
         setIsLoading(true);
         setError(null);
@@ -92,6 +94,7 @@ export function LoginCodeForm() {
                         variant="secondary"
                         className="w-full"
                         isLoading={isLoading}
+                        disabled={isLoading || !isValid}
                     >
                         Continue with Email
                     </Button>

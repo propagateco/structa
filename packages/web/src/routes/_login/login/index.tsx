@@ -19,12 +19,12 @@ function RouteComponent() {
                             <div className="mb-10">
                                 <HomeIconLink />
                             </div>
-                            <h1 className="text-2xl font-bold">
-                                Welcome to Structa
+                            <h1 className="font-heading font-semibold text-3xl">
+                                Sign in or create an account
                             </h1>
-                            <h2 className="text-lg font-semibold text-text-muted">
-                                Get started with the modern way to manage your
-                                renovation.
+                            <h2 className="text-lg text-text-muted">
+                                Save and sync your workspace. Manage your
+                                renovation the modern way.
                             </h2>
                         </div>
 

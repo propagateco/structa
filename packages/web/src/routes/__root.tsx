@@ -20,13 +20,19 @@ export const Route = createRootRoute({
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: '' },
 
-      // 1. Lora (Serif) - from Google Fonts
+      // 1. Space Grotesk (Sans-serif) - from Google Fonts
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap'
+      },
+
+      // 2. Lora (Serif) - from Google Fonts
       {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap'
       },
 
-      // 2. Inter Tight (Variable Sans-serif) - from Google Fonts
+      // 3. Inter Tight (Variable Sans-serif) - from Google Fonts
       {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap'

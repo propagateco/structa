@@ -8,6 +8,13 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   server: {
     port: 3000,
+    watch: {
+      // Use poll-based watching for WSL/Docker reliability
+      usePolling: true,
+      interval: 1000,
+      // Prevent infinite loop by ignoring generated files
+      ignored: ['**/routeTree.gen.ts', '**/routeTree.gen.ts.map', '.tanstack/**'],
+    },
   },
   plugins: [
     tailwindcss(),

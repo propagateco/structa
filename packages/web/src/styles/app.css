@@ -138,7 +138,7 @@
 
     --color-border: var(--ds-mono-600);
     --color-input: var(--ds-mono-600);
-    --color-ring: var(--ds-primary);
+    --color-ring: var(--ds-mono-600);
 
     --color-text: var(--color-foreground);
     --color-text-secondary: var(--color-secondary-foreground);
@@ -254,6 +254,8 @@
     --font-heading: 'Lora', system-ui, sans-serif;
     --font-body: 'Inter Tight', system-ui, sans-serif;
     --font-serif: 'Lora', serif;
+    --font-display: 'Lora', serif;
+    --font-sans: 'Inter Tight', sans-serif;
 
     /* ================================================
       SPACING & RADIUS
@@ -300,7 +302,7 @@
 }
 
 .font-heading {
-    @apply text-foreground font-serif;
+    @apply text-foreground font-serif tracking-tight;
 }
 
 .dark .font-heading {
