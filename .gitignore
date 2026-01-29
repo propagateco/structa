@@ -36,3 +36,9 @@ node_modules
 # OpenCode local configuration
 .opencode/
 
+# TanStack build cache
+packages/web/.tanstack/tmp/
+
+# TanStack Router generated files
+packages/web/src/routeTree.gen.ts
+

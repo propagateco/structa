@@ -1,82 +1,84 @@
-import * as React from "react";
-import { Input } from "@/components/ui/input";
+import * as React from 'react';
+import { OTPInput, OTPInputContext } from 'input-otp';
 
-interface OTPInputProps {
-	length?: number;
-	value: string;
-	onChange: (value: string) => void;
-	disabled?: boolean;
+import { cn } from '@/lib/utils';
+import { Dot } from 'lucide-react';
+
+function InputOTP({
+    className,
+    containerClassName,
+    ...props
+}: React.ComponentProps<typeof OTPInput> & {
+    containerClassName?: string;
+}) {
+    return (
+        <OTPInput
+            data-slot="input-otp"
+            containerClassName={cn(
+                'cn-input-otp flex items-center justify-between has-disabled:opacity-50',
+                containerClassName
+            )}
+            spellCheck={false}
+            className={cn('disabled:cursor-not-allowed', className)}
+            {...props}
+        />
+    );
 }
 
-export function OTPInput({
-	length = 6,
-	value,
-	onChange,
-	disabled = false,
-}: OTPInputProps) {
-	const inputRefs = React.useRef<(HTMLInputElement | null)[]>(
-		new Array(length).fill(null),
-	);
-
-	const handleChange = (
-		index: number,
-		e: React.ChangeEvent<HTMLInputElement>,
-	) => {
-		const newValue = e.target.value;
-		if (newValue.length > 1) return;
-
-		const newOtp = value.split("");
-		newOtp[index] = newValue;
-		const otpValue = newOtp.join("");
-
-		onChange(otpValue);
-
-		// Auto-focus next input
-		if (newValue && index < length - 1) {
-			inputRefs.current[index + 1]?.focus();
-		}
-	};
-
-	const handleKeyDown = (
-		index: number,
-		e: React.KeyboardEvent<HTMLInputElement>,
-	) => {
-		if (e.key === "Backspace" && !value[index] && index > 0) {
-			inputRefs.current[index - 1]?.focus();
-		}
-	};
-
-	const handlePaste = (e: React.ClipboardEvent) => {
-		e.preventDefault();
-		const pastedData = e.clipboardData.getData("text").slice(0, length);
-		if (/^\d+$/.test(pastedData)) {
-			onChange(pastedData);
-			// Focus the last input
-			inputRefs.current[Math.min(pastedData.length, length) - 1]?.focus();
-		}
-	};
-
-	return (
-		<div className="flex gap-2 justify-center">
-			{Array.from({ length }).map((_, index) => (
-				<Input
-					key={`otp-${index}`}
-					ref={(ref) => {
-						inputRefs.current[index] = ref;
-					}}
-					type="text"
-					inputMode="numeric"
-					pattern="[0-9]*"
-					maxLength={1}
-					value={value[index] || ""}
-					onChange={(e) => handleChange(index, e)}
-					onKeyDown={(e) => handleKeyDown(index, e)}
-					onPaste={handlePaste}
-					disabled={disabled}
-					className="w-12 h-12 text-center text-xl font-bold"
-					autoFocus={index === 0}
-				/>
-			))}
-		</div>
-	);
+function InputOTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
+    return (
+        <div
+            data-slot="input-otp-group"
+            className={cn(
+                'has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 has-aria-invalid:border-destructive rounded-lg has-aria-invalid:ring-[3px] flex items-center',
+                className
+            )}
+            {...props}
+        />
+    );
 }
+
+function InputOTPSlot({
+    index,
+    className,
+    ...props
+}: React.ComponentProps<'div'> & {
+    index: number;
+}) {
+    const inputOTPContext = React.useContext(OTPInputContext);
+    const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
+
+    return (
+        <div
+            data-slot="input-otp-slot"
+            data-active={isActive}
+            className={cn(
+                'size-10 bg-background border-input data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive border-y border-r text-sm transition-all outline-none first:rounded-l-lg first:border-l last:rounded-r-lg data-[active=true]:ring-[3px] relative flex items-center justify-center data-[active=true]:z-10',
+                className
+            )}
+            {...props}
+        >
+            {char}
+            {hasFakeCaret && (
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                    <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
+                </div>
+            )}
+        </div>
+    );
+}
+
+function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
+    return (
+        <div
+            data-slot="input-otp-separator"
+            className="[&_svg:not([class*='size-'])]:size-4 flex items-center"
+            role="separator"
+            {...props}
+        >
+            <Dot />
+        </div>
+    );
+}
+
+export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };

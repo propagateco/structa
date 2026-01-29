@@ -1,79 +1,88 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
+import { createFileRoute } from '@tanstack/react-router'
+import { Header } from '@/components/landing/Header'
+import { Hero } from '@/components/landing/Hero'
+import { VideoSection } from '@/components/landing/VideoSection'
+import { LogoShowcaseSection } from '@/components/landing/LogoShowcaseSection'
+import { StatsSection } from '@/components/landing/StatsSection'
+import { FeaturesSection } from '@/components/landing/FeaturesSection'
+import {
+    TexturedSection,
+    DiagonalDivider,
+} from '@/components/layout'
 
 export const Route = createFileRoute('/')({
-  component: RouteComponent,
+    component: LandingPage,
 })
 
-function RouteComponent() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 text-center">
-        <h1 className="text-5xl md:text-7xl font-bold text-teal-600 dark:text-teal-400 mb-6">
-          Renovate Smarter
-        </h1>
-        <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-          Your AI-powered renovation assistant. Plan, visualize, and execute your home
-          projects with expert guidance.
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Link to={("/login") as any}>
-            <Button size="lg" className="gap-2 bg-teal-600 hover:bg-teal-700">
-              Get Started →
-            </Button>
-          </Link>
-          <Link to="/about">
-            <Button size="lg" variant="outline" className="border-teal-600 text-teal-600 hover:bg-teal-50 dark:hover:bg-gray-800">
-              Learn More
-            </Button>
-          </Link>
-        </div>
-      </section>
+function LandingPage() {
+    return (
+        <div className="text-text min-h-screen flex flex-col relative bg-background">
+            <Header />
 
-      {/* Features Section */}
-      <section className="container mx-auto px-4 py-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-200 mb-12">
-          Everything You Need
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <FeatureCard
-            icon="🏠"
-            title="Smart Planning"
-            description="AI-powered floor plan analysis and renovation suggestions"
-          />
-          <FeatureCard
-            icon="📐"
-            title="Precise Estimates"
-            description="Get accurate cost and timeline estimates for your projects"
-          />
-          <FeatureCard
-            icon="🤝"
-            title="Expert Guidance"
-            description="Consult with The Clerk for step-by-step renovation advice"
-          />
-        </div>
-      </section>
-    </div>
-  )
-}
+            {/* Side gutters with noise texture */}
+            <div className="fixed left-0 top-0 bottom-0 w-3 sm:w-4 md:w-8 z-0 pointer-events-none bg-ds-mono-100 dark:bg-background">
+                <div
+                    className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.05] dark:opacity-[0.02]"
+                    style={{ backgroundImage: `url('/noise.png')` }}
+                />
+            </div>
+            <div className="fixed right-0 top-0 bottom-0 w-3 sm:w-4 md:w-8 z-0 pointer-events-none bg-ds-mono-100 dark:bg-background">
+                <div
+                    className="pointer-events-none [z-index:-1] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.05] dark:opacity-[0.02]"
+                    style={{ backgroundImage: `url('/noise.png')` }}
+                />
+            </div>
 
-function FeatureCard({
-  icon,
-  title,
-  description,
-}: {
-  icon: string
-  title: string
-  description: string
-}) {
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow">
-      <div className="text-4xl mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
-        {title}
-      </h3>
-      <p className="text-gray-600 dark:text-gray-400">{description}</p>
-    </div>
-  )
+            {/* Main content - aligned with grid overlay */}
+            <main className="flex-1 pt-14 mx-3 sm:mx-4 md:mx-8 border-x border-ds-powder/50 dark:border-ds-powder/[0.08] relative z-10">
+                {/* Hero Section */}
+                <Hero />
+
+                {/* Video & Logo Showcase Section */}
+                <TexturedSection
+                    showTopDivider={false}
+                    showBottomDivider={false}
+                    showTopDiamonds={true}
+                    showGrid={true}
+                    padding="none"
+                >
+                    <div className="col-span-4 md:col-span-8 space-y-8 py-8">
+                        {/* Video Section */}
+                        <VideoSection />
+
+                        {/* Logo Showcase Section */}
+                        <LogoShowcaseSection />
+                    </div>
+                </TexturedSection>
+
+                {/* Diagonal Slash Divider - matches zed.dev's #divider-slash */}
+                <DiagonalDivider />
+
+                {/* Stats Section - Textured background */}
+                <TexturedSection
+                    showTopDivider={false}
+                    showBottomDivider={false}
+                    showGrid={true}
+                    padding="none"
+                >
+                    <StatsSection />
+                </TexturedSection>
+
+                <DiagonalDivider />
+
+                {/* Features Section - Textured */}
+                <TexturedSection
+                    showTopDivider={false}
+                    showBottomDivider={false}
+                    showGrid={true}
+                    padding="none"
+                >
+                    <FeaturesSection />
+                </TexturedSection>
+
+                {/* Diagonal Slash Divider */}
+                <DiagonalDivider />
+            </main>
+        </div>
+    )
 }
