@@ -327,12 +327,6 @@
 .without-ring:focus-visible {
     @apply ring-1 ring-offset-1;
 }
-[type='checkbox']:focus:not(:focus-visible) {
-    @apply focus:ring-0 focus:ring-offset-0;
-}
-[type='checkbox']:focus-visible {
-    @apply ring-2 ring-offset-2;
-}
 
 .scrollbar-custom {
     scrollbar-width: thin;
@@ -399,6 +393,22 @@
 
 .testimonial-enter {
     animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes caret-blink {
+    0%,
+    70%,
+    100% {
+        opacity: 1;
+    }
+    20%,
+    50% {
+        opacity: 0;
+    }
+}
+
+.animate-caret-blink {
+    animation: caret-blink 1.5s ease-in-out infinite;
 }
 
 /* Smooth scroll behavior */

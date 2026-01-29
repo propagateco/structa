@@ -181,7 +181,7 @@ const StructaIcon = React.forwardRef<HTMLDivElement, StructaIconProps>(
             <div
                 ref={ref}
                 className={cn(
-                    mode === 'light' ? 'text-text-muted/50' : 'text-background',
+                    mode === 'light' ? 'text-muted' : 'text-background',
                     'flex items-center justify-center rounded-md hover:text-primary transition-all duration-500 ease-in-out',
                     className
                 )}

@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm font-medium hover:cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 transition-colors duration-300 ease-in-out',
+    'group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm font-medium hover:cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 transition-colors duration-300 ease-in-out',
     {
         variants: {
             variant: {
@@ -20,7 +20,7 @@ const buttonVariants = cva(
                 secondary:
                     'bg-secondary text-foreground hover:bg-foreground hover:text-primary-foreground',
                 ghost: 'hover:bg-ds-powder/40 hover:text-primary dark:hover:bg-primary/20 dark:hover:text-ds-powder',
-                link: 'text-primary underline-offset-4 hover:underline',
+                link: 'text-primary hover:text-primary transition-colors duration-200',
             },
             size: {
                 default: 'h-10 px-4 py-2',
@@ -78,6 +78,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                     <>
                         <Loader2 className="h-4 w-4 animate-spin" />
                         <div className="[&>svg]:hidden">{children}</div>
+                    </>
+                ) : variant === 'link' ? (
+                    <>
+                        {icon}
+                        <span className="relative inline-block after:content-[''] after:absolute after:w-full after:h-0.5 after:left-0 after:bottom-0 after:bg-current after:origin-bottom-right after:scale-x-0 group-hover:after:origin-bottom-left group-hover:after:scale-x-100 after:transition-transform after:duration-300">
+                            {children}
+                        </span>
                     </>
                 ) : (
                     <>

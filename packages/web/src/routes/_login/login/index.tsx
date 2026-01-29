@@ -23,7 +23,7 @@ function RouteComponent() {
                                 Sign in or create an account
                             </h1>
                             <h2 className="text-lg text-text-muted">
-                                Save and sync your progress. Manage your
+                                Save and sync your progress to manage your
                                 renovation the modern way.
                             </h2>
                         </div>
