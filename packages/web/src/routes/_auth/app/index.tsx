@@ -2,6 +2,10 @@ import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { getAuth } from "@/lib/auth-server";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_auth/app/")({
 	beforeLoad: async () => {
@@ -12,15 +16,36 @@ export const Route = createFileRoute("/_auth/app/")({
 });
 
 function DashboardComponent() {
+	const router = useRouter();
+
+	const handleLogout = async () => {
+		try {
+			await authClient.signOut();
+			toast.success("Logged out successfully");
+			router.navigate({ to: ("/") as any });
+		} catch (error) {
+			toast.error("Failed to log out");
+			console.error("Logout error:", error);
+		}
+	};
+
 	return (
 		<div className="space-y-6">
-			<div>
-				<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-					Dashboard
-				</h1>
-				<p className="text-gray-600 dark:text-gray-400">
-					Welcome to your renovation assistant
-				</p>
+			<div className="flex items-center justify-between">
+				<div>
+					<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+						Dashboard
+					</h1>
+					<p className="text-gray-600 dark:text-gray-400">
+						Welcome to your renovation assistant
+					</p>
+				</div>
+				<Button
+					variant="outline"
+					onClick={handleLogout}
+				>
+					Log Out
+				</Button>
 			</div>
 
 			<div className="grid md:grid-cols-3 gap-6">
