@@ -81,7 +81,7 @@
 		"vaul": "^1.1.2",
 		"vitefu": "^1.1.1",
 		"xmlbuilder2": "^4.0.0",
-    "zod": "^4.3.6"
+		"zod": "^4.3.6"
 	},
 	"devDependencies": {
 		"@tanstack/devtools-vite": "^0.3.11",
