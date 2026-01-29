@@ -61,7 +61,7 @@ export function VerifyCodeForm({ email }: VerifyCodeFormProps) {
                 hasSubmittedRef.current = false;
                 form.reset();
             } else {
-                navigate({ to: '/' });
+                navigate({ to: '/app' });
             }
         } catch (error) {
             setError('Something went wrong. Please try again.');

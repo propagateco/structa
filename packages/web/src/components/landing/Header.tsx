@@ -1,10 +1,18 @@
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Link } from '@tanstack/react-router';
 import { DiamondCorner, Container } from '@/components/layout';
 import { useTheme } from '@/components/theme-provider';
+import { authClient } from '@/lib/auth-client';
 
 export const Header = () => {
     const { resolvedTheme } = useTheme();
+    const { data: session } = authClient.useSession();
+    const user = session?.user;
+
+    const fallbackText = user?.name
+        ? user.name.charAt(0).toUpperCase()
+        : user?.email?.charAt(0).toUpperCase() || 'U';
 
     return (
         <header className="fixed inset-x-0 top-0 h-14 w-full bg-background backdrop-blur-3xl border-b border-ds-powder/50 dark:border-ds-powder/[0.08] z-50">
@@ -41,24 +49,50 @@ export const Header = () => {
                 </div>
 
                 <div className="flex flex-row items-center justify-center gap-2">
-                    <Link to="/login">
-                        <Button
-                            className="inline-flex items-center justify-center group"
-                            size={'sm'}
-                        >
-                            Sign Up
-                        </Button>
-                    </Link>
+                    {user ? (
+                        <>
+                            <Link to="/app">
+                                <Button
+                                    variant="outline"
+                                    className="inline-flex items-center justify-center group"
+                                    size={'sm'}
+                                >
+                                    Dashboard
+                                </Button>
+                            </Link>
 
-                    <Link to="/login">
-                        <Button
-                            className="inline-flex items-center justify-center group"
-                            variant="ghost"
-                            size={'sm'}
-                        >
-                            Login
-                        </Button>
-                    </Link>
+                            <Avatar className="size-8 cursor-pointer">
+                                <AvatarImage
+                                    src={user?.image || undefined}
+                                    alt={user?.name || 'User'}
+                                />
+                                <AvatarFallback className="text-sm">
+                                    {fallbackText}
+                                </AvatarFallback>
+                            </Avatar>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login">
+                                <Button
+                                    className="inline-flex items-center justify-center group"
+                                    size={'sm'}
+                                >
+                                    Sign Up
+                                </Button>
+                            </Link>
+
+                            <Link to="/login">
+                                <Button
+                                    className="inline-flex items-center justify-center group"
+                                    variant="ghost"
+                                    size={'sm'}
+                                >
+                                    Login
+                                </Button>
+                            </Link>
+                        </>
+                    )}
                 </div>
             </Container>
         </header>
