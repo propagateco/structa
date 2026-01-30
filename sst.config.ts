@@ -7,8 +7,8 @@ export default $config({
     app(input) {
         return {
             name: 'structa',
-            removal: input?.stage === 'production' ? 'remove' : 'remove',
-            // protect: ['production'].includes(input?.stage), // Temporarily disabled for cleanup
+            removal: input?.stage === 'production' ? 'retain' : 'remove',
+            protect: ['production'].includes(input?.stage),
             home: 'aws',
             providers: {
                 aws: {
