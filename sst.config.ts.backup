@@ -27,7 +27,7 @@ export default $config({
         };
     },
     async run() {
-        // Transform to add required lambda:InvokeFunction permission for Function URLs
+        // This affects new AWS accounts and recently created Lambda Function URLs (403 errors)
         // See: https://github.com/anomalyco/sst/issues/6198
         $transform(aws.lambda.FunctionUrl, (args, opts, name) => {
             new awsnative.lambda.Permission(`${name}InvokePermission`, {
