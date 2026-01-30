@@ -2,7 +2,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 
-const structaIconVariants = cva(
+const structaIconColorVariants = cva(
     'flex items-center justify-center rounded-md hover:text-primary transition-all duration-500 ease-in-out',
     {
         variants: {
@@ -11,38 +11,45 @@ const structaIconVariants = cva(
                 muted: 'text-ds-mono-300 dark:text-muted',
                 accent: 'text-primary hover:text-foreground',
             },
-            size: {
-                default: 'h-10 w-auto',
-                xs: 'h-4 w-auto',
-            },
         },
         defaultVariants: {
             variant: 'default',
-            size: 'default',
         },
     }
 );
 
+const structaIconSizeVariants = cva('', {
+    variants: {
+        size: {
+            default: 'h-10 w-auto',
+            xs: 'h-4 w-auto',
+        },
+    },
+    defaultVariants: {
+        size: 'default',
+    },
+});
+
 export interface StructaIconProps
     extends
         React.HTMLAttributes<HTMLDivElement>,
-        VariantProps<typeof structaIconVariants> {}
+        VariantProps<typeof structaIconColorVariants>,
+        VariantProps<typeof structaIconSizeVariants> {}
 
 const StructaIcon = React.forwardRef<HTMLDivElement, StructaIconProps>(
     (props, ref) => {
-        const { className, variant, size } = props;
-        console.log('Icon varaint', variant);
+        const { className, variant, size, ...restProps } = props;
         return (
             <div
                 ref={ref}
-                className={cn(structaIconVariants({ variant, className }))}
-                {...props}
+                className={cn(structaIconColorVariants({ variant }), className)}
+                {...restProps}
             >
                 <svg
                     viewBox="0 0 424 424"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className={cn(structaIconVariants({ size }))}
+                    className={cn(structaIconSizeVariants({ size }))}
                 >
                     <title>Structa Logo</title>
                     <path
@@ -125,4 +132,11 @@ const StructaIcon = React.forwardRef<HTMLDivElement, StructaIconProps>(
 
 StructaIcon.displayName = 'StructaIcon';
 
-export { StructaIcon, structaIconVariants };
+export {
+    StructaIcon,
+    structaIconColorVariants,
+    structaIconSizeVariants,
+};
+
+// Re-export structaIconVariants for backward compatibility with link.tsx
+export const structaIconVariants = structaIconColorVariants;

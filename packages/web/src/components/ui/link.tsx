@@ -4,7 +4,11 @@ import { ArrowRight } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { type VariantProps } from 'class-variance-authority';
-import { StructaIcon, structaIconVariants } from '@/components/ui/icons';
+import {
+    StructaIcon,
+    structaIconColorVariants,
+    structaIconSizeVariants,
+} from '@/components/ui/icons';
 
 export interface ArrowLinkProps extends LinkProps {
     children: React.ReactNode;
@@ -32,7 +36,10 @@ export const ArrowLink = React.forwardRef<HTMLAnchorElement, ArrowLinkProps>(
 ArrowLink.displayName = 'ArrowLink';
 
 export interface HomeIconLinkProps
-    extends Omit<LinkProps, 'to'>, VariantProps<typeof structaIconVariants> {
+    extends
+        Omit<LinkProps, 'to'>,
+        VariantProps<typeof structaIconColorVariants>,
+        VariantProps<typeof structaIconSizeVariants> {
     className?: string;
 }
 
@@ -40,7 +47,6 @@ export const HomeIconLink = React.forwardRef<
     HTMLAnchorElement,
     HomeIconLinkProps
 >(({ className, variant, size, ...props }, ref) => {
-    console.log('Variant: ', variant);
     return (
         <Link
             to="/"

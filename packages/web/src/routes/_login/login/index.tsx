@@ -19,7 +19,7 @@ function RouteComponent() {
                             <div className="mb-10">
                                 <HomeIconLink variant="muted" />
                             </div>
-                            <h1 className="font-heading font-semibold text-3xl">
+                            <h1 className="font-heading font-semibold text-2xl">
                                 Sign in or create an account
                             </h1>
                             <h2 className="text-lg text-text-muted">

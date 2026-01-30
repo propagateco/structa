@@ -18,7 +18,7 @@ export interface HeroProps {
 
 export function Hero({
     title = 'Tools for the modern renovator.',
-    description = 'Eliminate the guesswork from home renovation with an AI-powered Clerk that brings context, clarity, and confidence to every project.',
+    description = 'Eliminate the guesswork from home renovation with an AI-powered digital workspace that brings context, clarity, and confidence to every project.',
     primaryCTA = { text: 'Start for free', to: '/login' },
     secondaryCTA = { text: 'Download for mobile', to: '/login' },
 }: HeroProps) {
