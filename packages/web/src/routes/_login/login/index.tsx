@@ -17,7 +17,7 @@ function RouteComponent() {
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col items-start gap-2">
                             <div className="mb-10">
-                                <HomeIconLink />
+                                <HomeIconLink variant="muted" />
                             </div>
                             <h1 className="font-heading font-semibold text-3xl">
                                 Sign in or create an account
