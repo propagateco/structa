@@ -24,7 +24,7 @@ function RouteComponent() {
                         <div className="mb-10">
                             <HomeIconLink />
                         </div>
-                        <h1 className="font-heading text-3xl font-bold">
+                        <h1 className="font-heading text-2xl font-bold">
                             Let&apos;s verify your email
                         </h1>
                         <h2 className="text-lg text-text-muted">

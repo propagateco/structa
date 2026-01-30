@@ -3,7 +3,12 @@ import { Link, type LinkProps } from '@tanstack/react-router';
 import { ArrowRight } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { StructaIcon } from '@/components/ui/icons';
+import { type VariantProps } from 'class-variance-authority';
+import {
+    StructaIcon,
+    structaIconColorVariants,
+    structaIconSizeVariants,
+} from '@/components/ui/icons';
 
 export interface ArrowLinkProps extends LinkProps {
     children: React.ReactNode;
@@ -30,25 +35,30 @@ export const ArrowLink = React.forwardRef<HTMLAnchorElement, ArrowLinkProps>(
 );
 ArrowLink.displayName = 'ArrowLink';
 
-export interface HomeIconLinkProps extends Omit<LinkProps, 'to'> {
+export interface HomeIconLinkProps
+    extends
+        Omit<LinkProps, 'to'>,
+        VariantProps<typeof structaIconColorVariants>,
+        VariantProps<typeof structaIconSizeVariants> {
     className?: string;
 }
 
-export const HomeIconLink = React.forwardRef<HTMLAnchorElement, HomeIconLinkProps>(
-    ({ className, ...props }, ref) => {
-        return (
-            <Link
-                to="/"
-                className={cn(
-                    'flex items-center hover:opacity-80 transition-opacity cursor-pointer',
-                    className
-                )}
-                ref={ref}
-                {...props}
-            >
-                <StructaIcon size="sm" mode="light" />
-            </Link>
-        );
-    }
-);
+export const HomeIconLink = React.forwardRef<
+    HTMLAnchorElement,
+    HomeIconLinkProps
+>(({ className, variant, size, ...props }, ref) => {
+    return (
+        <Link
+            to="/"
+            className={cn(
+                'flex items-center hover:opacity-80 transition-opacity cursor-pointer',
+                className
+            )}
+            ref={ref}
+            {...props}
+        >
+            <StructaIcon size={size} variant={variant} />
+        </Link>
+    );
+});
 HomeIconLink.displayName = 'HomeIconLink';

@@ -42,3 +42,8 @@ packages/web/.tanstack/tmp/
 # TanStack Router generated files
 packages/web/src/routeTree.gen.ts
 
+# TanStack Start/Vite build output
+.output/
+packages/web/.output/
+packages/app-example/.output/
+
