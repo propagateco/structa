@@ -121,23 +121,18 @@ export function VerifyCodeForm({ email }: VerifyCodeFormProps) {
                                     <InputOTPGroup>
                                         <InputOTPSlot index={0} />
                                     </InputOTPGroup>
-                                    <InputOTPSeparator />
                                     <InputOTPGroup>
                                         <InputOTPSlot index={1} />
                                     </InputOTPGroup>
-                                    <InputOTPSeparator />
                                     <InputOTPGroup>
                                         <InputOTPSlot index={2} />
                                     </InputOTPGroup>
-                                    <InputOTPSeparator />
                                     <InputOTPGroup>
                                         <InputOTPSlot index={3} />
                                     </InputOTPGroup>
-                                    <InputOTPSeparator />
                                     <InputOTPGroup>
                                         <InputOTPSlot index={4} />
                                     </InputOTPGroup>
-                                    <InputOTPSeparator />
                                     <InputOTPGroup>
                                         <InputOTPSlot index={5} />
                                     </InputOTPGroup>
@@ -155,7 +150,7 @@ export function VerifyCodeForm({ email }: VerifyCodeFormProps) {
                 <Button
                     type="button"
                     variant="link"
-                    className="text-muted mt-10"
+                    className="text-text-muted mt-10"
                     onClick={() => navigate({ to: '/login' })}
                     disabled={isLoading}
                     isLoading={isLoading}

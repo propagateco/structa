@@ -12,6 +12,7 @@ interface TexturedSectionProps {
     showTopDiamonds?: boolean;
     showBottomDiamonds?: boolean;
     showGrid?: boolean;
+    padding?: 'none' | 'sm' | 'md' | 'lg';
     grainIntensity?: 'subtle' | 'light' | 'medium' | 'strong';
     bgColor?: string;
 }
@@ -28,7 +29,16 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
     showTopDiamonds = false,
     showBottomDiamonds = false,
     showGrid = false,
+    padding = 'md',
+    bgColor = 'bg-background',
 }) => {
+    const paddingClasses = {
+        none: '',
+        sm: 'px-4 py-8',
+        md: 'px-4 py-8 sm:py-12 sm:px-6 md:py-20',
+        lg: 'px-6 py-16 sm:px-8 md:py-24',
+    };
+
     return (
         <section
             className={cn(
@@ -48,7 +58,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
             )}
 
             {/* Main Content Area */}
-            <div className="relative bg-background">
+            <div className={cn('relative', paddingClasses[padding], bgColor)}>
                 {/* Noise Texture Overlay */}
                 <div
                     className={cn(

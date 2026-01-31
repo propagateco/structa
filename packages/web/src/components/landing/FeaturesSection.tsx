@@ -1,45 +1,48 @@
-import { useTheme } from '@/components/theme-provider'
-import { DiagonalPattern } from '@/components/ui/DiagonalPattern'
-import { ArrowLink } from '@/components/ui/link'
+import { useTheme } from '@/components/theme-provider';
+import { DiagonalPattern } from '@/components/ui/DiagonalPattern';
+import { ArrowLink } from '@/components/ui/link';
 
 export interface Feature {
-    title: string
-    description: string
-    cta?: string
-    imageBaseName: string
+    title: string;
+    description: string;
+    cta?: string;
+    imageBaseName: string;
 }
 
 export interface FeaturesSectionProps {
-    title?: string
-    description?: string
-    features?: Feature[]
+    title?: string;
+    description?: string;
+    features?: Feature[];
 }
 
 export function FeaturesSection({
-    title = "Intelligent digital workspace",
-    description = "Upload property listings, planning documents, architect drawings, and surveys—the AI transforms static PDFs into a ready-to-use workspace.",
+    title = 'Intelligent digital workspace',
+    description = 'Upload property listings, planning documents, architect drawings, and surveys—the AI transforms static PDFs into a ready-to-use workspace.',
     features = [
         {
-            title: "PDF to floor plans in seconds",
-            description: "Upload your property listing documents and have scaled floor plans ready for editing your dream layout.",
-            cta: "Start with Layout",
-            imageBaseName: "terrace-house"
+            title: 'PDF to floor plans in seconds',
+            description:
+                'Upload your property listing documents and have scaled floor plans ready for editing your dream layout.',
+            cta: 'Start with Layout',
+            imageBaseName: 'terrace-house',
         },
         {
-            title: "Track your financial runway",
-            description: "See your remaining budget in real-time and forecast what's left to spend. Catch cost overruns before they spiral.",
-            cta: "Start with Tracker",
-            imageBaseName: "runway"
+            title: 'Track your financial runway',
+            description:
+                "See your remaining budget in real-time and forecast what's left to spend. Catch cost overruns before they spiral.",
+            cta: 'Start with Tracker',
+            imageBaseName: 'runway',
         },
         {
-            title: "Get quotes from matched specialists",
-            description: "Using your project brief, AI gathers quotes from people who understand your requirements and timelines.",
-            cta: "Start with Workspace",
-            imageBaseName: "specialists"
-        }
+            title: 'Get quotes from matched specialists',
+            description:
+                'Using your project brief, AI gathers quotes from people who understand your requirements and timelines.',
+            cta: 'Start with Workspace',
+            imageBaseName: 'specialists',
+        },
     ],
 }: FeaturesSectionProps) {
-    const { resolvedTheme } = useTheme()
+    const { resolvedTheme } = useTheme();
 
     return (
         <div className="col-span-4 md:col-span-8 space-y-12 py-20">
@@ -55,7 +58,7 @@ export function FeaturesSection({
 
             {/* Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-                {features.map((feature) => (
+                {features.map(feature => (
                     <div key={feature.title} className="space-y-6">
                         <div className="aspect-square rounded-xl p-4 relative">
                             <DiagonalPattern
@@ -73,16 +76,14 @@ export function FeaturesSection({
                             <h3 className="font-heading text-xl font-medium tracking-tight lg:text-2xl">
                                 {feature.title}
                             </h3>
-                            <p className="text-muted-foreground">
+                            <p className="text-base text-muted-foreground">
                                 {feature.description}
                             </p>
-                            <ArrowLink to="/login">
-                                {feature.cta}
-                            </ArrowLink>
+                            <ArrowLink to="/login">{feature.cta}</ArrowLink>
                         </div>
                     </div>
                 ))}
             </div>
         </div>
-    )
+    );
 }

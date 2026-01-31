@@ -83,7 +83,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 ) : variant === 'link' ? (
                     <>
                         {icon}
-                        <span className="relative inline-block after:content-[''] after:absolute after:w-full after:h-0.5 after:left-0 after:bottom-0 after:bg-current after:origin-bottom-right after:scale-x-0 group-hover:after:origin-bottom-left group-hover:after:scale-x-100 after:transition-transform after:duration-300">
+                        <span className="relative inline-block after:content-[''] after:absolute after:w-full after:h-0.25 after:left-0 after:bottom-0 after:bg-current after:origin-bottom-right after:scale-x-0 group-hover:after:origin-bottom-left group-hover:after:scale-x-100 after:transition-transform after:duration-300">
                             {children}
                         </span>
                     </>

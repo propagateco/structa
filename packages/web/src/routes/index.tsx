@@ -41,7 +41,6 @@ function LandingPage() {
                     showBottomDivider={false}
                     showTopDiamonds={true}
                     showGrid={true}
-                    padding="none"
                 >
                     <div className="col-span-4 md:col-span-8">
                         {/* Video Section */}
@@ -60,7 +59,6 @@ function LandingPage() {
                     showTopDivider={false}
                     showBottomDivider={false}
                     showGrid={true}
-                    padding="none"
                 >
                     <StatsSection />
                 </TexturedSection>
@@ -72,7 +70,6 @@ function LandingPage() {
                     showTopDivider={false}
                     showBottomDivider={false}
                     showGrid={true}
-                    padding="none"
                 >
                     <FeaturesSection />
                 </TexturedSection>

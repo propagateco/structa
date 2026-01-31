@@ -20,7 +20,7 @@ export function Hero({
     title = 'Tools for the modern renovator.',
     description = 'Eliminate the guesswork AI-powered workspace that brings context, clarity, and confidence to every home renovation.',
     primaryCTA = { text: 'Start for free', to: '/login' },
-    secondaryCTA = { text: 'Download for mobile', to: '/login' },
+    secondaryCTA = { text: 'Login', to: '/login' },
 }: HeroProps) {
     return (
         <GridBackgroundSection
@@ -49,9 +49,10 @@ export function Hero({
                             size="lg"
                         >
                             {primaryCTA.text}
-                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Button>
                     </Link>
+                    {/* 
                     <Link to={secondaryCTA.to} className="w-full sm:w-auto">
                         <Button
                             variant="outline"
@@ -60,7 +61,8 @@ export function Hero({
                         >
                             {secondaryCTA.text}
                         </Button>
-                    </Link>
+                 </Link>
+                    */}
                 </div>
             </div>
         </GridBackgroundSection>
