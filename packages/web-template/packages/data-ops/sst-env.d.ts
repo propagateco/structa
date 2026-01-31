@@ -92,6 +92,14 @@ declare module "sst" {
       "sender": string
       "type": "sst.aws.Email"
     }
+    "PosthogHost": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "PosthogPublicKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "Stage": {
       "cookiePrefix": string
       "type": "sst.sst.Linkable"

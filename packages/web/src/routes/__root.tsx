@@ -11,6 +11,8 @@ import {
     ScriptOnce,
 } from '@tanstack/react-router';
 import appCss from '@/styles/app.css?url';
+import { PostHogProvider } from 'posthog-js/react';
+
 import { ThemeProvider } from '@/components/theme-provider';
 import { seo } from '@/utils/seo';
 
@@ -62,16 +64,26 @@ export const Route = createRootRoute({
     component: RootComponent,
 });
 
+const posthogOptions = {
+    api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+    defaults: '2025-11-30',
+} as const;
+
 function RootComponent() {
     const [queryClient] = React.useState(() => new QueryClient());
 
     return (
         <QueryClientProvider client={queryClient}>
-            <ThemeProvider defaultTheme="system">
-                <RootDocument>
-                    <Outlet />
-                </RootDocument>
-            </ThemeProvider>
+            <PostHogProvider
+                apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
+                options={posthogOptions}
+            >
+                <ThemeProvider defaultTheme="system">
+                    <RootDocument>
+                        <Outlet />
+                    </RootDocument>
+                </ThemeProvider>
+            </PostHogProvider>
         </QueryClientProvider>
     );
 }

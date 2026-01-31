@@ -5,6 +5,8 @@ export const secret = {
     NeonProjectId: new sst.Secret('NeonProjectId'),
     GoogleClientId: new sst.Secret('GoogleOAuthClientId'),
     GoogleClientSecret: new sst.Secret('GoogleOAuthClientSecret'),
+    PosthogPublicKey: new sst.Secret('PosthogPublicKey'),
+    PosthogHost: new sst.Secret('PosthogHost'),
     StripeSecretKey: new sst.Secret('StripeSecretKey'),
     StripePublishableKey: new sst.Secret('StripePublishableKey'),
     StripeClientId: new sst.Secret('StripeClientId'),

@@ -33,11 +33,13 @@ export const app = new sst.aws.TanStackStart('Web', {
         secret.BetterAuthSecret,
     ],
     environment: {
+        BETTER_AUTH_URL: Domain.properties.platform,
+        PLATFORM_URL: Domain.properties.platform,
+        REACT_APP_STRIPE_PUBLISHABLE_KEY: secret.StripePublishableKey.value,
+        VITE_PUBLIC_POSTHOG_KEY: secret.PosthogPublicKey.value,
+        VITE_PUBLIC_POSTHOG_HOST: secret.PosthogHost.value,
         VITE_API_URL: apiRouter.url,
         VITE_PLATFORM_URL: Domain.properties.platform,
-        PLATFORM_URL: Domain.properties.platform,
-        BETTER_AUTH_URL: Domain.properties.platform,
         VITE_COOKIE_PREFIX: Stage.properties.cookiePrefix,
-        REACT_APP_STRIPE_PUBLISHABLE_KEY: secret.StripePublishableKey.value,
     },
 });
