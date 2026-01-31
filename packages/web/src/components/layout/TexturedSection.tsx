@@ -35,7 +35,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
                 'relative w-full',
                 // Top horizontal line (full viewport width)
                 showTopDivider &&
-                    'before:absolute before:top-0 before:-left-[100vw] before:z-10 before:h-px before:w-[200vw] before:bg-ds-powder/50 dark:before:bg-ds-powder/[0.08]',
+                    'before:absolute before:top-0 before:inset-x-0 before:z-10 before:h-px before:w-full before:bg-ds-powder/50 dark:before:bg-ds-powder/[0.08]',
                 className
             )}
         >
@@ -84,7 +84,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
 
             {/* Bottom horizontal line (full viewport width) */}
             {showBottomDivider && (
-                <div className="absolute bottom-0 -left-[100vw] z-10 h-px w-[200vw] bg-ds-powder/50 dark:bg-ds-powder/[0.08]" />
+                <div className="absolute bottom-0 inset-x-0 z-10 h-px w-full bg-ds-powder/50 dark:bg-ds-powder/[0.08]" />
             )}
         </section>
     );

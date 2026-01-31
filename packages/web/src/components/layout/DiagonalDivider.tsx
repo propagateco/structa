@@ -22,9 +22,9 @@ export const DiagonalDivider: React.FC<DiagonalDividerProps> = ({
             className={cn(
                 'relative h-4 w-full',
                 // Top horizontal line (full viewport width)
-                'before:absolute before:top-0 before:-left-[100vw] before:z-10 before:h-px before:w-[200vw] before:bg-ds-powder/50 dark:before:bg-ds-powder/[0.08]',
+                'before:absolute before:top-0 before:inset-x-0 before:z-10 before:h-px before:w-full before:bg-ds-powder/50 dark:before:bg-ds-powder/[0.08]',
                 // Bottom horizontal line (full viewport width)
-                'after:absolute after:bottom-0 after:-left-[100vw] after:z-10 after:h-px after:w-[200vw] after:bg-ds-powder/50 dark:after:bg-ds-powder/[0.08]',
+                'after:absolute after:bottom-0 after:inset-x-0 after:z-10 after:h-px after:w-full after:bg-ds-powder/50 dark:after:bg-ds-powder/[0.08]',
                 className
             )}
         >
