@@ -50,9 +50,9 @@ export function StatsSection({
                     <h2 className="font-heading font-medium tracking-tight text-2xl lg:text-3xl text-text">
                         {title}
                     </h2>
-                    <h3 className="text-text-secondary text-lg max-w-3xl">
+                    <p className="text-lg text-text-secondary max-w-3xl">
                         {description}
-                    </h3>
+                    </p>
 
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-6">

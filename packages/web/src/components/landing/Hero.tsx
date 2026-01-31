@@ -18,7 +18,7 @@ export interface HeroProps {
 
 export function Hero({
     title = 'Tools for the modern renovator.',
-    description = 'Eliminate the guesswork from home renovation with an AI-powered digital workspace that brings context, clarity, and confidence to every project.',
+    description = 'Eliminate the guesswork AI-powered workspace that brings context, clarity, and confidence to every home renovation.',
     primaryCTA = { text: 'Start for free', to: '/login' },
     secondaryCTA = { text: 'Download for mobile', to: '/login' },
 }: HeroProps) {
@@ -37,7 +37,7 @@ export function Hero({
                 </h1>
 
                 {/* Hero Description */}
-                <p className="mx-auto max-w-2xl text-center text-text-secondary">
+                <p className="text-lg mx-auto max-w-2xl text-center text-text-secondary">
                     {description}
                 </p>
 

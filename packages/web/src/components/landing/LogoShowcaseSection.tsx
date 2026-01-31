@@ -9,7 +9,7 @@ export interface LogoShowcaseSectionProps {
 
 export function LogoShowcaseSection({
     title = 'Loved by renovators, designers, and trades',
-    description = "Structa's AI searches trusted platforms to gather quotes from specialists matched to your unique property type and project specification.",
+    description = 'Get quotes from specialists matched to your unique property type and project specification.',
     logos = [
         'TrustATrader',
         'MyBuilder',
@@ -29,9 +29,9 @@ export function LogoShowcaseSection({
                     <h2 className="text-left lg:text-left font-heading font-medium tracking-tight text-2xl lg:text-3xl text-text">
                         {title}
                     </h2>
-                    <h3 className="text-lg text-text-secondary text-left lg:text-left">
+                    <p className="text-lg text-text-secondary text-left lg:text-left">
                         {description}
-                    </h3>
+                    </p>
                 </div>
             </div>
             <LogoShowcase logos={logos} className="mx-auto w-full" />
