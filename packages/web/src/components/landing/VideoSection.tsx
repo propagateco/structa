@@ -1,14 +1,14 @@
 export interface VideoSectionProps {
-    videoSrc?: string
-    alt?: string
+    videoSrc?: string;
+    alt?: string;
 }
 
 export function VideoSection({
-    videoSrc = "/lovable-uploads/seerexample.mp4",
-    alt = "Structa AI in action",
+    videoSrc = '/lovable-uploads/seerexample.mp4',
+    alt = 'Structa AI in action',
 }: VideoSectionProps) {
     return (
-        <div className="relative -mt-36">
+        <div className="relative -mt-24 sm:-mt-36">
             <div className="relative w-full rounded-xl overflow-hidden">
                 <div className="aspect-[1.91/1]">
                     <video
@@ -24,5 +24,5 @@ export function VideoSection({
                 </div>
             </div>
         </div>
-    )
+    );
 }

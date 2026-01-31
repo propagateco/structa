@@ -1,18 +1,15 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Header } from '@/components/landing/Header'
-import { Hero } from '@/components/landing/Hero'
-import { VideoSection } from '@/components/landing/VideoSection'
-import { LogoShowcaseSection } from '@/components/landing/LogoShowcaseSection'
-import { StatsSection } from '@/components/landing/StatsSection'
-import { FeaturesSection } from '@/components/landing/FeaturesSection'
-import {
-    TexturedSection,
-    DiagonalDivider,
-} from '@/components/layout'
+import { createFileRoute } from '@tanstack/react-router';
+import { Header } from '@/components/landing/Header';
+import { Hero } from '@/components/landing/Hero';
+import { VideoSection } from '@/components/landing/VideoSection';
+import { LogoShowcaseSection } from '@/components/landing/LogoShowcaseSection';
+import { StatsSection } from '@/components/landing/StatsSection';
+import { FeaturesSection } from '@/components/landing/FeaturesSection';
+import { TexturedSection, DiagonalDivider } from '@/components/layout';
 
 export const Route = createFileRoute('/')({
     component: LandingPage,
-})
+});
 
 function LandingPage() {
     return (
@@ -46,7 +43,7 @@ function LandingPage() {
                     showGrid={true}
                     padding="none"
                 >
-                    <div className="col-span-4 md:col-span-8 space-y-8 py-8">
+                    <div className="col-span-4 md:col-span-8">
                         {/* Video Section */}
                         <VideoSection />
 
@@ -84,5 +81,5 @@ function LandingPage() {
                 <DiagonalDivider />
             </main>
         </div>
-    )
+    );
 }

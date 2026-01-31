@@ -30,32 +30,32 @@ export function Hero({
             showDiamonds={false}
             showGridBackground={true}
         >
-            <div className="col-span-4 sm:col-span-6 lg:col-span-8 space-y-6 py-8">
+            <div className="relative col-span-4 sm:col-span-6 lg:col-span-8 space-y-5 sm:space-y-6 py-8">
                 {/* Hero Title */}
                 <h1 className="text-text font-heading font-medium tracking-tight text-4xl lg:text-5xl text-center">
                     {title}
                 </h1>
 
                 {/* Hero Description */}
-                <p className="text-lg mx-auto max-w-2xl text-center text-text-secondary">
+                <p className="mx-auto max-w-2xl text-center text-text-secondary">
                     {description}
                 </p>
 
                 {/* CTA Buttons */}
-                <div className="flex flex-row items-center justify-center gap-4 pt-2 md:pt-3">
-                    <Link to={primaryCTA.to}>
+                <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 pt-2 md:pt-3">
+                    <Link to={primaryCTA.to} className="w-full sm:w-auto">
                         <Button
-                            className="inline-flex items-center justify-center group"
+                            className="w-full inline-flex items-center justify-center group"
                             size="lg"
                         >
                             {primaryCTA.text}
                             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Button>
                     </Link>
-                    <Link to={secondaryCTA.to}>
+                    <Link to={secondaryCTA.to} className="w-full sm:w-auto">
                         <Button
                             variant="outline"
-                            className="inline-flex items-center justify-center"
+                            className="w-full inline-flex items-center justify-center"
                             size="lg"
                         >
                             {secondaryCTA.text}

@@ -35,7 +35,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
     const paddingClasses = {
         none: '',
         sm: 'px-4 py-8',
-        md: 'px-4 py-12 sm:px-6 md:py-20',
+        md: 'px-4 py-8 sm:py-12 sm:px-6 md:py-20',
         lg: 'px-6 py-16 sm:px-8 md:py-24',
     };
 
