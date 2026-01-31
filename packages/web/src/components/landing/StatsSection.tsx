@@ -13,32 +13,32 @@ export interface StatsSectionProps {
 }
 
 export function StatsSection({
-    title = 'Your AI renovation partner',
-    description = 'Never feel lost again. Ask questions about your specific property, get instant answers from your surveys and documents, and catch expensive problems before they happen.',
+    title = 'Your property intelligence, secured in the EU',
+    description = 'AI that answers based on YOUR specific property—from surveys and floor plans to building regulations. Citations included, data protected, never trained on your personal data.',
     stats = [
         {
-            value: '500K+',
-            label: 'Lines of code',
+            value: 'EU Hosted & GDPR Compliant',
+            label: '',
             description:
-                'In-house developers leveraging 100+ years of experience & the latest AI coding agents = 14-day MVP.',
+                'Your property documents never leave the EU. Full data protection compliance for your renovation plans.',
         },
         {
-            value: '4M+',
-            label: 'Cold emails',
+            value: 'Property-Specific RAG',
+            label: '',
             description:
-                "We'll build & deploy your outbound systems to get your first customers, handling infrastructure, lead sourcing & everything in-between.",
+                'AI answers based on your surveys and floor plans, with source citations from your own documents.',
         },
         {
-            value: 'Infinite',
-            label: 'Revisions',
+            value: 'Zero Training on Your Data',
+            label: '',
             description:
-                "We're not a one-and-done agency. We'll keep building your MVP & improving your systems, and there's a refund-guarantee to be super-safe.",
+                'Your surveys and floor plans are isolated to your workspace. We use them to answer your questions, but never to train our AI models.',
         },
         {
-            value: '100%',
-            label: 'Code ownership',
+            value: 'UK Standards Knowledge',
+            label: '',
             description:
-                'Obviously. You own every single line of code & the outbound system we build you from scratch.',
+                'Knowledge of building regulations & property age hazards tailored to your specific home.',
         },
     ],
 }: StatsSectionProps) {
