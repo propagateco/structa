@@ -14,7 +14,7 @@ export interface StatsSectionProps {
 
 export function StatsSection({
     title = 'Your property intelligence, secured in the EU',
-    description = 'AI that answers based on YOUR specific property—from surveys and floor plans to building regulations. Citations included, data protected, never trained on your personal data.',
+    description = 'AI that answers based on your specific property—from surveys and floor plans to building regulations. Citations included, data protected, never trained on your personal data.',
     stats = [
         {
             value: 'EU Hosted & GDPR Compliant',
