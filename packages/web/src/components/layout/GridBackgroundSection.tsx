@@ -100,7 +100,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
                 )}
 
                 {/* Content Container - full width with centered content */}
-                <Container className="relative z-20">
+                <Container className="relative">
                     <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-0">
                         {children}
                     </div>
