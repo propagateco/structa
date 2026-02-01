@@ -322,3 +322,39 @@ Outputting COMPLETE to trigger PR creation
 - Labels: (none)
 - Waiting for CI checks...
 
+**Completed Tasks:**
+1. ✅ Created packages/web/src/utils/favicon.ts with updateFavicon(theme) function
+   - Handles 'light', 'dark', and 'system' themes
+   - Finds or creates favicon link element in DOM
+   - Updates favicon href based on theme
+
+2. ✅ Modified packages/web/src/routes/__root.tsx to add ScriptOnce for initial favicon
+   - Import updateFavicon utility
+   - Update ScriptOnce to call updateFavicon with detected theme
+   - Mirrors existing theme detection logic from theme script
+   - Prevents FOUC (flash of incorrect favicon) on initial page load
+
+3. ✅ Modified packages/web/src/components/theme-provider.tsx to track favicon changes
+   - Import updateFavicon utility
+   - Add useEffect to call updateFavicon when actualTheme changes
+   - Ensures favicon updates dynamically on theme switch
+
+**Files Changed:**
+- packages/web/src/utils/favicon.ts (NEW)
+- packages/web/src/routes/__root.tsx (MODIFIED)
+- packages/web/src/components/theme-provider.tsx (MODIFIED)
+
+**Verification:**
+- ✅ TypeScript typecheck passed
+- ✅ Tests passed (no test files)
+
+**Remaining Task:**
+- ⏳ Manual browser testing required (dev-browser agent unavailable due to ProviderModelNotFoundError)
+
+**Notes:**
+- Implementation follows the issue specification exactly
+- Both logo-light.svg and logo-dark.svg exist in packages/web/public/
+- ScriptOnce ensures correct favicon loads before React hydrates (no FOUC)
+- ThemeProvider useEffect ensures favicon updates when user switches themes
+
+
