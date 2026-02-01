@@ -242,3 +242,13 @@ Started: Thu Jan 22 05:57:13 PM UTC 2026
 - Components can be reused in future pages
 
 **Related**: Issue #11 - Phase 7 Complete (All Phases Done)
+
+## 2026-02-01T12:00:00Z: Issue #15 Started
+
+- Issue title: Fix Zod v4 validation error in login form - upgrade @hookform/resolvers
+- Branch: 15-fix-zod-v4-validation-error-in-login-form-upgrade-hookformresolvers-1
+[CURRENT_ISSUE] 15
+[CURRENT_BRANCH] 15-fix-zod-v4-validation-error-in-login-form-upgrade-hookformresolvers-1
+[STARTED] 2026-02-01T12:00:00Z
+
+---
