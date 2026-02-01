@@ -5,3 +5,15 @@
 [CURRENT_ISSUE] 15
 [CURRENT_BRANCH] 15-fix-zod-v4-validation-error-in-login-form-upgrade-hookformresolvers-1
 [STARTED] 2026-02-01 15:06:04 UTC
+
+## 2026-02-01 15:08:21 UTC: Issue #15 Complete
+
+- All tasks completed:
+  - Upgraded @hookform/resolvers from v4.1.3 to v5.2.2
+  - Changed form validation mode from 'onBlur' to 'onChange'
+- Files changed:
+  - packages/web/package.json (dependency upgrade)
+  - packages/web/src/components/auth/login-code-form.tsx (validation mode change)
+  - specs/progress.txt (progress tracking)
+- Outputting COMPLETE to trigger PR creation
+<promise>COMPLETE</promise>
