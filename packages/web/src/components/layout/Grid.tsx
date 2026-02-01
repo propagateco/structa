@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-type GridColCount = 1 | 2 | 3 | 4 | 6 | 8 | 12;
+export type GridColCount = 1 | 2 | 3 | 4 | 6 | 8 | 12;
 
 const GRID_COL_CLASSES: Record<GridColCount, string> = {
     1: 'grid-cols-1',

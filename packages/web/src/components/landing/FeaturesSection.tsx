@@ -34,7 +34,7 @@ export function FeaturesSection({
             imageBaseName: 'runway',
         },
         {
-            title: 'Get quotes from matched specialists',
+            title: 'Quotes from matched specialists',
             description:
                 'Using your project brief, AI gathers quotes from people who understand your requirements and timelines.',
             cta: 'Start with Workspace',
@@ -45,7 +45,7 @@ export function FeaturesSection({
     const { resolvedTheme } = useTheme();
 
     return (
-        <div className="col-span-4 md:col-span-8 space-y-12 py-20">
+        <div className="col-span-4 md:col-span-8 py-20">
             {/* Section Header */}
             <div className="text-center space-y-4">
                 <h2 className="font-heading font-medium tracking-tight text-2xl lg:text-3xl text-text">
@@ -57,9 +57,9 @@ export function FeaturesSection({
             </div>
 
             {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <div className="grid grid-cols-1 gap-12 md:gap-0 md:grid-cols-3 mt-16">
                 {features.map(feature => (
-                    <div key={feature.title} className="space-y-6">
+                    <div key={feature.title} className="space-y-4">
                         <div className="aspect-square rounded-xl p-4 relative">
                             <DiagonalPattern
                                 color={
@@ -72,7 +72,7 @@ export function FeaturesSection({
                                 className="w-full h-full object-cover relative z-10"
                             />
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-2 p-4">
                             <h3 className="font-heading text-xl font-medium tracking-tight lg:text-2xl">
                                 {feature.title}
                             </h3>

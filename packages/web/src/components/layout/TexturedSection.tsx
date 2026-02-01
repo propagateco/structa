@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { DiamondCorner } from './DiamondCorner';
 import { Container } from './Container';
 import { Grid } from './Grid';
+import type { GridColCount } from './Grid';
 
 interface TexturedSectionProps {
     children: React.ReactNode;
@@ -12,8 +13,16 @@ interface TexturedSectionProps {
     showTopDiamonds?: boolean;
     showBottomDiamonds?: boolean;
     showGrid?: boolean;
-    grainIntensity?: 'subtle' | 'light' | 'medium' | 'strong';
-    bgColor?: string;
+    /** Number of grid columns at base breakpoint (default: 2) */
+    cols?: GridColCount;
+    /** Number of grid columns at small breakpoint (≥640px) (default: 2) */
+    smCols?: GridColCount;
+    /** Number of grid columns at medium breakpoint (≥768px) (default: 2) */
+    mdCols?: GridColCount;
+    /** Number of grid columns at large breakpoint (≥1024px) (default: 4) */
+    lgCols?: GridColCount;
+    /** Number of grid columns at extra-large breakpoint (≥1280px) (falls back to lgCols if undefined) */
+    xlCols?: GridColCount;
 }
 
 /**
@@ -28,6 +37,11 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
     showTopDiamonds = false,
     showBottomDiamonds = false,
     showGrid = false,
+    cols = 2,
+    smCols = 2,
+    mdCols = 2,
+    lgCols = 4,
+    xlCols,
 }) => {
     return (
         <section
@@ -64,10 +78,11 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
                 <Container className="relative z-10">
                     <Grid
                         showGrid={showGrid}
-                        cols={2}
-                        smCols={2}
-                        mdCols={2}
-                        lgCols={4}
+                        cols={cols}
+                        smCols={smCols}
+                        mdCols={mdCols}
+                        lgCols={lgCols}
+                        xlCols={xlCols}
                     >
                         {children}
                     </Grid>

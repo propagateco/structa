@@ -25,7 +25,7 @@ for ((i=1; i<=$1; i++)); do
 Follow the instructions in specs/prompt.md for task breakdown, selection, and execution."
 
   # Check for completion signal in progress.txt
-  if grep -q "<promise>COMPLETE</promise>" specs/progress.txt; then
+  if grep -q "<promise>MERGED</promise>" specs/progress.txt; then
     COMPLETED=1
     break
   fi

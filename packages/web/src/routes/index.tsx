@@ -70,6 +70,10 @@ function LandingPage() {
                     showTopDivider={false}
                     showBottomDivider={false}
                     showGrid={true}
+                    cols={1}
+                    smCols={1}
+                    mdCols={3}
+                    lgCols={3}
                 >
                     <FeaturesSection />
                 </TexturedSection>

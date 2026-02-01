@@ -67,6 +67,10 @@ declare module "sst" {
       "type": "sst.aws.Function"
       "url": string
     }
+    "LoopsApiKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "NODE_TLS_REJECT_UNAUTHORIZED": {
       "type": "sst.sst.Secret"
       "value": string
