@@ -15,6 +15,7 @@ import { PostHogProvider } from 'posthog-js/react';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { seo } from '@/utils/seo';
+import { updateFavicon } from '@/utils/favicon';
 
 export const Route = createRootRoute({
     head: () => ({
@@ -93,8 +94,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <html lang="en" suppressHydrationWarning>
             <head>
                 <HeadContent />
-                <ScriptOnce
-                    children={`
+                <ScriptOnce>
+                    {`
             (function() {
               try {
                 const storedTheme = localStorage.getItem('structa-ui-theme') || 'system';
@@ -106,6 +107,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 } else {
                   html.classList.add(storedTheme);
                 }
+                // Update favicon based on theme
+                ${updateFavicon.toString()}
+                updateFavicon(storedTheme);
               } catch (e) {
                 // Fallback to system theme if localStorage fails
                 const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -113,7 +117,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               }
             })();
           `}
-                />
+                </ScriptOnce>
             </head>
             <body className="min-h-screen flex flex-col">
                 {children}
