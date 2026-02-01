@@ -8,6 +8,7 @@ import { db } from '@core/drizzle';
 import { AuthSchema } from '@core/auth';
 import { extractIPAddress, getLocationFromIP } from '@core/utils/geolocation';
 import { sendVerificationOTP } from '@backend/auth/email';
+import { createContactInLoops } from '@core/marketing';
 
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
@@ -94,6 +95,28 @@ export const auth = betterAuth({
                             country,
                         },
                     };
+                },
+            },
+        },
+        user: {
+            create: {
+                after: async (user) => {
+                    // NO plan field modification - keep as null (default behavior)
+                    // Sync to Loops using user.id for automatic deduplication
+                    const nameParts = (user.name || '').trim().split(' ');
+                    const firstName = nameParts[0] || '';
+                    const lastName = nameParts.slice(1).join(' ') || '';
+
+                    await createContactInLoops({
+                        email: user.email,
+                        userId: user.id, // Loops handles deduplication!
+                        firstName,
+                        lastName,
+                        properties: {
+                            source: 'resource-signup',
+                            createdAt: user.createdAt.toISOString(),
+                        },
+                    });
                 },
             },
         },
