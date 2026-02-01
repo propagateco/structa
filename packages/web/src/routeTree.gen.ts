@@ -9,15 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as LoginRouteImport } from './routes/_login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ResourcesSlugRouteImport } from './routes/resources.$slug'
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
 
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -31,6 +44,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesSlugRoute = ResourcesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ResourcesRoute,
 } as any)
 const LoginLoginIndexRoute = LoginLoginIndexRouteImport.update({
   id: '/login/',
@@ -61,6 +79,9 @@ const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/onboarding': typeof OnboardingRoute
+  '/resources': typeof ResourcesRouteWithChildren
+  '/resources/$slug': typeof ResourcesSlugRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -70,6 +91,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/onboarding': typeof OnboardingRoute
+  '/resources': typeof ResourcesRouteWithChildren
+  '/resources/$slug': typeof ResourcesSlugRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -81,6 +105,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_login': typeof LoginRouteWithChildren
   '/about': typeof AboutRoute
+  '/onboarding': typeof OnboardingRoute
+  '/resources': typeof ResourcesRouteWithChildren
+  '/resources/$slug': typeof ResourcesSlugRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -92,6 +119,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/onboarding'
+    | '/resources'
+    | '/resources/$slug'
     | '/app/settings'
     | '/login/code'
     | '/api/auth/$'
@@ -101,6 +131,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/onboarding'
+    | '/resources'
+    | '/resources/$slug'
     | '/app/settings'
     | '/login/code'
     | '/api/auth/$'
@@ -111,6 +144,9 @@ export interface FileRouteTypes {
     | '/'
     | '/_login'
     | '/about'
+    | '/onboarding'
+    | '/resources'
+    | '/resources/$slug'
     | '/_auth/app/settings'
     | '/_login/login/code'
     | '/api/auth/$'
@@ -122,6 +158,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRouteWithChildren
   AboutRoute: typeof AboutRoute
+  OnboardingRoute: typeof OnboardingRoute
+  ResourcesRoute: typeof ResourcesRouteWithChildren
   AuthAppSettingsRoute: typeof AuthAppSettingsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   AuthAppIndexRoute: typeof AuthAppIndexRoute
@@ -129,6 +167,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -149,6 +201,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/resources/$slug': {
+      id: '/resources/$slug'
+      path: '/$slug'
+      fullPath: '/resources/$slug'
+      preLoaderRoute: typeof ResourcesSlugRouteImport
+      parentRoute: typeof ResourcesRoute
     }
     '/_login/login/': {
       id: '/_login/login/'
@@ -200,10 +259,24 @@ const LoginRouteChildren: LoginRouteChildren = {
 
 const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 
+interface ResourcesRouteChildren {
+  ResourcesSlugRoute: typeof ResourcesSlugRoute
+}
+
+const ResourcesRouteChildren: ResourcesRouteChildren = {
+  ResourcesSlugRoute: ResourcesSlugRoute,
+}
+
+const ResourcesRouteWithChildren = ResourcesRoute._addFileChildren(
+  ResourcesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRouteWithChildren,
   AboutRoute: AboutRoute,
+  OnboardingRoute: OnboardingRoute,
+  ResourcesRoute: ResourcesRouteWithChildren,
   AuthAppSettingsRoute: AuthAppSettingsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   AuthAppIndexRoute: AuthAppIndexRoute,
