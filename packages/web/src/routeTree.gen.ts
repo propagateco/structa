@@ -9,46 +9,46 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ResourcesRouteImport } from './routes/resources'
-import { Route as OnboardingRouteImport } from './routes/onboarding'
-import { Route as AboutRouteImport } from './routes/about'
+import { Route as MarketingRouteImport } from './routes/_marketing'
 import { Route as LoginRouteImport } from './routes/_login'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ResourcesSlugRouteImport } from './routes/resources.$slug'
+import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
+import { Route as MarketingOnboardingRouteImport } from './routes/_marketing/onboarding'
+import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
+import { Route as MarketingResourcesIndexRouteImport } from './routes/_marketing/resources/index'
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as MarketingResourcesSlugRouteImport } from './routes/_marketing/resources/$slug'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
 
-const ResourcesRoute = ResourcesRouteImport.update({
-  id: '/resources',
-  path: '/resources',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OnboardingRoute = OnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const MarketingRoute = MarketingRouteImport.update({
+  id: '/_marketing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/_login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const MarketingIndexRoute = MarketingIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => MarketingRoute,
 } as any)
-const ResourcesSlugRoute = ResourcesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ResourcesRoute,
+const MarketingOnboardingRoute = MarketingOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingAboutRoute = MarketingAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingResourcesIndexRoute = MarketingResourcesIndexRouteImport.update({
+  id: '/resources/',
+  path: '/resources/',
+  getParentRoute: () => MarketingRoute,
 } as any)
 const LoginLoginIndexRoute = LoginLoginIndexRouteImport.update({
   id: '/login/',
@@ -65,6 +65,11 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketingResourcesSlugRoute = MarketingResourcesSlugRouteImport.update({
+  id: '/resources/$slug',
+  path: '/resources/$slug',
+  getParentRoute: () => MarketingRoute,
+} as any)
 const LoginLoginCodeRoute = LoginLoginCodeRouteImport.update({
   id: '/login/code',
   path: '/login/code',
@@ -77,42 +82,43 @@ const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/onboarding': typeof OnboardingRoute
-  '/resources': typeof ResourcesRouteWithChildren
-  '/resources/$slug': typeof ResourcesSlugRoute
+  '/': typeof MarketingIndexRoute
+  '/about': typeof MarketingAboutRoute
+  '/onboarding': typeof MarketingOnboardingRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
+  '/resources/$slug': typeof MarketingResourcesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app/': typeof AuthAppIndexRoute
   '/login/': typeof LoginLoginIndexRoute
+  '/resources/': typeof MarketingResourcesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/onboarding': typeof OnboardingRoute
-  '/resources': typeof ResourcesRouteWithChildren
-  '/resources/$slug': typeof ResourcesSlugRoute
+  '/': typeof MarketingIndexRoute
+  '/about': typeof MarketingAboutRoute
+  '/onboarding': typeof MarketingOnboardingRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
+  '/resources/$slug': typeof MarketingResourcesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app': typeof AuthAppIndexRoute
   '/login': typeof LoginLoginIndexRoute
+  '/resources': typeof MarketingResourcesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_login': typeof LoginRouteWithChildren
-  '/about': typeof AboutRoute
-  '/onboarding': typeof OnboardingRoute
-  '/resources': typeof ResourcesRouteWithChildren
-  '/resources/$slug': typeof ResourcesSlugRoute
+  '/_marketing': typeof MarketingRouteWithChildren
+  '/_marketing/about': typeof MarketingAboutRoute
+  '/_marketing/onboarding': typeof MarketingOnboardingRoute
+  '/_marketing/': typeof MarketingIndexRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
+  '/_marketing/resources/$slug': typeof MarketingResourcesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/app/': typeof AuthAppIndexRoute
   '/_login/login/': typeof LoginLoginIndexRoute
+  '/_marketing/resources/': typeof MarketingResourcesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,46 +126,44 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/onboarding'
-    | '/resources'
-    | '/resources/$slug'
     | '/app/settings'
     | '/login/code'
+    | '/resources/$slug'
     | '/api/auth/$'
     | '/app/'
     | '/login/'
+    | '/resources/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/onboarding'
-    | '/resources'
-    | '/resources/$slug'
     | '/app/settings'
     | '/login/code'
+    | '/resources/$slug'
     | '/api/auth/$'
     | '/app'
     | '/login'
+    | '/resources'
   id:
     | '__root__'
-    | '/'
     | '/_login'
-    | '/about'
-    | '/onboarding'
-    | '/resources'
-    | '/resources/$slug'
+    | '/_marketing'
+    | '/_marketing/about'
+    | '/_marketing/onboarding'
+    | '/_marketing/'
     | '/_auth/app/settings'
     | '/_login/login/code'
+    | '/_marketing/resources/$slug'
     | '/api/auth/$'
     | '/_auth/app/'
     | '/_login/login/'
+    | '/_marketing/resources/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRouteWithChildren
-  AboutRoute: typeof AboutRoute
-  OnboardingRoute: typeof OnboardingRoute
-  ResourcesRoute: typeof ResourcesRouteWithChildren
+  MarketingRoute: typeof MarketingRouteWithChildren
   AuthAppSettingsRoute: typeof AuthAppSettingsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   AuthAppIndexRoute: typeof AuthAppIndexRoute
@@ -167,25 +171,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/resources': {
-      id: '/resources'
-      path: '/resources'
-      fullPath: '/resources'
-      preLoaderRoute: typeof ResourcesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onboarding': {
-      id: '/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/_marketing': {
+      id: '/_marketing'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MarketingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_login': {
@@ -195,19 +185,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_marketing/': {
+      id: '/_marketing/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof MarketingRoute
     }
-    '/resources/$slug': {
-      id: '/resources/$slug'
-      path: '/$slug'
-      fullPath: '/resources/$slug'
-      preLoaderRoute: typeof ResourcesSlugRouteImport
-      parentRoute: typeof ResourcesRoute
+    '/_marketing/onboarding': {
+      id: '/_marketing/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof MarketingOnboardingRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/about': {
+      id: '/_marketing/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof MarketingAboutRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/resources/': {
+      id: '/_marketing/resources/'
+      path: '/resources'
+      fullPath: '/resources/'
+      preLoaderRoute: typeof MarketingResourcesIndexRouteImport
+      parentRoute: typeof MarketingRoute
     }
     '/_login/login/': {
       id: '/_login/login/'
@@ -229,6 +233,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_marketing/resources/$slug': {
+      id: '/_marketing/resources/$slug'
+      path: '/resources/$slug'
+      fullPath: '/resources/$slug'
+      preLoaderRoute: typeof MarketingResourcesSlugRouteImport
+      parentRoute: typeof MarketingRoute
     }
     '/_login/login/code': {
       id: '/_login/login/code'
@@ -259,24 +270,29 @@ const LoginRouteChildren: LoginRouteChildren = {
 
 const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 
-interface ResourcesRouteChildren {
-  ResourcesSlugRoute: typeof ResourcesSlugRoute
+interface MarketingRouteChildren {
+  MarketingAboutRoute: typeof MarketingAboutRoute
+  MarketingOnboardingRoute: typeof MarketingOnboardingRoute
+  MarketingIndexRoute: typeof MarketingIndexRoute
+  MarketingResourcesSlugRoute: typeof MarketingResourcesSlugRoute
+  MarketingResourcesIndexRoute: typeof MarketingResourcesIndexRoute
 }
 
-const ResourcesRouteChildren: ResourcesRouteChildren = {
-  ResourcesSlugRoute: ResourcesSlugRoute,
+const MarketingRouteChildren: MarketingRouteChildren = {
+  MarketingAboutRoute: MarketingAboutRoute,
+  MarketingOnboardingRoute: MarketingOnboardingRoute,
+  MarketingIndexRoute: MarketingIndexRoute,
+  MarketingResourcesSlugRoute: MarketingResourcesSlugRoute,
+  MarketingResourcesIndexRoute: MarketingResourcesIndexRoute,
 }
 
-const ResourcesRouteWithChildren = ResourcesRoute._addFileChildren(
-  ResourcesRouteChildren,
+const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
+  MarketingRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   LoginRoute: LoginRouteWithChildren,
-  AboutRoute: AboutRoute,
-  OnboardingRoute: OnboardingRoute,
-  ResourcesRoute: ResourcesRouteWithChildren,
+  MarketingRoute: MarketingRouteWithChildren,
   AuthAppSettingsRoute: AuthAppSettingsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   AuthAppIndexRoute: AuthAppIndexRoute,

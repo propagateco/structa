@@ -1,17 +1,21 @@
 import { createFileRoute } from '@tanstack/react-router';
 import React from 'react';
-import { auth } from '@/lib/auth';
+import { authClient } from '@/lib/auth-client';
+import { getPublicAuth } from '@/lib/auth-server';
 import { parseMarkdown, getPreviewContent } from '@/lib/blog-parser';
 import ReactMarkdown from 'react-markdown';
 import { Button } from '@/components/ui/button';
 import { Lock, ArrowRight } from 'lucide-react';
 
-export const Route = createFileRoute('/resources/$slug')({
-  component: ResourcePost,
-  loader: async ({ params }) => {
-    // For tracer bullet, return hardcoded data
-    // In production, this would read from /public/resources/{slug}.md
-    const post = parseMarkdown(`
+export const Route = createFileRoute('/_marketing/resources/$slug')({
+    beforeLoad: async () => {
+        // Fetch session on server side for SEO and initial render
+        return await getPublicAuth();
+    },
+    loader: async ({ params }) => {
+        // For tracer bullet, return hardcoded data
+        // In production, this would read from /public/resources/{slug}.md
+        const post = parseMarkdown(`
 ---
 title: "12-Week Renovation Checklist"
 slug: "renovation-checklist"
@@ -137,110 +141,108 @@ Congratulations! You've completed your 12-week renovation journey. With proper p
 Remember, every renovation is unique, so adapt this checklist to your specific needs and circumstances. Good luck with your project!
     `);
 
-    return { post };
-  },
+        return { post };
+    },
+    component: ResourcePost,
 });
 
 function ResourcePost() {
-  const { post } = Route.useLoaderData();
-  const navigate = Route.useNavigate();
-  const [session, setSession] = React.useState<any>(null);
+    const { post } = Route.useLoaderData();
+    const routeContext = Route.useRouteContext();
+    const serverSession = routeContext?.session || null;
+    const navigate = Route.useNavigate();
 
-  // Check auth state
-  React.useEffect(() => {
-    const checkAuth = async () => {
-      const sess = await auth.api.getSession();
-      setSession(sess);
-    };
-    checkAuth();
-  }, []);
+    // Use client-side session for reactive auth state
+    const { data: clientSession } = authClient.useSession();
+    const session = clientSession?.session || serverSession;
 
-  if (!post) {
-    return <div>Resource not found</div>;
-  }
+    if (!post) {
+        return <div>Resource not found</div>;
+    }
 
-  // Determine if user can see full content
-  // plan=null users can read full content (after signup)
-  // plan='pro' users can read full content (future upgrade)
-  const canReadFullContent = session && (!session.user.plan || session.user.plan === 'pro');
-  const isPreview = !canReadFullContent;
-  const contentToShow = isPreview
-    ? getPreviewContent(post.content, post.previewPercentage)
-    : post.content;
+    // Determine if user can see full content
+    const canReadFullContent = !!session;
+    const isPreview = !canReadFullContent;
+    const contentToShow = isPreview
+        ? getPreviewContent(post.content, post.previewPercentage)
+        : post.content;
 
-  return (
-    <article className="container mx-auto px-4 py-12 max-w-4xl">
-      {/* Header */}
-      <header className="mb-8 space-y-4">
-        {post.coverImage && (
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="w-full h-64 md:h-96 object-cover rounded-lg"
-          />
-        )}
+    return (
+        <article className="container mx-auto px-4 pt-28 max-w-4xl">
+            {/* Header */}
+            <header className="mb-8 space-y-4">
+                {post.coverImage && (
+                    <img
+                        src={post.coverImage}
+                        alt={post.title}
+                        className="w-full h-64 md:h-96 object-cover rounded-lg"
+                    />
+                )}
 
-        <h1 className="text-4xl md:text-5xl font-bold">
-          {post.title}
-        </h1>
+                <h1 className="text-4xl md:text-5xl font-bold">{post.title}</h1>
 
-        <div className="flex items-center gap-4 text-muted-foreground">
-          <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
-          {post.readTime && <span>· {post.readTime}</span>}
-          {isPreview && <Lock className="h-4 w-4" />}
-          <span className="px-2 py-1 text-xs bg-primary/10 text-primary rounded">
-            Members only
-          </span>
-        </div>
+                <div className="flex items-center gap-4 text-muted-foreground">
+                    <span>
+                        {new Date(post.publishedAt).toLocaleDateString()}
+                    </span>
+                    {post.readTime && <span>· {post.readTime}</span>}
+                    {isPreview && <Lock className="h-4 w-4" />}
+                    <span className="px-2 py-1 text-xs bg-primary/10 text-primary rounded">
+                        Members only
+                    </span>
+                </div>
 
-        <p className="text-xl text-muted-foreground">
-          {post.description}
-        </p>
-      </header>
+                <p className="text-xl text-muted-foreground">
+                    {post.description}
+                </p>
+            </header>
 
-      {/* Content */}
-      <div className="prose prose-lg max-w-none">
-        {isPreview ? (
-          <div className="space-y-6">
-            <ReactMarkdown>{contentToShow}</ReactMarkdown>
+            {/* Content */}
+            <div className="prose prose-lg max-w-none">
+                {isPreview ? (
+                    <div className="space-y-6">
+                        <ReactMarkdown>{contentToShow}</ReactMarkdown>
 
-            {/* Gated content prompt */}
-            <div className="my-12 p-8 bg-muted/50 border border-border rounded-lg text-center space-y-4">
-              <div className="w-16 h-16 mx-auto mb-4 text-primary">
-                <Lock className="w-full h-full" />
-              </div>
+                        {/* Gated content prompt */}
+                        <div className="my-12 p-8 bg-muted/50 border border-border rounded-lg text-center space-y-4">
+                            <div className="w-16 h-16 mx-auto mb-4 text-primary">
+                                <Lock className="w-full h-full" />
+                            </div>
 
-              <h2 className="text-2xl font-semibold">
-                Continue reading for free
-              </h2>
+                            <h2 className="text-2xl font-semibold">
+                                Continue reading for free
+                            </h2>
 
-              <p className="text-muted-foreground">
-                Sign up for a free account to read the full guide and get access to all renovation resources.
-              </p>
+                            <p className="text-muted-foreground">
+                                Sign up for a free account to read the full
+                                guide and get access to all renovation
+                                resources.
+                            </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  onClick={() => {
-                    navigate({
-                      to: '/login' as any,
-                    });
-                  }}
-                >
-                  Sign up to continue
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <Button
+                                    size="lg"
+                                    onClick={() => {
+                                        navigate({
+                                            to: '/login' as any,
+                                        });
+                                    }}
+                                >
+                                    Sign up to continue
+                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            </div>
 
-              <p className="text-sm text-muted-foreground">
-                No credit card required. Join thousands of homeowners planning smarter renovations.
-              </p>
+                            <p className="text-sm text-muted-foreground">
+                                No credit card required. Join thousands of
+                                homeowners planning smarter renovations.
+                            </p>
+                        </div>
+                    </div>
+                ) : (
+                    <ReactMarkdown>{contentToShow}</ReactMarkdown>
+                )}
             </div>
-          </div>
-        ) : (
-          <ReactMarkdown>{contentToShow}</ReactMarkdown>
-        )}
-      </div>
-    </article>
-  );
+        </article>
+    );
 }

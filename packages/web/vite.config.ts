@@ -16,6 +16,9 @@ export default defineConfig({
       ignored: ['**/routeTree.gen.ts', '**/routeTree.gen.ts.map', '.tanstack/**'],
     },
   },
+  ssr: {
+    noExternal: ['posthog-js', 'posthog-js/react'],
+  },
   plugins: [
     tailwindcss(),
     nitro(),
