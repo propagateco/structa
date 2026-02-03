@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import React, { useEffect, useState, useRef } from 'react';
+import { Link } from '@tanstack/react-router';
+import { useEffect, useState, useRef } from 'react';
 import { authClient } from '@/lib/auth-client';
 import { getPublicAuth } from '@/lib/auth-server';
 import { parseMarkdown, getPreviewContent } from '@/lib/blog-parser';
@@ -14,8 +15,12 @@ import {
     DrawerHeader,
     DrawerTitle,
 } from '@/components/ui/drawer';
-import { Lock, ArrowRight } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { TexturedSection, DiagonalDivider } from '@/components/layout';
+import { LoginAppleForm } from '@/components/auth/login-apple-form';
+import { LoginCodeForm } from '@/components/auth/login-code-form';
+import { LoginGoogleForm } from '@/components/auth/login-google-form';
+import { Divider } from '@/components/layout/divider';
 
 export const Route = createFileRoute('/_marketing/resources/$slug')({
     beforeLoad: async () => {
@@ -312,27 +317,40 @@ function ResourcePost() {
                                                 Sign up below to continue
                                                 reading for free
                                             </DrawerTitle>
-                                            <DrawerDescription className="text-base text-center">
-                                                Create a free account to read
-                                                the full guide and get access to
-                                                all renovation resources.
+                                            <DrawerDescription className="text-sm text-balance text-center">
+                                                By clicking continue, you agree
+                                                to our{' '}
+                                                <Link
+                                                    to="/terms-of-service"
+                                                    className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
+                                                >
+                                                    Terms of Service
+                                                </Link>{' '}
+                                                and{' '}
+                                                <Link
+                                                    to="/privacy-policy"
+                                                    className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
+                                                >
+                                                    Privacy Policy
+                                                </Link>
+                                                .
                                             </DrawerDescription>
                                         </DrawerHeader>
-                                        <DrawerFooter>
-                                            <Button
-                                                size="lg"
-                                                onClick={() => {
-                                                    navigate({
-                                                        to: '/login' as any,
-                                                    });
-                                                }}
-                                            >
-                                                Continue reading
-                                                <ArrowRight className="h-4 w-4" />
-                                            </Button>
+                                        <DrawerFooter className="mx-auto max-w-sm md:max-w-md">
+                                            <div className="flex flex-col gap-4 md:gap-5">
+                                                <div className="flex flex-col gap-3">
+                                                    <LoginGoogleForm />
+                                                    <LoginAppleForm />
+                                                </div>
+                                                <Divider text="Or" />
+                                                <LoginCodeForm />
+                                            </div>
                                             <DrawerClose asChild>
-                                                <Button variant="ghost">
-                                                    Cancel
+                                                <Button
+                                                    variant="ghost"
+                                                    className="text-text-muted my-3"
+                                                >
+                                                    Close
                                                 </Button>
                                             </DrawerClose>
                                         </DrawerFooter>

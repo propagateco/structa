@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as MarketingRouteImport } from './routes/_marketing'
 import { Route as LoginRouteImport } from './routes/_login'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
+import { Route as MarketingTermsOfServiceRouteImport } from './routes/_marketing/terms-of-service'
+import { Route as MarketingPrivacyPolicyRouteImport } from './routes/_marketing/privacy-policy'
 import { Route as MarketingOnboardingRouteImport } from './routes/_marketing/onboarding'
 import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
 import { Route as MarketingResourcesIndexRouteImport } from './routes/_marketing/resources/index'
@@ -33,6 +35,16 @@ const LoginRoute = LoginRouteImport.update({
 const MarketingIndexRoute = MarketingIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingTermsOfServiceRoute = MarketingTermsOfServiceRouteImport.update({
+  id: '/terms-of-service',
+  path: '/terms-of-service',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingPrivacyPolicyRoute = MarketingPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
   getParentRoute: () => MarketingRoute,
 } as any)
 const MarketingOnboardingRoute = MarketingOnboardingRouteImport.update({
@@ -85,6 +97,8 @@ export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/about': typeof MarketingAboutRoute
   '/onboarding': typeof MarketingOnboardingRoute
+  '/privacy-policy': typeof MarketingPrivacyPolicyRoute
+  '/terms-of-service': typeof MarketingTermsOfServiceRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/resources/$slug': typeof MarketingResourcesSlugRoute
@@ -97,6 +111,8 @@ export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/about': typeof MarketingAboutRoute
   '/onboarding': typeof MarketingOnboardingRoute
+  '/privacy-policy': typeof MarketingPrivacyPolicyRoute
+  '/terms-of-service': typeof MarketingTermsOfServiceRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/resources/$slug': typeof MarketingResourcesSlugRoute
@@ -111,6 +127,8 @@ export interface FileRoutesById {
   '/_marketing': typeof MarketingRouteWithChildren
   '/_marketing/about': typeof MarketingAboutRoute
   '/_marketing/onboarding': typeof MarketingOnboardingRoute
+  '/_marketing/privacy-policy': typeof MarketingPrivacyPolicyRoute
+  '/_marketing/terms-of-service': typeof MarketingTermsOfServiceRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
@@ -126,6 +144,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/onboarding'
+    | '/privacy-policy'
+    | '/terms-of-service'
     | '/app/settings'
     | '/login/code'
     | '/resources/$slug'
@@ -138,6 +158,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/onboarding'
+    | '/privacy-policy'
+    | '/terms-of-service'
     | '/app/settings'
     | '/login/code'
     | '/resources/$slug'
@@ -151,6 +173,8 @@ export interface FileRouteTypes {
     | '/_marketing'
     | '/_marketing/about'
     | '/_marketing/onboarding'
+    | '/_marketing/privacy-policy'
+    | '/_marketing/terms-of-service'
     | '/_marketing/'
     | '/_auth/app/settings'
     | '/_login/login/code'
@@ -190,6 +214,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/terms-of-service': {
+      id: '/_marketing/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof MarketingTermsOfServiceRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/privacy-policy': {
+      id: '/_marketing/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof MarketingPrivacyPolicyRouteImport
       parentRoute: typeof MarketingRoute
     }
     '/_marketing/onboarding': {
@@ -273,6 +311,8 @@ const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 interface MarketingRouteChildren {
   MarketingAboutRoute: typeof MarketingAboutRoute
   MarketingOnboardingRoute: typeof MarketingOnboardingRoute
+  MarketingPrivacyPolicyRoute: typeof MarketingPrivacyPolicyRoute
+  MarketingTermsOfServiceRoute: typeof MarketingTermsOfServiceRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
   MarketingResourcesSlugRoute: typeof MarketingResourcesSlugRoute
   MarketingResourcesIndexRoute: typeof MarketingResourcesIndexRoute
@@ -281,6 +321,8 @@ interface MarketingRouteChildren {
 const MarketingRouteChildren: MarketingRouteChildren = {
   MarketingAboutRoute: MarketingAboutRoute,
   MarketingOnboardingRoute: MarketingOnboardingRoute,
+  MarketingPrivacyPolicyRoute: MarketingPrivacyPolicyRoute,
+  MarketingTermsOfServiceRoute: MarketingTermsOfServiceRoute,
   MarketingIndexRoute: MarketingIndexRoute,
   MarketingResourcesSlugRoute: MarketingResourcesSlugRoute,
   MarketingResourcesIndexRoute: MarketingResourcesIndexRoute,
