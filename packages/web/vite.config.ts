@@ -19,6 +19,10 @@ export default defineConfig({
   ssr: {
     noExternal: ['posthog-js', 'posthog-js/react'],
   },
+  optimizeDeps: {
+    // Pre-bundle gray-matter with Buffer polyfill support
+    include: ['gray-matter'],
+  },
   plugins: [
     tailwindcss(),
     nitro(),

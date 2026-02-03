@@ -1,11 +1,21 @@
 import { createFileRoute } from '@tanstack/react-router';
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { authClient } from '@/lib/auth-client';
 import { getPublicAuth } from '@/lib/auth-server';
 import { parseMarkdown, getPreviewContent } from '@/lib/blog-parser';
 import ReactMarkdown from 'react-markdown';
 import { Button } from '@/components/ui/button';
+import {
+    Drawer,
+    DrawerClose,
+    GatedDrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+} from '@/components/ui/drawer';
 import { Lock, ArrowRight } from 'lucide-react';
+import { TexturedSection, DiagonalDivider } from '@/components/layout';
 
 export const Route = createFileRoute('/_marketing/resources/$slug')({
     beforeLoad: async () => {
@@ -23,7 +33,7 @@ description: "A comprehensive week-by-week guide to planning your home renovatio
 author: "Structa Team"
 publishedAt: "2026-01-31"
 readTime: "8 min read"
-previewPercentage: 30
+previewPercentage: 60
 coverImage: "/resources/images/renovation-checklist-cover.jpg"
 seoTitle: "12-Week Home Renovation Checklist | Structa"
 seoDescription: "Free downloadable checklist to guide you through every stage of your renovation project. Week-by-week timeline included."
@@ -156,93 +166,185 @@ function ResourcePost() {
     const { data: clientSession } = authClient.useSession();
     const session = clientSession?.session || serverSession;
 
+    // Drawer state
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const drawerTriggeredRef = useRef(false);
+    const previewEndRef = useRef<HTMLDivElement>(null);
+
+    // Log when drawer state changes
+    useEffect(() => {
+        console.log('Drawer state changed:', drawerOpen);
+    }, [drawerOpen]);
+
+    // Determine if user can see full content
+    const canReadFullContent = !!session;
+    const isPreview = !canReadFullContent && post;
+    const contentToShow =
+        isPreview && post
+            ? getPreviewContent(post.content, post.previewPercentage)
+            : post?.content || '';
+
+    // Scroll to trigger drawer when reaching the preview end
+    useEffect(() => {
+        if (!isPreview || drawerTriggeredRef.current) return;
+
+        const handleScroll = () => {
+            if (drawerTriggeredRef.current) return;
+
+            const element = previewEndRef.current;
+
+            if (element) {
+                const rect = element.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                const scrollY = window.scrollY;
+
+                console.log(
+                    'Scroll event - scrollY:',
+                    scrollY,
+                    'element rect:',
+                    rect
+                );
+
+                // Check if the element is at least partially visible and near the bottom
+                const isVisible = rect.bottom > 0 && rect.top < viewportHeight;
+
+                // Trigger when the element's bottom is within the bottom half of viewport
+                const isNearBottom =
+                    rect.bottom > viewportHeight * 0.3 &&
+                    rect.bottom < viewportHeight;
+
+                if (isVisible && isNearBottom) {
+                    console.log(
+                        'Triggering drawer - rect.bottom:',
+                        rect.bottom,
+                        'viewportHeight:',
+                        viewportHeight
+                    );
+                    drawerTriggeredRef.current = true;
+                    setDrawerOpen(true);
+                }
+            }
+        };
+
+        // Check immediately on mount in case user is already scrolled
+        handleScroll();
+
+        // Also set up a timeout to trigger after a short delay if scroll doesn't work
+        const fallbackTimeout = setTimeout(() => {
+            if (!drawerTriggeredRef.current) {
+                console.log('Fallback timeout triggered');
+                drawerTriggeredRef.current = true;
+                setDrawerOpen(true);
+            }
+        }, 3000); // 3 seconds fallback
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(fallbackTimeout);
+        };
+    }, [isPreview]);
+
     if (!post) {
         return <div>Resource not found</div>;
     }
 
-    // Determine if user can see full content
-    const canReadFullContent = !!session;
-    const isPreview = !canReadFullContent;
-    const contentToShow = isPreview
-        ? getPreviewContent(post.content, post.previewPercentage)
-        : post.content;
-
     return (
-        <article className="container mx-auto px-4 pt-28 max-w-4xl">
-            {/* Header */}
-            <header className="mb-8 space-y-4">
-                {post.coverImage && (
-                    <img
-                        src={post.coverImage}
-                        alt={post.title}
-                        className="w-full h-64 md:h-96 object-cover rounded-lg"
-                    />
-                )}
+        <TexturedSection
+            showTopDivider={false}
+            showBottomDivider={false}
+            showTopDiamonds={true}
+            showGrid={false}
+        >
+            <div className="col-span-2 md:col-span-8">
+                {/* Header */}
+                <header className="my-12 space-y-6">
+                    {post.coverImage && (
+                        <img
+                            src={post.coverImage}
+                            alt={post.title}
+                            className="w-full h-64 md:h-96 object-cover rounded-lg"
+                        />
+                    )}
 
-                <h1 className="text-4xl md:text-5xl font-bold">{post.title}</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold">
+                        {post.title}
+                    </h1>
 
-                <div className="flex items-center gap-4 text-muted-foreground">
-                    <span>
-                        {new Date(post.publishedAt).toLocaleDateString()}
-                    </span>
-                    {post.readTime && <span>· {post.readTime}</span>}
-                    {isPreview && <Lock className="h-4 w-4" />}
-                    <span className="px-2 py-1 text-xs bg-primary/10 text-primary rounded">
-                        Members only
-                    </span>
-                </div>
-
-                <p className="text-xl text-muted-foreground">
-                    {post.description}
-                </p>
-            </header>
-
-            {/* Content */}
-            <div className="prose prose-lg max-w-none">
-                {isPreview ? (
-                    <div className="space-y-6">
-                        <ReactMarkdown>{contentToShow}</ReactMarkdown>
-
-                        {/* Gated content prompt */}
-                        <div className="my-12 p-8 bg-muted/50 border border-border rounded-lg text-center space-y-4">
-                            <div className="w-16 h-16 mx-auto mb-4 text-primary">
-                                <Lock className="w-full h-full" />
-                            </div>
-
-                            <h2 className="text-2xl font-semibold">
-                                Continue reading for free
-                            </h2>
-
-                            <p className="text-muted-foreground">
-                                Sign up for a free account to read the full
-                                guide and get access to all renovation
-                                resources.
-                            </p>
-
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <Button
-                                    size="lg"
-                                    onClick={() => {
-                                        navigate({
-                                            to: '/login' as any,
-                                        });
-                                    }}
-                                >
-                                    Sign up to continue
-                                    <ArrowRight className="ml-2 h-4 w-4" />
-                                </Button>
-                            </div>
-
-                            <p className="text-sm text-muted-foreground">
-                                No credit card required. Join thousands of
-                                homeowners planning smarter renovations.
-                            </p>
-                        </div>
+                    <div className="flex items-center gap-4 text-muted-foreground">
+                        <span>
+                            {new Date(post.publishedAt).toLocaleDateString()}
+                        </span>
+                        {post.readTime && <span>· {post.readTime}</span>}
+                        {isPreview && <Lock className="h-4 w-4" />}
+                        <span className="px-2 py-1 text-xs bg-primary/10 text-primary rounded">
+                            Members only
+                        </span>
                     </div>
-                ) : (
-                    <ReactMarkdown>{contentToShow}</ReactMarkdown>
-                )}
+
+                    <p className="text-xl text-muted-foreground">
+                        {post.description}
+                    </p>
+                </header>
+
+                {/* Content */}
+                <div className="prose prose-lg max-w-none">
+                    {isPreview ? (
+                        <div className="space-y-6">
+                            <ReactMarkdown>{contentToShow}</ReactMarkdown>
+
+                            {/* Invisible ref element to mark the end of preview */}
+                            <div
+                                ref={previewEndRef}
+                                className="h-4 border-t-2 border-dashed border-primary/20"
+                            />
+
+                            {/* Drawer that triggers on scroll */}
+                            <Drawer
+                                // open={drawerOpen}
+                                open={true}
+                                onOpenChange={setDrawerOpen}
+                            >
+                                <GatedDrawerContent>
+                                    <div className="px-lg mx-auto max-w-md md:max-w-xl">
+                                        <DrawerHeader className="space-y-3">
+                                            <DrawerTitle className="font-heading font-light text-4xl text-center">
+                                                Sign up below to continue
+                                                reading for free
+                                            </DrawerTitle>
+                                            <DrawerDescription className="text-base text-center">
+                                                Create a free account to read
+                                                the full guide and get access to
+                                                all renovation resources.
+                                            </DrawerDescription>
+                                        </DrawerHeader>
+                                        <DrawerFooter>
+                                            <Button
+                                                size="lg"
+                                                onClick={() => {
+                                                    navigate({
+                                                        to: '/login' as any,
+                                                    });
+                                                }}
+                                            >
+                                                Continue reading
+                                                <ArrowRight className="h-4 w-4" />
+                                            </Button>
+                                            <DrawerClose asChild>
+                                                <Button variant="ghost">
+                                                    Cancel
+                                                </Button>
+                                            </DrawerClose>
+                                        </DrawerFooter>
+                                    </div>
+                                </GatedDrawerContent>
+                            </Drawer>
+                        </div>
+                    ) : (
+                        <ReactMarkdown>{contentToShow}</ReactMarkdown>
+                    )}
+                </div>
             </div>
-        </article>
+        </TexturedSection>
     );
 }

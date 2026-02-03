@@ -1,4 +1,7 @@
 /// <reference types="vite/client" />
+// Import Buffer polyfill first to ensure gray-matter works in browser during HMR
+import '@/lib/buffer-polyfill';
+
 import * as React from 'react';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

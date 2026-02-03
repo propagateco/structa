@@ -29,7 +29,9 @@ function LayoutComponent() {
                     />
                 </div>
 
-                <Outlet />
+                <main className="flex-1 pt-14 mx-3 sm:mx-4 md:mx-8 border-x border-ds-powder/50 dark:border-ds-powder/[0.08] relative z-10">
+                    <Outlet />
+                </main>
             </div>
         </>
     );

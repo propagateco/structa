@@ -1,3 +1,6 @@
+// Import Buffer polyfill first (before any other imports that might use it)
+import './buffer-polyfill';
+
 import matter from 'gray-matter';
 
 export interface BlogPost {
@@ -29,22 +32,36 @@ export interface BlogPostPreview {
  * Parse a markdown file and extract front matter
  */
 export function parseMarkdown(markdownContent: string): BlogPost {
-  const { data, content } = matter(markdownContent);
+  try {
+    const { data, content } = matter(markdownContent);
 
-  return {
-    title: data.title || 'Untitled',
-    slug: data.slug || '',
-    description: data.description || '',
-    author: data.author,
-    publishedAt: data.publishedAt || new Date().toISOString(),
-    readTime: data.readTime,
-    previewPercentage: data.previewPercentage || 30, // Default to 30%
-    coverImage: data.coverImage,
-    seoTitle: data.seoTitle,
-    seoDescription: data.seoDescription,
-    tags: data.tags || [],
-    content,
-  };
+    return {
+      title: data.title || 'Untitled',
+      slug: data.slug || '',
+      description: data.description || '',
+      author: data.author,
+      publishedAt: data.publishedAt || new Date().toISOString(),
+      readTime: data.readTime,
+      previewPercentage: data.previewPercentage || 30, // Default to 30%
+      coverImage: data.coverImage,
+      seoTitle: data.seoTitle,
+      seoDescription: data.seoDescription,
+      tags: data.tags || [],
+      content,
+    };
+  } catch (error) {
+    // Fallback if gray-matter fails (e.g., during HMR in browser)
+    console.error('Failed to parse markdown:', error);
+    return {
+      title: 'Untitled',
+      slug: '',
+      description: '',
+      publishedAt: new Date().toISOString(),
+      previewPercentage: 30,
+      tags: [],
+      content: markdownContent,
+    };
+  }
 }
 
 /**
