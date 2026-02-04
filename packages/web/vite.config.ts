@@ -4,6 +4,7 @@ import tsConfigPaths from 'vite-tsconfig-paths'
 import viteReact from '@vitejs/plugin-react'
 import { nitro } from 'nitro/vite'
 import tailwindcss from '@tailwindcss/vite'
+import contentCollections from '@content-collections/vite'
 
 export default defineConfig({
   server: {
@@ -32,6 +33,7 @@ export default defineConfig({
     }),
     tanstackStart(),
     viteReact(),
+    contentCollections(),
   ],
   nitro: {
     preset: 'aws-lambda',

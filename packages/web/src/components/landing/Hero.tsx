@@ -17,8 +17,10 @@ export interface HeroProps {
 }
 
 export function Hero({
-    title = 'Tools for the modern renovator.',
-    description = 'Eliminate the guesswork AI-powered workspace that brings context, clarity, and confidence to every home renovation.',
+    title = 'Confident renovation decisions in minutes, not months',
+    description = 'An AI assistant that understands your property and guides your renovation. Live budget tracking, visual floor plans, and tradesperson matching in one intelligent workspace.',
+
+    // description = 'Eliminate the guesswork AI-powered workspace that brings context, clarity, and confidence to every home renovation.',
     primaryCTA = { text: 'Start for free', to: '/login' },
     secondaryCTA = { text: 'Login', to: '/login' },
 }: HeroProps) {
@@ -30,7 +32,7 @@ export function Hero({
             showDiamonds={false}
             showGridBackground={true}
         >
-            <div className="relative col-span-4 sm:col-span-6 lg:col-span-8 space-y-5 sm:space-y-6 py-8">
+            <div className="mx-auto max-w-xl md:max-w-2xl relative col-span-4 sm:col-span-6 lg:col-span-8 space-y-5 sm:space-y-6 py-8">
                 {/* Hero Title */}
                 <h1 className="text-text font-heading font-medium tracking-tight text-4xl lg:text-5xl text-center">
                     {title}

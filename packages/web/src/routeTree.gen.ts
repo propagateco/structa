@@ -16,11 +16,11 @@ import { Route as MarketingTermsOfServiceRouteImport } from './routes/_marketing
 import { Route as MarketingPrivacyPolicyRouteImport } from './routes/_marketing/privacy-policy'
 import { Route as MarketingOnboardingRouteImport } from './routes/_marketing/onboarding'
 import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
-import { Route as MarketingResourcesIndexRouteImport } from './routes/_marketing/resources/index'
+import { Route as MarketingBlogIndexRouteImport } from './routes/_marketing/blog/index'
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as MarketingResourcesSlugRouteImport } from './routes/_marketing/resources/$slug'
+import { Route as MarketingBlogSlugRouteImport } from './routes/_marketing/blog/$slug'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
 
@@ -57,9 +57,9 @@ const MarketingAboutRoute = MarketingAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => MarketingRoute,
 } as any)
-const MarketingResourcesIndexRoute = MarketingResourcesIndexRouteImport.update({
-  id: '/resources/',
-  path: '/resources/',
+const MarketingBlogIndexRoute = MarketingBlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
   getParentRoute: () => MarketingRoute,
 } as any)
 const LoginLoginIndexRoute = LoginLoginIndexRouteImport.update({
@@ -77,9 +77,9 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MarketingResourcesSlugRoute = MarketingResourcesSlugRouteImport.update({
-  id: '/resources/$slug',
-  path: '/resources/$slug',
+const MarketingBlogSlugRoute = MarketingBlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
   getParentRoute: () => MarketingRoute,
 } as any)
 const LoginLoginCodeRoute = LoginLoginCodeRouteImport.update({
@@ -101,11 +101,11 @@ export interface FileRoutesByFullPath {
   '/terms-of-service': typeof MarketingTermsOfServiceRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
-  '/resources/$slug': typeof MarketingResourcesSlugRoute
+  '/blog/$slug': typeof MarketingBlogSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app/': typeof AuthAppIndexRoute
   '/login/': typeof LoginLoginIndexRoute
-  '/resources/': typeof MarketingResourcesIndexRoute
+  '/blog/': typeof MarketingBlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
@@ -115,11 +115,11 @@ export interface FileRoutesByTo {
   '/terms-of-service': typeof MarketingTermsOfServiceRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
-  '/resources/$slug': typeof MarketingResourcesSlugRoute
+  '/blog/$slug': typeof MarketingBlogSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app': typeof AuthAppIndexRoute
   '/login': typeof LoginLoginIndexRoute
-  '/resources': typeof MarketingResourcesIndexRoute
+  '/blog': typeof MarketingBlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -132,11 +132,11 @@ export interface FileRoutesById {
   '/_marketing/': typeof MarketingIndexRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
-  '/_marketing/resources/$slug': typeof MarketingResourcesSlugRoute
+  '/_marketing/blog/$slug': typeof MarketingBlogSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/app/': typeof AuthAppIndexRoute
   '/_login/login/': typeof LoginLoginIndexRoute
-  '/_marketing/resources/': typeof MarketingResourcesIndexRoute
+  '/_marketing/blog/': typeof MarketingBlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -148,11 +148,11 @@ export interface FileRouteTypes {
     | '/terms-of-service'
     | '/app/settings'
     | '/login/code'
-    | '/resources/$slug'
+    | '/blog/$slug'
     | '/api/auth/$'
     | '/app/'
     | '/login/'
-    | '/resources/'
+    | '/blog/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -162,11 +162,11 @@ export interface FileRouteTypes {
     | '/terms-of-service'
     | '/app/settings'
     | '/login/code'
-    | '/resources/$slug'
+    | '/blog/$slug'
     | '/api/auth/$'
     | '/app'
     | '/login'
-    | '/resources'
+    | '/blog'
   id:
     | '__root__'
     | '/_login'
@@ -178,11 +178,11 @@ export interface FileRouteTypes {
     | '/_marketing/'
     | '/_auth/app/settings'
     | '/_login/login/code'
-    | '/_marketing/resources/$slug'
+    | '/_marketing/blog/$slug'
     | '/api/auth/$'
     | '/_auth/app/'
     | '/_login/login/'
-    | '/_marketing/resources/'
+    | '/_marketing/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,11 +244,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingAboutRouteImport
       parentRoute: typeof MarketingRoute
     }
-    '/_marketing/resources/': {
-      id: '/_marketing/resources/'
-      path: '/resources'
-      fullPath: '/resources/'
-      preLoaderRoute: typeof MarketingResourcesIndexRouteImport
+    '/_marketing/blog/': {
+      id: '/_marketing/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof MarketingBlogIndexRouteImport
       parentRoute: typeof MarketingRoute
     }
     '/_login/login/': {
@@ -272,11 +272,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_marketing/resources/$slug': {
-      id: '/_marketing/resources/$slug'
-      path: '/resources/$slug'
-      fullPath: '/resources/$slug'
-      preLoaderRoute: typeof MarketingResourcesSlugRouteImport
+    '/_marketing/blog/$slug': {
+      id: '/_marketing/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof MarketingBlogSlugRouteImport
       parentRoute: typeof MarketingRoute
     }
     '/_login/login/code': {
@@ -314,8 +314,8 @@ interface MarketingRouteChildren {
   MarketingPrivacyPolicyRoute: typeof MarketingPrivacyPolicyRoute
   MarketingTermsOfServiceRoute: typeof MarketingTermsOfServiceRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
-  MarketingResourcesSlugRoute: typeof MarketingResourcesSlugRoute
-  MarketingResourcesIndexRoute: typeof MarketingResourcesIndexRoute
+  MarketingBlogSlugRoute: typeof MarketingBlogSlugRoute
+  MarketingBlogIndexRoute: typeof MarketingBlogIndexRoute
 }
 
 const MarketingRouteChildren: MarketingRouteChildren = {
@@ -324,8 +324,8 @@ const MarketingRouteChildren: MarketingRouteChildren = {
   MarketingPrivacyPolicyRoute: MarketingPrivacyPolicyRoute,
   MarketingTermsOfServiceRoute: MarketingTermsOfServiceRoute,
   MarketingIndexRoute: MarketingIndexRoute,
-  MarketingResourcesSlugRoute: MarketingResourcesSlugRoute,
-  MarketingResourcesIndexRoute: MarketingResourcesIndexRoute,
+  MarketingBlogSlugRoute: MarketingBlogSlugRoute,
+  MarketingBlogIndexRoute: MarketingBlogIndexRoute,
 }
 
 const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
