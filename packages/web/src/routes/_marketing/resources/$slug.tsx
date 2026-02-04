@@ -173,12 +173,18 @@ function ResourcePost() {
 
     // Drawer state
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const drawerTriggeredRef = useRef(false);
     const previewEndRef = useRef<HTMLDivElement>(null);
+    const justClosedRef = useRef(false);
+    const hasOpenedRef = useRef(false); // Track if drawer has been opened at least once
 
-    // Log when drawer state changes
+    // Track when drawer is manually closed (only after it has been opened once)
     useEffect(() => {
-        console.log('Drawer state changed:', drawerOpen);
+        if (drawerOpen) {
+            hasOpenedRef.current = true;
+        } else if (hasOpenedRef.current) {
+            // Only mark as "just closed" if it was opened before
+            justClosedRef.current = true;
+        }
     }, [drawerOpen]);
 
     // Determine if user can see full content
@@ -191,64 +197,53 @@ function ResourcePost() {
 
     // Scroll to trigger drawer when reaching the preview end
     useEffect(() => {
-        if (!isPreview || drawerTriggeredRef.current) return;
+        if (!isPreview) return;
 
         const handleScroll = () => {
-            if (drawerTriggeredRef.current) return;
-
             const element = previewEndRef.current;
+            if (!element || drawerOpen) return;
 
-            if (element) {
-                const rect = element.getBoundingClientRect();
-                const viewportHeight = window.innerHeight;
-                const scrollY = window.scrollY;
+            const rect = element.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
 
-                console.log(
-                    'Scroll event - scrollY:',
-                    scrollY,
-                    'element rect:',
-                    rect
-                );
+            // Simple trigger: element is in the viewport
+            const isInViewport = rect.top < viewportHeight && rect.bottom > 0;
 
-                // Check if the element is at least partially visible and near the bottom
-                const isVisible = rect.bottom > 0 && rect.top < viewportHeight;
+            if (isInViewport) {
+                // Check if user just closed it - don't re-open immediately
+                if (justClosedRef.current) {
+                    // Reset if user has scrolled away from the trigger point
+                    const isAboveViewport = rect.bottom < 0;
+                    const isBelowViewport = rect.top > viewportHeight;
 
-                // Trigger when the element's bottom is within the bottom half of viewport
-                const isNearBottom =
-                    rect.bottom > viewportHeight * 0.3 &&
-                    rect.bottom < viewportHeight;
-
-                if (isVisible && isNearBottom) {
-                    console.log(
-                        'Triggering drawer - rect.bottom:',
-                        rect.bottom,
-                        'viewportHeight:',
-                        viewportHeight
-                    );
-                    drawerTriggeredRef.current = true;
-                    setDrawerOpen(true);
+                    if (isAboveViewport || isBelowViewport) {
+                        justClosedRef.current = false;
+                    }
+                    return; // Don't re-open yet
                 }
+
+                console.log('Triggering drawer - preview end is visible');
+                setDrawerOpen(true);
             }
         };
 
         // Check immediately on mount in case user is already scrolled
         handleScroll();
 
-        // Also set up a timeout to trigger after a short delay if scroll doesn't work
+        // Set up a timeout to trigger after 30 seconds if scroll doesn't work
         const fallbackTimeout = setTimeout(() => {
-            if (!drawerTriggeredRef.current) {
-                console.log('Fallback timeout triggered');
-                drawerTriggeredRef.current = true;
+            if (!drawerOpen) {
+                console.log('Fallback timeout triggered after 30s');
                 setDrawerOpen(true);
             }
-        }, 3000); // 3 seconds fallback
+        }, 30000); // 30 seconds fallback
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => {
             window.removeEventListener('scroll', handleScroll);
             clearTimeout(fallbackTimeout);
         };
-    }, [isPreview]);
+    }, [isPreview, drawerOpen]);
 
     if (!post) {
         return <div>Resource not found</div>;
@@ -306,8 +301,7 @@ function ResourcePost() {
 
                             {/* Drawer that triggers on scroll */}
                             <Drawer
-                                // open={drawerOpen}
-                                open={true}
+                                open={drawerOpen}
                                 onOpenChange={setDrawerOpen}
                             >
                                 <GatedDrawerContent>
