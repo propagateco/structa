@@ -1,5 +1,5 @@
-import { Hono } from 'hono';
+import { Hono } from "hono";
 
-export const HealthRoute = new Hono().get('/', async c => {
-    return c.json({ message: 'Structa api is healthy' });
+export const HealthRoute = new Hono().get("/", async (c) => {
+	return c.json({ message: "Structa api is healthy" });
 });

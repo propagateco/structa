@@ -8,7 +8,6 @@ export default [
     "publishedAt": "2026-01-31",
     "readTime": "25 min read",
     "previewPercentage": 30,
-    "coverImage": "/resources/images/renovation-checklist-cover.jpg",
     "seoTitle": "12-Week Home Renovation Checklist | Structa",
     "seoDescription": "Free downloadable checklist to guide you through every stage of your renovation project. Week-by-week timeline included.",
     "tags": [
