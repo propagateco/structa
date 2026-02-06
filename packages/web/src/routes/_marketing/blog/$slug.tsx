@@ -1,6 +1,6 @@
 import { allPosts } from '.content-collections/generated';
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
-import { Lock } from 'lucide-react';
+import { Lock, Sparkle, ArrowRight } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { LoginAppleForm } from '@/components/auth/login-apple-form';
 import { LoginCodeForm } from '@/components/auth/login-code-form';
@@ -9,7 +9,7 @@ import { TexturedSection } from '@/components/layout';
 import { Divider } from '@/components/layout/divider';
 import { Markdown } from '@/components/Markdown';
 import { Button } from '@/components/ui/button';
-import { TexturedDiv } from '@/components/layout';
+import { TexturedDiv, TexturedFadingDiv } from '@/components/layout';
 import {
     Drawer,
     DrawerClose,
@@ -243,27 +243,54 @@ function BlogPost() {
                                 ref={ctaSectionRef}
                                 className="absolute w-full bottom-0 left-0"
                             >
-                                <TexturedDiv className="h-96 bg-gradient-to-t from-background via-background/50 to-transparent"></TexturedDiv>
+                                <TexturedFadingDiv className="h-54 bg-gradient-to-t from-background via-background/80 to-transparent"></TexturedFadingDiv>
                                 <TexturedDiv className="text-center space-y-4 bg-background pt-8 pb-20">
-                                    <div className="px-lg mx-auto max-w-md md:max-w-xl mb-6">
-                                        <h3 className="font-heading font-light text-4xl text-center mb-6">
+                                    <div className="px-lg mx-auto max-w-md md:max-w-xl mb-6 space-y-6">
+                                        <h3 className="font-heading font-light text-4xl text-center">
                                             Sign up below to continue reading
                                             for free
                                         </h3>
-                                        <p className="text-sm text-balance text-center text-text-muted">
+                                        <p className="text-sm text-balance text-center">
                                             The rest of this article is
                                             available with a free membership,
                                             which come with a host of benefits:
-                                            LIST BENEFITS
                                         </p>
+                                        <ul className="flex flex-col mx-20 text-sm gap-4">
+                                            <li className="flex flex-row items-center gap-2">
+                                                <Sparkle className="size-4 text-ds-apricot fill-ds-apricot " />
+                                                Read all member-only articles on
+                                                Structa
+                                            </li>
+                                            <li className="flex flex-row items-center gap-2">
+                                                <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
+                                                Early access to digital tools to
+                                                plan your renovation
+                                            </li>
+
+                                            <li className="flex flex-row items-center gap-2">
+                                                <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
+                                                Improve you DIY and home
+                                                improvement skills
+                                            </li>
+
+                                            <li className="flex flex-row items-center gap-2">
+                                                <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
+                                                Access to our private Discord
+                                                community of home renovators
+                                            </li>
+                                        </ul>
                                     </div>
                                     <Drawer
                                         open={drawerOpen}
                                         onOpenChange={setDrawerOpen}
                                     >
                                         <DrawerTrigger asChild>
-                                            <Button size="lg" className="mt-2">
+                                            <Button
+                                                size="lg"
+                                                className="mt-2 group"
+                                            >
                                                 Continue reading
+                                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                                             </Button>
                                         </DrawerTrigger>
                                         <GatedDrawerContent>

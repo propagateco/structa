@@ -29,3 +29,27 @@ export const TexturedDiv: React.FC<TexturedDivProps> = ({
         </div>
     );
 };
+
+export const TexturedFadingDiv: React.FC<TexturedDivProps> = ({
+    className,
+    children,
+    ...props
+}) => {
+    return (
+        <div className={cn('relative', className)} {...props}>
+            {/* Noise texture overlay - absolute positioned, pointer-events-none */}
+            <div
+                className={
+                    'pointer-events-none [z-index:0] absolute inset-0 bg-[size:180px] bg-repeat opacity-[0.035] dark:opacity-[0.012]'
+                }
+                style={{
+                    backgroundImage: `url('/noise.png')`,
+                    maskImage:
+                        'linear-gradient(to top, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%)',
+                }}
+            />
+            {/* Content - z-index ensures it sits above the noise texture */}
+            {children && <div className="relative z-10">{children}</div>}
+        </div>
+    );
+};
