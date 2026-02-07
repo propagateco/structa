@@ -1,7 +1,7 @@
 # Markdown-Driven Content Migration
 
 ## Executive Summary
-Migrate markdown rendering to TanStack Start's recommended `content-collections` approach with build-time processing, preserve existing preview/gating behavior, serve at `/blog/$slug` routes, and replace old `/resources/$slug` routes.
+Migrate markdown rendering to TanStack Start's recommended `content-collections` approach with build-time processing, preserve existing preview/gating behavior, serve at `/guides/$slug` routes, and replace old `/resources/$slug` routes.
 
 ---
 
@@ -20,15 +20,15 @@ npm install unified remark-parse remark-gfm remark-rehype rehype-raw rehype-slug
 
 ## Phase 2: Move Files & Create Structure
 
-### Task 2.1: Create Blog Directory
-- **Create**: `packages/web/src/blog/`
+### Task 2.1: Create guides Directory
+- **Create**: `packages/web/src/guides/`
 
 ### Task 2.2: Move Markdown Files
-- **Move**: `packages/web/public/resources/renovation-checklist.md` → `packages/web/src/blog/renovation-checklist.md`
+- **Move**: `packages/web/public/resources/renovation-checklist.md` → `packages/web/src/guides/renovation-checklist.md`
 
-**Note**: If there are other markdown files in `/public/resources/`, move all of them to `/src/blog/`.
+**Note**: If there are other markdown files in `/public/resources/`, move all of them to `/src/guides/`.
 
-**Verification**: `ls -la /home/hking/dev/structa/packages/web/src/blog/` shows markdown files.
+**Verification**: `ls -la /home/hking/dev/structa/packages/web/src/guides/` shows markdown files.
 
 ---
 
@@ -46,9 +46,9 @@ function extractFrontMatter(content: string) {
   return { data, body }
 }
 
-const blogPosts = defineCollection({
+const guidesPosts = defineCollection({
   name: 'posts',
-  directory: './src/blog',
+  directory: './src/guides',
   include: '*.md',
   schema: (z) => ({
     title: z.string(),
@@ -76,7 +76,7 @@ const blogPosts = defineCollection({
 })
 
 export default defineConfig({
-  collections: [blogPosts],
+  collections: [guidesPosts],
 })
 ```
 
@@ -181,7 +181,7 @@ export function getPreviewContent(content: string, percentage: number): string {
 }
 ```
 
-**Note**: This replaces existing `blog-parser.ts` functionality with enhanced processing.
+**Note**: This replaces existing `guides-parser.ts` functionality with enhanced processing.
 
 ---
 
@@ -245,10 +245,10 @@ export function Markdown({ content, className }: MarkdownProps) {
 
 ---
 
-## Phase 6: Create Blog Routes
+## Phase 6: Create guides Routes
 
-### Task 6.1: Create Blog Index Route
-**Create**: `packages/web/src/routes/_marketing/blog/index.tsx`
+### Task 6.1: Create guides Index Route
+**Create**: `packages/web/src/routes/_marketing/guides/index.tsx`
 
 ```typescript
 import { createFileRoute } from '@tanstack/react-router'
@@ -256,11 +256,11 @@ import { allPosts } from 'content-collections'
 import { Link } from '@tanstack/react-router'
 import { TexturedSection } from '@/components/layout'
 
-export const Route = createFileRoute('/_marketing/blog/')({
-  component: BlogIndex,
+export const Route = createFileRoute('/_marketing/guides/')({
+  component: guidesIndex,
 })
 
-function BlogIndex() {
+function guidesIndex() {
   const sortedPosts = allPosts.sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
   )
@@ -273,14 +273,14 @@ function BlogIndex() {
       showGrid={false}
     >
       <div className="col-span-2 md:col-span-8">
-        <h1 className="text-4xl md:text-5xl font-bold mb-8">Blog</h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-8">guides</h1>
 
         {sortedPosts.length === 0 ? (
           <p className="text-muted-foreground">No posts yet.</p>
         ) : (
           sortedPosts.map((post) => (
             <article key={post.slug} className="mb-8 pb-8 border-b">
-              <Link to="/blog/$slug" params={{ slug: post.slug }}>
+              <Link to="/guides/$slug" params={{ slug: post.slug }}>
                 <h2 className="text-2xl font-semibold hover:underline">
                   {post.title}
                 </h2>
@@ -301,8 +301,8 @@ function BlogIndex() {
 }
 ```
 
-### Task 6.2: Create Blog Post Route
-**Create**: `packages/web/src/routes/_marketing/blog/$slug.tsx`
+### Task 6.2: Create guides Post Route
+**Create**: `packages/web/src/routes/_marketing/guides/$slug.tsx`
 
 **Import all existing components**:
 ```typescript
@@ -333,7 +333,7 @@ import { Divider } from '@/components/layout/divider'
 
 **Route definition**:
 ```typescript
-export const Route = createFileRoute('/_marketing/blog/$slug')({
+export const Route = createFileRoute('/_marketing/guides/$slug')({
     beforeLoad: async () => {
         return await getPublicAuth();
     },
@@ -344,13 +344,13 @@ export const Route = createFileRoute('/_marketing/blog/$slug')({
         }
         return { post };
     },
-    component: BlogPost,
+    component: guidesPost,
 });
 ```
 
 **Component** (preserving exact gating behavior):
 ```typescript
-function BlogPost() {
+function guidesPost() {
     const { post } = Route.useLoaderData();
     const routeContext = Route.useRouteContext();
     const serverSession = routeContext?.session || null;
@@ -541,7 +541,7 @@ function BlogPost() {
 **Delete**: `packages/web/src/routes/_marketing/resources/$slug.tsx`
 
 ### Task 7.2: Clean Up Old Parser (Optional)
-**Delete**: `packages/web/src/lib/blog-parser.ts` (or keep as reference)
+**Delete**: `packages/web/src/lib/guides-parser.ts` (or keep as reference)
 
 ### Task 7.3: Uninstall Old Package (Optional)
 ```bash
@@ -572,8 +572,8 @@ npm run build
 ```bash
 npm run dev
 ```
-- Access `/blog` - verify index page loads
-- Access `/blog/renovation-checklist` - verify post loads
+- Access `/guides` - verify index page loads
+- Access `/guides/renovation-checklist` - verify post loads
 - Test all markdown features: headings, links, images, lists, code blocks
 
 ### Task 8.4: Gating Behavior Test
@@ -602,32 +602,32 @@ npm run dev
 1. `packages/web/content-collections.ts`
 2. `packages/web/src/utils/markdown.ts`
 3. `packages/web/src/components/Markdown.tsx`
-4. `packages/web/src/routes/_marketing/blog/index.tsx`
-5. `packages/web/src/routes/_marketing/blog/$slug.tsx`
+4. `packages/web/src/routes/_marketing/guides/index.tsx`
+5. `packages/web/src/routes/_marketing/guides/$slug.tsx`
 
 ### Files Modified:
 1. `packages/web/vite.config.ts` - added `contentCollections()` plugin
 2. `packages/web/package.json` - added dependencies
 
 ### Files Moved:
-1. `packages/web/public/resources/*.md` → `packages/web/src/blog/*.md`
+1. `packages/web/public/resources/*.md` → `packages/web/src/guides/*.md`
 
 ### Files Deleted:
 1. `packages/web/src/routes/_marketing/resources/$slug.tsx`
-2. Optionally: `packages/web/src/lib/blog-parser.ts`
+2. Optionally: `packages/web/src/lib/guides-parser.ts`
 
 ---
 
 ## Verification Checklist
 
 - [ ] Dependencies installed successfully
-- [ ] Markdown files moved to `src/blog/`
+- [ ] Markdown files moved to `src/guides/`
 - [ ] `content-collections.ts` created
 - [ ] Vite config updated
 - [ ] Markdown processor utility created
 - [ ] Markdown component created
-- [ ] Blog index route created and functional
-- [ ] Blog post route created and functional
+- [ ] guides index route created and functional
+- [ ] guides post route created and functional
 - [ ] Gating behavior preserved and working
 - [ ] Old routes removed
 - [ ] Build completes without errors
@@ -642,7 +642,7 @@ If issues arise, revert by:
 1. Delete `packages/web/content-collections.ts`
 2. Delete `packages/web/src/utils/markdown.ts`
 3. Delete `packages/web/src/components/Markdown.tsx`
-4. Delete `packages/web/src/routes/_marketing/blog/` directory
+4. Delete `packages/web/src/routes/_marketing/guides/` directory
 5. Restore `packages/web/src/routes/_marketing/resources/$slug.tsx` from git
 6. Remove `contentCollections()` from `vite.config.ts`
 7. Move markdown files back to `public/resources/`

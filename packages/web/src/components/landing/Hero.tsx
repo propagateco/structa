@@ -30,7 +30,7 @@ export function Hero({
     primaryCTA = { text: 'get started', to: '/login' },
     secondaryCTA = {
         text: 'our latest renovation guide',
-        to: '/blog/renovation-checklist',
+        to: '/guides/renovation-checklist',
     },
 }: HeroProps) {
     return (

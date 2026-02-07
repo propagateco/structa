@@ -50,7 +50,7 @@ export const Header = () => {
                 </div>
 
                 <div className="flex flex-row items-center justify-center gap-0">
-                    <Link to="/blog">
+                    <Link to="/guides">
                         <Button
                             className="inline-flex items-center justify-center group"
                             variant={'ghost'}

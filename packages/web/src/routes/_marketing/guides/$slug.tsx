@@ -24,7 +24,7 @@ import { authClient } from '@/lib/auth-client';
 import { getPublicAuth } from '@/lib/auth-server';
 import { getPreviewContent } from '@/utils/markdown';
 
-export const Route = createFileRoute('/_marketing/blog/$slug')({
+export const Route = createFileRoute('/_marketing/guides/$slug')({
     beforeLoad: async () => {
         return await getPublicAuth();
     },
@@ -205,7 +205,7 @@ function BlogPost() {
             showGrid={false}
         >
             <div className="col-span-2 md:col-span-8">
-                <header className="my-12 space-y-6">
+                <header className="my-12 md:my-24 space-y-6">
                     {post.coverImage && (
                         <img
                             src={post.coverImage}

@@ -20,7 +20,7 @@ function OnboardingPage() {
           </p>
 
           <Link
-            to="/blog"
+            to="/guides"
             className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
           >
             Browse Resources

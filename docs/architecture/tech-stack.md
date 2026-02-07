@@ -46,7 +46,7 @@ see [../ARCHITECTURE.md](../ARCHITECTURE.md).
 | **Zod** | Schema validation & type inference | [zod.dev](https://zod.dev) |
 | **Electric SQL** | Local-first PostgreSQL sync | [electric-sql.com/docs/](https://electric-sql.com/docs/) |
 | **Yjs** | CRDT documents for floor plans | [docs.yjs.dev](https://docs.yjs.dev) |
-| **Durable Streams** | Document storage & real-time broadcast | [Blog](https://electric-sql.com/blog/2025/12/09/announcing-durable-streams) • [Source](https://github.com/durable-streams/durable-streams) |
+| **Durable Streams** | Document storage & real-time broadcast | [guides](https://electric-sql.com/guides/2025/12/09/announcing-durable-streams) • [Source](https://github.com/durable-streams/durable-streams) |
 
 ---
 

@@ -185,19 +185,19 @@ Showcase
 
 [
 
-Blog
+guides
 
 
 
-](/blog)
+](/guides)
 
 [
 
-Blog
+guides
 
 
 
-](/blog)
+](/guides)
 
 [
 

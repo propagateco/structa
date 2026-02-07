@@ -145,7 +145,7 @@ This directory contains source code from open-source CAD kernels for reference w
 
 **Why it's useful**:
 
-- Written by a single developer with excellent blog posts explaining decisions
+- Written by a single developer with excellent guides posts explaining decisions
 - Very readable, well-documented code
 - Similar "from scratch" approach to SolidType
 - Modern type system patterns that translate well to TypeScript

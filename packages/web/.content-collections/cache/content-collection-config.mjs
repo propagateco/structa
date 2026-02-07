@@ -8,7 +8,7 @@ function extractFrontMatter(content) {
 }
 var blogPosts = defineCollection({
   name: "posts",
-  directory: "./src/blog",
+  directory: "./src/blog/",
   include: "*.md",
   schema: z.object({
     title: z.string(),

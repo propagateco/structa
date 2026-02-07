@@ -69,7 +69,7 @@ useEffect(() => {
 ## How to Debug
 
 1. **Open browser console** (F12 → Console tab)
-2. **Navigate to blog post** as non-authenticated user
+2. **Navigate to guides post** as non-authenticated user
 3. **Scroll to bottom** where "Continue reading" CTA appears
 4. **Watch console logs**:
 
