@@ -6,7 +6,7 @@ import { GridLoaderIcon, TwoBodyLoaderIcon } from '@/components/ui/loader';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    'group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm font-medium hover:cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 transition-colors duration-300 ease-in-out',
+    'group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-none font-medium hover:cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 transition-colors duration-300 ease-in-out',
     {
         variants: {
             variant: {
@@ -20,6 +20,8 @@ const buttonVariants = cva(
                 secondary:
                     'bg-secondary text-foreground hover:bg-foreground hover:text-primary-foreground',
                 ghost: 'hover:bg-ds-powder/40 hover:text-primary dark:hover:bg-primary/20 dark:hover:text-ds-powder',
+                ghostPrimary:
+                    'hover:bg-ds-powder/40 hover:text-primary dark:hover:bg-primary/20 dark:hover:text-ds-powder',
                 link: 'text-primary hover:text-primary transition-colors duration-200',
             },
             size: {

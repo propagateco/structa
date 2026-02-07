@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Link } from '@tanstack/react-router';
 import { DiamondCorner, Container } from '@/components/layout';
+import { ArrowRight } from 'lucide-react';
 import { useTheme } from '@/components/theme-provider';
 import { authClient } from '@/lib/auth-client';
 
@@ -53,11 +54,12 @@ export const Header = () => {
                         <>
                             <Link to="/app">
                                 <Button
-                                    variant="outline"
+                                    variant="ghostPrimary"
                                     className="inline-flex items-center justify-center group"
-                                    size={'sm'}
+                                    size={'default'}
                                 >
-                                    Dashboard
+                                    Open App
+                                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Button>
                             </Link>
 
