@@ -26,8 +26,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
 
     const variantClasses = {
         hero: 'bg-gradient-to-t from-ds-azure/20 dark:from-ds-azure/20 pt-12 pb-30 sm:pt-0 sm:pb-0 sm:py-12 md:pb-36',
-        content:
-            'bg-gradient-to-b from-ds-azure/10 via-ds-azure/40 to-ds-azure/[0.03] dark:from-ds-azure/[0.03] dark:via-transparent dark:to-ds-azure/10',
+        content: 'bg-gradient-to-t from-ds-azure/10 dark:from-ds-azure/10',
     };
 
     return (
@@ -50,7 +49,7 @@ export const GridBackgroundSection: React.FC<GridBackgroundSectionProps> = ({
             {/* Main content area with gradient background */}
             <div
                 className={cn(
-                    'relative py-12 md:py-20',
+                    'relative py-12 md:py-14',
                     variantClasses[variant]
                 )}
             >

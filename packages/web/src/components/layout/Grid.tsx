@@ -108,7 +108,7 @@ export const Grid: React.FC<GridProps> = ({
     const gridId = React.useId();
 
     const gridClasses = cn(
-        'grid gap-0 relative',
+        'grid gap-0 relative h-full',
         GRID_COL_CLASSES[cols],
         SM_GRID_COL_CLASSES[smCols],
         mdCols && MD_GRID_COL_CLASSES[mdCols],

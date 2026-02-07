@@ -21,7 +21,7 @@ export const Container: React.FC<ContainerProps> = ({
     return (
         <div
             className={cn(
-                'mx-auto px-3 sm:px-4 md:px-8',
+                'h-full mx-auto px-3 sm:px-4 md:px-8',
                 sizeClasses[size],
                 className
             )}

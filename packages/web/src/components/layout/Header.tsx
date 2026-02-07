@@ -49,51 +49,36 @@ export const Header = () => {
                     </a>
                 </div>
 
-                <div className="flex flex-row items-center justify-center gap-2">
-                    {user ? (
-                        <>
-                            <Link to="/app">
-                                <Button
-                                    variant="ghostPrimary"
-                                    className="inline-flex items-center justify-center group"
-                                    size={'default'}
-                                >
-                                    Open App
-                                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                </Button>
-                            </Link>
-
-                            <Avatar className="size-8 cursor-pointer">
-                                <AvatarImage
-                                    src={user?.image || undefined}
-                                    alt={user?.name || 'User'}
-                                />
-                                <AvatarFallback className="text-sm">
-                                    {fallbackText}
-                                </AvatarFallback>
-                            </Avatar>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/login">
-                                <Button
-                                    className="inline-flex items-center justify-center group"
-                                    size={'sm'}
-                                >
-                                    Sign Up
-                                </Button>
-                            </Link>
-
-                            <Link to="/login">
-                                <Button
-                                    className="inline-flex items-center justify-center group"
-                                    variant="ghost"
-                                    size={'sm'}
-                                >
-                                    Login
-                                </Button>
-                            </Link>
-                        </>
+                <div className="flex flex-row items-center justify-center gap-0">
+                    <Link to="/blog">
+                        <Button
+                            className="inline-flex items-center justify-center group"
+                            variant={'ghost'}
+                            size={'default'}
+                        >
+                            guides
+                        </Button>
+                    </Link>
+                    <Link to="/app">
+                        <Button
+                            variant="ghostPrimary"
+                            className="inline-flex items-center justify-center group"
+                            size={'default'}
+                        >
+                            start
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </Button>
+                    </Link>
+                    {user && (
+                        <Avatar className="size-8 ml-2 cursor-pointer">
+                            <AvatarImage
+                                src={user?.image || undefined}
+                                alt={user?.name || 'User'}
+                            />
+                            <AvatarFallback className="text-sm">
+                                {fallbackText}
+                            </AvatarFallback>
+                        </Avatar>
                     )}
                 </div>
             </Container>

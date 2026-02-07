@@ -1,10 +1,12 @@
-import { ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
+import { ArrowRight } from 'lucide-react';
 import { GridBackgroundSection } from '@/components/layout';
+import { Button } from '@/components/ui/button';
 
 export interface HeroProps {
     title?: string;
+    titleTop?: string;
+    titleBottom?: string;
     description?: string;
     primaryCTA?: {
         text: string;
@@ -17,13 +19,17 @@ export interface HeroProps {
 }
 
 export function Hero({
-    title = 'Confident renovation decisions in minutes, not months',
-    description = 'An AI assistant that understands your property and guides your renovation. Live budget tracking, visual floor plans, and tradesperson matching in one intelligent workspace.',
+    title = 'Confident renovation decisions\n in minutes, not months',
+    titleTop = 'Renovate with confidence.',
+    // titleBottom = ' AI guidance for your property, the home for renovation planning.',
+    // titleBottom = 'AI that understands your property and guides every decision.',
+    titleBottom = 'AI-powered workspace for UK homeowners.',
+    description = 'AI assistant that understands your property and guides your renovation. Budget tracking, floor planning, and tradesperson matching in one intelligent workspace.',
 
     // description = 'Eliminate the guesswork AI-powered workspace that brings context, clarity, and confidence to every home renovation.',
-    primaryCTA = { text: 'Get started', to: '/login' },
+    primaryCTA = { text: 'get started', to: '/login' },
     secondaryCTA = {
-        text: 'Our latest renovation guide',
+        text: 'our latest renovation guide',
         to: '/blog/renovation-checklist',
     },
 }: HeroProps) {
@@ -35,19 +41,16 @@ export function Hero({
             showDiamonds={false}
             showGridBackground={true}
         >
-            <div className="mx-auto max-w-xl md:max-w-2xl relative col-span-4 sm:col-span-6 lg:col-span-8 space-y-5 sm:space-y-6 pt-10 pb-16">
+            <div className="max-w-xl md:max-w-2xl relative col-span-4 sm:col-span-6 lg:col-span-8 space-y-5 sm:space-y-6 pt-10 pb-16">
                 {/* Hero Title */}
-                <h1 className="text-text font-heading font-medium tracking-tight text-4xl lg:text-5xl text-center">
-                    {title}
+                <h1 className="font-heading text-text font-normal tracking-tight text-4xl lg:text-5xl text-left whitespace-pre-line">
+                    {titleTop}
+                    <br />
+                    <span className="text-text-secondary">{titleBottom}</span>
                 </h1>
 
-                {/* Hero Description */}
-                <p className="text-lg mx-auto max-w-2xl text-center text-text-secondary">
-                    {description}
-                </p>
-
                 {/* CTA Buttons */}
-                <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 pt-2 md:pt-3">
+                <div className="w-full flex flex-col sm:flex-row items-center justify-start gap-2 sm:gap-4 pt-2 md:pt-3">
                     <Link to={primaryCTA.to} className="w-full sm:w-auto">
                         <Button
                             className="w-full inline-flex items-center justify-center"

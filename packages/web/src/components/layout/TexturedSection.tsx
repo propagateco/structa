@@ -1,9 +1,9 @@
-import React from 'react';
+import type React from 'react';
 import { cn } from '@/lib/utils';
-import { DiamondCorner } from './DiamondCorner';
 import { Container } from './Container';
-import { Grid } from './Grid';
+import { DiamondCorner } from './DiamondCorner';
 import type { GridColCount } from './Grid';
+import { Grid } from './Grid';
 
 interface TexturedSectionProps {
     children: React.ReactNode;
@@ -62,7 +62,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
             )}
 
             {/* Main Content Area */}
-            <div className="relative bg-background">
+            <div className="relative bg-background h-full">
                 {/* Noise Texture Overlay */}
                 <div
                     className={cn(
