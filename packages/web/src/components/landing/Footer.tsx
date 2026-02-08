@@ -2,18 +2,20 @@ import { Link } from '@tanstack/react-router';
 import { StructaIcon } from '@/components/ui/icons';
 import { Divider } from '@/components/layout/divider';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { GridPattern } from '@/components/layout/GridPattern';
 
 export function Footer() {
     return (
-        <footer className="w-full border-t border-ds-powder/50 dark:border-ds-powder/[0.08] bg-background">
-            <div className="px-4 py-12 sm:px-6 md:px-8">
-                <div className="max-w-[1100px] mx-auto">
+        <footer className="-z-1 w-full h-dvh bg-background flex flex-col justify-between relative">
+            <GridPattern className="fixed inset-0 text-ds-powder dark:text-ds-mono-700" />
+            <div className="px-4 py-8 sm:px-6 md:px-8 flex-1 relative overflow-y-auto">
+                <div className="max-w-[1100px] mx-auto h-full flex flex-col justify-center">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                         {/* Column 1: Brand & Company Info */}
                         <div className="flex flex-col items-start">
                             <StructaIcon size="default" variant="default" />
                             <p className="text-sm text-muted-foreground mt-4">
-                                Propagate &copy; 2026
+                                Structa &copy; 2026
                             </p>
                             <Divider className="my-4" />
                             <p className="text-sm text-muted-foreground">
@@ -138,12 +140,19 @@ export function Footer() {
                 </div>
             </div>
 
-            {/* Bottom Section: Large STRUCTA Text */}
-            <div className="border-t border-ds-powder/30 dark:border-ds-powder/[0.05] px-4 py-8 sm:px-6 md:px-8">
+            {/* Bottom Section: Wordmark Image */}
+            <div className="fixed bottom-0 left-0 right-0 w-full -z-1">
                 <div className="flex justify-center">
-                    <h2 className="font-heading font-bold text-4xl md:text-6xl text-ds-mono-200 dark:text-ds-mono-800">
-                        STRUCTA
-                    </h2>
+                    <img
+                        src="/wordmark-footer-light.png"
+                        alt="Structa"
+                        className="w-full max-w-[1920px] dark:hidden"
+                    />
+                    <img
+                        src="/wordmark-footer-dark.png"
+                        alt="Structa"
+                        className="w-full max-w-[1920px] hidden dark:block"
+                    />
                 </div>
             </div>
         </footer>
