@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, type LinkProps } from '@tanstack/react-router';
+import { Link, type LinkProps, useLocation } from '@tanstack/react-router';
 import { ArrowRight } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -41,12 +41,23 @@ export interface HomeIconLinkProps
         VariantProps<typeof structaIconColorVariants>,
         VariantProps<typeof structaIconSizeVariants> {
     className?: string;
+    onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
 export const HomeIconLink = React.forwardRef<
     HTMLAnchorElement,
     HomeIconLinkProps
->(({ className, variant, size, ...props }, ref) => {
+>(({ className, variant, size, onClick, ...props }, ref) => {
+    const location = useLocation();
+
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        if (location.pathname === '/') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        onClick?.(e);
+    };
+
     return (
         <Link
             to="/"
@@ -55,6 +66,7 @@ export const HomeIconLink = React.forwardRef<
                 className
             )}
             ref={ref}
+            onClick={handleClick}
             {...props}
         >
             <StructaIcon size={size} variant={variant} />

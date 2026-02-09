@@ -5,3 +5,6 @@ export { DiagonalDivider } from './DiagonalDivider';
 export { Grid } from './Grid';
 export { GridBackgroundSection } from './GridBackgroundSection';
 export { TexturedSection } from './TexturedSection';
+
+// Landing page components
+export { Footer } from '../landing/Footer';
