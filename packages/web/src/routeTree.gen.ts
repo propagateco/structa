@@ -9,15 +9,36 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as LoginRouteImport } from './routes/_login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UseCasesLoftRouteImport } from './routes/use-cases/loft'
+import { Route as UseCasesKitchenRouteImport } from './routes/use-cases/kitchen'
+import { Route as UseCasesExtensionRouteImport } from './routes/use-cases/extension'
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -30,6 +51,21 @@ const LoginRoute = LoginRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UseCasesLoftRoute = UseCasesLoftRouteImport.update({
+  id: '/use-cases/loft',
+  path: '/use-cases/loft',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UseCasesKitchenRoute = UseCasesKitchenRouteImport.update({
+  id: '/use-cases/kitchen',
+  path: '/use-cases/kitchen',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UseCasesExtensionRoute = UseCasesExtensionRouteImport.update({
+  id: '/use-cases/extension',
+  path: '/use-cases/extension',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginLoginIndexRoute = LoginLoginIndexRouteImport.update({
@@ -61,6 +97,12 @@ const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/use-cases/extension': typeof UseCasesExtensionRoute
+  '/use-cases/kitchen': typeof UseCasesKitchenRoute
+  '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -70,6 +112,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/use-cases/extension': typeof UseCasesExtensionRoute
+  '/use-cases/kitchen': typeof UseCasesKitchenRoute
+  '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -81,6 +129,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_login': typeof LoginRouteWithChildren
   '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/use-cases/extension': typeof UseCasesExtensionRoute
+  '/use-cases/kitchen': typeof UseCasesKitchenRoute
+  '/use-cases/loft': typeof UseCasesLoftRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -92,6 +146,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/blog'
+    | '/privacy'
+    | '/terms'
+    | '/use-cases/extension'
+    | '/use-cases/kitchen'
+    | '/use-cases/loft'
     | '/app/settings'
     | '/login/code'
     | '/api/auth/$'
@@ -101,6 +161,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/blog'
+    | '/privacy'
+    | '/terms'
+    | '/use-cases/extension'
+    | '/use-cases/kitchen'
+    | '/use-cases/loft'
     | '/app/settings'
     | '/login/code'
     | '/api/auth/$'
@@ -111,6 +177,12 @@ export interface FileRouteTypes {
     | '/'
     | '/_login'
     | '/about'
+    | '/blog'
+    | '/privacy'
+    | '/terms'
+    | '/use-cases/extension'
+    | '/use-cases/kitchen'
+    | '/use-cases/loft'
     | '/_auth/app/settings'
     | '/_login/login/code'
     | '/api/auth/$'
@@ -122,6 +194,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRouteWithChildren
   AboutRoute: typeof AboutRoute
+  BlogRoute: typeof BlogRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
+  UseCasesExtensionRoute: typeof UseCasesExtensionRoute
+  UseCasesKitchenRoute: typeof UseCasesKitchenRoute
+  UseCasesLoftRoute: typeof UseCasesLoftRoute
   AuthAppSettingsRoute: typeof AuthAppSettingsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   AuthAppIndexRoute: typeof AuthAppIndexRoute
@@ -129,6 +207,27 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -148,6 +247,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/use-cases/loft': {
+      id: '/use-cases/loft'
+      path: '/use-cases/loft'
+      fullPath: '/use-cases/loft'
+      preLoaderRoute: typeof UseCasesLoftRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/use-cases/kitchen': {
+      id: '/use-cases/kitchen'
+      path: '/use-cases/kitchen'
+      fullPath: '/use-cases/kitchen'
+      preLoaderRoute: typeof UseCasesKitchenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/use-cases/extension': {
+      id: '/use-cases/extension'
+      path: '/use-cases/extension'
+      fullPath: '/use-cases/extension'
+      preLoaderRoute: typeof UseCasesExtensionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_login/login/': {
@@ -204,6 +324,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRouteWithChildren,
   AboutRoute: AboutRoute,
+  BlogRoute: BlogRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
+  UseCasesExtensionRoute: UseCasesExtensionRoute,
+  UseCasesKitchenRoute: UseCasesKitchenRoute,
+  UseCasesLoftRoute: UseCasesLoftRoute,
   AuthAppSettingsRoute: AuthAppSettingsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   AuthAppIndexRoute: AuthAppIndexRoute,

@@ -7,7 +7,7 @@ const structaIconColorVariants = cva(
     {
         variants: {
             variant: {
-                default: 'text-foreground hover:text-accent',
+                default: 'text-foreground hover:text-primary',
                 muted: 'text-ds-mono-300 dark:text-muted',
                 accent: 'text-primary hover:text-foreground',
             },
@@ -132,11 +132,7 @@ const StructaIcon = React.forwardRef<HTMLDivElement, StructaIconProps>(
 
 StructaIcon.displayName = 'StructaIcon';
 
-export {
-    StructaIcon,
-    structaIconColorVariants,
-    structaIconSizeVariants,
-};
+export { StructaIcon, structaIconColorVariants, structaIconSizeVariants };
 
 // Re-export structaIconVariants for backward compatibility with link.tsx
 export const structaIconVariants = structaIconColorVariants;

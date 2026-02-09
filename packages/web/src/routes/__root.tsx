@@ -27,8 +27,9 @@ export const Route = createRootRoute({
                 content: 'width=device-width, initial-scale=1',
             },
             ...seo({
-                title: 'Structa | Digital Workspace for Modern Renovators. Powered by Agentic AI.',
-                description: `Structa's AI-powered workspace brings context, clarity, and confidence to every renovation project.`,
+                title: 'Structa | Renovate with confidence. AI guidance for your property, the new home for planning.',
+                description:
+                    'An AI agent built to understand your property, guide you renovation and find you quotes. With live budget tracking that shows your financial runway, and visual floor plan markups that stop quote confusion',
             }),
         ],
         links: [
