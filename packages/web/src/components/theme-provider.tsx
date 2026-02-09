@@ -64,7 +64,7 @@ const ThemeProvider = ({ children, defaultTheme = 'system', storageKey = 'struct
                 const newSystemTheme = e.matches ? 'dark' : 'light';
                 root.classList.remove('light', 'dark');
                 root.classList.add(newSystemTheme);
-                setActualTheme(newSystemTheme); // Update state for useTheme hook
+                setActualTheme(newSystemTheme);
             };
 
             mediaQuery.addEventListener('change', handleChange);
@@ -76,13 +76,22 @@ const ThemeProvider = ({ children, defaultTheme = 'system', storageKey = 'struct
         }
 
         root.classList.add(theme);
-        setActualTheme(theme); // Update state for useTheme hook
     }, [theme]);
 
     const setTheme = React.useCallback(
-        (theme: Theme) => {
-            setThemeState(theme);
-            localStorage.setItem(storageKey, theme);
+        (newTheme: Theme) => {
+            setThemeState(newTheme);
+            localStorage.setItem(storageKey, newTheme);
+
+            // Update actualTheme synchronously to prevent race conditions
+            if (newTheme === 'system') {
+                const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? 'dark'
+                    : 'light';
+                setActualTheme(systemTheme);
+            } else {
+                setActualTheme(newTheme);
+            }
         },
         [storageKey],
     );

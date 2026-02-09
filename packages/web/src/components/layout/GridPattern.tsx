@@ -12,7 +12,7 @@ export const GridPattern: React.FC<GridPatternProps> = ({ className }) => {
         <svg
             className={cn(
                 'pointer-events-none absolute inset-0 z-0 size-full',
-                'opacity-[.30] dark:opacity-[.25]',
+                'dark:opacity-[.25]',
                 className
             )}
             aria-hidden="true"
@@ -34,11 +34,7 @@ export const GridPattern: React.FC<GridPatternProps> = ({ className }) => {
                     />
                 </pattern>
             </defs>
-            <rect
-                width="100%"
-                height="100%"
-                fill={`url(#${patternId})`}
-            />
+            <rect width="100%" height="100%" fill={`url(#${patternId})`} />
         </svg>
     );
 };
