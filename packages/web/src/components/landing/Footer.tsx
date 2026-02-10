@@ -7,8 +7,8 @@ import { GridPattern } from '@/components/layout/GridPattern';
 
 export function Footer() {
     return (
-        <footer className="relative z-0 w-full min-h-[80dvh] bg-background flex flex-col justify-between">
-            <GridPattern className="fixed inset-0 z-0 text-ds-mono-100 dark:text-ds-mono-700" />
+        <footer className="relative w-full min-h-[80dvh] bg-background flex flex-col justify-between">
+            <GridPattern className="absolute inset-0 z-0 text-ds-mono-100 dark:text-ds-mono-700" />
             <Container
                 size="full"
                 className="relative z-10 overflow-y-auto py-15 lg:py-32 flex flex-col justify-center"
@@ -109,7 +109,7 @@ export function Footer() {
             </Container>
 
             {/* Bottom Section: Wordmark Image */}
-            <div className="fixed bottom-0 left-0 right-0 w-full z-0">
+            <div className="absolute bottom-0 left-0 right-0 w-full z-0">
                 <div className="flex justify-center">
                     <img
                         src="/wordmark-footer-light.webp"
