@@ -18,7 +18,7 @@ export function Footer() {
                     <div className="flex flex-col items-center lg:items-start w-60">
                         <HomeIconLink variant="default" />
                         <p className="text-base text-muted-foreground mt-4">
-                            Structa &copy; 2026
+                            &copy; 2026 Propagate
                         </p>
                     </div>
 

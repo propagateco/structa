@@ -13,8 +13,9 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as MarketingRouteImport } from './routes/_marketing'
 import { Route as LoginRouteImport } from './routes/_login'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as UseCasesLoftRouteImport } from './routes/use-cases/loft'
 import { Route as UseCasesKitchenRouteImport } from './routes/use-cases/kitchen'
 import { Route as UseCasesExtensionRouteImport } from './routes/use-cases/extension'
@@ -44,14 +45,18 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketingRoute = MarketingRouteImport.update({
+  id: '/_marketing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/_login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const MarketingIndexRoute = MarketingIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => MarketingRoute,
 } as any)
 const UseCasesLoftRoute = UseCasesLoftRouteImport.update({
   id: '/use-cases/loft',
@@ -95,7 +100,7 @@ const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof MarketingIndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/privacy': typeof PrivacyRoute
@@ -110,7 +115,7 @@ export interface FileRoutesByFullPath {
   '/login/': typeof LoginLoginIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof MarketingIndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/privacy': typeof PrivacyRoute
@@ -126,8 +131,8 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_login': typeof LoginRouteWithChildren
+  '/_marketing': typeof MarketingRouteWithChildren
   '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/privacy': typeof PrivacyRoute
@@ -135,6 +140,7 @@ export interface FileRoutesById {
   '/use-cases/extension': typeof UseCasesExtensionRoute
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
+  '/_marketing/': typeof MarketingIndexRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -174,8 +180,8 @@ export interface FileRouteTypes {
     | '/login'
   id:
     | '__root__'
-    | '/'
     | '/_login'
+    | '/_marketing'
     | '/about'
     | '/blog'
     | '/privacy'
@@ -183,6 +189,7 @@ export interface FileRouteTypes {
     | '/use-cases/extension'
     | '/use-cases/kitchen'
     | '/use-cases/loft'
+    | '/_marketing/'
     | '/_auth/app/settings'
     | '/_login/login/code'
     | '/api/auth/$'
@@ -191,8 +198,8 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRouteWithChildren
+  MarketingRoute: typeof MarketingRouteWithChildren
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -235,6 +242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_marketing': {
+      id: '/_marketing'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MarketingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_login': {
       id: '/_login'
       path: ''
@@ -242,12 +256,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_marketing/': {
+      id: '/_marketing/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof MarketingRoute
     }
     '/use-cases/loft': {
       id: '/use-cases/loft'
@@ -320,9 +334,21 @@ const LoginRouteChildren: LoginRouteChildren = {
 
 const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 
+interface MarketingRouteChildren {
+  MarketingIndexRoute: typeof MarketingIndexRoute
+}
+
+const MarketingRouteChildren: MarketingRouteChildren = {
+  MarketingIndexRoute: MarketingIndexRoute,
+}
+
+const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
+  MarketingRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   LoginRoute: LoginRouteWithChildren,
+  MarketingRoute: MarketingRouteWithChildren,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRoute,
   PrivacyRoute: PrivacyRoute,
