@@ -50,3 +50,21 @@
 ### Files Changed
 - packages/web/src/components/auth/auth-drawer.tsx (updated)
 - packages/web/src/components/auth/login-code-form.tsx (updated)
+
+## 2025-02-11: Task 4 Complete - VerifyCodeFormDrawer and AuthDrawerVerifyView
+
+### Completed
+- Created VerifyCodeFormDrawer component with:
+  - Email display showing which email is being verified
+  - Same verification logic as VerifyCodeForm (authClient.signIn.emailOtp)
+  - Back button that returns to initial view
+  - onSuccess callback instead of navigation on success
+  - Inline error handling
+  - Auto-submit when 6 digits entered
+  - Paste support for verification code
+- Updated AuthDrawerVerifyView to use VerifyCodeFormDrawer
+- Removed TODO marker and placeholder code
+
+### Files Changed
+- packages/web/src/components/auth/verify-code-form-drawer.tsx (new, ~130 lines)
+- packages/web/src/components/auth/auth-drawer.tsx (updated)
