@@ -272,7 +272,6 @@ function BlogPost() {
 											);
 										}}
 										title="Sign up below to continue reading for free"
-										showLegalLinks={true}
 									/>
 								</TexturedDiv>
 							</div>

@@ -44,11 +44,11 @@ function BlogIndex() {
                 {sortedPosts.length === 0 ? (
                     <p className="text-muted-foreground">No guides yet.</p>
                 ) : (
-                    <div className="h-full">
+                    <div className="h-full col-span-1 lg:col-span-2">
                         {sortedPosts.map((post: any) => (
                             <div
                                 key={post.slug}
-                                className="col-span-1 lg:col-span-2 py-8"
+                                className="py-8"
                                 id={post.slug}
                             >
                                 <BlogPostCard

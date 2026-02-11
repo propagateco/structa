@@ -1,21 +1,21 @@
-import { Link } from '@tanstack/react-router';
-import type * as React from 'react';
-import { useEffect, useState } from 'react';
-import { LoginAppleForm } from '@/components/auth/login-apple-form';
-import { LoginCodeForm } from '@/components/auth/login-code-form';
-import { LoginGoogleForm } from '@/components/auth/login-google-form';
-import { VerifyCodeFormDrawer } from '@/components/auth/verify-code-form-drawer';
-import { Divider } from '@/components/layout/divider';
-import { Button } from '@/components/ui/button';
+import { Link } from "@tanstack/react-router";
+import type * as React from "react";
+import { useEffect, useState } from "react";
+import { LoginAppleForm } from "@/components/auth/login-apple-form";
+import { LoginCodeForm } from "@/components/auth/login-code-form";
+import { LoginGoogleForm } from "@/components/auth/login-google-form";
+import { VerifyCodeFormDrawer } from "@/components/auth/verify-code-form-drawer";
+import { Divider } from "@/components/layout/divider";
+import { Button } from "@/components/ui/button";
 import {
-    Drawer,
-    DrawerClose,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    GatedDrawerContent,
-} from '@/components/ui/drawer';
+	Drawer,
+	DrawerClose,
+	DrawerDescription,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerTitle,
+	GatedDrawerContent,
+} from "@/components/ui/drawer";
 
 /**
  * AuthDrawer Component
@@ -37,177 +37,172 @@ import {
  * ```
  */
 export interface AuthDrawerProps {
-    /** Whether the drawer is open */
-    open: boolean;
-    /** Callback when drawer open state changes */
-    onOpenChange: (open: boolean) => void;
-    /** Callback when authentication succeeds */
-    onSuccess?: () => void;
-    /** Optional title to display */
-    title?: string;
+	/** Whether the drawer is open */
+	open: boolean;
+	/** Callback when drawer open state changes */
+	onOpenChange: (open: boolean) => void;
+	/** Callback when authentication succeeds */
+	onSuccess?: () => void;
+	/** Optional title to display */
+	title?: string;
 }
 
-type ViewType = 'initial' | 'verify';
+type ViewType = "initial" | "verify";
 
 export function AuthDrawer({
-    open,
-    onOpenChange,
-    onSuccess,
-    title = 'Sign up to continue reading for free',
+	open,
+	onOpenChange,
+	onSuccess,
+	title = "Sign up to continue reading for free",
 }: AuthDrawerProps) {
-    // View state: 'initial' shows social login + email form, 'verify' shows code verification
-    const [view, setView] = useState<ViewType>('initial');
-    // Email state to pass between views
-    const [email, setEmail] = useState<string | null>(null);
-    // Loading state for verification
-    const [_isLoading, setIsLoading] = useState(false);
+	// View state: 'initial' shows social login + email form, 'verify' shows code verification
+	const [view, setView] = useState<ViewType>("initial");
+	// Email state to pass between views
+	const [email, setEmail] = useState<string | null>(null);
+	// Loading state for verification
+	const [_isLoading, setIsLoading] = useState(false);
 
-    /**
-     * Reset state when drawer closes
-     */
-    useEffect(() => {
-        if (!open) {
-            // Small delay to allow animations to complete before resetting
-            const timeoutId = setTimeout(() => {
-                setView('initial');
-                setEmail(null);
-                setIsLoading(false);
-            }, 300);
-            return () => clearTimeout(timeoutId);
-        }
-    }, [open]);
+	// Current URL to use as callback for social login
+	const currentURL = typeof window !== "undefined" ? window.location.href : "/";
 
-    /**
-     * Handle email submission from LoginCodeForm
-     * Transitions to verify view with the submitted email
-     */
-    const handleEmailSent = (submittedEmail: string) => {
-        setEmail(submittedEmail);
-        setView('verify');
-    };
+	/**
+	 * Reset state when drawer closes
+	 */
+	useEffect(() => {
+		if (!open) {
+			// Small delay to allow animations to complete before resetting
+			const timeoutId = setTimeout(() => {
+				setView("initial");
+				setEmail(null);
+				setIsLoading(false);
+			}, 300);
+			return () => clearTimeout(timeoutId);
+		}
+	}, [open]);
 
-    /**
-     * Handle successful code verification
-     * Closes drawer and calls onSuccess callback
-     */
-    const handleVerificationSuccess = () => {
-        setIsLoading(true);
-        // Small delay to ensure session is updated
-        setTimeout(() => {
-            onOpenChange(false);
-            onSuccess?.();
-        }, 300);
-    };
+	/**
+	 * Handle email submission from LoginCodeForm
+	 * Transitions to verify view with the submitted email
+	 */
+	const handleEmailSent = (submittedEmail: string) => {
+		setEmail(submittedEmail);
+		setView("verify");
+	};
 
-    /**
-     * Handle back button in verify view
-     * Returns to initial view
-     */
-    const handleBack = () => {
-        setView('initial');
-        setEmail(null);
-    };
+	/**
+	 * Handle successful code verification
+	 * Closes drawer and calls onSuccess callback
+	 */
+	const handleVerificationSuccess = () => {
+		setIsLoading(true);
+		// Small delay to ensure session is updated
+		setTimeout(() => {
+			onOpenChange(false);
+			onSuccess?.();
+		}, 300);
+	};
 
-    /**
-     * Default description with Terms/Privacy links
-     */
-    const defaultDescription = (
-        <p className="text-sm text-balance text-center">
-            By clicking continue, you agree to our{' '}
-            <Link
-                to="/terms-of-service"
-                className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
-            >
-                Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link
-                to="/privacy-policy"
-                className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
-            >
-                Privacy Policy
-            </Link>
-            .{' '}
-        </p>
-    );
+	/**
+	 * Handle back button in verify view
+	 * Returns to initial view
+	 */
+	const handleBack = () => {
+		setView("initial");
+		setEmail(null);
+	};
 
-    /**
-     * Code verification description
-     */
-    const verifyDescription = (
-        <p className="text-lg text-text-muted text-balance text-center">
-            To continue signing in, enter the code sent to{' '}
-            <span className="font-semibold">{email}</span> below.
-        </p>
-    );
+	/**
+	 * Default description with Terms/Privacy links
+	 */
+	const defaultDescription = (
+		<p className="text-sm text-balance text-center">
+			By clicking continue, you agree to our{" "}
+			<Link
+				to="/terms-of-service"
+				className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
+			>
+				Terms of Service
+			</Link>{" "}
+			and{" "}
+			<Link
+				to="/privacy-policy"
+				className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
+			>
+				Privacy Policy
+			</Link>
+			.{" "}
+		</p>
+	);
 
-    return (
-        <Drawer open={open} onOpenChange={onOpenChange}>
-            <GatedDrawerContent>
-                <div className="px-lg mx-auto max-w-md md:max-w-xl">
-                    <DrawerHeader className="space-y-3">
-                        <DrawerTitle className="font-heading font-light text-4xl text-center">
-                            {view === 'initial'
-                                ? title
-                                : "Let's verify your email"}
-                        </DrawerTitle>
-                        <DrawerDescription>
-                            {view === 'initial'
-                                ? defaultDescription
-                                : verifyDescription}
-                        </DrawerDescription>
-                    </DrawerHeader>
-                    <DrawerFooter className="mx-auto max-w-sm md:max-w-md">
-                        <div className="flex flex-col">
-                            {/* Initial View: Social login + email form */}
-                            <ViewContainer
-                                isActive={view === 'initial'}
-                                direction="left"
-                            >
-                                <div className="flex w-full flex-col gap-4 md:gap-5">
-                                    <div className="flex flex-col gap-3">
-                                        <LoginGoogleForm />
-                                        <LoginAppleForm />
-                                    </div>
-                                    <Divider text="Or" />
-                                    <LoginCodeForm
-                                        onEmailSent={handleEmailSent}
-                                    />
-                                </div>
-                            </ViewContainer>
+	/**
+	 * Code verification description
+	 */
+	const verifyDescription = (
+		<p className="text-lg text-text-muted text-balance text-center">
+			To continue signing in, enter the code sent to{" "}
+			<span className="font-semibold">{email}</span> below.
+		</p>
+	);
 
-                            {/* Verify View: Code entry with email context */}
-                            <ViewContainer
-                                isActive={view === 'verify'}
-                                direction="right"
-                            >
-                                {email && (
-                                    <div className="flex w-full flex-col gap-4 md:gap-5">
-                                        <VerifyCodeFormDrawer
-                                            email={email}
-                                            onBack={handleBack}
-                                            onSuccess={
-                                                handleVerificationSuccess
-                                            }
-                                        />
-                                    </div>
-                                )}
-                            </ViewContainer>
+	return (
+		<Drawer open={open} onOpenChange={onOpenChange}>
+			<GatedDrawerContent>
+				<div className="px-lg mx-auto max-w-md md:max-w-xl">
+					<DrawerHeader className="space-y-3">
+						<DrawerTitle className="font-heading font-light text-4xl text-center">
+							{view === "initial" ? title : "Let's verify your email"}
+						</DrawerTitle>
+						<DrawerDescription>
+							{view === "initial" ? defaultDescription : verifyDescription}
+						</DrawerDescription>
+					</DrawerHeader>
+					<DrawerFooter className="mx-auto max-w-sm md:max-w-md">
+						<div className="flex flex-col">
+							{/* Initial View: Social login + email form */}
+							<ViewContainer isActive={view === "initial"} direction="left">
+								<div className="flex w-full flex-col gap-4 md:gap-5">
+									<div className="flex flex-col gap-3">
+										<LoginGoogleForm
+											callbackURL={currentURL}
+											onSuccess={onSuccess}
+										/>
+										<LoginAppleForm
+											_callbackURL={currentURL}
+											_onSuccess={onSuccess}
+										/>
+									</div>
+									<Divider text="Or" />
+									<LoginCodeForm onEmailSent={handleEmailSent} />
+								</div>
+							</ViewContainer>
 
-                            <DrawerClose asChild>
-                                <Button
-                                    variant="ghost"
-                                    className="text-text-muted w-full mt-6 mb-3"
-                                >
-                                    Close
-                                </Button>
-                            </DrawerClose>
-                        </div>
-                    </DrawerFooter>
-                </div>
-            </GatedDrawerContent>
-        </Drawer>
-    );
+							{/* Verify View: Code entry with email context */}
+							<ViewContainer isActive={view === "verify"} direction="right">
+								{email && (
+									<div className="flex w-full flex-col gap-4 md:gap-5">
+										<VerifyCodeFormDrawer
+											email={email}
+											onBack={handleBack}
+											onSuccess={handleVerificationSuccess}
+										/>
+									</div>
+								)}
+							</ViewContainer>
+
+							<DrawerClose asChild>
+								<Button
+									variant="ghost"
+									className="text-text-muted w-full mt-6 mb-3"
+								>
+									Close
+								</Button>
+							</DrawerClose>
+						</div>
+					</DrawerFooter>
+				</div>
+			</GatedDrawerContent>
+		</Drawer>
+	);
 }
 
 /**
@@ -217,26 +212,26 @@ export function AuthDrawer({
  * @param direction - 'left' for initial view (slides left on exit), 'right' for verify view (slides from right on enter)
  */
 interface ViewContainerProps {
-    isActive: boolean;
-    direction: 'left' | 'right';
-    children: React.ReactNode;
+	isActive: boolean;
+	direction: "left" | "right";
+	children: React.ReactNode;
 }
 
 function ViewContainer({ isActive, direction, children }: ViewContainerProps) {
-    return (
-        <div
-            className={`
+	return (
+		<div
+			className={`
 				transition-all duration-300 ease-in-out
 				${
-                    isActive
-                        ? 'translate-x-0 opacity-100 max-h-[2000px]'
-                        : direction === 'left'
-                          ? '-translate-x-full opacity-0 max-h-0 overflow-hidden'
-                          : 'translate-x-full opacity-0 max-h-0 overflow-hidden'
-                }
+					isActive
+						? "translate-x-0 opacity-100 max-h-[2000px]"
+						: direction === "left"
+							? "-translate-x-full opacity-0 max-h-0 overflow-hidden"
+							: "translate-x-full opacity-0 max-h-0 overflow-hidden"
+				}
 			`}
-        >
-            {children}
-        </div>
-    );
+		>
+			{children}
+		</div>
+	);
 }

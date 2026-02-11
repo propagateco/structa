@@ -50,7 +50,7 @@ export function BlogPostCard({
                         {description}
                     </p>
 
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground pt-4 border-t border-border/50">
+                    <div className="flex items-center gap-2 font-space-grotesk text-sm text-muted-foreground pt-4 border-t border-border/50">
                         <span>
                             {new Date(publishedAt).toLocaleDateString()}
                         </span>

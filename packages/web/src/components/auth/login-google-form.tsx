@@ -1,47 +1,66 @@
-import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { authClient } from '@/lib/auth-client';
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
 
-export function LoginGoogleForm() {
-    const [isLoading, setIsLoading] = useState(false);
+interface LoginGoogleFormProps {
+	/** Optional callback URL to redirect to after sign-in. Defaults to '/' */
+	callbackURL?: string;
+	/** Optional callback when sign-in succeeds (for drawer context) */
+	onSuccess?: () => void;
+}
 
-    const handleGoogleSignIn = async () => {
-        setIsLoading(true);
-        try {
-            await authClient.signIn.social({
-                provider: 'google',
-                callbackURL: '/',
-            });
-        } catch (error) {
-            console.error('Google sign in failed:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+export function LoginGoogleForm({
+	callbackURL = "/",
+	onSuccess,
+}: LoginGoogleFormProps = {}) {
+	const [isLoading, setIsLoading] = useState(false);
 
-    return (
-        <Button
-            variant="default"
-            className="w-full"
-            onClick={handleGoogleSignIn}
-            disabled={isLoading}
-        >
-            {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4 mr"
-                >
-                    <path
-                        d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-                        fill="currentColor"
-                    />
-                </svg>
-            )}
-            Continue with Google
-        </Button>
-    );
+	const handleGoogleSignIn = async () => {
+		setIsLoading(true);
+		try {
+			const response = await authClient.signIn.social({
+				provider: "google",
+				callbackURL,
+			});
+
+			// In drawer context (when onSuccess is provided), don't wait for redirect
+			// The redirect will happen, but we can trigger success callback
+			if (onSuccess && !response.error) {
+				onSuccess();
+			}
+		} catch (error) {
+			console.error("Google sign in failed:", error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	return (
+		<Button
+			variant="default"
+			className="w-full"
+			onClick={handleGoogleSignIn}
+			disabled={isLoading}
+		>
+			{isLoading ? (
+				<Loader2 className="h-4 w-4 animate-spin" />
+			) : (
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					className="h-4 w-4 mr"
+					role="img"
+					aria-label="Google logo"
+				>
+					<title>Google</title>
+					<path
+						d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
+						fill="currentColor"
+					/>
+				</svg>
+			)}
+			Continue with Google
+		</Button>
+	);
 }
