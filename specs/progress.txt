@@ -1,0 +1,7 @@
+## 2026-02-11T20:00:00Z: Issue #25 Started
+
+- Issue title: Implement Slide-Out Auth Drawer for Blog Posts
+- Branch: 25-implement-slide-out-auth-drawer-for-blog-posts
+[CURRENT_ISSUE] 25
+[CURRENT_BRANCH] 25-implement-slide-out-auth-drawer-for-blog-posts
+[STARTED] 2026-02-11T20:00:00Z
