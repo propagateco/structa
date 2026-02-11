@@ -25,6 +25,44 @@ export interface AuthDrawerProps {
  *
  * Manages two views: 'initial' (social login + email input) and 'verify' (code verification)
  * Transitions between views with fade+slide animations (300ms)
+ *
+ * @example
+ * // Landing page example
+ * ```tsx
+ * const [open, setOpen] = useState(false);
+ *
+ * <AuthDrawer
+ *   open={open}
+ *   onOpenChange={setOpen}
+ *   title="Start Your Free Account"
+ *   description="Join thousands of home renovators..."
+ *   onSuccess={() => console.log('User authenticated!')}
+ * />
+ * <Button onClick={() => setOpen(true)}>Sign Up</Button>
+ * ```
+ *
+ * @example
+ * // Pricing page example
+ * ```tsx
+ * <AuthDrawer
+ *   open={open}
+ *   onOpenChange={setOpen}
+ *   title="Start Your Pro Trial"
+ *   description="14 days free, no credit card required"
+ *   onSuccess={() => navigate('/dashboard')}
+ * />
+ * ```
+ *
+ * @example
+ * // Blog/gated content example (minimal)
+ * ```tsx
+ * <AuthDrawer
+ *   open={drawerOpen}
+ *   onOpenChange={setDrawerOpen}
+ *   onSuccess={handleAuthSuccess}
+ *   showLegalLinks={false}
+ * />
+ * ```
  */
 export function AuthDrawer({
 	open,
