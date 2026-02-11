@@ -24,21 +24,21 @@ export function FeaturesSection({
             description:
                 'Upload your property listing documents and have scaled floor plans ready for editing your dream layout.',
             cta: 'Start with Layout',
-            imageBaseName: 'terrace-house',
+            imageBaseName: 'floor-plan',
         },
         {
             title: 'Track your financial runway',
             description:
                 "See your remaining budget in real-time and forecast what's left to spend. Catch cost overruns before they spiral.",
             cta: 'Start with Tracker',
-            imageBaseName: 'runway',
+            imageBaseName: 'financial-plan',
         },
         {
             title: 'Quotes from matched specialists',
             description:
                 'Using your project brief, AI gathers quotes from people who understand your requirements and timelines.',
             cta: 'Start with Workspace',
-            imageBaseName: 'specialists',
+            imageBaseName: 'hand-shake-door',
         },
     ],
 }: FeaturesSectionProps) {
@@ -67,7 +67,7 @@ export function FeaturesSection({
                                 }
                             />
                             <img
-                                src={`/images/maquettes/${feature.imageBaseName}${resolvedTheme === 'dark' ? '-dark' : ''}.png`}
+                                src={`/images/half-tone/${feature.imageBaseName}${resolvedTheme === 'dark' ? '-dark' : '-light'}.webp`}
                                 alt={feature.title}
                                 className="w-full h-full object-cover relative z-10"
                             />

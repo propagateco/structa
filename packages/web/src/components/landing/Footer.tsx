@@ -117,9 +117,9 @@ export function Footer() {
                         className="w-full max-w-[1920px] dark:hidden"
                     />
                     <img
-                        src="/wordmark-footer-dark.webp"
+                        src="/wordmark-footer-light.webp"
                         alt="Structa"
-                        className="w-full max-w-[1920px] hidden dark:block"
+                        className="w-full max-w-[1920px] hidden dark:block opacity-30"
                     />
                 </div>
             </div>

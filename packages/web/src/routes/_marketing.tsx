@@ -16,7 +16,7 @@ function LayoutComponent() {
             <Header />
 
             {/* Main content wrapper */}
-            <div className="flex-1 relative z-10">
+            <div className="flex-1 relative z-10 bg-background">
                 {/* Side gutters with noise texture */}
                 <div className="absolute left-0 top-0 bottom-0 w-3 sm:w-4 md:w-8 pointer-events-none bg-ds-mono-100 dark:bg-background border-b border-ds-powder/50 dark:border-ds-powder/[0.08]">
                     <div

@@ -39,15 +39,17 @@ function BlogIndex() {
                 showBottomDivider={true}
                 showTopDiamonds={true}
                 showGrid={true}
+                className="min-h-dvh"
             >
                 {sortedPosts.length === 0 ? (
                     <p className="text-muted-foreground">No guides yet.</p>
                 ) : (
-                    <>
+                    <div className="h-full">
                         {sortedPosts.map((post: any) => (
                             <div
                                 key={post.slug}
                                 className="col-span-1 lg:col-span-2 py-8"
+                                id={post.slug}
                             >
                                 <BlogPostCard
                                     title={post.title}
@@ -60,7 +62,7 @@ function BlogIndex() {
                                 />
                             </div>
                         ))}
-                    </>
+                    </div>
                 )}
             </TexturedSection>
         </div>

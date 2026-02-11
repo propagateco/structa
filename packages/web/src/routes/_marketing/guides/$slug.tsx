@@ -9,7 +9,11 @@ import { TexturedSection } from '@/components/layout';
 import { Divider } from '@/components/layout/divider';
 import { Markdown } from '@/components/Markdown';
 import { Button } from '@/components/ui/button';
-import { TexturedDiv, TexturedFadingDiv } from '@/components/layout';
+import {
+    TexturedDiv,
+    TexturedFadingDiv,
+    DiagonalDivider,
+} from '@/components/layout';
 import {
     Drawer,
     DrawerClose,
@@ -198,157 +202,166 @@ function BlogPost() {
     }
 
     return (
-        <TexturedSection
-            showTopDivider={false}
-            showBottomDivider={false}
-            showTopDiamonds={true}
-            showGrid={false}
-        >
-            <div className="col-span-2 md:col-span-8">
-                <header className="my-12 md:my-24 space-y-6">
-                    {post.coverImage && (
-                        <img
-                            src={post.coverImage}
-                            alt={post.title}
-                            className="w-full h-64 md:h-96 object-cover rounded-lg"
-                        />
-                    )}
+        <>
+            <TexturedSection
+                showTopDivider={false}
+                showBottomDivider={false}
+                showTopDiamonds={true}
+                showGrid={false}
+            >
+                <div className="col-span-2 md:col-span-8">
+                    <header className="my-12 md:my-24 space-y-6">
+                        {post.coverImage && (
+                            <img
+                                src={post.coverImage}
+                                alt={post.title}
+                                className="w-full h-64 md:h-96 object-cover rounded-lg"
+                            />
+                        )}
 
-                    <h1 className="font-heading text-4xl md:text-5xl">
-                        {post.title}
-                    </h1>
+                        <h1 className="font-heading text-4xl md:text-5xl">
+                            {post.title}
+                        </h1>
 
-                    <div className="flex items-center gap-4 text-muted-foreground">
-                        <span>
-                            {new Date(post.publishedAt).toLocaleDateString()}
-                        </span>
-                        {post.readTime && <span>· {post.readTime}</span>}
-                        {isPreview && <Lock className="h-4 w-4" />}
-                        <span className="px-2 py-1 text-xs bg-primary/10 text-primary rounded">
-                            Members only
-                        </span>
-                    </div>
+                        <div className="flex items-center gap-4 text-muted-foreground">
+                            <span>
+                                {new Date(
+                                    post.publishedAt
+                                ).toLocaleDateString()}
+                            </span>
+                            {post.readTime && <span>· {post.readTime}</span>}
+                            {isPreview && <Lock className="h-4 w-4" />}
+                            <span className="px-2 py-1 text-xs bg-primary/10 text-primary rounded">
+                                Members only
+                            </span>
+                        </div>
 
-                    <p className="text-xl text-muted-foreground">
-                        {post.description}
-                    </p>
-                </header>
+                        <p className="text-xl text-muted-foreground">
+                            {post.description}
+                        </p>
+                    </header>
 
-                <div className="prose prose-lg max-w-none">
-                    {isPreview ? (
-                        <>
-                            <Markdown content={contentToShow} />
+                    <div className="prose prose-lg max-w-none">
+                        {isPreview ? (
+                            <>
+                                <Markdown content={contentToShow} />
 
-                            <div
-                                ref={ctaSectionRef}
-                                className="absolute w-full bottom-0 left-0"
-                            >
-                                <TexturedFadingDiv className="h-54 bg-gradient-to-t from-background via-background/80 to-transparent"></TexturedFadingDiv>
-                                <TexturedDiv className="text-center space-y-4 bg-background pt-8 pb-20">
-                                    <div className="px-lg mx-auto max-w-md md:max-w-xl mb-6 space-y-6">
-                                        <h3 className="font-heading font-light text-4xl text-center">
-                                            Sign up below to continue reading
-                                            for free
-                                        </h3>
-                                        <p className="text-sm text-balance text-center">
-                                            The rest of this article is
-                                            available with a free membership,
-                                            which come with a host of benefits:
-                                        </p>
-                                        <ul className="flex flex-col mx-20 text-sm gap-4">
-                                            <li className="flex flex-row items-center gap-2">
-                                                <Sparkle className="size-4 text-ds-apricot fill-ds-apricot " />
-                                                Read all member-only articles on
-                                                Structa
-                                            </li>
-                                            <li className="flex flex-row items-center gap-2">
-                                                <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
-                                                Early access to digital tools to
-                                                plan your renovation
-                                            </li>
+                                <div
+                                    ref={ctaSectionRef}
+                                    className="absolute w-full bottom-0 left-0"
+                                >
+                                    <TexturedFadingDiv className="h-54 bg-gradient-to-t from-background via-background/80 to-transparent"></TexturedFadingDiv>
+                                    <TexturedDiv className="text-center bg-background pt-8 pb-20">
+                                        <div className="px-lg mx-auto max-w-md md:max-w-xl mb-6 space-y-6">
+                                            <h3 className="font-heading font-light text-4xl text-center">
+                                                Sign up below to continue
+                                                reading for free
+                                            </h3>
+                                            <p className="text-sm text-balance text-center">
+                                                The rest of this article is
+                                                available with a free
+                                                membership, which come with a
+                                                host of benefits:
+                                            </p>
+                                            <ul className="flex flex-col mx-20 text-sm gap-4">
+                                                <li className="flex flex-row items-center gap-2">
+                                                    <Sparkle className="size-4 text-ds-apricot fill-ds-apricot " />
+                                                    Read all member-only
+                                                    articles on Structa
+                                                </li>
+                                                <li className="flex flex-row items-center gap-2">
+                                                    <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
+                                                    Early access to digital
+                                                    tools to plan your
+                                                    renovation
+                                                </li>
 
-                                            <li className="flex flex-row items-center gap-2">
-                                                <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
-                                                Improve you DIY and home
-                                                improvement skills
-                                            </li>
+                                                <li className="flex flex-row items-center gap-2">
+                                                    <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
+                                                    Improve you DIY and home
+                                                    improvement skills
+                                                </li>
 
-                                            <li className="flex flex-row items-center gap-2">
-                                                <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
-                                                Access to our private Discord
-                                                community of home renovators
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <Drawer
-                                        open={drawerOpen}
-                                        onOpenChange={setDrawerOpen}
-                                    >
-                                        <DrawerTrigger asChild>
-                                            <Button
-                                                size="lg"
-                                                className="mt-2 group"
-                                            >
-                                                Continue reading
-                                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                            </Button>
-                                        </DrawerTrigger>
-                                        <GatedDrawerContent>
-                                            <div className="px-lg mx-auto max-w-md md:max-w-xl">
-                                                <DrawerHeader className="space-y-3">
-                                                    <DrawerTitle className="font-heading font-light text-4xl text-center">
-                                                        Sign up below to
-                                                        continue reading for
-                                                        free
-                                                    </DrawerTitle>
-                                                    <DrawerDescription className="text-sm text-balance text-center">
-                                                        By clicking continue,
-                                                        you agree to our{' '}
-                                                        <Link
-                                                            to="/terms-of-service"
-                                                            className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
-                                                        >
-                                                            Terms of Service
-                                                        </Link>{' '}
-                                                        and{' '}
-                                                        <Link
-                                                            to="/privacy-policy"
-                                                            className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
-                                                        >
-                                                            Privacy Policy
-                                                        </Link>
-                                                        .
-                                                    </DrawerDescription>
-                                                </DrawerHeader>
-                                                <DrawerFooter className="mx-auto max-w-sm md:max-w-md">
-                                                    <div className="flex flex-col gap-4 md:gap-5">
-                                                        <div className="flex flex-col gap-3">
-                                                            <LoginGoogleForm />
-                                                            <LoginAppleForm />
+                                                <li className="flex flex-row items-center gap-2">
+                                                    <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
+                                                    Access to our private
+                                                    Discord community of home
+                                                    renovators
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <Drawer
+                                            open={drawerOpen}
+                                            onOpenChange={setDrawerOpen}
+                                        >
+                                            <DrawerTrigger asChild>
+                                                <Button
+                                                    size="lg"
+                                                    className="mt-2 group"
+                                                >
+                                                    Continue reading
+                                                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                                </Button>
+                                            </DrawerTrigger>
+                                            <GatedDrawerContent>
+                                                <div className="px-lg mx-auto max-w-md md:max-w-xl">
+                                                    <DrawerHeader className="space-y-3">
+                                                        <DrawerTitle className="font-heading font-light text-4xl text-center">
+                                                            Sign up below to
+                                                            continue reading for
+                                                            free
+                                                        </DrawerTitle>
+                                                        <DrawerDescription className="text-sm text-balance text-center">
+                                                            By clicking
+                                                            continue, you agree
+                                                            to our{' '}
+                                                            <Link
+                                                                to="/terms-of-service"
+                                                                className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
+                                                            >
+                                                                Terms of Service
+                                                            </Link>{' '}
+                                                            and{' '}
+                                                            <Link
+                                                                to="/privacy-policy"
+                                                                className="font-medium underline underline-offset-4 transition-colors duration-200 hover:text-accent"
+                                                            >
+                                                                Privacy Policy
+                                                            </Link>
+                                                            .
+                                                        </DrawerDescription>
+                                                    </DrawerHeader>
+                                                    <DrawerFooter className="mx-auto max-w-sm md:max-w-md">
+                                                        <div className="flex flex-col gap-4 md:gap-5">
+                                                            <div className="flex flex-col gap-3">
+                                                                <LoginGoogleForm />
+                                                                <LoginAppleForm />
+                                                            </div>
+                                                            <Divider text="Or" />
+                                                            <LoginCodeForm />
                                                         </div>
-                                                        <Divider text="Or" />
-                                                        <LoginCodeForm />
-                                                    </div>
-                                                    <DrawerClose asChild>
-                                                        <Button
-                                                            variant="ghost"
-                                                            className="text-text-muted my-3"
-                                                        >
-                                                            Close
-                                                        </Button>
-                                                    </DrawerClose>
-                                                </DrawerFooter>
-                                            </div>
-                                        </GatedDrawerContent>
-                                    </Drawer>
-                                </TexturedDiv>
-                            </div>
-                        </>
-                    ) : (
-                        <Markdown content={contentToShow} />
-                    )}
+                                                        <DrawerClose asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                className="text-text-muted my-3"
+                                                            >
+                                                                Close
+                                                            </Button>
+                                                        </DrawerClose>
+                                                    </DrawerFooter>
+                                                </div>
+                                            </GatedDrawerContent>
+                                        </Drawer>
+                                    </TexturedDiv>
+                                </div>
+                            </>
+                        ) : (
+                            <Markdown content={contentToShow} />
+                        )}
+                    </div>
                 </div>
-            </div>
-        </TexturedSection>
+            </TexturedSection>
+            <DiagonalDivider />
+        </>
     );
 }

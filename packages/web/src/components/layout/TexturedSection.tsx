@@ -75,7 +75,7 @@ export const TexturedSection: React.FC<TexturedSectionProps> = ({
                 />
 
                 {/* Content Container */}
-                <Container className="relative z-10">
+                <Container className="relative z-10 h-full">
                     <Grid
                         showGrid={showGrid}
                         cols={cols}
