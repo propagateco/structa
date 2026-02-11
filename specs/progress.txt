@@ -1,0 +1,48 @@
+## 2025-02-11: Issue #24 Started
+
+- Issue title: Copy Nav Components from app-example to web package
+- Branch: 24-copy-nav-components-from-app-example-to-web-package
+[CURRENT_ISSUE] 24
+[CURRENT_BRANCH] 24-copy-nav-components-from-app-example-to-web-package
+[STARTED] 2025-02-11
+## 2025-02-11: Progress Update - Phase 1-6 Complete
+
+### Completed
+- Directory structure created (nav/, hooks/, utils/)
+- string-utils.ts created with 5 formatting functions
+- branding-status.ts created with stub types
+- product-status.ts created with stub types
+- UI components copied: skeleton, tooltip, breadcrumb, alert-dialog, image, dot, saving (stubbed), sidebar, sheet
+- use-mobile.tsx hook copied
+- tabs.tsx enhanced with TabNav, TabNavList, TabNavLink
+- Nav components copied: nav-secondary, nav-header, nav-main, nav-products-skeleton
+
+### In Progress
+- responsive-breadcrumbs.tsx, nav-products.tsx and remaining nav components
+
+### Next
+- Priority 3 nav components (with stubs): nav-products-wrapper, nav-tabs, nav-workspace, nav-user, app-sidebar
+## 2025-02-11: All nav components copied successfully
+
+### Completed
+- All 12 nav components copied to packages/web/src/components/nav/
+  - nav-secondary.tsx
+  - nav-breadcrumb.tsx
+  - nav-header.tsx
+  - nav-main.tsx
+  - nav-products-skeleton.tsx
+  - nav-products.tsx
+  - responsive-breadcrumbs.tsx
+  - nav-tabs.tsx (stubbed)
+  - nav-user.tsx (stubbed with TODO for settings routes)
+  - nav-workspace.tsx (stubbed)
+  - nav-products-wrapper.tsx (mock data instead of TanStack Query)
+  - app-sidebar.tsx (stubbed)
+
+### Summary
+- Total files created: ~25 files
+- UI components created: 8 new components + 1 enhanced (tabs)
+- Hooks created: use-mobile.tsx
+- Utilities created: string-utils.ts, branding-status.ts, product-status.ts
+- All stubs have clear TODO comments
+- npm run typecheck:web passes
