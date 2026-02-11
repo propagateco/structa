@@ -23,9 +23,20 @@
 - packages/web/src/components/auth/auth-drawer.tsx (new, ~155 lines)
 
 ### Next Tasks
-- Task 2: Implement fade+slide animations
 - Task 3: Create AuthDrawerInitialView with auth forms
 - Task 4: Create AuthDrawerVerifyView with verification form
 - Task 5: Update LoginCodeForm for callback mode
 - Task 6: Create VerifyCodeFormDrawer component
 - Task 7: Refactor blog post route to use AuthDrawer
+
+## 2025-02-11: Task 2 Complete - Fade+Slide Animations
+
+### Completed
+- Added absolute positioning container with overflow-hidden for views
+- Initial view slides left with -translate-x-full when transitioning to verify
+- Verify view slides in from right with translate-x-full to translate-x-0
+- Both views have transition-all duration-300 ease-in-out for smooth animations
+- Views use opacity transitions (opacity-100 ↔ opacity-0) for fade effect
+
+### Files Changed
+- packages/web/src/components/auth/auth-drawer.tsx (updated)
