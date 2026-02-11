@@ -166,8 +166,6 @@ export function AuthDrawer({
 									<LoginAppleForm />
 								</div>
 								<Divider text="Or" />
-								{/* TODO: Remove @ts-ignore after Task 2.1 - onEmailSent prop will be added to LoginCodeForm */}
-								{/* @ts-ignore - Temporary until LoginCodeForm gets onEmailSent prop */}
 								<LoginCodeForm onEmailSent={handleEmailSent} />
 							</ViewContainer>
 
