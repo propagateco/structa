@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { Divider } from "@/components/layout/divider";
 import {
 	Drawer,
 	DrawerClose,
@@ -7,22 +8,21 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 } from "@/components/ui/drawer";
+import { LoginAppleForm } from "./login-apple-form";
+import { LoginCodeForm } from "./login-code-form";
+import { LoginGoogleForm } from "./login-google-form";
 
-// TODO: Implement in subsequent task
 interface AuthDrawerInitialViewProps {
 	onEmailSent: (email: string) => void;
-	onSuccess: () => void;
 }
 
-function AuthDrawerInitialView({
-	onEmailSent,
-	onSuccess,
-}: AuthDrawerInitialViewProps) {
+function AuthDrawerInitialView({ onEmailSent }: AuthDrawerInitialViewProps) {
 	return (
 		<div className="flex flex-col gap-2">
-			<p className="text-sm text-muted-foreground">
-				TODO: Implement AuthDrawerInitialView with social login forms
-			</p>
+			<LoginGoogleForm />
+			<LoginAppleForm />
+			<Divider text="Or" />
+			<LoginCodeForm onEmailSent={onEmailSent} />
 		</div>
 	);
 }
@@ -133,10 +133,7 @@ export function AuthDrawer({
 								: "-translate-x-full opacity-0"
 						}`}
 					>
-						<AuthDrawerInitialView
-							onEmailSent={handleEmailSent}
-							onSuccess={handleSuccess}
-						/>
+						<AuthDrawerInitialView onEmailSent={handleEmailSent} />
 					</div>
 
 					{/* Verify View - slides in from right when view is verify */}
