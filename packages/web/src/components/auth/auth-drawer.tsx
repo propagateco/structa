@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { AuthDrawerInitialView } from "@/components/auth/auth-drawer-initial-view";
+import { AuthDrawerVerifyView } from "@/components/auth/auth-drawer-verify-view";
 import {
 	Drawer,
 	DrawerContent,
@@ -7,6 +9,7 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 } from "@/components/ui/drawer";
+import { cn } from "@/lib/utils";
 
 export interface AuthDrawerProps {
 	open: boolean;
@@ -21,7 +24,7 @@ export interface AuthDrawerProps {
  * AuthDrawer - A reusable authentication drawer component
  *
  * Manages two views: 'initial' (social login + email input) and 'verify' (code verification)
- * Transitions between views with fade+slide animations
+ * Transitions between views with fade+slide animations (300ms)
  */
 export function AuthDrawer({
 	open,
@@ -88,6 +91,39 @@ export function AuthDrawer({
 						</DrawerDescription>
 					)}
 				</DrawerHeader>
+
+				{/* View Container with fade+slide animations */}
+				<div className="relative overflow-hidden">
+					{/* Initial View */}
+					<div
+						className={cn(
+							"transition-all duration-300 ease-in-out",
+							view === "initial"
+								? "translate-x-0 opacity-100"
+								: "-translate-x-full opacity-0 absolute inset-0",
+						)}
+					>
+						<AuthDrawerInitialView onEmailSent={handleEmailSent} />
+					</div>
+
+					{/* Verify View */}
+					<div
+						className={cn(
+							"transition-all duration-300 ease-in-out",
+							view === "verify"
+								? "translate-x-0 opacity-100"
+								: "translate-x-full opacity-0 absolute inset-0",
+						)}
+					>
+						{email && (
+							<AuthDrawerVerifyView
+								email={email}
+								onBack={handleBack}
+								onSuccess={handleSuccess}
+							/>
+						)}
+					</div>
+				</div>
 			</DrawerContent>
 		</Drawer>
 	);
