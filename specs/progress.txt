@@ -5,3 +5,27 @@
 [CURRENT_ISSUE] 25
 [CURRENT_BRANCH] 25-implement-slide-out-auth-drawer-for-blog-posts
 [STARTED] 2025-02-11
+
+## 2025-02-11: Task 1 Complete - AuthDrawer Component Skeleton
+
+### Completed
+- Created AuthDrawer component with view state transitions (initial ↔ verify)
+- Added internal state: view, email, isLoading
+- Implemented reset logic when drawer closes via useEffect
+- Added placeholder sub-components:
+  - AuthDrawerInitialView (with onEmailSent, onSuccess props)
+  - AuthDrawerVerifyView (with email, onBack, onSuccess props)
+  - defaultDescription (Terms/Privacy links)
+- Created component interface:
+  - open, onOpenChange, onSuccess, title?, description?, showLegalLinks?
+
+### Files Changed
+- packages/web/src/components/auth/auth-drawer.tsx (new, ~155 lines)
+
+### Next Tasks
+- Task 2: Implement fade+slide animations
+- Task 3: Create AuthDrawerInitialView with auth forms
+- Task 4: Create AuthDrawerVerifyView with verification form
+- Task 5: Update LoginCodeForm for callback mode
+- Task 6: Create VerifyCodeFormDrawer component
+- Task 7: Refactor blog post route to use AuthDrawer
