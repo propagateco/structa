@@ -31,6 +31,51 @@ interface AuthDrawerProps {
 	children?: React.ReactNode;
 }
 
+/**
+ * AuthDrawer - A reusable authentication drawer with animated view transitions
+ *
+ * @example
+ * ```tsx
+ * // Landing page example
+ * <AuthDrawer
+ *   open={open}
+ *   onOpenChange={setOpen}
+ *   title="Start Your Free Account"
+ *   description="Join thousands of home renovators..."
+ *   onSuccess={() => console.log('Authenticated')}
+ * >
+ *   <Button>Get Started</Button>
+ * </AuthDrawer>
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Pricing page example
+ * <AuthDrawer
+ *   open={open}
+ *   onOpenChange={setOpen}
+ *   title="Start Your Pro Trial"
+ *   description="14 days free, no credit card required"
+ *   showLegalLinks={true}
+ * >
+ *   <Button>Start Trial</Button>
+ * </AuthDrawer>
+ * ```
+ *
+ * @example
+ * ```tsx
+ * // Guide/blog post example
+ * <AuthDrawer
+ *   open={drawerOpen}
+ *   onOpenChange={setDrawerOpen}
+ *   onSuccess={() => {
+ *     console.log('User successfully authenticated');
+ *   }}
+ * >
+ *   <Button>Continue Reading</Button>
+ * </AuthDrawer>
+ * ```
+ */
 export function AuthDrawer({
 	open,
 	onOpenChange,
