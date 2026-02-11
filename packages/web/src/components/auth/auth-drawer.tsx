@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { LoginAppleForm } from "@/components/auth/login-apple-form";
 import { LoginCodeForm } from "@/components/auth/login-code-form";
 import { LoginGoogleForm } from "@/components/auth/login-google-form";
+import { VerifyCodeFormDrawer } from "@/components/auth/verify-code-form-drawer";
 import { Divider } from "@/components/layout/divider";
 import { Button } from "@/components/ui/button";
 import {
@@ -171,12 +172,13 @@ export function AuthDrawer({
 
 							{/* Verify View: Code entry with email context */}
 							<ViewContainer isActive={view === "verify"} direction="right">
-								{/* TODO: Implement VerifyCodeFormDrawer component */}
-								<div className="text-center py-8">
-									<p className="text-muted-foreground">
-										Code verification component (VerifyCodeFormDrawer)
-									</p>
-								</div>
+								{email && (
+									<VerifyCodeFormDrawer
+										email={email}
+										onBack={handleBack}
+										onSuccess={handleVerificationSuccess}
+									/>
+								)}
 							</ViewContainer>
 
 							<DrawerClose asChild>
