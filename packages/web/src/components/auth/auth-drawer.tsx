@@ -124,20 +124,36 @@ export function AuthDrawer({
 					{description || (showLegalLinks && defaultDescription())}
 				</DrawerHeader>
 
-				<div className="px-4 pb-4">
-					{view === "initial" && (
+				<div className="px-4 pb-4 relative overflow-hidden">
+					{/* Initial View - slides left when transitioning to verify */}
+					<div
+						className={`absolute inset-0 transition-all duration-300 ease-in-out ${
+							view === "initial"
+								? "translate-x-0 opacity-100"
+								: "-translate-x-full opacity-0"
+						}`}
+					>
 						<AuthDrawerInitialView
 							onEmailSent={handleEmailSent}
 							onSuccess={handleSuccess}
 						/>
-					)}
+					</div>
 
-					{view === "verify" && email && (
-						<AuthDrawerVerifyView
-							email={email}
-							onBack={handleBack}
-							onSuccess={handleSuccess}
-						/>
+					{/* Verify View - slides in from right when view is verify */}
+					{email && (
+						<div
+							className={`absolute inset-0 transition-all duration-300 ease-in-out ${
+								view === "verify"
+									? "translate-x-0 opacity-100"
+									: "translate-x-full opacity-0"
+							}`}
+						>
+							<AuthDrawerVerifyView
+								email={email}
+								onBack={handleBack}
+								onSuccess={handleSuccess}
+							/>
+						</div>
 					)}
 				</div>
 
