@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { DiagonalPattern } from './DiagonalPattern';
+import { useTheme } from '../theme-provider';
 
 interface BlogPostCardProps {
     title: string;
@@ -20,6 +21,8 @@ export function BlogPostCard({
     coverImage,
     slug,
 }: BlogPostCardProps) {
+    const { resolvedTheme } = useTheme();
+
     return (
         <Link
             to="/guides/$slug"
@@ -31,7 +34,7 @@ export function BlogPostCard({
                 <div className="relative shrink-0 h-56 overflow-hidden">
                     {coverImage ? (
                         <img
-                            src={coverImage}
+                            src={`${coverImage}${resolvedTheme === 'dark' ? '-dark' : '-light'}.webp`}
                             alt={title}
                             className="object-cover w-full h-full"
                         />

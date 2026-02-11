@@ -4,6 +4,7 @@ slug: "renovation-checklist"
 description: "A comprehensive week-by-week guide to planning your home renovation project, from initial budgeting to final walkthrough."
 author: "Structa Team"
 publishedAt: "2026-01-31"
+coverImage: 'https://structa.so/images/half-tone/floating-floor'
 readTime: "25 min read"
 previewPercentage: 30
 seoTitle: "12-Week Home Renovation Checklist | Structa"
