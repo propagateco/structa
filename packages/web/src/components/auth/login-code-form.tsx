@@ -25,11 +25,19 @@ const CodeForm = z.object({
 type CodeFormType = z.infer<typeof CodeForm>;
 
 interface LoginCodeFormProps {
+	/**
+	 * Optional callback triggered when email verification code is sent successfully.
+	 * If provided, the component will NOT navigate to /login/code.
+	 * If not provided, the component will navigate to /login/code (existing behavior).
+	 */
 	onEmailSent?: (email: string) => void;
 	onSuccess?: () => void;
 }
 
-export function LoginCodeForm({ onEmailSent, onSuccess }: LoginCodeFormProps) {
+export function LoginCodeForm({
+	onEmailSent,
+	onSuccess,
+}: LoginCodeFormProps = {}) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const navigate = useNavigate();
@@ -58,16 +66,15 @@ export function LoginCodeForm({ onEmailSent, onSuccess }: LoginCodeFormProps) {
 
 			if (error) {
 				setError("Failed to send verification code. Please try again.");
+			} else if (onEmailSent) {
+				// Callback mode: call the callback instead of navigating
+				onEmailSent(values.email);
 			} else {
-				// Use callback if provided, otherwise navigate to verify page
-				if (onEmailSent) {
-					onEmailSent(values.email);
-				} else {
-					navigate({
-						to: "/login/code",
-						search: { email: values.email },
-					});
-				}
+				// Default mode: navigate to verification page
+				navigate({
+					to: "/login/code",
+					search: { email: values.email },
+				});
 			}
 		} catch (error) {
 			setError("Something went wrong. Please try again.");

@@ -10,7 +10,6 @@ import {
 } from "@/components/layout";
 import { Markdown } from "@/components/Markdown";
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 import { authClient } from "@/lib/auth-client";
 import { getPublicAuth } from "@/lib/auth-server";
 import { getPreviewContent } from "@/utils/markdown";
@@ -256,25 +255,25 @@ function BlogPost() {
 											</li>
 										</ul>
 									</div>
-									<Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-										<DrawerTrigger asChild>
-											<Button size="lg" className="mt-2 group">
-												Continue reading
-												<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-											</Button>
-										</DrawerTrigger>
-										<AuthDrawer
-											open={drawerOpen}
-											onOpenChange={setDrawerOpen}
-											title="Sign up below to continue reading for free"
-											showLegalLinks={true}
-											onSuccess={() => {
-												console.log(
-													"User successfully authenticated from guide",
-												);
-											}}
-										/>
-									</Drawer>
+									<Button
+										size="lg"
+										className="mt-2 group"
+										onClick={() => setDrawerOpen(true)}
+									>
+										Continue reading
+										<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+									</Button>
+									<AuthDrawer
+										open={drawerOpen}
+										onOpenChange={setDrawerOpen}
+										onSuccess={() => {
+											console.log(
+												"User successfully authenticated from guide post",
+											);
+										}}
+										title="Sign up below to continue reading for free"
+										showLegalLinks={true}
+									/>
 								</TexturedDiv>
 							</div>
 						</>

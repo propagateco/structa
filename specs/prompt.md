@@ -44,7 +44,14 @@ This determines whether you're in WORK mode or PR_MERGE mode.
 
 Use GitHub's auto-generated branch name. Do NOT manually construct one.
 
-Use this command:
+**IMPORTANT: Ensure branches are created from dev, not the repository's default branch.**
+
+First, checkout and update dev:
+```bash
+git checkout dev && git pull origin dev
+```
+
+Then use this command:
 ```bash
 gh issue develop <ISSUE_NUMBER>
 ```

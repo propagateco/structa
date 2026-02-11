@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MoveLeft } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -28,9 +28,31 @@ const CodeSchema = z.object({
 
 type CodeFormType = z.infer<typeof CodeSchema>;
 
+/**
+ * VerifyCodeFormDrawer Component
+ *
+ * Drawer-optimized verification form with back button and success callback.
+ * Designed for use within AuthDrawer to provide in-place verification without
+ * navigating to a new page.
+ *
+ * @example
+ * ```tsx
+ * <VerifyCodeFormDrawer
+ *   email="user@example.com"
+ *   onBack={() => setView('initial')}
+ *   onSuccess={() => {
+ *     setDrawerOpen(false);
+ *     onAuthSuccess();
+ *   }}
+ * />
+ * ```
+ */
 export interface VerifyCodeFormDrawerProps {
+	/** Email address that the code was sent to */
 	email: string;
+	/** Callback when back button is clicked */
 	onBack: () => void;
+	/** Callback when verification succeeds */
 	onSuccess: () => void;
 }
 
@@ -50,31 +72,33 @@ export function VerifyCodeFormDrawer({
 		},
 	});
 
-	const onSubmit = async (data: CodeFormType) => {
-		setIsLoading(true);
-		setError(null);
+	const onSubmit = useCallback(
+		async (data: CodeFormType) => {
+			setIsLoading(true);
+			setError(null);
 
-		try {
-			const response = await authClient.signIn.emailOtp({
-				email,
-				otp: data.code,
-			});
+			try {
+				const response = await authClient.signIn.emailOtp({
+					email,
+					otp: data.code,
+				});
 
-			if (response.error) {
-				setError("Invalid verification code. Please try again.");
+				if (response.error) {
+					setError("Invalid verification code. Please try again.");
+					hasSubmittedRef.current = false;
+					form.reset();
+				} else {
+					onSuccess();
+				}
+			} catch (error) {
+				setError("Something went wrong. Please try again.");
 				hasSubmittedRef.current = false;
-				form.reset();
-			} else {
-				// Call success callback instead of navigating
-				onSuccess();
+			} finally {
+				setIsLoading(false);
 			}
-		} catch (error) {
-			setError("Something went wrong. Please try again.");
-			hasSubmittedRef.current = false;
-		} finally {
-			setIsLoading(false);
-		}
-	};
+		},
+		[email, onSuccess, form],
+	);
 
 	const handlePaste = (e: React.ClipboardEvent) => {
 		e.preventDefault();
@@ -97,7 +121,7 @@ export function VerifyCodeFormDrawer({
 			hasSubmittedRef.current = true;
 			form.handleSubmit(onSubmit)();
 		}
-	}, [code, isLoading]);
+	}, [code, isLoading, form, onSubmit]);
 
 	// Reset submission guard when code is cleared
 	useEffect(() => {
@@ -108,12 +132,7 @@ export function VerifyCodeFormDrawer({
 
 	return (
 		<Form {...form}>
-			<form onSubmit={(e) => e.preventDefault()} className="space-y-4 w-full">
-				<div className="text-sm text-muted-foreground">
-					Enter the 6-digit code sent to{" "}
-					<span className="text-foreground font-medium">{email}</span>
-				</div>
-
+			<form onSubmit={(e) => e.preventDefault()} className="space-y-2 w-full">
 				<FormField
 					control={form.control}
 					name="code"
@@ -151,9 +170,10 @@ export function VerifyCodeFormDrawer({
 				<Button
 					type="button"
 					variant="link"
-					className="text-muted-foreground"
+					className="text-text-muted mt-10"
 					onClick={onBack}
 					disabled={isLoading}
+					isLoading={isLoading}
 					icon={<MoveLeft className="h-4 w-4" />}
 				>
 					{isLoading ? "Verifying" : "Back"}
