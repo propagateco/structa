@@ -11,6 +11,7 @@ import {
 import { LoginAppleForm } from "./login-apple-form";
 import { LoginCodeForm } from "./login-code-form";
 import { LoginGoogleForm } from "./login-google-form";
+import { VerifyCodeFormDrawer } from "./verify-code-form-drawer";
 
 interface AuthDrawerInitialViewProps {
 	onEmailSent: (email: string) => void;
@@ -27,7 +28,6 @@ function AuthDrawerInitialView({ onEmailSent }: AuthDrawerInitialViewProps) {
 	);
 }
 
-// TODO: Implement in subsequent task
 interface AuthDrawerVerifyViewProps {
 	email: string;
 	onBack: () => void;
@@ -40,11 +40,7 @@ function AuthDrawerVerifyView({
 	onSuccess,
 }: AuthDrawerVerifyViewProps) {
 	return (
-		<div className="flex flex-col gap-2">
-			<p className="text-sm text-muted-foreground">
-				TODO: Implement AuthDrawerVerifyView with verification form
-			</p>
-		</div>
+		<VerifyCodeFormDrawer email={email} onBack={onBack} onSuccess={onSuccess} />
 	);
 }
 
