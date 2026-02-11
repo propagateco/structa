@@ -1,0 +1,24 @@
+## 2025-02-11T12:00:00Z: Issue #25 Started
+
+- Issue title: Implement Slide-Out Auth Drawer for Blog Posts
+- Branch: 25-implement-slide-out-auth-drawer-for-blog-posts
+[CURRENT_ISSUE] 25
+[CURRENT_BRANCH] 25-implement-slide-out-auth-drawer-for-blog-posts
+[STARTED] 2025-02-11T12:00:00Z
+
+## 2025-02-11T12:30:00Z: AuthDrawer Component Implementation Complete
+
+- Created auth-drawer.tsx with internal state management (view, email, isLoading)
+- Updated LoginCodeForm to support optional onEmailSent callback
+- Created VerifyCodeFormDrawer component with back button support
+- Implemented fade+slide animations (300ms duration) between initial and verify views
+- Refactored guides/$slug.tsx to use AuthDrawer (reduced from 355 to 286 lines = 69 line reduction)
+- Key decisions:
+  - Used absolute positioning with CSS transforms for smooth animations
+  - Both views render simultaneously with visibility control via CSS classes
+  - AuthDrawer accepts optional children prop for custom trigger buttons
+- Files changed:
+  - packages/web/src/components/auth/auth-drawer.tsx (new)
+  - packages/web/src/components/auth/login-code-form.tsx (modified)
+  - packages/web/src/components/auth/verify-code-form-drawer.tsx (new)
+  - packages/web/src/routes/_marketing/guides/$slug.tsx (modified)
