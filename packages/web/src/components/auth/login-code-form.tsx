@@ -1,107 +1,110 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { authClient } from '@/lib/auth-client';
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const CodeForm = z.object({
-    email: z.string().email({
-        message: 'Must be a valid email address',
-    }),
+	email: z.string().email({
+		message: "Must be a valid email address",
+	}),
 });
 
 type CodeFormType = z.infer<typeof CodeForm>;
 
-export function LoginCodeForm() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
+interface LoginCodeFormProps {
+	onEmailSent?: (email: string) => void;
+}
 
-    const form = useForm<CodeFormType>({
-        resolver: zodResolver(CodeForm),
-        mode: 'onChange',
-        reValidateMode: 'onChange',
-        criteriaMode: 'firstError',
-        defaultValues: {
-            email: '',
-        },
-    });
+export function LoginCodeForm({ onEmailSent }: LoginCodeFormProps) {
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const navigate = useNavigate();
 
-    const { isValid } = form.formState;
+	const form = useForm<CodeFormType>({
+		resolver: zodResolver(CodeForm),
+		mode: "onChange",
+		reValidateMode: "onChange",
+		criteriaMode: "firstError",
+		defaultValues: {
+			email: "",
+		},
+	});
 
-    const onSubmit = async (values: CodeFormType) => {
-        setIsLoading(true);
-        setError(null);
+	const { isValid } = form.formState;
 
-        try {
-            const { error } = await authClient.emailOtp.sendVerificationOtp({
-                email: values.email,
-                type: 'sign-in',
-            });
+	const onSubmit = async (values: CodeFormType) => {
+		setIsLoading(true);
+		setError(null);
 
-            if (error) {
-                setError('Failed to send verification code. Please try again.');
-            } else {
-                navigate({
-                    to: '/login/code',
-                    search: { email: values.email },
-                });
-            }
-        } catch (error) {
-            setError('Something went wrong. Please try again.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
+		try {
+			const { error } = await authClient.emailOtp.sendVerificationOtp({
+				email: values.email,
+				type: "sign-in",
+			});
 
-    return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="flex flex-col gap-1 mb-2">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        placeholder="Enter your email"
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
+			if (error) {
+				setError("Failed to send verification code. Please try again.");
+			} else if (onEmailSent) {
+				// Callback mode for drawer usage
+				onEmailSent(values.email);
+			} else {
+				// Navigation mode for standalone page
+				navigate({
+					to: "/login/code",
+					search: { email: values.email },
+				});
+			}
+		} catch (error) {
+			setError("Something went wrong. Please try again.");
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-                    {error && (
-                        <div className="text-sm text-destructive">{error}</div>
-                    )}
-                </div>
+	return (
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(onSubmit)}>
+				<div className="flex flex-col gap-1 mb-2">
+					<FormField
+						control={form.control}
+						name="email"
+						render={({ field }) => (
+							<FormItem>
+								<FormControl>
+									<Input {...field} placeholder="Enter your email" />
+								</FormControl>
+							</FormItem>
+						)}
+					/>
 
-                <div className="flex flex-col gap-2">
-                    <Button
-                        type="submit"
-                        variant="secondary"
-                        className="w-full"
-                        isLoading={isLoading}
-                        disabled={isLoading || !isValid}
-                    >
-                        Continue with Email
-                    </Button>
-                </div>
-            </form>
-        </Form>
-    );
+					{error && <div className="text-sm text-destructive">{error}</div>}
+				</div>
+
+				<div className="flex flex-col gap-2">
+					<Button
+						type="submit"
+						variant="secondary"
+						className="w-full"
+						isLoading={isLoading}
+						disabled={isLoading || !isValid}
+					>
+						Continue with Email
+					</Button>
+				</div>
+			</form>
+		</Form>
+	);
 }
