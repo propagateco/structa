@@ -31,9 +31,13 @@ interface LoginCodeFormProps {
 	 * If not provided, the component will navigate to /login/code (existing behavior).
 	 */
 	onEmailSent?: (email: string) => void;
+	onSuccess?: () => void;
 }
 
-export function LoginCodeForm({ onEmailSent }: LoginCodeFormProps = {}) {
+export function LoginCodeForm({
+	onEmailSent,
+	onSuccess,
+}: LoginCodeFormProps = {}) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const navigate = useNavigate();
