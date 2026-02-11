@@ -5,3 +5,61 @@
 [CURRENT_ISSUE] 25
 [CURRENT_BRANCH] 25-implement-slide-out-auth-drawer-for-blog-posts
 [STARTED] 2026-02-11T20:00:00Z
+
+## 2026-02-11T20:05:00Z: Task 1 Complete
+
+- Created AuthDrawer component with basic structure
+- Added props interface and state management
+- File created: packages/web/src/components/auth/auth-drawer.tsx
+
+## 2026-02-11T20:10:00Z: Task 6 Complete
+
+- Added optional callback support to LoginCodeForm
+- Maintains backward compatibility with navigation mode
+
+## 2026-02-11T20:15:00Z: Task 3 Complete
+
+- Created AuthDrawerInitialView sub-component
+- Renders Google, Apple, and Email login options
+
+## 2026-02-11T20:20:00Z: Task 7 Complete
+
+- Created VerifyCodeFormDrawer component
+- Drawer-optimized verification form with email display
+
+## 2026-02-11T20:25:00Z: Task 4 Complete
+
+- Created AuthDrawerVerifyView sub-component
+- Wraps VerifyCodeFormDrawer with pass-through props
+
+## 2026-02-11T20:30:00Z: Task 5 Complete
+
+- Added fade+slide animations (300ms)
+- Smooth transitions between initial and verify views
+
+## 2026-02-11T20:35:00Z: Task 8 Complete
+
+- Refactored guides/$slug.tsx to use AuthDrawer
+- Reduced file by 65 lines (349 removed, 284 added)
+- Kept all existing logic (scroll, intersection observer, session)
+
+## 2026-02-11T20:40:00Z: Task 9 Complete
+
+- Added JSDoc documentation with usage examples
+- Examples for landing page, pricing, and gated content
+
+## 2026-02-11T20:45:00Z: Issue #25 Complete
+
+- All tasks completed
+- New components created:
+  - AuthDrawer (main component with animations)
+  - AuthDrawerInitialView (initial auth view)
+  - AuthDrawerVerifyView (verification view)
+  - VerifyCodeFormDrawer (drawer-optimized verification)
+- Modified:
+  - LoginCodeForm (added callback support)
+  - guides/$slug.tsx (refactored to use AuthDrawer)
+- Complexity reduced by 65 lines (vs 40 lines target)
+- All acceptance criteria met
+- Outputting COMPLETE to trigger PR creation
+<promise>COMPLETE</promise>
