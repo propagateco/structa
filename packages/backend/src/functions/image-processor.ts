@@ -1,11 +1,24 @@
-import { Resource } from 'sst';
-import type { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
-import { TimingMetrics, StorageServiceError } from '@core/storage/storage.interfaces';
-import { ImageFormat, ImageOperations, ImageProcessingConfig } from '@core/image/image.interfaces';
-import { StorageService } from '@core/storage';
-import { ImageService } from '@core/image';
-import { convertBytesToKilobytes, convertBytesToMegabytes } from '@core/utils/conversion';
-import { CACHE_TTL, MAX_IMAGE_SIZE_LAMBDA } from '@core/utils/constants';
+import { ImageService } from "@core/image";
+import type {
+	ImageFormat,
+	ImageOperations,
+	ImageProcessingConfig,
+} from "@core/image/image.interfaces";
+import { StorageService } from "@core/storage";
+import {
+	StorageServiceError,
+	type TimingMetrics,
+} from "@core/storage/storage.interfaces";
+import { CACHE_TTL, MAX_IMAGE_SIZE_LAMBDA } from "@core/utils/constants";
+import {
+	convertBytesToKilobytes,
+	convertBytesToMegabytes,
+} from "@core/utils/conversion";
+import type {
+	APIGatewayProxyEventV2,
+	APIGatewayProxyResultV2,
+} from "aws-lambda";
+import { Resource } from "sst";
 
 // Constants
 const config: ImageProcessingConfig = {
@@ -16,15 +29,19 @@ const config: ImageProcessingConfig = {
 };
 
 // Helper functions
-const parseImagePath = (path: string): { originalPath: string; operations: ImageOperations } => {
-	const pathArray = path.split('/');
-	const operationsString = pathArray.pop() || '';
+const parseImagePath = (
+	path: string,
+): { originalPath: string; operations: ImageOperations } => {
+	const pathArray = path.split("/");
+	const operationsString = pathArray.pop() || "";
 	pathArray.shift();
 
-	const operations = Object.fromEntries(operationsString.split(',').map((op) => op.split('=')));
+	const operations = Object.fromEntries(
+		operationsString.split(",").map((op) => op.split("=")),
+	);
 
 	return {
-		originalPath: pathArray.join('/'),
+		originalPath: pathArray.join("/"),
 		operations: {
 			width: operations.width ? parseInt(operations.width) : undefined,
 			height: operations.height ? parseInt(operations.height) : undefined,
@@ -44,7 +61,7 @@ const formatTimingHeader = (metrics: TimingMetrics): string => {
 		timings.push(`img-upload;dur=${Math.round(metrics.upload)}`);
 	}
 
-	return timings.join(',');
+	return timings.join(",");
 };
 
 /**
@@ -65,13 +82,13 @@ const formatTimingHeader = (metrics: TimingMetrics): string => {
 const createRedirectResponse = (
 	path: string,
 	operations: string,
-	timingHeader: string
+	timingHeader: string,
 ): APIGatewayProxyResultV2 => ({
 	statusCode: 302,
 	headers: {
-		Location: `/${path}?${operations.replace(/,/g, '&')}`,
-		'Cache-Control': 'private,no-store',
-		'Server-Timing': timingHeader,
+		Location: `/${path}?${operations.replace(/,/g, "&")}`,
+		"Cache-Control": "private,no-store",
+		"Server-Timing": timingHeader,
 	},
 });
 
@@ -90,15 +107,15 @@ const createRedirectResponse = (
 const createSuccessResponse = (
 	image: Buffer,
 	contentType: string,
-	timingHeader: string
+	timingHeader: string,
 ): APIGatewayProxyResultV2 => ({
 	statusCode: 200,
-	body: image.toString('base64'),
+	body: image.toString("base64"),
 	isBase64Encoded: true,
 	headers: {
-		'Content-Type': contentType,
-		'Cache-Control': config.cacheTTL,
-		'Server-Timing': timingHeader,
+		"Content-Type": contentType,
+		"Cache-Control": config.cacheTTL,
+		"Server-Timing": timingHeader,
 	},
 });
 
@@ -116,28 +133,32 @@ const createSuccessResponse = (
 const createErrorResponse = (
 	statusCode: number,
 	message: string,
-	error?: unknown
+	error?: unknown,
 ): APIGatewayProxyResultV2 => {
-	console.error('Application Error:', message, error);
+	console.error("Application Error:", message, error);
 	return {
 		statusCode,
 		body: JSON.stringify({ error: message }),
 		headers: {
-			'Content-Type': 'application/json',
+			"Content-Type": "application/json",
 		},
 	};
 };
 
 // Main handler
-const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+const handler = async (
+	event: APIGatewayProxyEventV2,
+): Promise<APIGatewayProxyResultV2> => {
 	// Validate request method
-	if (event.requestContext?.http?.method !== 'GET') {
-		return createErrorResponse(400, 'Only GET method is supported');
+	if (event.requestContext?.http?.method !== "GET") {
+		return createErrorResponse(400, "Only GET method is supported");
 	}
 
-	const { originalPath, operations } = parseImagePath(event.requestContext.http.path);
+	const { originalPath, operations } = parseImagePath(
+		event.requestContext.http.path,
+	);
 
-	let metrics: TimingMetrics = {
+	const metrics: TimingMetrics = {
 		download: 0,
 		transform: 0,
 	};
@@ -150,13 +171,13 @@ const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyRe
 		({ image: originalImage, contentType } = await StorageService.downloadFile(
 			config.originalBucket,
 			originalPath,
-			metrics
+			metrics,
 		));
 	} catch (error) {
 		if (error instanceof StorageServiceError) {
 			return createErrorResponse(error.statusCode, error.message, error);
 		}
-		return createErrorResponse(500, 'Error downloading original image', error);
+		return createErrorResponse(500, "Error downloading original image", error);
 	}
 
 	// Transform image
@@ -167,7 +188,7 @@ const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyRe
 			originalImage,
 			operations,
 			contentType,
-			metrics
+			metrics,
 		);
 		transformedImage = result.image;
 		contentType = result.contentType;
@@ -175,19 +196,19 @@ const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyRe
 		if (error instanceof StorageServiceError) {
 			return createErrorResponse(error.statusCode, error.message, error);
 		}
-		return createErrorResponse(500, 'Error transforming image', error);
+		return createErrorResponse(500, "Error transforming image", error);
 	}
 
 	// Upload the transformed image to S3
 	const imageTooLarge = transformedImage.byteLength > config.maxImageSize;
 	const transformedKey = `${originalPath}/${Object.entries(operations)
 		.map(([k, v]) => `${k}=${v}`)
-		.join(',')}`;
+		.join(",")}`;
 
-	console.log('Transformed key:', transformedKey);
+	console.log("Transformed key:", transformedKey);
 	console.log(
-		'Transformed image size:',
-		`${convertBytesToKilobytes(transformedImage.byteLength).toFixed(2)} KB`
+		"Transformed image size:",
+		`${convertBytesToKilobytes(transformedImage.byteLength).toFixed(2)} KB`,
 	);
 
 	// For images that are too large, upload and redirect or return error
@@ -199,22 +220,22 @@ const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyRe
 				transformedImage,
 				contentType,
 				config.cacheTTL,
-				metrics
+				metrics,
 			);
 
 			return createRedirectResponse(
 				originalPath,
 				Object.entries(operations)
 					.map(([k, v]) => `${k}=${v}`)
-					.join(','),
-				formatTimingHeader(metrics)
+					.join(","),
+				formatTimingHeader(metrics),
 			);
 		} catch (error) {
-			console.error('Could not upload transformed image to S3:', error);
+			console.error("Could not upload transformed image to S3:", error);
 			if (error instanceof StorageServiceError) {
 				return createErrorResponse(error.statusCode, error.message, error);
 			}
-			return createErrorResponse(403, 'Requested transformed image is too big');
+			return createErrorResponse(403, "Requested transformed image is too big");
 		}
 	}
 
@@ -226,19 +247,23 @@ const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyRe
 			transformedImage,
 			contentType,
 			config.cacheTTL,
-			metrics
+			metrics,
 		);
 	} catch (error) {
 		// Continue and return the image directly even if caching fails
-		console.error('Could not upload transformed image to S3:', error);
+		console.error("Could not upload transformed image to S3:", error);
 		if (error instanceof StorageServiceError) {
 			console.error(
 				`Error code: ${error.errorCode}, Status: ${error.statusCode}`,
-				error.context
+				error.context,
 			);
 		}
 	}
-	return createSuccessResponse(transformedImage, contentType, formatTimingHeader(metrics));
+	return createSuccessResponse(
+		transformedImage,
+		contentType,
+		formatTimingHeader(metrics),
+	);
 };
 
 export { handler };

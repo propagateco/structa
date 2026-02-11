@@ -31,8 +31,8 @@ export function LoginCodeForm() {
 
     const form = useForm<CodeFormType>({
         resolver: zodResolver(CodeForm),
-        mode: 'onBlur',
-        reValidateMode: 'onBlur',
+        mode: 'onChange',
+        reValidateMode: 'onChange',
         criteriaMode: 'firstError',
         defaultValues: {
             email: '',
@@ -69,7 +69,7 @@ export function LoginCodeForm() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 mb-2">
                     <FormField
                         control={form.control}
                         name="email"
@@ -81,7 +81,6 @@ export function LoginCodeForm() {
                                         placeholder="Enter your email"
                                     />
                                 </FormControl>
-                                <FormMessage />
                             </FormItem>
                         )}
                     />

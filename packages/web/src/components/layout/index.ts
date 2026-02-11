@@ -4,6 +4,7 @@ export { DiamondCorner } from './DiamondCorner';
 export { DiagonalDivider } from './DiagonalDivider';
 export { Grid } from './Grid';
 export { GridBackgroundSection } from './GridBackgroundSection';
+export { TexturedDiv, TexturedFadingDiv } from './TexturedDiv';
 export { TexturedSection } from './TexturedSection';
 
 // Landing page components

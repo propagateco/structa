@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { updateFavicon } from '@/utils/favicon';
 
 type Theme = 'dark' | 'light' | 'system';
 
@@ -77,6 +78,11 @@ const ThemeProvider = ({ children, defaultTheme = 'system', storageKey = 'struct
 
         root.classList.add(theme);
     }, [theme]);
+
+    // Update favicon when actualTheme changes
+    React.useEffect(() => {
+        updateFavicon(actualTheme);
+    }, [actualTheme]);
 
     const setTheme = React.useCallback(
         (newTheme: Theme) => {

@@ -12,16 +12,21 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as BlogRouteImport } from './routes/blog'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as MarketingRouteImport } from './routes/_marketing'
 import { Route as LoginRouteImport } from './routes/_login'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as UseCasesLoftRouteImport } from './routes/use-cases/loft'
 import { Route as UseCasesKitchenRouteImport } from './routes/use-cases/kitchen'
 import { Route as UseCasesExtensionRouteImport } from './routes/use-cases/extension'
+import { Route as MarketingTermsOfServiceRouteImport } from './routes/_marketing/terms-of-service'
+import { Route as MarketingPrivacyPolicyRouteImport } from './routes/_marketing/privacy-policy'
+import { Route as MarketingOnboardingRouteImport } from './routes/_marketing/onboarding'
+import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
+import { Route as MarketingGuidesIndexRouteImport } from './routes/_marketing/guides/index'
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as MarketingGuidesSlugRouteImport } from './routes/_marketing/guides/$slug'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
 
@@ -38,11 +43,6 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketingRoute = MarketingRouteImport.update({
@@ -73,6 +73,31 @@ const UseCasesExtensionRoute = UseCasesExtensionRouteImport.update({
   path: '/use-cases/extension',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketingTermsOfServiceRoute = MarketingTermsOfServiceRouteImport.update({
+  id: '/terms-of-service',
+  path: '/terms-of-service',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingPrivacyPolicyRoute = MarketingPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingOnboardingRoute = MarketingOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingAboutRoute = MarketingAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingGuidesIndexRoute = MarketingGuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => MarketingRoute,
+} as any)
 const LoginLoginIndexRoute = LoginLoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
@@ -88,6 +113,11 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MarketingGuidesSlugRoute = MarketingGuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => MarketingRoute,
+} as any)
 const LoginLoginCodeRoute = LoginLoginCodeRouteImport.update({
   id: '/login/code',
   path: '/login/code',
@@ -101,106 +131,135 @@ const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
-  '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/about': typeof MarketingAboutRoute
+  '/onboarding': typeof MarketingOnboardingRoute
+  '/privacy-policy': typeof MarketingPrivacyPolicyRoute
+  '/terms-of-service': typeof MarketingTermsOfServiceRoute
   '/use-cases/extension': typeof UseCasesExtensionRoute
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
+  '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app/': typeof AuthAppIndexRoute
   '/login/': typeof LoginLoginIndexRoute
+  '/guides/': typeof MarketingGuidesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
-  '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/about': typeof MarketingAboutRoute
+  '/onboarding': typeof MarketingOnboardingRoute
+  '/privacy-policy': typeof MarketingPrivacyPolicyRoute
+  '/terms-of-service': typeof MarketingTermsOfServiceRoute
   '/use-cases/extension': typeof UseCasesExtensionRoute
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
+  '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app': typeof AuthAppIndexRoute
   '/login': typeof LoginLoginIndexRoute
+  '/guides': typeof MarketingGuidesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_login': typeof LoginRouteWithChildren
   '/_marketing': typeof MarketingRouteWithChildren
-  '/about': typeof AboutRoute
   '/blog': typeof BlogRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/_marketing/about': typeof MarketingAboutRoute
+  '/_marketing/onboarding': typeof MarketingOnboardingRoute
+  '/_marketing/privacy-policy': typeof MarketingPrivacyPolicyRoute
+  '/_marketing/terms-of-service': typeof MarketingTermsOfServiceRoute
   '/use-cases/extension': typeof UseCasesExtensionRoute
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
+  '/_marketing/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/app/': typeof AuthAppIndexRoute
   '/_login/login/': typeof LoginLoginIndexRoute
+  '/_marketing/guides/': typeof MarketingGuidesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/blog'
     | '/privacy'
     | '/terms'
+    | '/about'
+    | '/onboarding'
+    | '/privacy-policy'
+    | '/terms-of-service'
     | '/use-cases/extension'
     | '/use-cases/kitchen'
     | '/use-cases/loft'
     | '/app/settings'
     | '/login/code'
+    | '/guides/$slug'
     | '/api/auth/$'
     | '/app/'
     | '/login/'
+    | '/guides/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/blog'
     | '/privacy'
     | '/terms'
+    | '/about'
+    | '/onboarding'
+    | '/privacy-policy'
+    | '/terms-of-service'
     | '/use-cases/extension'
     | '/use-cases/kitchen'
     | '/use-cases/loft'
     | '/app/settings'
     | '/login/code'
+    | '/guides/$slug'
     | '/api/auth/$'
     | '/app'
     | '/login'
+    | '/guides'
   id:
     | '__root__'
     | '/_login'
     | '/_marketing'
-    | '/about'
     | '/blog'
     | '/privacy'
     | '/terms'
+    | '/_marketing/about'
+    | '/_marketing/onboarding'
+    | '/_marketing/privacy-policy'
+    | '/_marketing/terms-of-service'
     | '/use-cases/extension'
     | '/use-cases/kitchen'
     | '/use-cases/loft'
     | '/_marketing/'
     | '/_auth/app/settings'
     | '/_login/login/code'
+    | '/_marketing/guides/$slug'
     | '/api/auth/$'
     | '/_auth/app/'
     | '/_login/login/'
+    | '/_marketing/guides/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   LoginRoute: typeof LoginRouteWithChildren
   MarketingRoute: typeof MarketingRouteWithChildren
-  AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
@@ -233,13 +292,6 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_marketing': {
@@ -284,6 +336,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UseCasesExtensionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_marketing/terms-of-service': {
+      id: '/_marketing/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof MarketingTermsOfServiceRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/privacy-policy': {
+      id: '/_marketing/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof MarketingPrivacyPolicyRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/onboarding': {
+      id: '/_marketing/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof MarketingOnboardingRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/about': {
+      id: '/_marketing/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof MarketingAboutRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/guides/': {
+      id: '/_marketing/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof MarketingGuidesIndexRouteImport
+      parentRoute: typeof MarketingRoute
+    }
     '/_login/login/': {
       id: '/_login/login/'
       path: '/login'
@@ -304,6 +391,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_marketing/guides/$slug': {
+      id: '/_marketing/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof MarketingGuidesSlugRouteImport
+      parentRoute: typeof MarketingRoute
     }
     '/_login/login/code': {
       id: '/_login/login/code'
@@ -335,11 +429,23 @@ const LoginRouteChildren: LoginRouteChildren = {
 const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 
 interface MarketingRouteChildren {
+  MarketingAboutRoute: typeof MarketingAboutRoute
+  MarketingOnboardingRoute: typeof MarketingOnboardingRoute
+  MarketingPrivacyPolicyRoute: typeof MarketingPrivacyPolicyRoute
+  MarketingTermsOfServiceRoute: typeof MarketingTermsOfServiceRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
+  MarketingGuidesSlugRoute: typeof MarketingGuidesSlugRoute
+  MarketingGuidesIndexRoute: typeof MarketingGuidesIndexRoute
 }
 
 const MarketingRouteChildren: MarketingRouteChildren = {
+  MarketingAboutRoute: MarketingAboutRoute,
+  MarketingOnboardingRoute: MarketingOnboardingRoute,
+  MarketingPrivacyPolicyRoute: MarketingPrivacyPolicyRoute,
+  MarketingTermsOfServiceRoute: MarketingTermsOfServiceRoute,
   MarketingIndexRoute: MarketingIndexRoute,
+  MarketingGuidesSlugRoute: MarketingGuidesSlugRoute,
+  MarketingGuidesIndexRoute: MarketingGuidesIndexRoute,
 }
 
 const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
@@ -349,7 +455,6 @@ const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRouteWithChildren,
   MarketingRoute: MarketingRouteWithChildren,
-  AboutRoute: AboutRoute,
   BlogRoute: BlogRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,

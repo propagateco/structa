@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const google = z.object({
-	iss: z.literal('https://accounts.google.com'),
+	iss: z.literal("https://accounts.google.com"),
 	azp: z.string(),
 	aud: z.string(),
 	sub: z.string(),

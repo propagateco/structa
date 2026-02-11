@@ -4,6 +4,7 @@ import tsConfigPaths from 'vite-tsconfig-paths'
 import viteReact from '@vitejs/plugin-react'
 import { nitro } from 'nitro/vite'
 import tailwindcss from '@tailwindcss/vite'
+import contentCollections from '@content-collections/vite'
 
 export default defineConfig({
   server: {
@@ -16,6 +17,13 @@ export default defineConfig({
       ignored: ['**/routeTree.gen.ts', '**/routeTree.gen.ts.map', '.tanstack/**'],
     },
   },
+  ssr: {
+    noExternal: ['posthog-js', 'posthog-js/react'],
+  },
+  optimizeDeps: {
+    // Pre-bundle gray-matter with Buffer polyfill support
+    include: ['gray-matter'],
+  },
   plugins: [
     tailwindcss(),
     nitro(),
@@ -25,6 +33,7 @@ export default defineConfig({
     }),
     tanstackStart(),
     viteReact(),
+    contentCollections(),
   ],
   nitro: {
     preset: 'aws-lambda',

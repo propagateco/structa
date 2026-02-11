@@ -248,6 +248,16 @@
     --color-ds-background-200: hsl(var(--ds-background-200));
 
     /* ================================================
+      CUSTOM FONT SIZES
+      ================================================ */
+
+    /* Override default Tailwind font sizes */
+    --text-4xl: 2.5rem;
+    --text-4xl--line-height: 1.2;
+    --text-5xl: 3.125rem;
+    --text-5xl--line-height: 1.2;
+
+    /* ================================================
       FONTS
       ================================================ */
 
@@ -256,6 +266,12 @@
     --font-serif: 'Lora', serif;
     --font-display: 'Lora', serif;
     --font-sans: 'Inter Tight', sans-serif;
+
+    /* Google Fonts */
+    --font-newsreader: 'Newsreader', serif;
+    --font-eb-garamond: 'EB Garamond', serif;
+    --font-cormorant-garamond: 'Cormorant Garamond', serif;
+    --font-figtree: 'Figtree', sans-serif;
 
     /* ================================================
       SPACING & RADIUS
@@ -304,11 +320,7 @@
 }
 
 .font-heading {
-    @apply text-foreground font-serif tracking-tight;
-}
-
-.dark .font-heading {
-    @apply text-foreground;
+    @apply font-serif tracking-tight;
 }
 
 .font-subheading {
@@ -317,6 +329,23 @@
 
 .dark .font-subheading {
     @apply text-ds-powder;
+}
+
+/* Google Font Utility Classes */
+.font-newsreader {
+    font-family: var(--font-newsreader);
+}
+
+.font-eb-garamond {
+    font-family: var(--font-eb-garamond);
+}
+
+.font-cormorant-garamond {
+    font-family: var(--font-cormorant-garamond);
+}
+
+.font-figtree {
+    font-family: var(--font-figtree);
 }
 
 /* ================================================
