@@ -1,6 +1,6 @@
-import type * as React from 'react';
-import { useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LoginAppleForm } from '@/components/auth/login-apple-form';
 import { LoginCodeForm } from '@/components/auth/login-code-form';
 import { LoginGoogleForm } from '@/components/auth/login-google-form';
@@ -10,13 +10,12 @@ import { Button } from '@/components/ui/button';
 import {
     Drawer,
     DrawerClose,
-    GatedDrawerContent,
     DrawerDescription,
     DrawerFooter,
     DrawerHeader,
     DrawerTitle,
+    GatedDrawerContent,
 } from '@/components/ui/drawer';
-import { verify } from 'crypto';
 
 /**
  * AuthDrawer Component
@@ -61,7 +60,17 @@ export function AuthDrawer({
     // Email state to pass between views
     const [email, setEmail] = useState<string | null>(null);
     // Loading state for verification
-    const [isLoading, setIsLoading] = useState(false);
+    const [_isLoading, setIsLoading] = useState(false);
+
+    // Refs for measuring view heights
+    const initialViewRef = useRef<HTMLDivElement>(null);
+    const verifyViewRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const initialViewContentRef = useRef<HTMLDivElement>(null);
+    const verifyViewContentRef = useRef<HTMLDivElement>(null);
+
+    // State for container height
+    const [containerHeight, setContainerHeight] = useState<number | null>(null);
 
     /**
      * Reset state when drawer closes
@@ -73,10 +82,39 @@ export function AuthDrawer({
                 setView('initial');
                 setEmail(null);
                 setIsLoading(false);
+                setContainerHeight(null);
             }, 300);
             return () => clearTimeout(timeoutId);
         }
     }, [open]);
+
+    /**
+     * Set initial height when drawer opens
+     */
+    useEffect(() => {
+        if (open && initialViewContentRef.current) {
+            setContainerHeight(initialViewContentRef.current.scrollHeight);
+        }
+    }, [open]);
+
+    /**
+     * Update container height based on active view
+     * Measures the height of the content (not the container) to get accurate size
+     */
+    useEffect(() => {
+        const activeContentRef =
+            view === 'initial' ? initialViewContentRef : verifyViewContentRef;
+
+        // Small delay to ensure the ref is populated and DOM is updated
+        const timeoutId = setTimeout(() => {
+            if (activeContentRef.current) {
+                const height = activeContentRef.current.scrollHeight;
+                setContainerHeight(height);
+            }
+        }, 50);
+
+        return () => clearTimeout(timeoutId);
+    }, [view]);
 
     /**
      * Handle email submission from LoginCodeForm
@@ -159,38 +197,62 @@ export function AuthDrawer({
                         </DrawerDescription>
                     </DrawerHeader>
                     <DrawerFooter className="mx-auto max-w-sm md:max-w-md">
-                        <div className="relative flex flex-col">
+                        <div
+                            ref={containerRef}
+                            className="relative flex flex-col min-h-[300px]"
+                            style={{
+                                height: containerHeight
+                                    ? `${containerHeight}px`
+                                    : 'auto',
+                            }}
+                        >
                             {/* Initial View: Social login + email form */}
                             <ViewContainer
                                 isActive={view === 'initial'}
                                 direction="left"
+                                ref={initialViewRef}
                             >
-                                <div className="flex flex-col gap-3">
-                                    <LoginGoogleForm />
-                                    <LoginAppleForm />
+                                <div
+                                    ref={initialViewContentRef}
+                                    className="flex w-full flex-col gap-4 md:gap-5"
+                                >
+                                    <div className="flex flex-col gap-3">
+                                        <LoginGoogleForm />
+                                        <LoginAppleForm />
+                                    </div>
+                                    <Divider text="Or" />
+                                    <LoginCodeForm
+                                        onEmailSent={handleEmailSent}
+                                    />
                                 </div>
-                                <Divider text="Or" />
-                                <LoginCodeForm onEmailSent={handleEmailSent} />
                             </ViewContainer>
 
                             {/* Verify View: Code entry with email context */}
                             <ViewContainer
                                 isActive={view === 'verify'}
                                 direction="right"
+                                ref={verifyViewRef}
                             >
                                 {email && (
-                                    <VerifyCodeFormDrawer
-                                        email={email}
-                                        onBack={handleBack}
-                                        onSuccess={handleVerificationSuccess}
-                                    />
+                                    <div
+                                        ref={verifyViewContentRef}
+                                        className="flex w-full flex-col gap-4 md:gap-5"
+                                    >
+                                        <VerifyCodeFormDrawer
+                                            email={email}
+                                            onBack={handleBack}
+                                            onSuccess={
+                                                handleVerificationSuccess
+                                            }
+                                        />
+                                    </div>
                                 )}
                             </ViewContainer>
 
                             <DrawerClose asChild>
                                 <Button
                                     variant="ghost"
-                                    className="text-text-muted mt-6 mb-3"
+                                    className="text-text-muted w-full mt-6 mb-3 absolute bottom-0 left-0"
                                 >
                                     Close
                                 </Button>
@@ -215,21 +277,25 @@ interface ViewContainerProps {
     children: React.ReactNode;
 }
 
-function ViewContainer({ isActive, direction, children }: ViewContainerProps) {
-    return (
-        <div
-            className={`
-                flex flex-col gap-4 md:gap-5 transition-all duration-300 ease-in-out
-                ${
-                    isActive
-                        ? 'translate-x-0 opacity-100'
-                        : direction === 'left'
-                          ? '-translate-x-full opacity-0'
-                          : 'translate-x-full opacity-0'
-                }
-            `}
-        >
-            {children}
-        </div>
-    );
-}
+const ViewContainer = React.forwardRef<HTMLDivElement, ViewContainerProps>(
+    ({ isActive, direction, children }, ref) => {
+        return (
+            <div
+                ref={ref}
+                className={`
+                    absolute inset-0 transition-all duration-300 ease-in-out
+                    ${
+                        isActive
+                            ? 'translate-x-0 opacity-100'
+                            : direction === 'left'
+                              ? '-translate-x-full opacity-0'
+                              : 'translate-x-full opacity-0'
+                    }
+                `}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+ViewContainer.displayName = 'ViewContainer';
