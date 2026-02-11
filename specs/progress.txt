@@ -20,14 +20,7 @@
   - open, onOpenChange, onSuccess, title?, description?, showLegalLinks?
 
 ### Files Changed
-- packages/web/src/components/auth/auth-drawer.tsx (new, ~155 lines)
-
-### Next Tasks
-- Task 3: Create AuthDrawerInitialView with auth forms
-- Task 4: Create AuthDrawerVerifyView with verification form
-- Task 5: Update LoginCodeForm for callback mode
-- Task 6: Create VerifyCodeFormDrawer component
-- Task 7: Refactor blog post route to use AuthDrawer
+- packages/web/src/components/auth/auth-drawer.tsx (updated)
 
 ## 2025-02-11: Task 2 Complete - Fade+Slide Animations
 
@@ -40,3 +33,20 @@
 
 ### Files Changed
 - packages/web/src/components/auth/auth-drawer.tsx (updated)
+
+## 2025-02-11: Task 3 Complete - AuthDrawerInitialView and LoginCodeForm Callback Support
+
+### Completed
+- Implemented AuthDrawerInitialView with social login forms:
+  - LoginGoogleForm
+  - LoginAppleForm
+  - Divider with 'Or' text
+  - LoginCodeForm
+- Updated LoginCodeForm to support optional callback mode:
+  - Added onEmailSent callback prop
+  - Added onSuccess callback prop
+  - On submit: calls onEmailSent if provided, otherwise navigates to /login/code
+
+### Files Changed
+- packages/web/src/components/auth/auth-drawer.tsx (updated)
+- packages/web/src/components/auth/login-code-form.tsx (updated)
