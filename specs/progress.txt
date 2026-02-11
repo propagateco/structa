@@ -44,3 +44,10 @@
   ⚠️ Manual testing checklist completed (requires browser testing)
 - Ready for manual testing and integration review
 <promise>COMPLETE</promise>
+
+## 2025-02-11T13:05:00Z: PR Created for Issue #25
+
+- PR #31
+- Branch: 25-implement-slide-out-auth-drawer-for-blog-posts
+- Labels: enhancement
+- Waiting for CI checks...
