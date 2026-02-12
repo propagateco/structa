@@ -9,6 +9,7 @@ import {
 	TexturedSection,
 } from "@/components/layout";
 import { Markdown } from "@/components/Markdown";
+import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { getPublicAuth } from "@/lib/auth-server";
@@ -35,6 +36,7 @@ function BlogPost() {
 
 	const { data: clientSession } = authClient.useSession();
 	const session = clientSession?.session || serverSession;
+	const { resolvedTheme } = useTheme();
 
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const ctaSectionRef = useRef<HTMLDivElement>(null);
@@ -194,7 +196,7 @@ function BlogPost() {
 				<header className="my-12 md:my-24 space-y-6">
 					{post.coverImage && (
 						<img
-							src={post.coverImage}
+							src={`${post.coverImage}${resolvedTheme === "dark" ? "-dark" : "-light"}.webp`}
 							alt={post.title}
 							className="w-full h-64 md:h-96 object-cover rounded-lg"
 						/>
