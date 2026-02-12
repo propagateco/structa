@@ -4,7 +4,7 @@ export default [
     "title": "12-Week Renovation Checklist",
     "slug": "renovation-checklist",
     "description": "A comprehensive week-by-week guide to planning your home renovation project, from initial budgeting to final walkthrough.",
-    "author": "Structa Team",
+    "author": "Hester @lifewithcharacter",
     "publishedAt": "2026-01-31",
     "readTime": "25 min read",
     "previewPercentage": 30,
