@@ -4,6 +4,7 @@ import { ArrowRight, Lock, Sparkle } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AuthDrawer } from '@/components/auth/auth-drawer';
 import {
+    Crosshair,
     TexturedDiv,
     TexturedFadingDiv,
     TexturedSection,
@@ -197,16 +198,20 @@ function BlogPost() {
             showGrid={false}
         >
             <div className="col-span-2 md:col-span-8">
-                <header className="my-12 md:my-24 space-y-6">
+                <header className="my-12 md:my-16 space-y-4">
                     {post.coverImage && (
-                        <img
-                            src={`${post.coverImage}${resolvedTheme === 'dark' ? '-dark' : '-light'}.webp`}
-                            alt={post.title}
-                            className="w-full h-64 md:h-96 object-cover rounded-lg"
-                        />
+                        <div className="relative w-full h-64 md:h-96">
+                            <img
+                                src={`${post.coverImage}${resolvedTheme === 'dark' ? '-dark' : '-light'}.webp`}
+                                alt={post.title}
+                                className="w-full h-full object-cover rounded-none"
+                            />
+                            <Crosshair position="top-left" />
+                            <Crosshair position="bottom-right" />
+                        </div>
                     )}
 
-                    <h1 className="font-heading text-4xl md:text-5xl">
+                    <h1 className="font-heading text-4xl md:text-5xl mt-8">
                         {post.title}
                     </h1>
 
@@ -226,7 +231,7 @@ function BlogPost() {
                     </p>
                 </header>
 
-                <div className="prose prose-lg max-w-none">
+                <div className="prose prose-lg max-w-none mb-12 md:mb-16">
                     {isPreview ? (
                         <>
                             <Markdown content={contentToShow} />
@@ -236,7 +241,7 @@ function BlogPost() {
                                 className="absolute w-full bottom-0 left-0"
                             >
                                 <TexturedFadingDiv className="h-54 bg-gradient-to-t from-background via-background/80 to-transparent"></TexturedFadingDiv>
-                                <TexturedDiv className="text-center bg-background pt-8 pb-20">
+                                <TexturedDiv className="text-center bg-background py-12">
                                     <div className="px-lg mx-auto max-w-md md:max-w-xl mb-6 space-y-6">
                                         <h3 className="font-heading font-light text-4xl text-center">
                                             Sign up below to continue reading

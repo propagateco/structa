@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout';
+import { DiagonalDivider, Footer } from '@/components/layout';
 import { getPublicAuth } from '@/lib/auth-server';
 
 export const Route = createFileRoute('/_marketing')({
@@ -32,6 +32,7 @@ function LayoutComponent() {
                 </div>
                 <main className="pt-14 mx-3 sm:mx-4 md:mx-8 border-x border-ds-powder/50 dark:border-ds-powder/[0.08] relative">
                     <Outlet />
+                    <DiagonalDivider />
                 </main>
             </div>
             <Footer />
