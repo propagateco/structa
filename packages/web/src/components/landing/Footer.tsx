@@ -28,13 +28,13 @@ export function Footer() {
                             Company
                         </h3>
                         <Link
-                            to="/about"
+                            to="/"
                             className="text-muted-foreground hover:text-accent transition-colors"
                         >
                             home
                         </Link>
                         <Link
-                            to="/blog"
+                            to="/guides"
                             className="text-muted-foreground hover:text-accent transition-colors"
                         >
                             guides
@@ -91,7 +91,7 @@ export function Footer() {
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-accent transition-colors"
                         >
-                            @lifewithchracter
+                            @lifewithcharacter
                         </a>
                         <a
                             href="https://linkedin.com/placeholder"
