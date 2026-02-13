@@ -1,66 +1,63 @@
-import { Link } from '@tanstack/react-router';
-import { DiagonalPattern } from './DiagonalPattern';
-import { useTheme } from '../theme-provider';
+import { Link } from "@tanstack/react-router";
+import { DiagonalPatternCard } from "../layout/DiagonalPatternCard";
 
 interface BlogPostCardProps {
-    title: string;
-    description: string;
-    author?: string;
-    publishedAt: string;
-    readTime?: string;
-    coverImage?: string;
-    slug: string;
+	title: string;
+	description: string;
+	author?: string;
+	publishedAt: string;
+	readTime?: string;
+	coverImage?: string;
+	slug: string;
 }
 
 export function BlogPostCard({
-    title,
-    description,
-    author,
-    publishedAt,
-    readTime,
-    coverImage,
-    slug,
+	title,
+	description,
+	author,
+	publishedAt,
+	readTime: _readTime,
+	coverImage,
+	slug,
 }: BlogPostCardProps) {
-    const { resolvedTheme } = useTheme();
+	return (
+		<Link to="/guides/$slug" params={{ slug }} className="block h-full">
+			<DiagonalPatternCard className="h-[450px] flex flex-col border-0">
+				{/* Inner content with solid background */}
+				<div className="flex flex-col h-full bg-background rounded-md">
+					{/* Top Section: Image (pattern is provided by DiagonalPatternCard as fallback) */}
+					{coverImage && (
+						<div className="relative shrink-0 h-52 overflow-hidden rounded-t-md">
+							<img
+								src={`${coverImage}-light.webp`}
+								alt={title}
+								className="object-cover w-full h-full dark:hidden"
+							/>
+							<img
+								src={`${coverImage}-dark.webp`}
+								alt={title}
+								className="object-cover w-full h-full hidden dark:block"
+							/>
+						</div>
+					)}
 
-    return (
-        <Link
-            to="/guides/$slug"
-            params={{ slug }}
-            className="block h-full group"
-        >
-            <article className="border border-border rounded-lg overflow-hidden hover:border-accent transition-colors duration-300 h-[450px] flex flex-col bg-background">
-                {/* Top Section: Image or DiagonalPattern fallback */}
-                <div className="relative shrink-0 h-56 overflow-hidden">
-                    {coverImage ? (
-                        <img
-                            src={`${coverImage}${resolvedTheme === 'dark' ? '-dark' : '-light'}.webp`}
-                            alt={title}
-                            className="object-cover w-full h-full"
-                        />
-                    ) : (
-                        <DiagonalPattern show={true} />
-                    )}
-                </div>
+					{/* Bottom Section: Content */}
+					<div className="flex flex-col flex-1 p-4">
+						<h2 className="font-serif text-xl font-semibold mb-2 group-hover:text-accent transition-colors duration-500">
+							{title}
+						</h2>
 
-                {/* Bottom Section: Content */}
-                <div className="p-6 flex flex-col flex-1">
-                    <h2 className="text-xl font-semibold mb-2 group-hover:text-accent transition-colors">
-                        {title}
-                    </h2>
+						<p className="text-muted-foreground line-clamp-3 mb-4 flex-1">
+							{description}
+						</p>
 
-                    <p className="text-muted-foreground line-clamp-3 mb-4 flex-1">
-                        {description}
-                    </p>
-
-                    <div className="flex items-center gap-2 font-space-grotesk text-sm text-muted-foreground pt-4 border-t border-border/50">
-                        <span>
-                            {new Date(publishedAt).toLocaleDateString()}
-                        </span>
-                        {author && <span>· {author}</span>}
-                    </div>
-                </div>
-            </article>
-        </Link>
-    );
+						<div className="flex items-center gap-2 font-space-grotesk text-sm text-muted-foreground pt-4 border-t border-border/50">
+							<span>{new Date(publishedAt).toLocaleDateString()}</span>
+							{author && <span>· {author}</span>}
+						</div>
+					</div>
+				</div>
+			</DiagonalPatternCard>
+		</Link>
+	);
 }
