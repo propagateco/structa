@@ -47,7 +47,7 @@ export const Header = () => {
                     </a>
                 </div>
 
-                <div className="flex flex-row items-center justify-center gap-4 md:gap-8">
+                <div className="flex flex-row items-center justify-center gap-6 md:gap-8">
                     <PageLink to="/guides" variant="default">
                         guides
                     </PageLink>
