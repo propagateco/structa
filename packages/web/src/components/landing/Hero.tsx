@@ -41,7 +41,7 @@ export function Hero({
             showDiamonds={false}
             showGridBackground={true}
         >
-            <div className="max-w-xl md:max-w-2xl relative col-span-4 sm:col-span-6 lg:col-span-8 space-y-5 sm:space-y-6 pt-10 pb-16">
+            <div className="max-w-xl md:max-w-2xl relative col-span-4 sm:col-span-6 lg:col-span-8 space-y-5 sm:space-y-6 pt-10 pb-5 md:pb-16">
                 {/* Hero Title */}
                 <h1 className="font-heading text-text font-normal tracking-tight text-4xl lg:text-5xl text-left whitespace-pre-line">
                     {titleTop}

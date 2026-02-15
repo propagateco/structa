@@ -243,7 +243,7 @@ function BlogPost() {
                                 <TexturedFadingDiv className="h-54 bg-gradient-to-t from-background via-background/80 to-transparent"></TexturedFadingDiv>
                                 <TexturedDiv className="text-center bg-background py-12">
                                     <div className="px-lg mx-auto max-w-md md:max-w-xl mb-6 space-y-6">
-                                        <h3 className="font-heading font-light text-4xl text-center">
+                                        <h3 className="font-heading font-light text-3xl md:text-4xl text-center">
                                             Sign up below to continue reading
                                             for free
                                         </h3>
@@ -252,7 +252,7 @@ function BlogPost() {
                                             available with a free membership,
                                             which come with a host of benefits:
                                         </p>
-                                        <ul className="flex flex-col mx-20 text-sm gap-4">
+                                        <ul className="flex flex-col md:mx-20 text-sm gap-4">
                                             <li className="flex flex-row items-center gap-2">
                                                 <Sparkle className="size-4 text-ds-apricot fill-ds-apricot " />
                                                 Read all member-only articles on
@@ -272,8 +272,8 @@ function BlogPost() {
 
                                             <li className="flex flex-row items-center gap-2">
                                                 <Sparkle className="size-4 text-ds-apricot fill-ds-apricot" />
-                                                Access to our private Discord
-                                                community of home renovators
+                                                Access to our community of home
+                                                renovators
                                             </li>
                                         </ul>
                                     </div>

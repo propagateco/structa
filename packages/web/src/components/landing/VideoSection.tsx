@@ -10,7 +10,7 @@ export function VideoSection({
     return (
         <div className="relative -mt-24 sm:-mt-36">
             <div className="relative w-full rounded-xl overflow-hidden">
-                <div className="aspect-[1.91/1]">
+                <div className="aspect-sqaure md:aspect-video">
                     <video
                         autoPlay
                         loop
