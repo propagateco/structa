@@ -18,7 +18,7 @@ export function DiagonalPatternCard({
     return (
         <div
             className={cn(
-                'relative rounded-lg border border-border bg-background',
+                'relative rounded-lg border border-border',
                 'cursor-pointer group',
                 'hover:border-accent transition-colors duration-300',
                 className

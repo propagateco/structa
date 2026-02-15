@@ -1,7 +1,10 @@
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkProps } from '@tanstack/react-router';
 import { ArrowRight } from 'lucide-react';
 import { GridBackgroundSection } from '@/components/layout';
 import { Button } from '@/components/ui/button';
+import { PageLink } from '@/components/ui/link';
+
+type RoutePath = LinkProps['to'];
 
 export interface HeroProps {
     title?: string;
@@ -10,11 +13,11 @@ export interface HeroProps {
     description?: string;
     primaryCTA?: {
         text: string;
-        to: string;
+        to: RoutePath;
     };
     secondaryCTA?: {
         text: string;
-        to: string;
+        to: RoutePath;
     };
 }
 
@@ -41,7 +44,7 @@ export function Hero({
             showDiamonds={false}
             showGridBackground={true}
         >
-            <div className="max-w-xl md:max-w-2xl relative col-span-4 sm:col-span-6 lg:col-span-8 space-y-5 sm:space-y-6 pt-10 pb-5 md:pb-16">
+            <div className="max-w-xl md:max-w-2xl relative col-span-4 sm:col-span-6 lg:col-span-8 space-y-5 sm:space-y-6  md:pt-10 pb-5 md:pb-16">
                 {/* Hero Title */}
                 <h1 className="font-heading text-text font-normal tracking-tight text-4xl lg:text-5xl text-left whitespace-pre-line">
                     {titleTop}
@@ -50,7 +53,7 @@ export function Hero({
                 </h1>
 
                 {/* CTA Buttons */}
-                <div className="w-full flex flex-col sm:flex-row items-center justify-start gap-2 sm:gap-4 pt-2 md:pt-3">
+                <div className="w-full flex flex-col sm:flex-row items-center justify-start gap-2 sm:gap-8 pt-2 md:pt-3">
                     <Link to={primaryCTA.to} className="w-full sm:w-auto">
                         <Button
                             className="w-full inline-flex items-center justify-center"
@@ -59,17 +62,14 @@ export function Hero({
                             {primaryCTA.text}
                         </Button>
                     </Link>
-                    <Link to={secondaryCTA.to} className="w-full sm:w-auto">
-                        <Button
-                            variant="ghost"
-                            className="w-full inline-flex items-center justify-center group"
-                            size="lg"
-                        >
-                            {secondaryCTA.text}
-
-                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Button>
-                    </Link>
+                    <PageLink
+                        to={secondaryCTA.to}
+                        variant={'default'}
+                        className="w-full justify-center px-6 py-2 sm:px-0 sm:w-auto"
+                        arrowForward
+                    >
+                        {secondaryCTA.text}
+                    </PageLink>
                 </div>
             </div>
         </GridBackgroundSection>

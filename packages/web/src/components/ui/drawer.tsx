@@ -39,7 +39,7 @@ const GatedDrawerOverlay = React.forwardRef<
     <DrawerPrimitive.Overlay
         ref={ref}
         className={cn(
-            'fixed inset-0 z-50 bg-gradient-to-t from-background via-background/90 to-transparent',
+            'fixed inset-0 z-50 bg-gradient-to-t from-background via-background/95 to-background/60',
             className
         )}
         {...props}
