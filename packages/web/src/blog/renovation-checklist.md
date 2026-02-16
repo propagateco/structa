@@ -12,8 +12,6 @@ seoDescription: "Free downloadable checklist to guide you through every stage of
 tags: ["planning", "checklist", "beginner"]
 ---
 
-# 12-Week Renovation Checklist: Your Complete Guide
-
 Renovating a home is exciting, but without a plan, it can quickly become overwhelming. This week-by-week checklist breaks down the entire process into manageable steps, helping you stay organized, on budget, and on schedule. Whether you're tackling a kitchen remodel, adding an extension, or undertaking a full house refurbishment, this guide will help you navigate the journey with confidence.
 
 ## Week 1-2: Planning & Budgeting

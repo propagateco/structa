@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 type MarkdownProps = {
 	content: string;
@@ -10,6 +12,8 @@ export function Markdown({ content, className }: MarkdownProps) {
 	return (
 		<div className={className}>
 			<ReactMarkdown
+				remarkPlugins={[remarkGfm]}
+				rehypePlugins={[rehypeRaw]}
 				components={{
 					a: ({ href, children, ...props }: any) => {
 						if (href?.startsWith("/")) {

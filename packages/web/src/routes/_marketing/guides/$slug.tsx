@@ -205,7 +205,7 @@ function BlogPost() {
 					<p className="text-xl text-muted-foreground">{post.description}</p>
 				</header>
 
-				<div className="prose prose-lg max-w-none mb-12 md:mb-16">
+				<div className="prose prose-lg max-w-none mb-12 md:mb-16 dark:prose-invert">
 					{isPreview ? (
 						<>
 							<Markdown content={contentToShow} />
