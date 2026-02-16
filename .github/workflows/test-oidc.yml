@@ -1,0 +1,43 @@
+name: Test OIDC Authentication
+
+on:
+  workflow_dispatch:  # Manual trigger only
+  push:
+    paths:
+      - 'infra/pipeline.ts'
+      - '.github/workflows/test-oidc.yml'
+
+# Cancel previous runs when new commits are pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write  # Required for OIDC token
+  contents: read
+
+jobs:
+  verify-oidc:
+    name: Verify OIDC Authentication
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔐 Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::571512465874:role/structa-dev-GitHubActionsDeploy
+          aws-region: eu-west-2
+          output-credentials: true
+
+      - name: ✅ Verify authentication
+        run: |
+          echo "🔐 Testing AWS authentication..."
+          aws sts get-caller-identity
+          echo ""
+          echo "✅ OIDC authentication successful!"
+          echo "Account: $(aws sts get-caller-identity --query Account --output text)"
+          echo "Role: $(aws sts get-caller-identity --query Arn --output text | cut -d'/' -f2)"

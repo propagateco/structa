@@ -1,0 +1,93 @@
+name: Deploy
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:  # Allow manual triggers
+
+# Cancel previous runs when new commits are pushed
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write  # Required for OIDC token
+  contents: read
+
+env:
+  AWS_REGION: eu-west-2
+  SST_STAGE: dev
+
+jobs:
+  quality-checks:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better git operations
+
+      - name: 🔧 Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔍 TypeScript type checks
+        run: |
+          cd packages/core && npx tsc --noEmit
+          cd ../backend && npx tsc --noEmit
+          cd ../web && npx tsc --noEmit
+
+      - name: 📝 Linting checks
+        run: npm run check
+
+      - name: 🧪 Run test suite
+        run: npm test
+        env:
+          CI: true
+
+  deploy:
+    name: Deploy to Dev
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: quality-checks
+    environment: dev
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔐 Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::571512465874:role/structa-dev-GitHubActionsDeploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: 🚀 Deploy with SST
+        run: npx sst deploy --stage ${{ env.SST_STAGE }}
+        env:
+          # Ensure SST uses the OIDC credentials, not AWS profiles
+          AWS_PROFILE: ''
+
+      - name: 📊 Output deployment info
+        if: success()
+        run: |
+          echo "✅ Deployment to ${{ env.SST_STAGE }} completed successfully!"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
