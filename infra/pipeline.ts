@@ -5,13 +5,8 @@
  * to this AWS account without storing long-lived credentials.
  *
  * Resources:
- * - IAM OIDC Identity Provider for GitHub (shared across all stages)
+ * - IAM OIDC Identity Provider for GitHub (created in production, referenced in other stages)
  * - IAM Role for GitHub Actions deployments (per-stage)
- *
- * Trust Policy by Stage:
- * - production: Only allows deployments from 'production' branch
- * - dev: Only allows deployments from 'dev' branch
- * - personal/*: Allows deployments from any branch (for testing)
  *
  * Usage in GitHub Actions:
  * ```yaml
@@ -27,32 +22,24 @@ import { createResourceName } from './utils';
 // GitHub's OIDC token endpoint
 const GITHUB_OIDC_URL = 'https://token.actions.githubusercontent.com';
 
+// GitHub's OIDC thumbprint (stable, rarely changes)
+const GITHUB_OIDC_THUMBPRINT = '6938fd4d98bab03faadb97b34396831e3780aea1';
+
 // Repository in format: owner/repo
 const REPOSITORY = 'propagateco/structa';
 
-// Determine the trust policy subject condition based on stage
-// - production: restrict to production branch only
-// - dev: restrict to dev branch only
-// - personal stages: allow any branch (for developer testing)
-const getTrustPolicySubject = (): string => {
-	const stage = $app.stage;
-
-	if (stage === 'production') {
-		return `repo:${REPOSITORY}:ref:refs/heads/production`;
-	}
-
-	if (stage === 'dev') {
-		return `repo:${REPOSITORY}:ref:refs/heads/dev`;
-	}
-
-	// Personal stages - allow any branch for flexibility
-	return `repo:${REPOSITORY}:*`;
-};
-
-// Reference the existing GitHub OIDC Identity Provider (account-level, shared across stages)
-const githubOidcProvider = aws.iam.getOpenIdConnectProviderOutput({
-	url: GITHUB_OIDC_URL,
-});
+// OIDC Provider: Create in production, reference in other stages
+// The OIDC provider is an account-level resource that should only be created once
+const githubOidcProvider =
+	$app.stage === 'production'
+		? new aws.iam.OpenIdConnectProvider('GitHubActionsOIDC', {
+				url: GITHUB_OIDC_URL,
+				clientIdLists: ['sts.amazonaws.com'],
+				thumbprintLists: [GITHUB_OIDC_THUMBPRINT],
+			})
+		: aws.iam.getOpenIdConnectProviderOutput({
+				url: GITHUB_OIDC_URL,
+			});
 
 // Create the IAM role that GitHub Actions can assume
 const deployRole = new aws.iam.Role(createResourceName('GitHubActionsDeploy'), {
@@ -67,8 +54,10 @@ const deployRole = new aws.iam.Role(createResourceName('GitHubActionsDeploy'), {
 				},
 				"Action": "sts:AssumeRoleWithWebIdentity",
 				"Condition": {
+					"StringLike": {
+						"token.actions.githubusercontent.com:sub": "repo:${REPOSITORY}:*"
+					},
 					"StringEquals": {
-						"token.actions.githubusercontent.com:sub": "${getTrustPolicySubject()}",
 						"token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
 					}
 				}
