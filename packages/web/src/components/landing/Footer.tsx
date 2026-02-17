@@ -66,7 +66,7 @@ export function Footer() {
                             Socials
                         </h3>
                         <a
-                            href="https://twitter.com/placeholder"
+                            href="https://x.com/getstructa"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-accent transition-colors"
@@ -74,7 +74,7 @@ export function Footer() {
                             @getstructa
                         </a>
                         <a
-                            href="https://instagram.com/placeholder"
+                            href="https://www.instagram.com/lifewithcharacter"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-accent transition-colors"
