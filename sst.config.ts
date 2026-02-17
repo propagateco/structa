@@ -51,8 +51,8 @@ export default $config({
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
         await import('./infra/email');
-        // GitHub Actions OIDC pipeline infrastructure
-        await import('./infra/pipeline');
+        // GitHub Actions OIDC infrastructure
+        await import('./infra/github');
         return {
             Api: dns.Domain.properties.api,
             Platform: dns.Domain.properties.platform,

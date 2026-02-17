@@ -4,13 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       stage:
-        description: 'Stage to test (dev, production, or personal stage name)'
+        description: 'Stage to test (dev or production)'
         required: true
         default: 'dev'
-        type: string
+        type: choice
+        options:
+          - dev
+          - production
 
 permissions:
-  id-token: write  # Required for OIDC token
+  id-token: write
   contents: read
 
 env:
@@ -26,10 +29,18 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: 🔐 Configure AWS credentials (OIDC)
+      - name: 🔐 Configure Dev AWS credentials
+        if: inputs.stage == 'dev'
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::571512465874:role/structa-${{ inputs.stage }}-GitHubActionsDeploy
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_DEV }}:role/structa-dev-GitHubActionsDeploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: 🔐 Configure Production AWS credentials
+        if: inputs.stage == 'production'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_PRODUCTION }}:role/structa-production-GitHubActionsDeploy
           aws-region: ${{ env.AWS_REGION }}
 
       - name: ✅ Verify authentication

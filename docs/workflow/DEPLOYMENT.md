@@ -39,24 +39,36 @@ This document describes deployment rules and restrictions.
 
 The project uses **GitHub Actions with OIDC** for secure deployments to AWS. This eliminates the need for long-lived AWS credentials stored in GitHub secrets.
 
+### Multi-Account Architecture
+
+Dev and production environments are deployed to separate AWS accounts:
+
+| Stage | AWS Account | Branch | Role |
+|-------|-------------|--------|------|
+| `dev` | Dev Account | `dev` | `structa-dev-GitHubActionsDeploy` |
+| `production` | Production Account | `production` | `structa-production-GitHubActionsDeploy` |
+
 ### How It Works
 
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Push to dev   │────▶│  GitHub Actions │────▶│   AWS (OIDC)    │
-│     branch      │     │  Quality Checks │     │  SST Deploy     │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
+┌─────────────────────┐     ┌─────────────────┐     ┌─────────────────────┐
+│  Push to dev or     │────▶│  GitHub Actions │────▶│  AWS (OIDC)         │
+│  production branch  │     │  Quality Checks │     │  SST Deploy         │
+└─────────────────────┘     └─────────────────┘     └─────────────────────┘
 ```
 
 ### Deploy Workflow (`.github/workflows/deploy.yml`)
 
-**Trigger:** Push to `dev` branch
+**Triggers:**
+- Push to `dev` branch → Deploys to dev AWS account
+- Push to `production` branch → Deploys to production AWS account
+- Manual trigger via `workflow_dispatch`
 
 **Steps:**
 1. Checkout code
 2. Install dependencies
 3. Run quality checks (typecheck, lint, test)
-4. Configure AWS credentials via OIDC
+4. Configure AWS credentials via OIDC (account selected by branch)
 5. Deploy with SST
 
 ### OIDC Authentication
@@ -64,21 +76,34 @@ The project uses **GitHub Actions with OIDC** for secure deployments to AWS. Thi
 The pipeline uses AWS IAM OpenID Connect (OIDC) for authentication:
 
 - **Identity Provider:** `token.actions.githubusercontent.com`
-- **Role:** `structa-dev-GitHubActionsDeploy`
 - **Trust Policy:** `repo:propagateco/structa:*`
-- **Permissions:** AdministratorAccess (scoped to dev stage)
+- **Permissions:** AdministratorAccess
+
+Each AWS account has its own OIDC provider and IAM role, created automatically when deploying to that stage.
+
+### GitHub Variables
+
+The following repository variables must be configured (Settings → Secrets and variables → Actions → Variables):
+
+| Variable | Description |
+|----------|-------------|
+| `AWS_ACCOUNT_DEV` | Dev AWS account ID |
+| `AWS_ACCOUNT_PRODUCTION` | Production AWS account ID |
 
 ### Testing OIDC
 
 Run the verification workflow to test OIDC authentication:
 - **Workflow:** `.github/workflows/test-oidc.yml`
-- **Trigger:** Manual (`workflow_dispatch`) or changes to `infra/pipeline.ts`
+- **Trigger:** Manual (`workflow_dispatch`)
+- **Options:** Select `dev` or `production` stage
 
 ### Infrastructure
 
-The OIDC infrastructure is defined in `infra/pipeline.ts`:
-- IAM OIDC Identity Provider for GitHub
+The OIDC infrastructure is defined in `infra/github.ts`:
+- IAM OIDC Identity Provider for GitHub (created in permanent stages only)
 - IAM Role with trust policy for the repository
+
+Only permanent stages (`dev`, `production`) create OIDC resources. Personal stages do not need CI deploy roles.
 
 ---
 
