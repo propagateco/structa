@@ -25,6 +25,7 @@ const github = new aws.iam.OpenIdConnectProvider(createResourceName('GitHubOIDC'
 
 // Create IAM role that GitHub Actions can assume
 const githubRole = new aws.iam.Role(createResourceName('GitHubActionsDeploy'), {
+	name: createResourceName('GitHubActionsDeploy'),
 	assumeRolePolicy: {
 		Version: '2012-10-17',
 		Statement: [
