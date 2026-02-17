@@ -20,10 +20,10 @@ const REPOSITORY = 'propagateco/structa';
 
 // Only create OIDC resources for permanent stages (dev, production)
 if (IS_DEPLOYED_STAGE) {
-	const github = new aws.iam.OpenIdConnectProvider('GitHubActionsOIDC', {
+	// Reference existing OIDC provider (created by SST auto-deploy or previous setup)
+	// Each AWS account has its own provider at account level
+	const github = aws.iam.getOpenIdConnectProviderOutput({
 		url: GITHUB_OIDC_URL,
-		clientIdLists: ['sts.amazonaws.com'],
-		thumbprintLists: GITHUB_OIDC_THUMBPRINTS,
 	});
 
 	const githubRole = new aws.iam.Role('GitHubActionsDeploy', {
