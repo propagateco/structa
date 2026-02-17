@@ -45,14 +45,14 @@ export default $config({
             });
         });
         const dns = await import('./infra/dns');
+        // GitHub Actions OIDC infrastructure (import early to debug)
+        await import('./infra/github');
         await import('./infra/web');
         await import('./infra/api');
         await import('./infra/database');
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
         await import('./infra/email');
-        // GitHub Actions OIDC infrastructure
-        await import('./infra/github');
         return {
             Api: dns.Domain.properties.api,
             Platform: dns.Domain.properties.platform,

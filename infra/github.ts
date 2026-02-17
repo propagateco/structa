@@ -2,10 +2,8 @@
  * GitHub Actions OIDC Infrastructure
  *
  * Creates IAM resources for GitHub Actions deployments.
- * Only permanent stages (dev, production) get OIDC providers and roles.
  */
 
-import { IS_DEPLOYED_STAGE } from './dns';
 import { createResourceName } from './utils';
 
 // GitHub's OIDC configuration
@@ -18,37 +16,36 @@ const GITHUB_OIDC_THUMBPRINTS = [
 // Repository in format: owner/repo
 const REPOSITORY = 'propagateco/structa';
 
-// Only create OIDC resources for permanent stages (dev, production)
-if (IS_DEPLOYED_STAGE) {
-	// Reference existing OIDC provider (created by SST auto-deploy or previous setup)
-	// Each AWS account has its own provider at account level
-	const github = aws.iam.getOpenIdConnectProviderOutput({
-		url: GITHUB_OIDC_URL,
-	});
+// Create OIDC provider - SST will track this resource
+const github = new aws.iam.OpenIdConnectProvider(createResourceName('GitHubOIDC'), {
+	url: GITHUB_OIDC_URL,
+	clientIdLists: ['sts.amazonaws.com'],
+	thumbprintLists: GITHUB_OIDC_THUMBPRINTS,
+});
 
-	const githubRole = new aws.iam.Role('GitHubActionsDeploy', {
-		name: createResourceName('GitHubActionsDeploy'),
-		assumeRolePolicy: {
-			Version: '2012-10-17',
-			Statement: [
-				{
-					Effect: 'Allow',
-					Principal: {
-						Federated: github.arn,
-					},
-					Action: 'sts:AssumeRoleWithWebIdentity',
-					Condition: {
-						StringLike: github.url.apply((url) => ({
-							[`${url}:sub`]: `repo:${REPOSITORY}:*`,
-						})),
-					},
+// Create IAM role that GitHub Actions can assume
+const githubRole = new aws.iam.Role(createResourceName('GitHubActionsDeploy'), {
+	assumeRolePolicy: {
+		Version: '2012-10-17',
+		Statement: [
+			{
+				Effect: 'Allow',
+				Principal: {
+					Federated: github.arn,
 				},
-			],
-		},
-	});
+				Action: 'sts:AssumeRoleWithWebIdentity',
+				Condition: {
+					StringLike: github.url.apply((url) => ({
+						[`${url}:sub`]: `repo:${REPOSITORY}:*`,
+					})),
+				},
+			},
+		],
+	},
+});
 
-	new aws.iam.RolePolicyAttachment('GitHubActionsDeployPolicy', {
-		policyArn: 'arn:aws:iam::aws:policy/AdministratorAccess',
-		role: githubRole.name,
-	});
-}
+// Attach AdministratorAccess policy to the role
+new aws.iam.RolePolicyAttachment(createResourceName('GitHubActionsDeployPolicy'), {
+	policyArn: 'arn:aws:iam::aws:policy/AdministratorAccess',
+	role: githubRole.name,
+});
