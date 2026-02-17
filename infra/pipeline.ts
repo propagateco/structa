@@ -8,6 +8,11 @@
  * - IAM OIDC Identity Provider for GitHub (shared across all stages)
  * - IAM Role for GitHub Actions deployments (per-stage)
  *
+ * Trust Policy by Stage:
+ * - production: Only allows deployments from 'production' branch
+ * - dev: Only allows deployments from 'dev' branch
+ * - personal/*: Allows deployments from any branch (for testing)
+ *
  * Usage in GitHub Actions:
  * ```yaml
  * - uses: aws-actions/configure-aws-credentials@v4
@@ -25,15 +30,33 @@ const GITHUB_OIDC_URL = 'https://token.actions.githubusercontent.com';
 // Repository in format: owner/repo
 const REPOSITORY = 'propagateco/structa';
 
+// Determine the trust policy subject condition based on stage
+// - production: restrict to production branch only
+// - dev: restrict to dev branch only
+// - personal stages: allow any branch (for developer testing)
+const getTrustPolicySubject = (): string => {
+	const stage = $app.stage;
+
+	if (stage === 'production') {
+		return `repo:${REPOSITORY}:ref:refs/heads/production`;
+	}
+
+	if (stage === 'dev') {
+		return `repo:${REPOSITORY}:ref:refs/heads/dev`;
+	}
+
+	// Personal stages - allow any branch for flexibility
+	return `repo:${REPOSITORY}:*`;
+};
+
 // Reference the existing GitHub OIDC Identity Provider (account-level, shared across stages)
-// This was likely created by SST's auto-deploy feature or a previous deployment
 const githubOidcProvider = aws.iam.getOpenIdConnectProviderOutput({
 	url: GITHUB_OIDC_URL,
 });
 
 // Create the IAM role that GitHub Actions can assume
 const deployRole = new aws.iam.Role(createResourceName('GitHubActionsDeploy'), {
-	description: 'Role for GitHub Actions to deploy SST infrastructure',
+	description: `Role for GitHub Actions to deploy SST infrastructure (${ $app.stage } stage)`,
 	assumeRolePolicy: githubOidcProvider.arn.apply((arn) => `{
 		"Version": "2012-10-17",
 		"Statement": [
@@ -44,10 +67,8 @@ const deployRole = new aws.iam.Role(createResourceName('GitHubActionsDeploy'), {
 				},
 				"Action": "sts:AssumeRoleWithWebIdentity",
 				"Condition": {
-					"StringLike": {
-						"token.actions.githubusercontent.com:sub": "repo:${REPOSITORY}:*"
-					},
 					"StringEquals": {
+						"token.actions.githubusercontent.com:sub": "${getTrustPolicySubject()}",
 						"token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
 					}
 				}
