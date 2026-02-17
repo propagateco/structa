@@ -12,8 +12,6 @@ seoDescription: "Free downloadable guide to insulate a suspended timber floor, r
 tags: ["floor", "insulation", "beginner"]
 ---
 
-# How we insulated our early 1900s Victorian style property - (living and dining room)
-
 Our house dates from the very early 1900s. Technically this makes it Edwardian, but in terms of how it is built it shares many features with late Victorian homes. For simplicity, and because many of the challenges are the same, we refer to it as Victorian style throughout this guide.
 
 Before we get started, we strongly recommend reading up on ventilation in older properties. Adding insulation without understanding how your home breathes can unintentionally create issues such as damp, condensation and mould. Insulation and ventilation must always be considered together, particularly in period buildings.

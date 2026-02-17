@@ -58,9 +58,6 @@ function RouteComponent() {
             >
                 <FeaturesSection />
             </TexturedSection>
-
-            {/* Diagonal Slash Divider */}
-            <DiagonalDivider />
         </div>
     );
 }
