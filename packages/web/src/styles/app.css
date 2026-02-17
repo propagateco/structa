@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+/* Configure dark mode to use .dark class selector */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ================================================
    DESIGN SYSTEM COLORS (from packages/marketing-site-example)
    ================================================ */
