@@ -90,6 +90,15 @@ The following repository variables must be configured (Settings → Secrets and 
 | `AWS_ACCOUNT_DEV` | Dev AWS account ID |
 | `AWS_ACCOUNT_PRODUCTION` | Production AWS account ID |
 
+### GitHub Secrets
+
+The following repository secrets must be configured (Settings → Secrets and variables → Actions → Secrets):
+
+| Secret | Description |
+|--------|-------------|
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API token with "Edit zone DNS" permission |
+| `CLOUDFLARE_DEFAULT_ACCOUNT_ID` | Cloudflare account ID |
+
 ### Testing OIDC
 
 Run the verification workflow to test OIDC authentication:

@@ -102,6 +102,8 @@ jobs:
               run: npx sst deploy --stage ${{ github.ref_name }}
               env:
                   AWS_PROFILE: ''
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
 
             - name: 📊 Output deployment info
               if: success()
