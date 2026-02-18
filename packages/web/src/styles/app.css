@@ -317,6 +317,9 @@
     p {
         @apply text-base sm:text-lg;
     }
+    li {
+        @apply text-base sm:text-lg;
+    }
 }
 
 .font-serif {

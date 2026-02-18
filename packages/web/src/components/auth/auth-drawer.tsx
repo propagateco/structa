@@ -149,8 +149,8 @@ export function AuthDrawer({
         <Drawer open={open} onOpenChange={onOpenChange}>
             <GatedDrawerContent>
                 <div className="px-lg mx-auto max-w-md md:max-w-xl">
-                    <DrawerHeader className="space-y-3">
-                        <DrawerTitle className="font-heading font-light text-3xl md:text-4xl text-center">
+                    <DrawerHeader className="space-y-3 p-0 py-4">
+                        <DrawerTitle className="font-heading font-light text-3xl md:text-4xl lg:text-5xl text-center">
                             {view === 'initial'
                                 ? title
                                 : "Let's verify your email"}

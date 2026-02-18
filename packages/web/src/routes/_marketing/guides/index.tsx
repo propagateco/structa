@@ -36,8 +36,9 @@ function BlogIndex() {
             <DiagonalDivider />
             <TexturedSection
                 showTopDivider={false}
-                showBottomDivider={true}
-                showTopDiamonds={true}
+                showBottomDivider={false}
+                showTopDiamonds={false}
+                showBottomDiamonds={false}
                 showGrid={true}
                 className="min-h-dvh"
             >

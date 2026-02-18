@@ -6,7 +6,7 @@ import { GridLoaderIcon, TwoBodyLoaderIcon } from '@/components/ui/loader';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    'group inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-none font-medium hover:cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 transition-colors duration-300 ease-in-out',
+    'group inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-none font-medium hover:cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 transition-colors duration-300 ease-in-out',
     {
         variants: {
             variant: {
@@ -27,8 +27,8 @@ const buttonVariants = cva(
             size: {
                 default: 'h-9 px-4 py-2 text-sm sm:text-base',
                 xs: 'h-6 px-2 text-xs [&_svg]:size-3 [&_svg]:shrink-0',
-                sm: 'h-7 px-3 text-sm',
-                lg: 'h-9 px-4 text-sm sm:h-10 sm:px-7 sm:text-base',
+                sm: 'h-7 px-3 text-sm gap-1',
+                lg: 'h-9 px-4 text-sm sm:h-10 sm:px-7 sm:text-base gap-2',
                 icon: 'h-10 w-10',
             },
         },

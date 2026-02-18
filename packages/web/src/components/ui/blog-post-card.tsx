@@ -25,7 +25,6 @@ export function BlogPostCard({
             <DiagonalPatternCard className="flex flex-col border-0">
                 {/* Inner content with solid background */}
                 <div className="flex flex-col h-full bg-background rounded-md">
-                    {/* Top Section: Image (pattern is provided by DiagonalPatternCard as fallback) */}
                     {coverImage && (
                         <div className="relative shrink-0 h-52 overflow-hidden rounded-t-md">
                             <img
