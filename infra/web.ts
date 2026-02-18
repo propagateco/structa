@@ -1,4 +1,4 @@
-import { Domain, domain, Stage } from './dns';
+import { Domain, domain, Stage, dnsAdapter } from './dns';
 import { apiRouter } from './api';
 import { Database } from './database';
 import { email } from './email';
@@ -11,6 +11,7 @@ export const app = new sst.aws.TanStackStart('Web', {
     domain: {
         name: domain,
         redirects: ['www.' + domain],
+        dns: dnsAdapter,
     },
     link: [
         Stage,

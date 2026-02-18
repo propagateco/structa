@@ -47,28 +47,36 @@ The Clerk currently provides mathematical formulas, but visual learners struggle
 ### Architecture Overview
 
 ```
-/tools/coving-calculator
-├── page.tsx                          # Route page
-├── _components/
-│   ├── CovingCalculator.tsx          # Main orchestrator component
-│   ├── CalculatorControls.tsx        # Input controls (sliders, inputs, radios)
-│   ├── DiagramContainer.tsx          # View toggle + SVG container
-│   ├── diagrams/
-│   │   ├── WallAngleDiagram.tsx      # Interactive wall corner diagram
-│   │   ├── SpringAngleDiagram.tsx    # Molding cross-section diagram
-│   │   ├── MiterAngleDiagram.tsx     # Saw miter setting diagram
-│   │   ├── BevelAngleDiagram.tsx     # Saw bevel setting diagram
-│   │   ├── Corner3DView.tsx          # 3D perspective of corner
-│   │   └── shared/
-│   │       ├── AngleArc.tsx          # Reusable angle arc renderer
-│   │       ├── DraggableHandle.tsx   # Draggable control point
-│   │       ├── DimensionLabel.tsx    # Measurement labels
-│   │       └── MoldingProfile.tsx    # Crown molding cross-section shape
-│   ├── CalculatorOutput.tsx          # Results display
-│   └── SawSetupInstructions.tsx      # Expandable instructions
-└── _hooks/
-    ├── useAngleCalculator.ts         # Core calculation logic
-    └── useDragInteraction.ts         # SVG drag handling
+packages/web/src/
+├── routes/tools/coving-calculator/           # Route folder
+│   ├── page.tsx                               # Route page
+│   └── _components/                           # Feature-specific components (co-located)
+│       ├── CovingCalculator.tsx               # Main orchestrator component
+│       ├── CalculatorControls.tsx             # Input controls (sliders, inputs, radios)
+│       ├── DiagramContainer.tsx               # View toggle + SVG container
+│       ├── diagrams/                          # Diagram components
+│       │   ├── WallAngleDiagram.tsx           # Interactive wall corner diagram
+│       │   ├── SpringAngleDiagram.tsx         # Molding cross-section diagram
+│       │   ├── MiterAngleDiagram.tsx          # Saw miter setting diagram
+│       │   ├── BevelAngleDiagram.tsx          # Saw bevel setting diagram
+│       │   └── Corner3DView.tsx               # 3D perspective of corner
+│       ├── CalculatorOutput.tsx               # Results display
+│       └── SawSetupInstructions.tsx           # Expandable instructions
+│
+├── components/                                # Shared components (reusable across app)
+│   ├── ui/                                    # shadcn components
+│   └── diagrams/                              # Shared diagram components
+│       ├── AngleArc.tsx                       # Reusable angle arc renderer
+│       ├── DraggableHandle.tsx                # Draggable control point
+│       ├── DimensionLabel.tsx                 # Measurement labels
+│       └── MoldingProfile.tsx                 # Crown molding cross-section shape
+│
+├── hooks/                                     # Shared hooks (reusable across app)
+│   └── useSvgDrag.ts                          # SVG drag handling (general purpose)
+│
+└── routes/tools/coving-calculator/
+    └── _hooks/                                # Feature-specific hooks (co-located)
+        └── useAngleCalculator.ts              # Core calculation logic
 ```
 
 ### Component Breakdown
@@ -301,11 +309,37 @@ interface CalculatorState {
 - `Tabs` ✅ - Potentially for view switching
 
 ### Need to Install
+
+Following the [UI.md](../design/UI.md) installation pattern:
+
 ```bash
-pnpm dlx shadcn@latest add slider
-pnpm dlx shadcn@latest add radio-group
-pnpm dlx shadcn@latest add select
-pnpm dlx shadcn@latest add switch
+cd packages/web
+npx shadcn@latest add slider
+npx shadcn@latest add radio-group
+npx shadcn@latest add select
+npx shadcn@latest add switch
+```
+
+Or install multiple at once:
+```bash
+cd packages/web
+npx shadcn@latest add slider radio-group select switch
+```
+
+### Check Community Registries First
+
+Before building custom diagram/animation components, check the [shadcn Registry Directory](https://ui.shadcn.com/docs/directory) for existing solutions:
+
+| Need | Registry to Check |
+|------|-------------------|
+| SVG Animations | `@magicui`, `@motion-primitives`, `@animate-ui` |
+| Interactive Diagrams | Search "diagram" or "canvas" in directory |
+| Drag Interactions | `@dnd-kit` or similar |
+
+If suitable components exist, prefer adding from community registry:
+```bash
+cd packages/web
+npx shadcn@latest add @[registry]/[component]
 ```
 
 ### Components to Add
@@ -319,6 +353,10 @@ pnpm dlx shadcn@latest add switch
 ---
 
 ## Shared SVG Components
+
+> **Location**: `packages/web/src/components/diagrams/`
+> 
+> These are reusable components that could be used by other features (floor plan editor, other calculators, etc.). Following the [UI.md](../design/UI.md) pattern for custom component location.
 
 ### AngleArc.tsx
 Reusable component for rendering angle arcs on diagrams.
@@ -383,7 +421,9 @@ interface MoldingProfileProps {
 
 ## Hooks
 
-### useAngleCalculator.ts
+### useAngleCalculator.ts (Feature-Specific)
+> **Location**: `packages/web/src/routes/tools/coving-calculator/_hooks/useAngleCalculator.ts`
+
 Core calculation logic using formulas from `docs/maths/COVING_CALCULATIONS.md`.
 
 ```typescript
@@ -406,11 +446,13 @@ function useAngleCalculator(options: UseAngleCalculatorOptions): AngleCalculator
 }
 ```
 
-### useDragInteraction.ts
-Handles SVG drag interactions with coordinate conversion.
+### useSvgDrag.ts (Shared Hook)
+> **Location**: `packages/web/src/hooks/useSvgDrag.ts`
+
+Handles SVG drag interactions with coordinate conversion. This is a general-purpose hook that can be reused by any feature needing SVG drag interactions (floor plan editor, other calculators, etc.).
 
 ```typescript
-interface UseDragInteractionOptions {
+interface UseSvgDragOptions {
   svgRef: React.RefObject<SVGSVGElement>;
   onDragStart?: () => void;
   onDrag: (position: { x: number; y: number }) => void;
@@ -424,7 +466,7 @@ type DragConstraint =
   | { type: 'circular'; center: [number, number] }
   | { type: 'angular'; center: [number, number]; minAngle: number; maxAngle: number };
 
-function useDragInteraction(options: UseDragInteractionOptions): {
+function useSvgDrag(options: UseSvgDragOptions): {
   isDragging: boolean;
   handlePointerDown: (e: React.PointerEvent) => void;
 }
@@ -465,16 +507,23 @@ function useDragInteraction(options: UseDragInteractionOptions): {
 ## Implementation Phases
 
 ### Phase 1: Core Calculator (Estimated: 3-4 days)
-- [ ] Create route `/tools/coving-calculator/page.tsx`
-- [ ] Install required shadcn components (slider, radio-group, select)
+- [ ] Create route `packages/web/src/routes/tools/coving-calculator/page.tsx`
+- [ ] Install required shadcn components:
+  ```bash
+  cd packages/web && npx shadcn@latest add slider radio-group select
+  ```
 - [ ] Build `CovingCalculator.tsx` with state management
 - [ ] Build `CalculatorControls.tsx` with all inputs
-- [ ] Implement `useAngleCalculator.ts` hook with formulas
+- [ ] Implement `useAngleCalculator.ts` hook with formulas (feature-specific location)
 - [ ] Build `CalculatorOutput.tsx` with angle display
 - [ ] Add basic styling and layout
 
 ### Phase 2: 2D Diagrams (Estimated: 4-5 days)
-- [ ] Build shared SVG components (AngleArc, DimensionLabel, MoldingProfile)
+- [ ] Create `packages/web/src/components/diagrams/` folder for shared diagram components
+- [ ] Build shared SVG components:
+  - `AngleArc.tsx`
+  - `DimensionLabel.tsx`
+  - `MoldingProfile.tsx`
 - [ ] Build `WallAngleDiagram.tsx` (static first)
 - [ ] Build `SpringAngleDiagram.tsx` (static first)
 - [ ] Build `MiterAngleDiagram.tsx` (read-only, calculated)
@@ -482,8 +531,8 @@ function useDragInteraction(options: UseDragInteractionOptions): {
 - [ ] Connect diagrams to state (update on slider changes)
 
 ### Phase 3: Drag Interactions (Estimated: 2-3 days)
-- [ ] Implement `useDragInteraction.ts` hook
-- [ ] Build `DraggableHandle.tsx` component
+- [ ] Implement `useSvgDrag.ts` hook in shared hooks folder (`packages/web/src/hooks/`)
+- [ ] Build `DraggableHandle.tsx` component in shared diagram components
 - [ ] Add drag to WallAngleDiagram
 - [ ] Add drag to SpringAngleDiagram
 - [ ] Implement bidirectional sync (drag ↔ slider)
@@ -577,9 +626,11 @@ function useDragInteraction(options: UseDragInteractionOptions): {
 ## Related Documents
 
 - [Coving Calculations Math Reference](../docs/maths/COVING_CALCULATIONS.md)
+- [UI Components Guide](../docs/design/UI.md) - shadcn installation patterns, component locations
 - [blocklayer.com Crown Molding Calculator](https://www.blocklayer.com/crown-molding) - Inspiration
 - [svg.guide](https://www.svg.guide/) - Interactive SVG patterns inspiration
 - [shadcn/ui Components](https://ui.shadcn.com/docs/components) - UI primitives
+- [shadcn Registry Directory](https://ui.shadcn.com/docs/directory) - Check for existing diagram/animation components
 
 ---
 

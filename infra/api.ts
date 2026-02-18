@@ -1,4 +1,4 @@
-import { domain, Stage, Domain } from './dns';
+import { domain, Stage, Domain, dnsAdapter } from './dns';
 import { database, Database } from './database';
 import { bucket, optimisedBucket } from './storage';
 import { cdn } from './cloudfront';
@@ -51,8 +51,6 @@ export const apiRouter = new sst.aws.Router('ApiRouter', {
     },
     domain: {
         name: 'api.' + domain,
-        dns: sst.aws.dns({
-            override: true,
-        }),
+        dns: dnsAdapter,
     },
 });
