@@ -1,10 +1,7 @@
-import { domain, DEV, dnsAdapter } from './dns';
+import { domain, DEV, dnsAdapter, IS_DEPLOYED_STAGE } from './dns';
 
-const isLocal = $app.stage !== 'dev' && $app.stage !== 'production';
-const devDomain = DEV;
-
-export const email = isLocal
-    ? sst.aws.Email.get('Email', devDomain)
+export const email = !IS_DEPLOYED_STAGE
+    ? sst.aws.Email.get('Email', DEV)
     : new sst.aws.Email('Email', {
           sender: domain,
           dns: dnsAdapter,
@@ -18,11 +15,10 @@ export const marketingEmail =
     });
 
 // TEMP this creates an identity in AWS SES so we can send emails to it in sandbox mode
-export const personalEmail = isLocal
+export const personalEmail = !IS_DEPLOYED_STAGE
     ? sst.aws.Email.get('PersonalEmail', 'harrison@structa.so')
     : new sst.aws.Email('PersonalEmail', {
           sender: 'harrison@structa.so',
-          dns: dnsAdapter,
       });
 
 export const reactEmail = new sst.x.DevCommand('EmailServer', {
