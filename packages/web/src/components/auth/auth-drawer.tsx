@@ -207,7 +207,7 @@ export function AuthDrawer({
                             <DrawerClose asChild>
                                 <Button
                                     variant="ghost"
-                                    className="text-text-muted w-full my-2 md:my-4"
+                                    className="text-text-muted w-full mb-6 mt-2 md:mt-4"
                                 >
                                     Close
                                 </Button>

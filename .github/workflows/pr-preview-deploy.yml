@@ -1,0 +1,227 @@
+name: PR Preview Deploy
+
+on:
+    pull_request:
+        branches:
+            - dev
+            - production
+        types: [opened, synchronize, reopened, ready_for_review]
+    workflow_dispatch:
+        inputs:
+            pr_number:
+                description: 'PR number to deploy (for manual testing)'
+                required: true
+                type: number
+
+permissions:
+    id-token: write
+    contents: read
+    pull-requests: write
+    deployments: write
+
+env:
+    AWS_REGION: eu-west-2
+    STAGE_NAME: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('pr-{0}', github.event.inputs.pr_number) }}
+
+concurrency:
+    group: pr-preview-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.event.inputs.pr_number }}
+    cancel-in-progress: false
+
+jobs:
+    # ===========================================
+    # Job 1: Quality Checks (runs for all PRs including drafts)
+    # ===========================================
+    quality-checks:
+        name: Quality Gate
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+
+        steps:
+            - name: 📥 Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: 🔧 Setup Node.js 22
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+                  cache: 'npm'
+
+            - name: 📦 Install dependencies
+              run: npm ci
+
+            - name: 🔨 Build web package (generates content-collections)
+              run: cd packages/web && npm run build
+
+            - name: 🔍 TypeScript type checks
+              run: |
+                  cd packages/core && npx tsc --noEmit
+                  cd ../backend && npx tsc --noEmit
+                  cd ../web && npx tsc --noEmit
+
+            - name: 📝 Linting checks
+              run: npm run check
+
+            - name: 🧪 Run test suite
+              run: npm test
+              env:
+                  CI: true
+
+            - name: 📊 Upload test results (on failure)
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: test-results-${{ github.sha }}
+                  path: |
+                      packages/*/test-results/
+                      coverage/
+                  retention-days: 7
+
+    # ===========================================
+    # Job 2: Deploy Preview (skipped for draft PRs)
+    # ===========================================
+    deploy-preview:
+        name: Deploy Preview Environment
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        needs: quality-checks
+        # Skip deployment for draft PRs and dependabot
+        if: |
+            github.event.pull_request.draft == false &&
+            github.actor != 'dependabot[bot]'
+
+        outputs:
+            platform_url: ${{ steps.get_urls.outputs.platform_url }}
+            api_url: ${{ steps.get_urls.outputs.api_url }}
+
+        steps:
+            - name: 📥 Checkout code
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  fetch-depth: 0
+
+            - name: 💾 Cache SST
+              uses: actions/cache@v4
+              with:
+                  path: .sst
+                  key: ${{ runner.os }}-sst-pr-${{ env.STAGE_NAME }}
+                  restore-keys: |
+                      ${{ runner.os }}-sst-pr-
+                      ${{ runner.os }}-sst-dev
+
+            - name: 🔧 Setup Node.js 22
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
+                  cache: 'npm'
+
+            - name: 📦 Install dependencies
+              run: npm ci
+
+            - name: 🔐 Configure AWS credentials (Dev)
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_DEV }}:role/structa-dev-GitHubActionsDeploy
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: 🚀 Deploy with SST
+              run: npx sst deploy --stage ${{ env.STAGE_NAME }}
+              env:
+                  AWS_PROFILE: ''
+
+            - name: 🔗 Get preview URLs
+              id: get_urls
+              run: |
+                  echo "Fetching SST outputs for stage: ${{ env.STAGE_NAME }}"
+                  OUTPUTS=$(npx sst output --stage ${{ env.STAGE_NAME }} --json 2>/dev/null || echo '{}')
+
+                  PLATFORM_URL=$(echo "$OUTPUTS" | jq -r '.Platform // empty')
+                  API_URL=$(echo "$OUTPUTS" | jq -r '.Api // empty')
+
+                  echo "platform_url=$PLATFORM_URL" >> $GITHUB_OUTPUT
+                  echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+
+                  echo "📱 Platform URL: $PLATFORM_URL"
+                  echo "🔌 API URL: $API_URL"
+
+    # ===========================================
+    # Job 3: Comment PR with Preview URLs
+    # ===========================================
+    comment-url:
+        name: Comment Preview URLs
+        runs-on: ubuntu-latest
+        needs: deploy-preview
+        if: |
+            always() &&
+            github.event_name == 'pull_request' &&
+            needs.deploy-preview.result == 'success'
+
+        steps:
+            - name: 🔍 Find existing comment
+              uses: peter-evans/find-comment@v3
+              id: find_comment
+              with:
+                  issue-number: ${{ github.event.pull_request.number }}
+                  body-includes: '🚀 Preview Environment'
+
+            - name: 💬 Create or update comment
+              uses: peter-evans/create-or-update-comment@v4
+              with:
+                  issue-number: ${{ github.event.pull_request.number }}
+                  comment-id: ${{ steps.find_comment.outputs.comment-id }}
+                  edit-mode: replace
+                  body: |
+                      ## 🚀 Preview Environment
+
+                      | Property | Value |
+                      |----------|-------|
+                      | **Stage** | `${{ env.STAGE_NAME }}` |
+                      | **Commit** | `${{ github.event.pull_request.head.sha }}` |
+                      | **Platform URL** | [${{ needs.deploy-preview.outputs.platform_url }}](${{ needs.deploy-preview.outputs.platform_url }}) |
+                      | **API URL** | [${{ needs.deploy-preview.outputs.api_url }}](${{ needs.deploy-preview.outputs.api_url }}) |
+
+                      ---
+
+                      ✅ Quality checks passed
+                      ✅ Deployment successful
+
+                      > 💡 This environment will be automatically cleaned up when the PR is closed or merged.
+
+    # ===========================================
+    # Job 4: Comment on Quality Check Failure
+    # ===========================================
+    comment-failure:
+        name: Comment Failure Status
+        runs-on: ubuntu-latest
+        needs: quality-checks
+        if: |
+            always() &&
+            github.event_name == 'pull_request' &&
+            needs.quality-checks.result == 'failure'
+
+        steps:
+            - name: 🔍 Find existing comment
+              uses: peter-evans/find-comment@v3
+              id: find_comment
+              with:
+                  issue-number: ${{ github.event.pull_request.number }}
+                  body-includes: 'Quality Checks'
+
+            - name: 💬 Comment failure status
+              uses: peter-evans/create-or-update-comment@v4
+              with:
+                  issue-number: ${{ github.event.pull_request.number }}
+                  comment-id: ${{ steps.find_comment.outputs.comment-id }}
+                  edit-mode: replace
+                  body: |
+                      ## ❌ Quality Checks Failed
+
+                      | Check | Status |
+                      |-------|--------|
+                      | TypeScript | ❌ |
+                      | Linting | ❌ |
+                      | Tests | ❌ |
+
+                      ⚠️ Please fix the issues above before merging.

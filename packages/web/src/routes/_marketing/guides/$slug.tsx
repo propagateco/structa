@@ -221,7 +221,7 @@ function BlogPost() {
 											The rest of this article is available with a free
 											membership, which come with a host of benefits:
 										</p>
-										<ul className="flex flex-col md:mx-20 text-sm gap-4">
+										<ul className="flex flex-col mx-auto md:mx-20 text-sm gap-4 list-none p-0">
 											<li className="flex flex-row items-center gap-2">
 												<Sparkle className="size-4 text-ds-apricot fill-ds-apricot " />
 												Read all member-only articles on Structa
