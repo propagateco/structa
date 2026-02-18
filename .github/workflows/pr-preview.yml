@@ -24,7 +24,7 @@ env:
   STAGE_NAME: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('pr-{0}', github.event.inputs.pr_number) }}
 
 concurrency:
-  group: pr-preview-${{ env.STAGE_NAME }}
+  group: pr-preview-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.event.inputs.pr_number }}
   cancel-in-progress: false
 
 jobs:
