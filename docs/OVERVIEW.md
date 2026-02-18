@@ -463,13 +463,15 @@ For safety-critical features (hazard detection, structural advice), **false posi
 |---------|----------|
 | **Architecture & Technical Decisions** | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | **Current Development Status** | [STATUS.md](STATUS.md) |
+| **UI Components (shadcn)** | [design/UI.md](design/UI.md) |
 | **Quality Tools & Testing** | [development/QUALITY_TOOLS.md](development/QUALITY_TOOLS.md) |
 | **Testing Philosophy (TDD)** | [development/TESTING.md](development/TESTING.md) |
 | **Coding Standards & Style** | [development/CODING_STYLE.md](development/CODING_STYLE.md) |
-| **Tech Stack Documentation** | [stack/TECH_STACK.md](stack/TECH_STACK.md) |
+| **Tech Stack Documentation** | [architecture/TECH_STACK.md](architecture/TECH_STACK.md) |
 | **Git Workflow & PRs** | [workflow/GIT_WORKFLOW.md](workflow/GIT_WORKFLOW.md) |
 | **Deployment Rules** | [workflow/DEPLOYMENT.md](workflow/DEPLOYMENT.md) |
 | **Development Plan (Phases)** | [specs/plan/00-overview.md](../specs/plan/00-overview.md) |
+| **Mathematical & Physical Rules** | [maths/COVING_CALCULATIONS.md](maths/COVING_CALCULATIONS.md) |
 
 ### Documentation Structure
 
@@ -478,13 +480,17 @@ docs/
 ├── OVERVIEW.md              # This file - Project vision & quick links
 ├── ARCHITECTURE.md         # System architecture & design decisions
 ├── STATUS.md               # Current phase & roadmap
+├── design/                 # UI design & component guidelines
+│   └── UI.md              # shadcn/ui component usage & best practices
+├── maths/                 # Mathematical & physical rules for construction calculations
+│   └── COVING_CALCULATIONS.md # Crown molding compound angle formulas
 ├── development/            # Development practices & tools
 │   ├── QUALITY_TOOLS.md   # TypeScript, Biome, Vitest commands
 │   ├── TESTING.md         # TDD workflow & test guidelines
 │   ├── CODING_STYLE.md    # Naming, imports, formatting rules
 │   └── DEBUGGING.md      # Log locations & troubleshooting
-├── stack/                 # Technology stack with docs links
-│   └── TECH_STACK.md     # All technologies & official docs
+├── architecture/           # Architecture & tech decisions
+│   └── TECH_STACK.md      # Technology stack documentation
 └── workflow/              # Git & deployment processes
     ├── GIT_WORKFLOW.md    # PR workflow, quality gates, commits
     └── DEPLOYMENT.md     # Deployment rules & restrictions

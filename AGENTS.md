@@ -28,7 +28,8 @@ For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 | Testing philosophy & TDD workflow | [docs/development/TESTING.md](docs/development/TESTING.md) |
 | Coding conventions & style | [docs/development/CODING_STYLE.md](docs/development/CODING_STYLE.md) |
 | Debugging & log locations | [docs/development/DEBUGGING.md](docs/development/DEBUGGING.md) |
-| Tech stack with documentation links | [docs/stack/TECH_STACK.md](docs/stack/TECH_STACK.md) |
+| UI components (shadcn) & best practices | [docs/design/UI.md](docs/design/UI.md) |
+| Tech stack with documentation links | [docs/architecture/TECH_STACK.md](docs/architecture/TECH_STACK.md) |
 | Git workflow & PR process | [docs/workflow/GIT_WORKFLOW.md](docs/workflow/GIT_WORKFLOW.md) |
 | Deployment rules | [docs/workflow/DEPLOYMENT.md](docs/workflow/DEPLOYMENT.md) |
 
@@ -54,6 +55,7 @@ For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 - **Vision**: [docs/OVERVIEW.md](docs/OVERVIEW.md)
 - **Architecture**: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- **Maths & Physics Rules**: [docs/maths/]
 - **Current Status**: [docs/STATUS.md](docs/STATUS.md)
 - **Development Plan**: [specs/plan/00-overview.md](specs/plan/00-overview.md)
 
