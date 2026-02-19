@@ -20,7 +20,6 @@ const GITHUB_OIDC_THUMBPRINTS = [
 const REPOSITORY = 'propagateco/structa';
 
 // OIDC Provider - only create for deployed stages, otherwise reference dev's
-const caller = aws.getCallerIdentity({});
 const github = IS_DEPLOYED_STAGE
 	? new aws.iam.OpenIdConnectProvider(createResourceName('GitHubOIDC'), {
 			url: GITHUB_OIDC_URL,
@@ -29,7 +28,7 @@ const github = IS_DEPLOYED_STAGE
 		})
 	: aws.iam.OpenIdConnectProvider.get(
 			createResourceName('GitHubOIDC'),
-			caller.then((c) => `arn:aws:iam::${c.accountId}:oidc-provider/token.actions.githubusercontent.com`)
+			`arn:aws:iam::${aws.getCallerIdentityOutput({}).accountId}:oidc-provider/token.actions.githubusercontent.com`
 		);
 
 // Create IAM role that GitHub Actions can assume
