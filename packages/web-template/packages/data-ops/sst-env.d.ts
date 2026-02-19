@@ -71,6 +71,11 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "MarketingEmail": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
     "NODE_TLS_REJECT_UNAUTHORIZED": {
       "type": "sst.sst.Secret"
       "value": string
