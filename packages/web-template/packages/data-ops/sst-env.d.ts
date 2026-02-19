@@ -35,7 +35,7 @@ declare module "sst" {
     }
     "Domain": {
       "api": string
-      "platform": string
+      "web": string
       "type": "sst.sst.Linkable"
     }
     "EncryptionKey": {
