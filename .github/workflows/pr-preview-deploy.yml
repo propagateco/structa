@@ -148,6 +148,10 @@ jobs:
                   
                   echo "Web URL: $WEB_URL"
                   echo "API URL: $API_URL"
+              env:
+                  AWS_PROFILE: ''
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
 
     # ===========================================
     # Job 3: Comment PR with Preview URLs
