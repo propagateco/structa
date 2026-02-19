@@ -48,6 +48,10 @@ export default $config({
     const dns = await import("./infra/dns");
     // GitHub Actions OIDC infrastructure (import early to debug)
     await import("./infra/github");
+    // SNS topics for SES bounce/complaint notifications
+    await import("./infra/sns");
+    // SES configuration set for email event tracking
+    await import("./infra/ses-config");
     await import("./infra/web");
     await import("./infra/api");
     await import("./infra/database");

@@ -1,7 +1,7 @@
 import { Domain, domain, Stage, dnsAdapter } from './dns';
 import { apiRouter } from './api';
 import { Database } from './database';
-import { email } from './email';
+import { authEmail, notifyEmail } from './email';
 import { bucket, optimisedBucket } from './storage';
 import { cdn } from './cloudfront';
 import { secret } from './secret';
@@ -17,7 +17,8 @@ export const app = new sst.aws.TanStackStart('Web', {
         Stage,
         Domain,
         Database,
-        email,
+        authEmail,
+        notifyEmail,
         bucket,
         optimisedBucket,
         cdn,
