@@ -25,7 +25,7 @@ env:
 
 concurrency:
     group: pr-preview-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.event.inputs.pr_number }}
-    cancel-in-progress: false
+    cancel-in-progress: true
 
 jobs:
     # ===========================================
@@ -138,14 +138,25 @@ jobs:
               id: get_urls
               run: |
                   echo "Fetching SST outputs for stage: ${{ env.STAGE_NAME }}"
-                  OUTPUTS=$(npx sst output --stage ${{ env.STAGE_NAME }} --json 2>/dev/null || echo '{}')
-
+                  
+                  # Capture output and check if valid JSON
+                  RAW_OUTPUT=$(npx sst output --stage ${{ env.STAGE_NAME }} --json 2>&1) || true
+                  echo "Raw output: $RAW_OUTPUT"
+                  
+                  # Try to parse as JSON, fall back to empty object
+                  if echo "$RAW_OUTPUT" | jq -e . >/dev/null 2>&1; then
+                    OUTPUTS="$RAW_OUTPUT"
+                  else
+                    echo "Warning: SST output is not valid JSON, using empty object"
+                    OUTPUTS='{}'
+                  fi
+                  
                   PLATFORM_URL=$(echo "$OUTPUTS" | jq -r '.Platform // empty')
                   API_URL=$(echo "$OUTPUTS" | jq -r '.Api // empty')
-
+                  
                   echo "platform_url=$PLATFORM_URL" >> $GITHUB_OUTPUT
                   echo "api_url=$API_URL" >> $GITHUB_OUTPUT
-
+                  
                   echo "📱 Platform URL: $PLATFORM_URL"
                   echo "🔌 API URL: $API_URL"
 
