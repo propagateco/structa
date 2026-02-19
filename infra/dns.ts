@@ -16,17 +16,17 @@ export const NODE_TLS_REJECT_UNAUTHORIZED = new sst.Secret(
     IS_DEPLOYED_STAGE || process.platform === 'linux' ? '1' : '0'
 );
 
-export const { domain, platform } = (() => {
+export const { domain, web } = (() => {
     if ($app.stage === 'production')
         return {
             domain: PRODUCTION,
-            platform: 'https://' + PRODUCTION,
+            web: 'https://' + PRODUCTION,
         };
 
     if ($app.stage === 'dev')
         return {
             domain: DEV,
-            platform: 'https://' + DEV,
+            web: 'https://' + DEV,
         };
 
     // For personal stages:
@@ -36,13 +36,13 @@ export const { domain, platform } = (() => {
 
     return {
         domain: personalDomain,
-        platform: $dev ? 'http://localhost:3000' : 'https://' + personalDomain,
+        web: $dev ? 'http://localhost:3000' : 'https://' + personalDomain,
     };
 })();
 
 export const Domain = new sst.Linkable('Domain', {
     properties: {
-        platform: platform,
+        web: web,
         api: 'https://api.' + domain,
     },
 });

@@ -26,28 +26,28 @@ jobs:
         timeout-minutes: 5
 
         steps:
-            - name: 📥 Checkout code
+            - name: Checkout code
               uses: actions/checkout@v4
 
-            - name: 🔐 Configure Dev AWS credentials
+            - name: Configure Dev AWS credentials
               if: inputs.stage == 'dev'
               uses: aws-actions/configure-aws-credentials@v4
               with:
                   role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_DEV }}:role/structa-dev-GitHubActionsDeploy
                   aws-region: ${{ env.AWS_REGION }}
 
-            - name: 🔐 Configure Production AWS credentials
+            - name: Configure Production AWS credentials
               if: inputs.stage == 'production'
               uses: aws-actions/configure-aws-credentials@v4
               with:
                   role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_PRODUCTION }}:role/structa-production-GitHubActionsDeploy
                   aws-region: ${{ env.AWS_REGION }}
 
-            - name: ✅ Verify authentication
+            - name: Verify authentication
               run: |
-                  echo "🔐 Testing AWS authentication for stage: ${{ inputs.stage }}"
+                  echo "Testing AWS authentication for stage: ${{ inputs.stage }}"
                   aws sts get-caller-identity
                   echo ""
-                  echo "✅ OIDC authentication successful!"
+                  echo "OIDC authentication successful!"
                   echo "Account: $(aws sts get-caller-identity --query Account --output text)"
                   echo "Role: $(aws sts get-caller-identity --query Arn --output text | cut -d'/' -f2)"
