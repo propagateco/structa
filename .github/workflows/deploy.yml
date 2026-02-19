@@ -23,33 +23,33 @@ jobs:
         timeout-minutes: 15
 
         steps:
-            - name: 📥 Checkout code
+            - name: Checkout code
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
-            - name: 🔧 Setup Node.js 22
+            - name: Setup Node.js 22
               uses: actions/setup-node@v4
               with:
                   node-version: '22'
                   cache: 'npm'
 
-            - name: 📦 Install dependencies
+            - name: Install dependencies
               run: npm ci
 
-            - name: 🔨 Build web package (generates content-collections)
+            - name: Build web package (generates content-collections)
               run: cd packages/web && npm run build
 
-            - name: 🔍 TypeScript type checks
+            - name: TypeScript type checks
               run: |
                   cd packages/core && npx tsc --noEmit
                   cd ../backend && npx tsc --noEmit
                   cd ../web && npx tsc --noEmit
 
-            - name: 📝 Linting checks
+            - name: Linting checks
               run: npm run check
 
-            - name: 🧪 Run test suite
+            - name: Run test suite
               run: npm test
               env:
                   CI: true
@@ -62,12 +62,12 @@ jobs:
         environment: ${{ github.ref_name }}
 
         steps:
-            - name: 📥 Checkout code
+            - name: Checkout code
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
-            - name: 💾 Cache SST
+            - name: Cache SST
               uses: actions/cache@v4
               with:
                   path: .sst
@@ -75,39 +75,39 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-sst-
 
-            - name: 🔧 Setup Node.js 22
+            - name: Setup Node.js 22
               uses: actions/setup-node@v4
               with:
                   node-version: '22'
                   cache: 'npm'
 
-            - name: 📦 Install dependencies
+            - name: Install dependencies
               run: npm ci
 
-            - name: 🔐 Configure Dev AWS credentials
+            - name: Configure Dev AWS credentials
               if: github.ref == 'refs/heads/dev'
               uses: aws-actions/configure-aws-credentials@v4
               with:
                   role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_DEV }}:role/structa-dev-GitHubActionsDeploy
                   aws-region: ${{ env.AWS_REGION }}
 
-            - name: 🔐 Configure Production AWS credentials
+            - name: Configure Production AWS credentials
               if: github.ref == 'refs/heads/production'
               uses: aws-actions/configure-aws-credentials@v4
               with:
                   role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_PRODUCTION }}:role/structa-production-GitHubActionsDeploy
                   aws-region: ${{ env.AWS_REGION }}
 
-            - name: 🚀 Deploy with SST
+            - name: Deploy with SST
               run: npx sst deploy --stage ${{ github.ref_name }}
               env:
                   AWS_PROFILE: ''
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
 
-            - name: 📊 Output deployment info
+            - name: Output deployment info
               if: success()
               run: |
-                  echo "✅ Deployment to ${{ github.ref_name }} completed successfully!"
+                  echo "Deployment to ${{ github.ref_name }} completed successfully!"
                   echo "Branch: ${{ github.ref_name }}"
                   echo "Commit: ${{ github.sha }}"

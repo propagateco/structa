@@ -37,38 +37,38 @@ jobs:
         timeout-minutes: 15
 
         steps:
-            - name: 📥 Checkout code
+            - name: Checkout code
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
 
-            - name: 🔧 Setup Node.js 22
+            - name: Setup Node.js 22
               uses: actions/setup-node@v4
               with:
                   node-version: '22'
                   cache: 'npm'
 
-            - name: 📦 Install dependencies
+            - name: Install dependencies
               run: npm ci
 
-            - name: 🔨 Build web package (generates content-collections)
+            - name: Build web package (generates content-collections)
               run: cd packages/web && npm run build
 
-            - name: 🔍 TypeScript type checks
+            - name: TypeScript type checks
               run: |
                   cd packages/core && npx tsc --noEmit
                   cd ../backend && npx tsc --noEmit
                   cd ../web && npx tsc --noEmit
 
-            - name: 📝 Linting checks
+            - name: Linting checks
               run: npm run check
 
-            - name: 🧪 Run test suite
+            - name: Run test suite
               run: npm test
               env:
                   CI: true
 
-            - name: 📊 Upload test results (on failure)
+            - name: Upload test results (on failure)
               if: failure()
               uses: actions/upload-artifact@v4
               with:
@@ -93,17 +93,17 @@ jobs:
             github.actor != 'dependabot[bot]'
 
         outputs:
-            platform_url: ${{ steps.get_urls.outputs.platform_url }}
+            web_url: ${{ steps.get_urls.outputs.web_url }}
             api_url: ${{ steps.get_urls.outputs.api_url }}
 
         steps:
-            - name: 📥 Checkout code
+            - name: Checkout code
               uses: actions/checkout@v4
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
                   fetch-depth: 0
 
-            - name: 💾 Cache SST
+            - name: Cache SST
               uses: actions/cache@v4
               with:
                   path: .sst
@@ -112,53 +112,42 @@ jobs:
                       ${{ runner.os }}-sst-pr-
                       ${{ runner.os }}-sst-dev
 
-            - name: 🔧 Setup Node.js 22
+            - name: Setup Node.js 22
               uses: actions/setup-node@v4
               with:
                   node-version: '22'
                   cache: 'npm'
 
-            - name: 📦 Install dependencies
+            - name: Install dependencies
               run: npm ci
 
-            - name: 🔐 Configure AWS credentials (Dev)
+            - name: Configure AWS credentials (Dev)
               uses: aws-actions/configure-aws-credentials@v4
               with:
                   role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_DEV }}:role/structa-dev-GitHubActionsDeploy
                   aws-region: ${{ env.AWS_REGION }}
 
-            - name: 🚀 Deploy with SST
+            - name: Deploy with SST
               run: npx sst deploy --stage ${{ env.STAGE_NAME }}
               env:
                   AWS_PROFILE: ''
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
 
-            - name: 🔗 Get preview URLs
+            - name: Get preview URLs
               id: get_urls
               run: |
-                  echo "Fetching SST outputs for stage: ${{ env.STAGE_NAME }}"
+                  # Get outputs from SST state
+                  STATE_OUTPUT=$(npx sst state export --stage ${{ env.STAGE_NAME }})
                   
-                  # Capture output and check if valid JSON
-                  RAW_OUTPUT=$(npx sst output --stage ${{ env.STAGE_NAME }} --json 2>&1) || true
-                  echo "Raw output: $RAW_OUTPUT"
+                  WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '.latest.resources[0].outputs.Web // empty')
+                  API_URL=$(echo "$STATE_OUTPUT" | jq -r '.latest.resources[0].outputs.Api // empty')
                   
-                  # Try to parse as JSON, fall back to empty object
-                  if echo "$RAW_OUTPUT" | jq -e . >/dev/null 2>&1; then
-                    OUTPUTS="$RAW_OUTPUT"
-                  else
-                    echo "Warning: SST output is not valid JSON, using empty object"
-                    OUTPUTS='{}'
-                  fi
-                  
-                  PLATFORM_URL=$(echo "$OUTPUTS" | jq -r '.Platform // empty')
-                  API_URL=$(echo "$OUTPUTS" | jq -r '.Api // empty')
-                  
-                  echo "platform_url=$PLATFORM_URL" >> $GITHUB_OUTPUT
+                  echo "web_url=$WEB_URL" >> $GITHUB_OUTPUT
                   echo "api_url=$API_URL" >> $GITHUB_OUTPUT
                   
-                  echo "📱 Platform URL: $PLATFORM_URL"
-                  echo "🔌 API URL: $API_URL"
+                  echo "Web URL: $WEB_URL"
+                  echo "API URL: $API_URL"
 
     # ===========================================
     # Job 3: Comment PR with Preview URLs
@@ -173,35 +162,34 @@ jobs:
             needs.deploy-preview.result == 'success'
 
         steps:
-            - name: 🔍 Find existing comment
+            - name: Find existing comment
               uses: peter-evans/find-comment@v3
               id: find_comment
               with:
                   issue-number: ${{ github.event.pull_request.number }}
-                  body-includes: '🚀 Preview Environment'
+                  body-includes: 'Preview Environment'
 
-            - name: 💬 Create or update comment
+            - name: Create or update comment
               uses: peter-evans/create-or-update-comment@v4
               with:
                   issue-number: ${{ github.event.pull_request.number }}
                   comment-id: ${{ steps.find_comment.outputs.comment-id }}
                   edit-mode: replace
                   body: |
-                      ## 🚀 Preview Environment
+                      ## Preview Environment
 
                       | Property | Value |
                       |----------|-------|
                       | **Stage** | `${{ env.STAGE_NAME }}` |
-                      | **Commit** | `${{ github.event.pull_request.head.sha }}` |
-                      | **Platform URL** | [${{ needs.deploy-preview.outputs.platform_url }}](${{ needs.deploy-preview.outputs.platform_url }}) |
+                      | **Web URL** | [${{ needs.deploy-preview.outputs.web_url }}](${{ needs.deploy-preview.outputs.web_url }}) |
                       | **API URL** | [${{ needs.deploy-preview.outputs.api_url }}](${{ needs.deploy-preview.outputs.api_url }}) |
 
                       ---
 
-                      ✅ Quality checks passed
-                      ✅ Deployment successful
+                      Quality checks passed
+                      Deployment successful
 
-                      > 💡 This environment will be automatically cleaned up when the PR is closed or merged.
+                      > This environment will be automatically cleaned up when the PR is closed or merged.
 
     # ===========================================
     # Job 4: Comment on Quality Check Failure
@@ -216,26 +204,26 @@ jobs:
             needs.quality-checks.result == 'failure'
 
         steps:
-            - name: 🔍 Find existing comment
+            - name: Find existing comment
               uses: peter-evans/find-comment@v3
               id: find_comment
               with:
                   issue-number: ${{ github.event.pull_request.number }}
                   body-includes: 'Quality Checks'
 
-            - name: 💬 Comment failure status
+            - name: Comment failure status
               uses: peter-evans/create-or-update-comment@v4
               with:
                   issue-number: ${{ github.event.pull_request.number }}
                   comment-id: ${{ steps.find_comment.outputs.comment-id }}
                   edit-mode: replace
                   body: |
-                      ## ❌ Quality Checks Failed
+                      ## Quality Checks Failed
 
                       | Check | Status |
                       |-------|--------|
-                      | TypeScript | ❌ |
-                      | Linting | ❌ |
-                      | Tests | ❌ |
+                      | TypeScript | Failed |
+                      | Linting | Failed |
+                      | Tests | Failed |
 
-                      ⚠️ Please fix the issues above before merging.
+                      Please fix the issues above before merging.
