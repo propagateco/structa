@@ -15,7 +15,7 @@ export const auth = betterAuth({
         provider: 'pg',
         schema: AuthSchema,
     }),
-    // baseURL: `${Resource.Domain.platform}`,
+    // baseURL: `${Resource.Domain.web}`,
     secret: Resource.BetterAuthSecret.value,
     socialProviders: {
         google: {
@@ -28,7 +28,7 @@ export const auth = betterAuth({
     advanced: {
         cookiePrefix: Resource.Stage.cookiePrefix,
         crossSubDomainCookies: {
-            enabled: Resource.Domain.platform !== 'http://localhost:3000',
+            enabled: Resource.Domain.web !== 'http://localhost:3000',
         },
         defaultCookieAttributes: {
             sameSite: 'none',

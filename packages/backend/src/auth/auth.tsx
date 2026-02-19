@@ -16,9 +16,9 @@ export const auth = betterAuth({
 		provider: "pg",
 		schema: AuthSchema,
 	}),
-	baseURL: `${Resource.Domain.platform}/auth`,
+	baseURL: `${Resource.Domain.web}/auth`,
 	secret: Resource.BetterAuthSecret.value,
-	allowedOrigins: [Resource.Domain.platform],
+	allowedOrigins: [Resource.Domain.web],
 	emailAndPassword: {
 		enabled: true,
 	},
