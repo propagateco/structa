@@ -171,7 +171,7 @@ jobs:
               id: find_comment
               with:
                   issue-number: ${{ github.event.pull_request.number }}
-                  body-includes: 'Preview Environment'
+                  body-includes: 'Stage'
 
             - name: Create or update comment
               uses: peter-evans/create-or-update-comment@v4
