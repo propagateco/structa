@@ -26,6 +26,7 @@ jobs:
     name: Destroy Preview Environment
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment: dev
 
     steps:
       - name: Checkout code
@@ -48,10 +49,7 @@ jobs:
 
       - name: Destroy SST environment
         run: npx sst remove --stage ${{ env.STAGE_NAME }}
-        continue-on-error: true
         env:
           AWS_PROFILE: ''
-
-      - name: Cleanup complete
-        run: |
-          echo "Preview environment ${{ env.STAGE_NAME }} has been cleaned up"
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
