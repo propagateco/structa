@@ -86,6 +86,7 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 30
         needs: quality-checks
+        environment: dev
         # Skip deployment for draft PRs and dependabot
         if: |
             github.event.pull_request.draft == false &&
