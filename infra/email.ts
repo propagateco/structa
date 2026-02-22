@@ -10,7 +10,7 @@ const getEmailSubdomain = (subdomain: string): string => {
 
 // Authentication emails (sign-in OTP, email verification, password reset)
 export const authEmail = !IS_DEPLOYED_STAGE
-    ? sst.aws.Email.get('AuthEmail', DEV)
+    ? sst.aws.Email.get('AuthEmail', getEmailSubdomain('auth'))
     : new sst.aws.Email('AuthEmail', {
           sender: getEmailSubdomain('auth'),
           dns: dnsAdapter,
@@ -18,7 +18,7 @@ export const authEmail = !IS_DEPLOYED_STAGE
 
 // Notification emails (onboarding, account alerts - templates to be created later)
 export const notifyEmail = !IS_DEPLOYED_STAGE
-    ? sst.aws.Email.get('NotifyEmail', DEV)
+    ? sst.aws.Email.get('NotifyEmail', getEmailSubdomain('notify'))
     : new sst.aws.Email('NotifyEmail', {
           sender: getEmailSubdomain('notify'),
           dns: dnsAdapter,
@@ -35,7 +35,9 @@ export const marketingEmail =
 // Dev-only: Personal email for sandbox testing (remove after production access)
 export const personalEmail = !IS_DEPLOYED_STAGE
     ? sst.aws.Email.get('PersonalEmail', 'harrison@structa.so')
-    : undefined;
+    : new sst.aws.Email('PersonalEmail', {
+          sender: 'harrison@structa.so',
+      });
 
 // Local email preview server (react-email)
 export const reactEmail = new sst.x.DevCommand('EmailServer', {
