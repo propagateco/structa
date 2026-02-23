@@ -16,6 +16,11 @@ declare module "sst" {
       "type": "sst.aws.Router"
       "url": string
     }
+    "AuthEmail": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
+    }
     "BetterAuthSecret": {
       "type": "sst.sst.Secret"
       "value": string
@@ -30,13 +35,8 @@ declare module "sst" {
     }
     "Domain": {
       "api": string
-      "platform": string
       "type": "sst.sst.Linkable"
-    }
-    "Email": {
-      "configSet": string
-      "sender": string
-      "type": "sst.aws.Email"
+      "web": string
     }
     "EncryptionKey": {
       "type": "sst.sst.Secret"
@@ -71,11 +71,6 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
-    "MarketingEmail": {
-      "configSet": string
-      "sender": string
-      "type": "sst.aws.Email"
-    }
     "NODE_TLS_REJECT_UNAUTHORIZED": {
       "type": "sst.sst.Secret"
       "value": string
@@ -91,6 +86,11 @@ declare module "sst" {
     "NeonProjectId": {
       "type": "sst.sst.Secret"
       "value": string
+    }
+    "NotifyEmail": {
+      "configSet": string
+      "sender": string
+      "type": "sst.aws.Email"
     }
     "OptimisedStorage": {
       "name": string
