@@ -33,6 +33,7 @@ export const app = new sst.aws.TanStackStart('Web', {
         secret.ExpoProjectId,
         secret.ExpoOwner,
         secret.BetterAuthSecret,
+        secret.LoopsApiKey,
     ],
     environment: {
         BETTER_AUTH_URL: Domain.properties.web,

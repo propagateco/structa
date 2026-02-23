@@ -46,7 +46,6 @@ export default $config({
             });
         });
         const dns = await import('./infra/dns');
-        // GitHub Actions OIDC infrastructure (import early to debug)
         await import('./infra/github');
         await import('./infra/web');
         await import('./infra/api');
@@ -54,6 +53,7 @@ export default $config({
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
         await import('./infra/email');
+        await import('./infra/sns');
         return {
             Api: dns.Domain.properties.api,
             Web: dns.Domain.properties.web,

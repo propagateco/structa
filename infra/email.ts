@@ -1,4 +1,4 @@
-import { DEV, dnsAdapter, IS_DEPLOYED_STAGE } from './dns';
+import { dnsAdapter, IS_DEPLOYED_STAGE } from './dns';
 
 // Helper to determine subdomain based on stage
 const getEmailSubdomain = (subdomain: string): string => {
@@ -8,7 +8,7 @@ const getEmailSubdomain = (subdomain: string): string => {
     return `${subdomain}.dev.structa.so`;
 };
 
-// Authentication emails (sign-in OTP, email verification, password reset)
+// Authentication emails
 export const authEmail = !IS_DEPLOYED_STAGE
     ? sst.aws.Email.get('AuthEmail', getEmailSubdomain('auth'))
     : new sst.aws.Email('AuthEmail', {
@@ -16,7 +16,7 @@ export const authEmail = !IS_DEPLOYED_STAGE
           dns: dnsAdapter,
       });
 
-// Notification emails (onboarding, account alerts - templates to be created later)
+// Notification emails
 export const notifyEmail = !IS_DEPLOYED_STAGE
     ? sst.aws.Email.get('NotifyEmail', getEmailSubdomain('notify'))
     : new sst.aws.Email('NotifyEmail', {
@@ -32,7 +32,7 @@ export const marketingEmail =
         dns: dnsAdapter,
     });
 
-// Dev-only: Personal email for sandbox testing (remove after production access)
+// Personal identity email for sandbox testing (remove after production access)
 export const personalEmail = !IS_DEPLOYED_STAGE
     ? sst.aws.Email.get('PersonalEmail', 'harrison@structa.so')
     : new sst.aws.Email('PersonalEmail', {
