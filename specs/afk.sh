@@ -19,10 +19,24 @@ for ((i=1; i<=$1; i++)); do
   echo "========================================="
 
   # Get fresh GitHub issues JSON each iteration (state may have changed)
-  ISSUES=$(gh issue list --state open --json number,title,body,comments)
+  # Filter out issues that already have open PRs (waiting for manual review)
+  # PRs can reference issues via: branch name (e.g., "39-..."), or PR body ("fixes #39", "closes #39")
+  gh pr list --state open --json headRefName,body > /tmp/pr_data.json
+  gh issue list --state open --json number,title,body,comments > /tmp/issues_raw.json
+  
+  # Filter issues and write to a file (avoids shell variable issues with JSON)
+  jq '
+    [.[] | select(
+      (.number | tostring) as $num |
+      ($pr_data[0] | map(
+        (.headRefName | contains($num)) or 
+        (.body | test("#\($num)"; "i"))
+      ) | any | not)
+    )]
+  ' --slurpfile pr_data /tmp/pr_data.json /tmp/issues_raw.json > /tmp/issues.json
 
-  # Check if there are any open issues
-  ISSUE_COUNT=$(echo "$ISSUES" | jq 'length')
+  # Check if there are any open issues (read count from file)
+  ISSUE_COUNT=$(jq 'length' /tmp/issues.json)
   if [ "$ISSUE_COUNT" -eq 0 ]; then
     echo ""
     echo "No open issues found. All work complete!"
@@ -35,8 +49,9 @@ for ((i=1; i<=$1; i++)); do
   fi
 
   # Run OpenCode with build agent
-  # Pass issues JSON and prompt instructions
-  opencode run --agent build "Here are the open issues: $ISSUES
+  # Pass issues JSON file path and prompt instructions
+  opencode run --agent build "Here are the open issues (from /tmp/issues.json):
+$(cat /tmp/issues.json)
 
 Follow the instructions in specs/prompt.md for task breakdown, selection, and execution."
 
