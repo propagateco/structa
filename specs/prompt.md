@@ -2,10 +2,11 @@
 
 **CRITICAL: Run this section FIRST, before anything else.**
 
-This determines whether you're in WORK mode or PR_MERGE mode.
+This determines whether you're in WORK mode, PR_READY mode, or POST-MERGE mode.
 
 1. Read `specs/progress.txt` to find promise markers:
    - Search for: `<promise>MERGED</promise>`
+   - Search for: `<promise>PR_READY</promise>`
    - Search for: `<promise>COMPLETE</promise>`
    - Search for: `<promise>FAILED</promise>`
 
@@ -16,15 +17,27 @@ This determines whether you're in WORK mode or PR_MERGE mode.
    - User will fix manually and restart afk.sh
 
 3. If `<promise>MERGED</promise>` is present:
-   - This issue is done and merged
-   - Remove the MERGED promise marker from progress.txt (keep the log entry)
-   - Proceed to BRANCH SETUP section to start next issue
+   - User has manually merged the PR
+   - Proceed to POST-MERGE CLEANUP section
 
-4. If `<promise>COMPLETE</promise>` is present:
-   - Skip all sections except PR CREATION & MERGE
-   - Go directly to PR CREATION & MERGE section
+4. If `<promise>PR_READY</promise>` is present:
+   - PR is created and CI passed, waiting for manual merge
+   - Check if PR still exists: `gh pr view --json number,merged,state 2>/dev/null`
+   - **If PR doesn't exist (deleted):**
+     - User did full manual cleanup (merge + delete + close)
+     - Clear progress.txt and output "Full manual cleanup detected"
+     - STOP - ready for next issue
+   - **If PR exists and is merged:**
+     - Replace `PR_READY` with `MERGED` in progress.txt
+     - Proceed to POST-MERGE CLEANUP section
+   - **If PR exists and not merged:**
+     - Output "PR still waiting for manual merge" and STOP
 
-5. If no promise markers present:
+5. If `<promise>COMPLETE</promise>` is present:
+   - Skip all sections except PR CREATION & WAIT
+   - Go directly to PR CREATION & WAIT section
+
+6. If no promise markers present:
    - Proceed to BRANCH SETUP section
 
 # BRANCH SETUP
@@ -44,11 +57,11 @@ This determines whether you're in WORK mode or PR_MERGE mode.
 
 Use GitHub's auto-generated branch name. Do NOT manually construct one.
 
-**IMPORTANT: Ensure branches are created from dev, not the repository's default branch.**
+**IMPORTANT: Ensure branches are created from production, not the repository's default branch.**
 
-First, checkout and update dev:
+First, checkout and update production:
 ```bash
-git checkout dev && git pull origin dev
+git checkout production && git pull origin production
 ```
 
 Then use this command:
@@ -57,7 +70,7 @@ gh issue develop <ISSUE_NUMBER>
 ```
 
 This will:
-- Create a branch with GitHub's auto-generated name (e.g., `feature/my-cool-feature` or `bug/123-fix-something`)
+- Create a branch with GitHub's auto-generated name (e.g., `<ISSUE_NUMBER>-name-of-the-issue`)
 - Checkout the branch
 - Set up tracking if needed
 
@@ -84,22 +97,20 @@ Read `specs/progress.txt` and search for:
 
 ## Update Progress State
 
-After branch setup, append to `specs/progress.txt`:
+After branch setup, write ONLY state markers to `specs/progress.txt` (overwrite, not append):
 ```
-## <timestamp>: Issue #<number> Started
-
-- Issue title: <issue-title>
-- Branch: <branch-name>
 [CURRENT_ISSUE] <issue-number>
 [CURRENT_BRANCH] <branch-name>
 [STARTED] <timestamp>
 ```
 
+Note: progress.txt uses a state-only model. No log entries or history - just current state markers.
+
 ## Verification
 
 - Run: `git status`
 - Verify you're on the correct branch
-- Verify it's up-to-date with dev
+- Verify it's up-to-date with production
 - If any errors, abort and leave a comment on the issue
 
 # ISSUES
@@ -175,15 +186,9 @@ Important: Always run `npx sst deploy` before committing to ensure infrastructur
 
 # PROGRESS
 
-After completing, append to progress.txt:
+Progress tracking is handled via git commits. The progress.txt file only stores state markers (current issue, branch, promise flags) - no task history.
 
-- Task completed and PRD reference
-- Key decisions made
-- Files changed
-- Blockers or notes for next iteration
-  Keep entries concise.
-
-- Ensure you commit progress.txt with the changed code
+Ensure meaningful commit messages capture what was done.
 
 # COMMIT
 
@@ -202,14 +207,8 @@ After each commit, check if the issue is complete.
    - Are all test criteria met?
 
 3. If YES (issue is complete):
-   - Append to `specs/progress.txt`:
+   - Append ONLY the promise marker to `specs/progress.txt`:
      ```
-     ## <timestamp>: Issue #<number> Complete
-
-     - Issue title: <issue-title>
-     - Branch: <current-branch>
-     - All tasks completed
-     - Outputting COMPLETE to trigger PR creation
      <promise>COMPLETE</promise>
      ```
    - Commit progress.txt with message: "Mark issue #<number> as COMPLETE"
@@ -233,18 +232,18 @@ If the task is not complete (issue still has unfinished work):
 - Leave a comment on the GitHub issue with what was done in this session
 - Include: task completed, files changed, any blockers found
 
-**Do NOT close the issue directly.** The issue will be automatically closed after the PR is merged in the PR CREATION & MERGE section.
+**Do NOT close the issue directly.** The issue will be automatically closed after the PR is merged in the POST-MERGE CLEANUP section.
 
-Only when the issue is fully complete and you've output `<promise>COMPLETE</promise>`, proceed to the PR CREATION & MERGE section which will:
+Only when the issue is fully complete and you've output `<promise>COMPLETE</promise>`, proceed to the PR CREATION & WAIT section which will:
 - Create a PR for this issue
-- Merge it to dev
-- Close the issue automatically
+- Wait for CI checks to pass
+- Stop and wait for manual merge
 
 # FINAL RULES
 
 ONLY WORK ON A SINGLE TASK.
 
-# PR CREATION & MERGE
+# PR CREATION & WAIT
 
 **This section only runs when `<promise>COMPLETE</promise>` is in progress.txt.**
 
@@ -275,7 +274,7 @@ This returns labels as a space-separated list (e.g., "bug critical enhancement")
    gh pr create \
      --title "Issue #{{ISSUE_NUMBER}}: {{ISSUE_TITLE}}" \
      --body "$(cat specs/pr-body-template.md)" \
-     --base dev \
+     --base production \
      --head {{BRANCH_NAME}} \
      --labels $ISSUE_LABELS
    ```
@@ -285,23 +284,12 @@ This returns labels as a space-separated list (e.g., "bug critical enhancement")
 
 3. If PR creation fails:
    - Leave a comment on the GitHub issue explaining the error
-   - Append failure note to progress.txt
    - Output `<promise>FAILED</promise>`
    - Abort this session
 
 4. Get the PR number:
    ```bash
    PR_NUMBER=$(gh pr view --json number --jq '.number')
-   ```
-
-5. Append to progress.txt:
-   ```
-   ## <timestamp>: PR Created for Issue #<issue-number>
-
-   - PR #<pr-number>
-   - Branch: <branch-name>
-   - Labels: <labels>
-   - Waiting for CI checks...
    ```
 
 ## Wait for CI Checks
@@ -317,50 +305,30 @@ This returns labels as a space-separated list (e.g., "bug critical enhancement")
    ```
 
 3. If all checks PASS:
-   - Proceed to Merge section
+   - Leave a comment on the GitHub issue: "✅ CI checks passed. Ready for manual merge."
+   - Update progress.txt:
+     ```
+     [CURRENT_ISSUE] <issue-number>
+     [CURRENT_BRANCH] <branch-name>
+     [STARTED] <timestamp>
+     <promise>PR_READY</promise>
+     ```
+   - Commit progress.txt with message: "PR #<pr-number> ready for manual merge"
+   - Output completion message:
+     ```
+     === PR Ready for Manual Merge ===
+     PR #<pr-number> created and CI checks passed
+     Issue #<issue-number> waiting for manual merge
+     Link: https://github.com/<owner>/<repo>/pull/<pr-number>
+     ```
+   - STOP - wait for user to manually merge
 
 4. If any checks FAIL:
    - Proceed to Failure Handling section
 
-## Merge PR
+## Failure Handling (Test Failures)
 
-**Only do this if all CI checks PASS.**
-
-1. Merge the PR:
-   ```bash
-   gh pr merge --merge
-   ```
-
-2. If merge fails:
-   - Leave a comment on the issue explaining the merge failure
-   - Append failure note to progress.txt
-   - Output `<promise>FAILED</promise>`
-   - Abort this session
-
-3. Close the GitHub issue:
-   ```bash
-   gh issue close <ISSUE_NUMBER>
-   ```
-
-4. Add success message to the issue:
-   ```bash
-   gh issue comment <ISSUE_NUMBER> --body "✅ Issue resolved and merged to dev via PR #<PR_NUMBER>"
-   ```
-
-5. Append to progress.txt:
-   ```
-   ## <timestamp>: Issue #<issue-number> Merged
-
-   - PR #<pr-number> merged to dev
-   - Issue closed
-   <promise>MERGED</promise>
-   ```
-
-6. Proceed to Cleanup section
-
-## Failure Handling (Test Failures or Merge Conflicts)
-
-**Only do this if CI checks fail or merge fails.**
+**Only do this if CI checks fail.**
 
 ### Attempt One Fix
 
@@ -390,13 +358,8 @@ This returns labels as a space-separated list (e.g., "bug critical enhancement")
    - What was attempted
    - What manual action is needed
 
-2. Append to progress.txt:
+2. Append ONLY the promise marker to progress.txt:
    ```
-   ## <timestamp>: Issue #<issue-number> Failed to Merge
-
-   - Failure reason: <details>
-   - Attempted fix: <details>
-   - Manual intervention required
    <promise>FAILED</promise>
    ```
 
@@ -404,70 +367,116 @@ This returns labels as a space-separated list (e.g., "bug critical enhancement")
 
 4. Output failure message and abort
 
-## Cleanup (After Successful Merge)
-
-**Only do this if merge succeeded.**
-
-1. Delete the remote branch:
-   ```bash
-   git push origin --delete <BRANCH_NAME>
-   ```
-
-2. Checkout dev:
-   ```bash
-   git checkout dev
-   ```
-
-3. Delete the local branch:
-   ```bash
-   git branch -D <BRANCH_NAME>
-   ```
-
-4. Pull latest dev (with your merged changes):
-   ```bash
-   git pull origin dev
-   ```
-
-5. **Clean progress.txt (remove all entries for this issue)**:
-
-   Use sed to remove all lines mentioning this issue number:
-   ```bash
-   sed -i '/Issue #<issue-number>/d' specs/progress.txt
-   sed -i '/\[CURRENT_ISSUE\]/d' specs/progress.txt
-   sed -i '/\[CURRENT_BRANCH\]/d' specs/progress.txt
-   sed -i '/\[STARTED\]/d' specs/progress.txt
-   sed -i '/<promise>COMPLETE<\/promise>/d' specs/progress.txt
-   sed -i '/<promise>MERGED<\/promise>/d' specs/progress.txt
-   sed -i '/<promise>FAILED<\/promise>/d' specs/progress.txt
-   ```
-
-6. Commit the cleaned progress.txt (only if changes were made):
-   ```bash
-   if [ -n "$(git diff specs/progress.txt)" ]; then
-     git add specs/progress.txt
-     git commit -m "Clean progress.txt after merging issue #<issue-number>"
-     git push
-   fi
-   ```
-
-7. Output completion message:
-   ```
-   === Issue #<issue-number> Complete ===
-   PR #<pr-number> merged to dev
-   Feature branch deleted
-   Progress log cleaned
-   Ready for next issue
-   ```
-
-8. Output the MERGED promise for afk.sh to detect:
-   ```markdown
-   <promise>MERGED</promise>
-   ```
-
 ## Important Notes
 
 - This section runs independently - it doesn't do any coding
-- The agent here is purely orchestrating PR, checks, and merge
+- The agent here is purely orchestrating PR creation and CI checks
 - All coding happens in WORK mode before this section
-- If this section fails, it outputs FAILED and aborts
-- The MERGED promise signals the afk.sh loop to complete (or move to next issue)
+- **Merging is manual** - the agent stops after CI passes
+- After manual merge, run the agent again to detect MERGED state and cleanup
+
+# POST-MERGE CLEANUP
+
+**This section only runs when `<promise>MERGED</promise>` is in progress.txt.**
+
+The MERGED promise is set by the user after manually merging the PR. This section handles cleanup.
+
+## Preconditions
+
+Before proceeding:
+- Read `[CURRENT_BRANCH]` and `[CURRENT_ISSUE]` from progress.txt
+
+## Check If Cleanup Already Done
+
+First, check if the user already did the cleanup manually:
+
+1. Check if branch exists locally:
+   ```bash
+   git show-ref --verify --quiet refs/heads/<BRANCH_NAME>
+   ```
+
+2. Check if issue is still open:
+   ```bash
+   gh issue view <ISSUE_NUMBER> --json state --jq '.state'
+   ```
+
+**If branch doesn't exist locally AND issue is closed:**
+- User did full cleanup manually
+- Just clear progress.txt and finish:
+  ```bash
+  > specs/progress.txt
+  git add specs/progress.txt
+  git commit -m "Clear progress.txt - cleanup already done"
+  git push
+  ```
+- Output:
+  ```
+  === Issue #<issue-number> Already Cleaned Up ===
+  Branch deleted and issue closed (manual cleanup detected)
+  Progress state cleared
+  Ready for next issue
+  ```
+- STOP
+
+**Otherwise, proceed with cleanup steps below.**
+
+## Cleanup
+
+1. Delete the remote branch (if it exists):
+   ```bash
+   git push origin --delete <BRANCH_NAME> 2>/dev/null || echo "Remote branch already deleted"
+   ```
+
+2. Checkout production:
+   ```bash
+   git checkout production
+   ```
+
+3. Delete the local branch (if it exists):
+   ```bash
+   git branch -D <BRANCH_NAME> 2>/dev/null || echo "Local branch already deleted"
+   ```
+
+4. Pull latest production (with your merged changes):
+   ```bash
+   git pull origin production
+   ```
+
+5. Close the GitHub issue (if still open):
+   ```bash
+   gh issue close <ISSUE_NUMBER> 2>/dev/null || echo "Issue already closed"
+   ```
+
+6. Add success message to the issue (if it exists):
+   ```bash
+   gh issue comment <ISSUE_NUMBER> --body "✅ Issue resolved and merged to production" 2>/dev/null || echo "Could not comment (issue may not exist)"
+   ```
+
+7. **Clear progress.txt (state-only model)**:
+
+   Simply truncate the file:
+   ```bash
+   > specs/progress.txt
+   ```
+
+8. Commit the cleared progress.txt:
+   ```bash
+   git add specs/progress.txt
+   git commit -m "Clear progress.txt after merging issue #<issue-number>"
+   git push
+   ```
+
+9. Output completion message:
+   ```
+   === Issue #<issue-number> Complete ===
+   PR merged to production
+   Feature branch deleted
+   Issue closed
+   Progress state cleared
+   Ready for next issue
+   ```
+
+10. Output the MERGED promise for afk.sh to detect (already in progress.txt):
+    ```markdown
+    <promise>MERGED</promise>
+    ```
