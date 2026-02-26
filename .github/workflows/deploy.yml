@@ -105,6 +105,13 @@ jobs:
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
 
+            - name: Run database migrations
+              run: cd packages/core && npx sst shell --stage ${{ github.ref_name }} drizzle-kit push
+              env:
+                  AWS_PROFILE: ''
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
+
             - name: Output deployment info
               if: success()
               run: |
