@@ -1,0 +1,63 @@
+name: Bug Fix
+description: Report a bug that needs to be fixed
+labels: ["bugfix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please fill out the details below.
+        
+        **Priority:** Critical bugfixes are addressed first in the task queue.
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What's broken? What should happen instead?
+      placeholder: "When I do X, Y happens instead of Z..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this bug?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What needs to be true for this bug to be considered fixed?
+      placeholder: |
+        - [ ] Bug no longer occurs when...
+        - [ ] Existing tests still pass
+        - [ ] New test added to prevent regression
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How critical is this bug?
+      options:
+        - Critical (blocking other work / user-facing failure)
+        - High (significant impact)
+        - Medium (affects some users)
+        - Low (minor issue)
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Screenshots, logs, related issues, or any other context
+      placeholder: "Add any other context about the problem here..."

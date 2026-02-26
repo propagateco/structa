@@ -1,0 +1,55 @@
+name: Polish
+description: UI/UX improvements and refinements
+labels: ["polish"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Polish issues are for UI/UX improvements that enhance the user experience but aren't core functionality.
+        
+        **Priority:** Polish is priority 4 (after features are working).
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What improvement are we making?
+      placeholder: "The current UI could be improved by..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-state
+    attributes:
+      label: Current State
+      description: What does it look/feel like now?
+      placeholder: "Currently, the button is... the layout is..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: desired-state
+    attributes:
+      label: Desired State
+      description: What should it look/feel like after this polish?
+      placeholder: "After this change, it should..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What defines "done" for this polish?
+      placeholder: |
+        - [ ] Visual improvement verified in browser
+        - [ ] No regressions in existing functionality
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Screenshots, design references, or mockups
+      placeholder: "Attach screenshots or Figma links..."

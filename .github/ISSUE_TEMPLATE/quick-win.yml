@@ -1,0 +1,37 @@
+name: Quick Win
+description: Small, fast tasks that can be completed quickly
+labels: ["quick-win"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Quick wins are small tasks that can be completed in a short time. Great for momentum and visibility.
+        
+        **Priority:** Quick wins are priority 4 (alongside polish) - good for filling gaps between larger tasks.
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What small task needs to be done?
+      placeholder: "It would be nice if..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What defines "done" for this quick win?
+      placeholder: |
+        - [ ] Change is implemented
+        - [ ] Verified working
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any relevant context or references
+      placeholder: "Related to #123..."

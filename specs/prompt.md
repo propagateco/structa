@@ -2,25 +2,42 @@
 
 **CRITICAL: Run this section FIRST, before anything else.**
 
-This determines whether you're in WORK mode, PR_READY mode, or POST-MERGE mode.
+This determines whether you're in WORK mode, PR_READY mode, POST-MERGE mode, or should start fresh.
+
+## Check for Open Issues
+
+First, check if there are any open issues to work on:
+- If the issues JSON is empty (no open issues), output:
+  ```
+  === No Open Issues ===
+  All issues have been resolved. Nothing to do.
+  ```
+  - STOP
+
+## Check Progress State
 
 1. Read `specs/progress.txt` to find promise markers:
+   - Search for: `<promise>COMPLETE_CYCLE</promise>`
    - Search for: `<promise>MERGED</promise>`
    - Search for: `<promise>PR_READY</promise>`
    - Search for: `<promise>COMPLETE</promise>`
    - Search for: `<promise>FAILED</promise>`
 
-2. If `<promise>FAILED</promise>` is present:
+2. If `<promise>COMPLETE_CYCLE</promise>` is present:
+   - Previous issue was fully completed and cleaned up
+   - Clear progress.txt and proceed to BRANCH SETUP for next issue
+
+3. If `<promise>FAILED</promise>` is present:
    - Read the failure notes in progress.txt
    - Leave a comment on the current GitHub issue explaining the failure
    - Abort this session (do not proceed further)
    - User will fix manually and restart afk.sh
 
-3. If `<promise>MERGED</promise>` is present:
+4. If `<promise>MERGED</promise>` is present:
    - User has manually merged the PR
    - Proceed to POST-MERGE CLEANUP section
 
-4. If `<promise>PR_READY</promise>` is present:
+5. If `<promise>PR_READY</promise>` is present:
    - PR is created and CI passed, waiting for manual merge
    - Check if PR still exists: `gh pr view --json number,merged,state 2>/dev/null`
    - **If PR doesn't exist (deleted):**
@@ -33,11 +50,11 @@ This determines whether you're in WORK mode, PR_READY mode, or POST-MERGE mode.
    - **If PR exists and not merged:**
      - Output "PR still waiting for manual merge" and STOP
 
-5. If `<promise>COMPLETE</promise>` is present:
+6. If `<promise>COMPLETE</promise>` is present:
    - Skip all sections except PR CREATION & WAIT
    - Go directly to PR CREATION & WAIT section
 
-6. If no promise markers present:
+7. If no promise markers present:
    - Proceed to BRANCH SETUP section
 
 # BRANCH SETUP
@@ -127,28 +144,37 @@ Make each task as smallest possible unit of work. We don't want to outrun our he
 
 Pick the next issue and task. Use the following priority framework, but use your judgment to pick the most impactful issue:
 
-1. **Critical Bugfixes** (highest impact)
-   - Issues labeled "critical" or "bug: critical"
+Issues are prioritized by their labels. Use this priority order:
+
+1. **Critical Bugfixes** (highest impact) — Label: `bugfix` with severity `Critical`
    - Blockers preventing work on other issues
    - User-facing failures
+   - Production issues
 
-2. **Tracer Bullets** (strategic value)
-   - New features that provide immediate feedback
-   - Infrastructure that unlocks multiple issues
-   - End-to-end slices of functionality
+2. **Tracer Bullets** (strategic value) — Label: `tracer-bullet`
+   - End-to-end slices that validate architecture
+   - Infrastructure that unlocks multiple features
+   - Thin slices that provide immediate feedback
 
-   Tracer bullets comes from the Pragmatic Programmer. When building systems, you want to write code that gets you feedback as quickly as possible. Tracer bullets are small slices of functionality that go through all layers of system, allowing you to test and validate your approach early. This helps in identifying potential issues and ensures that the overall architecture is sound before investing significant time in development.
+   Tracer bullets come from the Pragmatic Programmer. When building systems, you want to write code that gets you feedback as quickly as possible. Tracer bullets are small slices of functionality that go through all layers of system, allowing you to test and validate your approach early. This helps in identifying potential issues and ensures that the overall architecture is sound before investing significant time in development.
 
    TL;DR - build a tiny, end-to-end slice of the feature first, then expand it out.
 
-3. **Polish & Quick Wins** (visibility)
-   - UI improvements
+3. **Features** (core functionality) — Label: `feature`
+   - Full feature implementation after tracer bullet validation
+   - Core business logic
+   - Major functionality additions
+
+4. **Polish & Quick Wins** (visibility) — Labels: `polish`, `quick-win`
+   - UI/UX improvements
    - Small enhancements
    - Documentation fixes
+   - Minor tweaks
 
-4. **Refactors** (technical debt)
+5. **Refactors** (technical debt) — Label: `refactor`
    - Code quality improvements
    - Performance optimizations
+   - Technical debt reduction
 
 **Agent Agency**:
 - You may reorder these priorities based on context
@@ -388,7 +414,7 @@ Before proceeding:
 
 ## Check If Cleanup Already Done
 
-First, check if the user already did the cleanup manually:
+First, check if the cleanup was already completed in a previous iteration:
 
 1. Check if branch exists locally:
    ```bash
@@ -401,20 +427,17 @@ First, check if the user already did the cleanup manually:
    ```
 
 **If branch doesn't exist locally AND issue is closed:**
-- User did full cleanup manually
-- Just clear progress.txt and finish:
+- Cleanup was already done in a previous iteration
+- Clear progress.txt completely (this signals afk.sh that we're ready for next issue):
   ```bash
   > specs/progress.txt
-  git add specs/progress.txt
-  git commit -m "Clear progress.txt - cleanup already done"
-  git push
   ```
 - Output:
   ```
   === Issue #<issue-number> Already Cleaned Up ===
-  Branch deleted and issue closed (manual cleanup detected)
-  Progress state cleared
+  Cleanup was completed in a previous iteration
   Ready for next issue
+  <promise>COMPLETE_CYCLE</promise>
   ```
 - STOP
 
@@ -452,17 +475,17 @@ First, check if the user already did the cleanup manually:
    gh issue comment <ISSUE_NUMBER> --body "✅ Issue resolved and merged to production" 2>/dev/null || echo "Could not comment (issue may not exist)"
    ```
 
-7. **Clear progress.txt (state-only model)**:
-
-   Simply truncate the file:
+7. **Write completion signal to progress.txt:**
+   
+   Write ONLY the completion marker (this tells afk.sh to increment the counter):
    ```bash
-   > specs/progress.txt
+   echo "<promise>COMPLETE_CYCLE</promise>" > specs/progress.txt
    ```
 
-8. Commit the cleared progress.txt:
+8. Commit the progress.txt change:
    ```bash
    git add specs/progress.txt
-   git commit -m "Clear progress.txt after merging issue #<issue-number>"
+   git commit -m "Complete cycle for issue #<issue-number>"
    git push
    ```
 
@@ -474,9 +497,7 @@ First, check if the user already did the cleanup manually:
    Issue closed
    Progress state cleared
    Ready for next issue
+   <promise>COMPLETE_CYCLE</promise>
    ```
 
-10. Output the MERGED promise for afk.sh to detect (already in progress.txt):
-    ```markdown
-    <promise>MERGED</promise>
-    ```
+10. STOP - afk.sh will detect COMPLETE_CYCLE and continue to the next issue

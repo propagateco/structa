@@ -1,0 +1,56 @@
+name: Refactor
+description: Code quality improvements and technical debt reduction
+labels: ["refactor"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Refactors improve code quality without changing external behavior. They reduce technical debt and improve maintainability.
+        
+        **Priority:** Refactors are priority 5 (lowest) - do these when there's time or when they unblock other work.
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What refactoring are we doing and why?
+      placeholder: "The current code is difficult to maintain because..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-problem
+    attributes:
+      label: Current Problem
+      description: What's wrong with the current implementation?
+      placeholder: "Currently, the code has... which causes..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: How will the refactored code be better?
+      placeholder: "After refactoring, the code will be... which enables..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What defines a successful refactor?
+      placeholder: |
+        - [ ] Behavior unchanged (all tests pass)
+        - [ ] Code is more readable/maintainable
+        - [ ] No performance regression
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Technical notes, constraints, or related issues
+      placeholder: "This refactor will unblock #123..."

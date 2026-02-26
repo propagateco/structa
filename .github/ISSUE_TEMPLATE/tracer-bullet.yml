@@ -1,0 +1,59 @@
+name: Tracer Bullet
+description: Create an end-to-end slice to validate an approach before full implementation
+labels: ["tracer-bullet"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A tracer bullet is a thin, end-to-end slice of functionality that validates the architecture and provides early feedback.
+        
+        **Priority:** Tracer bullets are priority 2 (after critical bugfixes) because they unlock subsequent feature work.
+  
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What architectural approach or integration is this validating?
+      placeholder: "Validate that X can integrate with Y by building a minimal end-to-end flow..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Minimal Scope
+      description: What's the smallest slice that provides feedback? (Be ruthless about cutting scope)
+      placeholder: |
+        - Single happy path only (no error handling)
+        - Hardcoded values where appropriate
+        - No UI polish, just functional
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What proves this tracer bullet succeeded?
+      placeholder: |
+        - [ ] End-to-end flow works from A to B
+        - [ ] Architecture validated / approach confirmed
+        - [ ] Document learnings for full feature implementation
+    validations:
+      required: true
+
+  - type: textarea
+    id: related-feature
+    attributes:
+      label: Related Feature
+      description: Link to the feature issue(s) this tracer bullet will unlock
+      placeholder: "Unlocks #123, #124"
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Technical notes, constraints, or references
+      placeholder: "From the Pragmatic Programmer: build a tiny slice first, then expand..."

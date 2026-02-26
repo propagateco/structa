@@ -1,0 +1,61 @@
+name: Feature
+description: Implement a new feature (after tracer bullet validation)
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for implementing a full feature. Ideally, a tracer bullet has already validated the approach.
+        
+        **Priority:** Features are priority 3 (after critical bugfixes and tracer bullets).
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What feature are we building? What problem does it solve?
+      placeholder: "As a user, I want to... so that I can..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What needs to be true for this feature to be complete?
+      placeholder: |
+        - [ ] Given [context], when [action], then [outcome]
+        - [ ] Edge case X is handled
+        - [ ] Error states are handled gracefully
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Break down the implementation into specific tasks
+      placeholder: |
+        - [ ] Create data model / schema
+        - [ ] Implement backend logic
+        - [ ] Build UI components
+        - [ ] Add tests
+        - [ ] Update documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: tracer-bullet
+    attributes:
+      label: Tracer Bullet Reference
+      description: Link to the tracer bullet issue that validated this approach (if applicable)
+      placeholder: "Validated by #123"
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Design mockups, technical notes, related issues
+      placeholder: "Add any other context here..."
