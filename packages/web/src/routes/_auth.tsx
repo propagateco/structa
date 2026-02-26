@@ -16,13 +16,16 @@ export const Route = createFileRoute("/_auth")({
 			throw redirect({ to: "/login" });
 		}
 
+		// Check if this is an onboarding route
+		const isOnboardingRoute = location.pathname.startsWith("/onboarding");
+
 		// Redirect to onboarding if no plan
-		if (!session.user.plan && location.pathname !== "/onboarding") {
+		if (!session.user.plan && !isOnboardingRoute) {
 			throw redirect({ to: "/onboarding" });
 		}
 
 		// Redirect to app if has plan and trying to access onboarding
-		if (session.user.plan && location.pathname === "/onboarding") {
+		if (session.user.plan && isOnboardingRoute) {
 			throw redirect({ to: "/app" });
 		}
 
@@ -35,8 +38,8 @@ function AuthLayout() {
 	const { user } = Route.useRouteContext();
 	const pathname = useLocation({ select: (loc) => loc.pathname });
 
-	// Onboarding is standalone (no sidebar)
-	if (pathname === "/onboarding") {
+	// Onboarding routes are standalone (no sidebar)
+	if (pathname.startsWith("/onboarding")) {
 		return <Outlet />;
 	}
 

@@ -1,7 +1,7 @@
 import { sendVerificationOTP } from "@backend/auth/email";
 import { AuthSchema } from "@core/auth";
 import { db } from "@core/drizzle";
-import { createContactInLoops } from "@core/marketing";
+import { createContactInLoops, MAILING_LISTS } from "@core/marketing";
 import { extractIPAddress, getLocationFromIP } from "@core/utils/geolocation";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -116,6 +116,10 @@ export const auth = betterAuth({
 						properties: {
 							source: "resource-signup",
 							createdAt: user.createdAt.toISOString(),
+						},
+						mailingLists: {
+							[MAILING_LISTS.MARKETING]: true,
+							[MAILING_LISTS.PRODUCT]: true,
 						},
 					});
 

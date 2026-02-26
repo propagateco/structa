@@ -23,10 +23,12 @@ import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
 import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as MarketingGuidesIndexRouteImport } from './routes/_marketing/guides/index'
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
+import { Route as AuthOnboardingIndexRouteImport } from './routes/_auth/onboarding/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MarketingGuidesSlugRouteImport } from './routes/_marketing/guides/$slug'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
+import { Route as AuthOnboardingThankYouRouteImport } from './routes/_auth/onboarding/thank-you'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
 
 const BlogRoute = BlogRouteImport.update({
@@ -96,6 +98,11 @@ const LoginLoginIndexRoute = LoginLoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => LoginRoute,
 } as any)
+const AuthOnboardingIndexRoute = AuthOnboardingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthOnboardingRoute,
+} as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
   id: '/app/',
   path: '/app/',
@@ -116,6 +123,11 @@ const LoginLoginCodeRoute = LoginLoginCodeRouteImport.update({
   path: '/login/code',
   getParentRoute: () => LoginRoute,
 } as any)
+const AuthOnboardingThankYouRoute = AuthOnboardingThankYouRouteImport.update({
+  id: '/thank-you',
+  path: '/thank-you',
+  getParentRoute: () => AuthOnboardingRoute,
+} as any)
 const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
   id: '/app/settings',
   path: '/app/settings',
@@ -125,7 +137,7 @@ const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/blog': typeof BlogRoute
-  '/onboarding': typeof AuthOnboardingRoute
+  '/onboarding': typeof AuthOnboardingRouteWithChildren
   '/about': typeof MarketingAboutRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
@@ -133,17 +145,18 @@ export interface FileRoutesByFullPath {
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/settings': typeof AuthAppSettingsRoute
+  '/onboarding/thank-you': typeof AuthOnboardingThankYouRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app/': typeof AuthAppIndexRoute
+  '/onboarding/': typeof AuthOnboardingIndexRoute
   '/login/': typeof LoginLoginIndexRoute
   '/guides/': typeof MarketingGuidesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/blog': typeof BlogRoute
-  '/onboarding': typeof AuthOnboardingRoute
   '/about': typeof MarketingAboutRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
@@ -151,10 +164,12 @@ export interface FileRoutesByTo {
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/settings': typeof AuthAppSettingsRoute
+  '/onboarding/thank-you': typeof AuthOnboardingThankYouRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/app': typeof AuthAppIndexRoute
+  '/onboarding': typeof AuthOnboardingIndexRoute
   '/login': typeof LoginLoginIndexRoute
   '/guides': typeof MarketingGuidesIndexRoute
 }
@@ -164,7 +179,7 @@ export interface FileRoutesById {
   '/_login': typeof LoginRouteWithChildren
   '/_marketing': typeof MarketingRouteWithChildren
   '/blog': typeof BlogRoute
-  '/_auth/onboarding': typeof AuthOnboardingRoute
+  '/_auth/onboarding': typeof AuthOnboardingRouteWithChildren
   '/_marketing/about': typeof MarketingAboutRoute
   '/_marketing/privacy': typeof MarketingPrivacyRoute
   '/_marketing/terms': typeof MarketingTermsRoute
@@ -173,10 +188,12 @@ export interface FileRoutesById {
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
+  '/_auth/onboarding/thank-you': typeof AuthOnboardingThankYouRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
   '/_marketing/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/app/': typeof AuthAppIndexRoute
+  '/_auth/onboarding/': typeof AuthOnboardingIndexRoute
   '/_login/login/': typeof LoginLoginIndexRoute
   '/_marketing/guides/': typeof MarketingGuidesIndexRoute
 }
@@ -193,17 +210,18 @@ export interface FileRouteTypes {
     | '/use-cases/kitchen'
     | '/use-cases/loft'
     | '/app/settings'
+    | '/onboarding/thank-you'
     | '/login/code'
     | '/guides/$slug'
     | '/api/auth/$'
     | '/app/'
+    | '/onboarding/'
     | '/login/'
     | '/guides/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/blog'
-    | '/onboarding'
     | '/about'
     | '/privacy'
     | '/terms'
@@ -211,10 +229,12 @@ export interface FileRouteTypes {
     | '/use-cases/kitchen'
     | '/use-cases/loft'
     | '/app/settings'
+    | '/onboarding/thank-you'
     | '/login/code'
     | '/guides/$slug'
     | '/api/auth/$'
     | '/app'
+    | '/onboarding'
     | '/login'
     | '/guides'
   id:
@@ -232,10 +252,12 @@ export interface FileRouteTypes {
     | '/use-cases/loft'
     | '/_marketing/'
     | '/_auth/app/settings'
+    | '/_auth/onboarding/thank-you'
     | '/_login/login/code'
     | '/_marketing/guides/$slug'
     | '/api/auth/$'
     | '/_auth/app/'
+    | '/_auth/onboarding/'
     | '/_login/login/'
     | '/_marketing/guides/'
   fileRoutesById: FileRoutesById
@@ -351,6 +373,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginLoginIndexRouteImport
       parentRoute: typeof LoginRoute
     }
+    '/_auth/onboarding/': {
+      id: '/_auth/onboarding/'
+      path: '/'
+      fullPath: '/onboarding/'
+      preLoaderRoute: typeof AuthOnboardingIndexRouteImport
+      parentRoute: typeof AuthOnboardingRoute
+    }
     '/_auth/app/': {
       id: '/_auth/app/'
       path: '/app'
@@ -379,6 +408,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginLoginCodeRouteImport
       parentRoute: typeof LoginRoute
     }
+    '/_auth/onboarding/thank-you': {
+      id: '/_auth/onboarding/thank-you'
+      path: '/thank-you'
+      fullPath: '/onboarding/thank-you'
+      preLoaderRoute: typeof AuthOnboardingThankYouRouteImport
+      parentRoute: typeof AuthOnboardingRoute
+    }
     '/_auth/app/settings': {
       id: '/_auth/app/settings'
       path: '/app/settings'
@@ -389,14 +425,28 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthOnboardingRouteChildren {
+  AuthOnboardingThankYouRoute: typeof AuthOnboardingThankYouRoute
+  AuthOnboardingIndexRoute: typeof AuthOnboardingIndexRoute
+}
+
+const AuthOnboardingRouteChildren: AuthOnboardingRouteChildren = {
+  AuthOnboardingThankYouRoute: AuthOnboardingThankYouRoute,
+  AuthOnboardingIndexRoute: AuthOnboardingIndexRoute,
+}
+
+const AuthOnboardingRouteWithChildren = AuthOnboardingRoute._addFileChildren(
+  AuthOnboardingRouteChildren,
+)
+
 interface AuthRouteChildren {
-  AuthOnboardingRoute: typeof AuthOnboardingRoute
+  AuthOnboardingRoute: typeof AuthOnboardingRouteWithChildren
   AuthAppSettingsRoute: typeof AuthAppSettingsRoute
   AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthOnboardingRoute: AuthOnboardingRoute,
+  AuthOnboardingRoute: AuthOnboardingRouteWithChildren,
   AuthAppSettingsRoute: AuthAppSettingsRoute,
   AuthAppIndexRoute: AuthAppIndexRoute,
 }
