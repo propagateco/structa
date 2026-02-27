@@ -25,7 +25,7 @@ const AvatarStack = React.forwardRef<HTMLDivElement, AvatarStackProps>(
 
 		return (
 			<div ref={ref} className={cn("flex shrink-0", className)}>
-				{displayAvatars.map((avatar) => (
+				{displayAvatars.map((avatar, index) => (
 					<Avatar
 						key={avatar.src}
 						className={cn(
