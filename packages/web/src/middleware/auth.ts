@@ -1,53 +1,53 @@
-import { redirect } from '@tanstack/react-router';
-import { createMiddleware } from '@tanstack/react-start';
-import { auth } from '@/lib/auth';
+import { redirect } from "@tanstack/react-router";
+import { createMiddleware } from "@tanstack/react-start";
+import { auth } from "@/lib/auth";
 
 export const authMiddleware = createMiddleware().server(
-    async ({ next, request }) => {
-        const session = await auth.api.getSession({
-            headers: request.headers,
-        });
+	async ({ next, request }) => {
+		const session = await auth.api.getSession({
+			headers: request.headers,
+		});
 
-        if (!session) {
-            throw redirect({ to: '/login' as any });
-        }
+		if (!session) {
+			throw redirect({ to: "/login" as any });
+		}
 
-        return await next({
-            context: { session: session.session, user: session.user },
-        });
-    }
+		return await next({
+			context: { session: session.session, user: session.user },
+		});
+	},
 );
 
 export const publicAuthMiddleware = createMiddleware().server(
-    async ({ next, request }) => {
-        const session = await auth.api.getSession({
-            headers: request.headers,
-        });
+	async ({ next, request }) => {
+		const session = await auth.api.getSession({
+			headers: request.headers,
+		});
 
-        if (!session) {
-            return await next({
-                context: { session: null, user: null } as any,
-            });
-        }
+		if (!session) {
+			return await next({
+				context: { session: null, user: null } as any,
+			});
+		}
 
-        return await next({
-            context: { session: session.session, user: session.user } as any,
-        });
-    }
+		return await next({
+			context: { session: session.session, user: session.user } as any,
+		});
+	},
 );
 
 export const loginMiddleware = createMiddleware().server(
-    async ({ next, request }) => {
-        const session = await auth.api.getSession({
-            headers: request.headers,
-        });
+	async ({ next, request }) => {
+		const session = await auth.api.getSession({
+			headers: request.headers,
+		});
 
-        if (session) {
-            throw redirect({ to: '/app' as any });
-        }
+		if (session) {
+			throw redirect({ to: "/app" as any });
+		}
 
-        return await next({
-            context: { session: null, user: null },
-        });
-    }
+		return await next({
+			context: { session: null, user: null },
+		});
+	},
 );

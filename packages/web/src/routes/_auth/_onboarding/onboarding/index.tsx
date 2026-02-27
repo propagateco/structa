@@ -59,7 +59,7 @@ export const joinWaitlistFn = createServerFn({ method: 'POST' })
             plan: 'waitlist',
         });
 
-        return { success: false };
+        return { success: true };
     });
 
 export const Route = createFileRoute('/_auth/_onboarding/onboarding/')({
@@ -166,7 +166,7 @@ function OnboardingPage() {
                         </Button>
 
                         {hasError && (
-                            <p className="text-sm text-destructive text-center">
+                            <p className="text-sm text-error text-center">
                                 Failed to join waitlist. Please try again.
                             </p>
                         )}

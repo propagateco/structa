@@ -26,7 +26,7 @@ function RouteComponent() {
                         <h1 className="font-heading text-2xl lg:text-3xl tracking-tight">
                             You're on the list!
                         </h1>
-                        <h2 className="text-lg text-text-secondary">
+                        <h2 className="text-lg text-text-muted">
                             Thanks for signing up{' '}
                             <span className="font-semibold">{name}</span> —
                             can't wait to show you what we've been working on.
