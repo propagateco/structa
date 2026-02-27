@@ -106,13 +106,19 @@ const data = {
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 	currentPathname: string;
 	user: UserModelStub;
-	branding: BrandingModelStub;
+	branding?: BrandingModelStub;
 }
+
+// Default branding stub when branding is not provided
+const DEFAULT_BRANDING: BrandingModelStub = {
+	icon: null,
+	updatedAt: new Date().toISOString(),
+};
 
 export function AppSidebar({
 	currentPathname,
 	user,
-	branding,
+	branding = DEFAULT_BRANDING,
 	...props
 }: AppSidebarProps) {
 	return (

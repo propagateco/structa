@@ -13,11 +13,7 @@ export const initialise = async () => {
 };
 
 export const fromID = zod(UserModel.Schema.shape.id, async (id) => {
-	const result = await db
-		.select()
-		.from(user)
-		.where(eq(user.id, id))
-		.execute();
+	const result = await db.select().from(user).where(eq(user.id, id)).execute();
 	return UserModel.User.parse(result[0]);
 });
 
@@ -41,11 +37,7 @@ export const fromEmail = zod(UserModel.User.shape.email, async (email) => {
 });
 
 export const avatarKeyFromId = zod(UserModel.User.shape.id, async (id) => {
-	const result = await db
-		.select()
-		.from(user)
-		.where(eq(user.id, id))
-		.execute();
+	const result = await db.select().from(user).where(eq(user.id, id)).execute();
 	const avatarUrl = result[0]?.image ?? null;
 	if (!avatarUrl) {
 		return null;
@@ -60,6 +52,22 @@ export const updateNameFromId = zod(
 			.update(user)
 			.set({
 				name: input.name,
+				updatedAt: new Date(),
+			})
+			.where(eq(user.id, input.id))
+			.returning()
+			.execute();
+		return UserModel.User.parse(result[0]);
+	},
+);
+
+export const updatePlanFromId = zod(
+	UserModel.User.pick({ id: true, plan: true }),
+	async (input) => {
+		const result = await db
+			.update(user)
+			.set({
+				plan: input.plan,
 				updatedAt: new Date(),
 			})
 			.where(eq(user.id, input.id))

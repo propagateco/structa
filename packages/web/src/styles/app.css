@@ -137,8 +137,10 @@
     --color-accent: var(--ds-powder);
     --color-accent-foreground: var(--ds-carbon);
 
+    /* Lighter error color for dark mode visibility */
+    --ds-error: 358.57deg 68.478% 55%;
     --color-destructive: var(--ds-error);
-    --color-destructive-foreground: var(--ds-paper);
+    --color-destructive-foreground: var(--ds-carbon);
 
     --color-border: var(--ds-mono-600);
     --color-input: var(--ds-mono-600);
@@ -452,4 +454,29 @@
 /* Smooth scroll behavior */
 html {
     scroll-behavior: smooth;
+}
+
+/* Shake animation for error feedback */
+@keyframes shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-4px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+.animate-shake {
+    animation: shake 0.5s ease-in-out;
 }

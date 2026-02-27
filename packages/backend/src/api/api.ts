@@ -7,6 +7,7 @@ import { AuthRoute } from "./routes/auth";
 import { HealthRoute } from "./routes/health";
 import { StorageRoute } from "./routes/storage";
 import { UserRoute } from "./routes/user";
+import { WaitlistRoute } from "./routes/waitlist";
 
 export class VisibleError extends Error {
 	constructor(
@@ -69,7 +70,8 @@ const routes = app
 	.route("/auth", AuthRoute)
 	.route("/user", UserRoute)
 	.route("/storage", StorageRoute)
-	.route("/health", HealthRoute);
+	.route("/health", HealthRoute)
+	.route("/waitlist", WaitlistRoute);
 
 export const handler = handle(routes);
 export type RoutesType = typeof routes;

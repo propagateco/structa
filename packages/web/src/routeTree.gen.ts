@@ -12,14 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as MarketingRouteImport } from './routes/_marketing'
 import { Route as LoginRouteImport } from './routes/_login'
+import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as UseCasesLoftRouteImport } from './routes/use-cases/loft'
 import { Route as UseCasesKitchenRouteImport } from './routes/use-cases/kitchen'
 import { Route as UseCasesExtensionRouteImport } from './routes/use-cases/extension'
 import { Route as MarketingTermsRouteImport } from './routes/_marketing/terms'
 import { Route as MarketingPrivacyRouteImport } from './routes/_marketing/privacy'
-import { Route as MarketingOnboardingRouteImport } from './routes/_marketing/onboarding'
 import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
+import { Route as AuthOnboardingRouteImport } from './routes/_auth/_onboarding'
 import { Route as MarketingGuidesIndexRouteImport } from './routes/_marketing/guides/index'
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
@@ -27,6 +28,8 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MarketingGuidesSlugRouteImport } from './routes/_marketing/guides/$slug'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
+import { Route as AuthOnboardingOnboardingIndexRouteImport } from './routes/_auth/_onboarding/onboarding/index'
+import { Route as AuthOnboardingOnboardingThankYouRouteImport } from './routes/_auth/_onboarding/onboarding/thank-you'
 
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
@@ -39,6 +42,10 @@ const MarketingRoute = MarketingRouteImport.update({
 } as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/_login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketingIndexRoute = MarketingIndexRouteImport.update({
@@ -71,15 +78,14 @@ const MarketingPrivacyRoute = MarketingPrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => MarketingRoute,
 } as any)
-const MarketingOnboardingRoute = MarketingOnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => MarketingRoute,
-} as any)
 const MarketingAboutRoute = MarketingAboutRouteImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => MarketingRoute,
+} as any)
+const AuthOnboardingRoute = AuthOnboardingRouteImport.update({
+  id: '/_onboarding',
+  getParentRoute: () => AuthRoute,
 } as any)
 const MarketingGuidesIndexRoute = MarketingGuidesIndexRouteImport.update({
   id: '/guides/',
@@ -92,9 +98,9 @@ const LoginLoginIndexRoute = LoginLoginIndexRouteImport.update({
   getParentRoute: () => LoginRoute,
 } as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
-  id: '/_auth/app/',
+  id: '/app/',
   path: '/app/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -112,16 +118,27 @@ const LoginLoginCodeRoute = LoginLoginCodeRouteImport.update({
   getParentRoute: () => LoginRoute,
 } as any)
 const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
-  id: '/_auth/app/settings',
+  id: '/app/settings',
   path: '/app/settings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRoute,
 } as any)
+const AuthOnboardingOnboardingIndexRoute =
+  AuthOnboardingOnboardingIndexRouteImport.update({
+    id: '/onboarding/',
+    path: '/onboarding/',
+    getParentRoute: () => AuthOnboardingRoute,
+  } as any)
+const AuthOnboardingOnboardingThankYouRoute =
+  AuthOnboardingOnboardingThankYouRouteImport.update({
+    id: '/onboarding/thank-you',
+    path: '/onboarding/thank-you',
+    getParentRoute: () => AuthOnboardingRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/blog': typeof BlogRoute
   '/about': typeof MarketingAboutRoute
-  '/onboarding': typeof MarketingOnboardingRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
   '/use-cases/extension': typeof UseCasesExtensionRoute
@@ -134,12 +151,13 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AuthAppIndexRoute
   '/login/': typeof LoginLoginIndexRoute
   '/guides/': typeof MarketingGuidesIndexRoute
+  '/onboarding/thank-you': typeof AuthOnboardingOnboardingThankYouRoute
+  '/onboarding/': typeof AuthOnboardingOnboardingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/blog': typeof BlogRoute
   '/about': typeof MarketingAboutRoute
-  '/onboarding': typeof MarketingOnboardingRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
   '/use-cases/extension': typeof UseCasesExtensionRoute
@@ -152,14 +170,17 @@ export interface FileRoutesByTo {
   '/app': typeof AuthAppIndexRoute
   '/login': typeof LoginLoginIndexRoute
   '/guides': typeof MarketingGuidesIndexRoute
+  '/onboarding/thank-you': typeof AuthOnboardingOnboardingThankYouRoute
+  '/onboarding': typeof AuthOnboardingOnboardingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_auth': typeof AuthRouteWithChildren
   '/_login': typeof LoginRouteWithChildren
   '/_marketing': typeof MarketingRouteWithChildren
   '/blog': typeof BlogRoute
+  '/_auth/_onboarding': typeof AuthOnboardingRouteWithChildren
   '/_marketing/about': typeof MarketingAboutRoute
-  '/_marketing/onboarding': typeof MarketingOnboardingRoute
   '/_marketing/privacy': typeof MarketingPrivacyRoute
   '/_marketing/terms': typeof MarketingTermsRoute
   '/use-cases/extension': typeof UseCasesExtensionRoute
@@ -173,6 +194,8 @@ export interface FileRoutesById {
   '/_auth/app/': typeof AuthAppIndexRoute
   '/_login/login/': typeof LoginLoginIndexRoute
   '/_marketing/guides/': typeof MarketingGuidesIndexRoute
+  '/_auth/_onboarding/onboarding/thank-you': typeof AuthOnboardingOnboardingThankYouRoute
+  '/_auth/_onboarding/onboarding/': typeof AuthOnboardingOnboardingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -180,7 +203,6 @@ export interface FileRouteTypes {
     | '/'
     | '/blog'
     | '/about'
-    | '/onboarding'
     | '/privacy'
     | '/terms'
     | '/use-cases/extension'
@@ -193,12 +215,13 @@ export interface FileRouteTypes {
     | '/app/'
     | '/login/'
     | '/guides/'
+    | '/onboarding/thank-you'
+    | '/onboarding/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/blog'
     | '/about'
-    | '/onboarding'
     | '/privacy'
     | '/terms'
     | '/use-cases/extension'
@@ -211,13 +234,16 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/guides'
+    | '/onboarding/thank-you'
+    | '/onboarding'
   id:
     | '__root__'
+    | '/_auth'
     | '/_login'
     | '/_marketing'
     | '/blog'
+    | '/_auth/_onboarding'
     | '/_marketing/about'
-    | '/_marketing/onboarding'
     | '/_marketing/privacy'
     | '/_marketing/terms'
     | '/use-cases/extension'
@@ -231,18 +257,19 @@ export interface FileRouteTypes {
     | '/_auth/app/'
     | '/_login/login/'
     | '/_marketing/guides/'
+    | '/_auth/_onboarding/onboarding/thank-you'
+    | '/_auth/_onboarding/onboarding/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRouteWithChildren
   MarketingRoute: typeof MarketingRouteWithChildren
   BlogRoute: typeof BlogRoute
   UseCasesExtensionRoute: typeof UseCasesExtensionRoute
   UseCasesKitchenRoute: typeof UseCasesKitchenRoute
   UseCasesLoftRoute: typeof UseCasesLoftRoute
-  AuthAppSettingsRoute: typeof AuthAppSettingsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -266,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_marketing/': {
@@ -310,19 +344,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingPrivacyRouteImport
       parentRoute: typeof MarketingRoute
     }
-    '/_marketing/onboarding': {
-      id: '/_marketing/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof MarketingOnboardingRouteImport
-      parentRoute: typeof MarketingRoute
-    }
     '/_marketing/about': {
       id: '/_marketing/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof MarketingAboutRouteImport
       parentRoute: typeof MarketingRoute
+    }
+    '/_auth/_onboarding': {
+      id: '/_auth/_onboarding'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthOnboardingRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/_marketing/guides/': {
       id: '/_marketing/guides/'
@@ -343,7 +377,7 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app/'
       preLoaderRoute: typeof AuthAppIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -371,10 +405,52 @@ declare module '@tanstack/react-router' {
       path: '/app/settings'
       fullPath: '/app/settings'
       preLoaderRoute: typeof AuthAppSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/_onboarding/onboarding/': {
+      id: '/_auth/_onboarding/onboarding/'
+      path: '/onboarding'
+      fullPath: '/onboarding/'
+      preLoaderRoute: typeof AuthOnboardingOnboardingIndexRouteImport
+      parentRoute: typeof AuthOnboardingRoute
+    }
+    '/_auth/_onboarding/onboarding/thank-you': {
+      id: '/_auth/_onboarding/onboarding/thank-you'
+      path: '/onboarding/thank-you'
+      fullPath: '/onboarding/thank-you'
+      preLoaderRoute: typeof AuthOnboardingOnboardingThankYouRouteImport
+      parentRoute: typeof AuthOnboardingRoute
     }
   }
 }
+
+interface AuthOnboardingRouteChildren {
+  AuthOnboardingOnboardingThankYouRoute: typeof AuthOnboardingOnboardingThankYouRoute
+  AuthOnboardingOnboardingIndexRoute: typeof AuthOnboardingOnboardingIndexRoute
+}
+
+const AuthOnboardingRouteChildren: AuthOnboardingRouteChildren = {
+  AuthOnboardingOnboardingThankYouRoute: AuthOnboardingOnboardingThankYouRoute,
+  AuthOnboardingOnboardingIndexRoute: AuthOnboardingOnboardingIndexRoute,
+}
+
+const AuthOnboardingRouteWithChildren = AuthOnboardingRoute._addFileChildren(
+  AuthOnboardingRouteChildren,
+)
+
+interface AuthRouteChildren {
+  AuthOnboardingRoute: typeof AuthOnboardingRouteWithChildren
+  AuthAppSettingsRoute: typeof AuthAppSettingsRoute
+  AuthAppIndexRoute: typeof AuthAppIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthOnboardingRoute: AuthOnboardingRouteWithChildren,
+  AuthAppSettingsRoute: AuthAppSettingsRoute,
+  AuthAppIndexRoute: AuthAppIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface LoginRouteChildren {
   LoginLoginCodeRoute: typeof LoginLoginCodeRoute
@@ -390,7 +466,6 @@ const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 
 interface MarketingRouteChildren {
   MarketingAboutRoute: typeof MarketingAboutRoute
-  MarketingOnboardingRoute: typeof MarketingOnboardingRoute
   MarketingPrivacyRoute: typeof MarketingPrivacyRoute
   MarketingTermsRoute: typeof MarketingTermsRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
@@ -400,7 +475,6 @@ interface MarketingRouteChildren {
 
 const MarketingRouteChildren: MarketingRouteChildren = {
   MarketingAboutRoute: MarketingAboutRoute,
-  MarketingOnboardingRoute: MarketingOnboardingRoute,
   MarketingPrivacyRoute: MarketingPrivacyRoute,
   MarketingTermsRoute: MarketingTermsRoute,
   MarketingIndexRoute: MarketingIndexRoute,
@@ -413,15 +487,14 @@ const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRouteWithChildren,
   MarketingRoute: MarketingRouteWithChildren,
   BlogRoute: BlogRoute,
   UseCasesExtensionRoute: UseCasesExtensionRoute,
   UseCasesKitchenRoute: UseCasesKitchenRoute,
   UseCasesLoftRoute: UseCasesLoftRoute,
-  AuthAppSettingsRoute: AuthAppSettingsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  AuthAppIndexRoute: AuthAppIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
