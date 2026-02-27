@@ -39,6 +39,12 @@ export const personalEmail = !IS_DEPLOYED_STAGE
           sender: 'harrison@structa.so',
       });
 
+export const anotherPersonalEmail = !IS_DEPLOYED_STAGE
+    ? null
+    : new sst.aws.Email('anotherPersonalEmail', {
+          sender: 'hester@structa.so',
+      });
+
 // Local email preview server (react-email)
 export const reactEmail = new sst.x.DevCommand('EmailServer', {
     dev: {
