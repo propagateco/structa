@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+import * as React from 'react';
 import { GridLoaderIcon, TwoBodyLoaderIcon } from '@/components/ui/loader';
 
 import { cn } from '@/lib/utils';
@@ -45,6 +45,7 @@ export interface ButtonProps
         VariantProps<typeof buttonVariants> {
     asChild?: boolean;
     isLoading?: boolean;
+    isError?: boolean;
     icon?: React.ReactNode;
 }
 
@@ -56,6 +57,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             size,
             asChild = false,
             isLoading = false,
+            isError = false,
             icon,
             children,
             ...props
@@ -68,7 +70,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         const componentProps = asChild
             ? { className: cn(buttonVariants({ variant, size, className })) }
             : {
-                  className: cn(buttonVariants({ variant, size, className })),
+                  className: cn(
+                      buttonVariants({ variant, size, className }),
+                      isError &&
+                          'animate-shake bg-error border-error text-background'
+                  ),
                   ref,
                   disabled: isLoading || props.disabled,
                   ...props,

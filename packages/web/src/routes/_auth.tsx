@@ -19,13 +19,17 @@ export const Route = createFileRoute("/_auth")({
 		// Check if this is an onboarding route
 		const isOnboardingRoute = location.pathname.startsWith("/onboarding");
 
-		// Redirect to onboarding if no plan
-		if (!session.user.plan && !isOnboardingRoute) {
+		// Users without a plan OR on waitlist should be on onboarding
+		const needsOnboarding =
+			!session.user.plan || session.user.plan === "waitlist";
+
+		// Redirect to onboarding if needs onboarding
+		if (needsOnboarding && !isOnboardingRoute) {
 			throw redirect({ to: "/onboarding" });
 		}
 
-		// Redirect to app if has plan and trying to access onboarding
-		if (session.user.plan && isOnboardingRoute) {
+		// Redirect to app if has real plan and trying to access onboarding
+		if (!needsOnboarding && isOnboardingRoute) {
 			throw redirect({ to: "/app" });
 		}
 
