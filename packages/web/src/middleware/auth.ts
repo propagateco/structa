@@ -43,7 +43,12 @@ export const loginMiddleware = createMiddleware().server(
 		});
 
 		if (session) {
-			throw redirect({ to: "/app" as any });
+			// Only redirect to /app if user has a real plan (not waitlist)
+			const hasRealPlan = session.user.plan && session.user.plan !== "waitlist";
+
+			if (hasRealPlan) {
+				throw redirect({ to: "/app" as any });
+			}
 		}
 
 		return await next({
