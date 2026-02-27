@@ -128,16 +128,9 @@ export const HomeIconLink = React.forwardRef<
 		onClick?.(e);
 	};
 
-	// Use reloadDocument when navigating from authenticated routes to avoid
-	// route tree conflicts that can cause brief flashes of /app
-	const isAuthRoute =
-		location.pathname.startsWith("/app") ||
-		location.pathname.startsWith("/onboarding");
-
 	return (
 		<Link
 			to="/"
-			reloadDocument={isAuthRoute}
 			className={cn(
 				"flex items-center hover:opacity-80 transition-opacity cursor-pointer",
 				className,
