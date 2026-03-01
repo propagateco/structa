@@ -5,6 +5,7 @@ import { DiagonalPattern } from "./DiagonalPattern";
 
 interface LogoItem {
 	name: string;
+	image: string;
 	colSpan?: 1 | 2;
 }
 
@@ -15,7 +16,7 @@ interface LogoShowcaseProps {
 
 const normalizeLogos = (logos: (string | LogoItem)[]): LogoItem[] => {
 	return logos.map((logo) =>
-		typeof logo === "string" ? { name: logo, colSpan: 1 } : logo,
+		typeof logo === "string" ? { name: logo, image: "", colSpan: 1 } : logo,
 	);
 };
 
@@ -133,18 +134,20 @@ const LogoShowcase = ({
 						)}
 						<div className="flex items-center justify-center w-full h-full">
 							<DiagonalPattern show={showingPlaceholder.has(index)} />
-							<span
+							<img
+								src={logo.image}
+								alt={logo.name}
 								className={cn(
-									"text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight text-muted-foreground/70 text-center",
+									"max-h-8 sm:max-h-10 lg:max-h-12 w-auto object-contain",
 									"transition-all duration-1000 ease-in-out",
 								)}
 								style={{
-									opacity: fadingSlots.has(index) ? 0 : 1,
-									filter: fadingSlots.has(index) ? "blur(8px)" : "blur(0px)",
+									opacity: fadingSlots.has(index) ? 0 : 0.7,
+									filter: fadingSlots.has(index)
+										? "blur(8px) grayscale(100%)"
+										: "grayscale(100%)",
 								}}
-							>
-								{logo.name}
-							</span>
+							/>
 						</div>
 					</div>
 				))}

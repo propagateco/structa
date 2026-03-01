@@ -1,25 +1,36 @@
 import LogoShowcase from '@/components/ui/LogoShowcase';
-import { TexturedSection } from '@/components/layout';
 
 export interface LogoShowcaseSectionProps {
     title?: string;
     description?: string;
-    logos?: string[];
+    logos?: Array<{ name: string; image: string }>;
 }
 
 export function LogoShowcaseSection({
-    title = 'Loved by renovators, designers, and trades',
-    description = 'Get quotes from specialists matched to your unique property type and project specification.',
+    title = 'Powered by trusted UK sources',
+    description = 'We gather quotes from specialists matched to your unique property type and project specification.',
+
     logos = [
-        'TrustATrader',
-        'MyBuilder',
-        'Bark',
-        'MyJobQuote',
-        'Yelp',
-        'Checkatrade',
-        'Rated People',
-        'Houzz',
-        'Thumbtack',
+        {
+            name: 'TrustATrader',
+            image: '/images/logo-showcase/trust-a-trader.webp',
+        },
+        { name: 'MyBuilder', image: '/images/logo-showcase/mybuilder.webp' },
+        { name: 'Bark', image: '/images/logo-showcase/bark.webp' },
+        { name: 'MyJobQuote', image: '/images/logo-showcase/myjobquote.webp' },
+        {
+            name: 'Checkatrade',
+            image: '/images/logo-showcase/checkatrade.webp',
+        },
+        {
+            name: 'Rated People',
+            image: '/images/logo-showcase/rated-people.webp',
+        },
+        { name: 'Which?', image: '/images/logo-showcase/which.webp' },
+        {
+            name: 'Buy With Confidence',
+            image: '/images/logo-showcase/bywithconfidence.webp',
+        },
     ],
 }: LogoShowcaseSectionProps) {
     return (
