@@ -1,8 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import {
-	Command,
 	Frame,
-	Home,
 	LifeBuoy,
 	Map,
 	PieChart,
@@ -33,12 +31,18 @@ export type SidebarUser = {
 	avatar?: string;
 };
 
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+	user: SidebarUser;
+	/** Override the logo height. Default is h-4 */
+	logoClassName?: string;
+}
+
 const data = {
 	navMain: [
 		{
 			title: "Dashboard",
 			url: "/app",
-			icon: Home,
+			icon: SquareTerminal,
 			isActive: true,
 		},
 		{
@@ -97,10 +101,7 @@ const data = {
 	],
 };
 
-export function AppSidebar({
-	user,
-	...props
-}: React.ComponentProps<typeof Sidebar> & { user: SidebarUser }) {
+export function AppSidebar({ user, logoClassName, ...props }: AppSidebarProps) {
 	return (
 		<Sidebar {...props}>
 			<SidebarHeader>
@@ -108,13 +109,16 @@ export function AppSidebar({
 					<SidebarMenuItem>
 						<SidebarMenuButton size="lg" asChild>
 							<Link to="/app">
-								<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-									<Command className="size-4" />
-								</div>
-								<div className="grid flex-1 text-left text-sm leading-tight">
-									<span className="truncate font-semibold">Structa</span>
-									<span className="truncate text-xs">Renovation Assistant</span>
-								</div>
+								<img
+									src="/wordmark-light.webp"
+									alt="Structa"
+									className={`h-4 dark:hidden ${logoClassName ?? ""}`}
+								/>
+								<img
+									src="/wordmark-dark.webp"
+									alt="Structa"
+									className={`h-4 hidden dark:block ${logoClassName ?? ""}`}
+								/>
 							</Link>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
