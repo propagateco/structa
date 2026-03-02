@@ -33,7 +33,7 @@ export type SidebarUser = {
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 	user: SidebarUser;
-	/** Override the logo height. Default is h-4 */
+	/** Override the logo height. Default is h-5 */
 	logoClassName?: string;
 }
 
@@ -112,12 +112,12 @@ export function AppSidebar({ user, logoClassName, ...props }: AppSidebarProps) {
 								<img
 									src="/wordmark-light.webp"
 									alt="Structa"
-									className={`h-4 dark:hidden ${logoClassName ?? ""}`}
+									className={`h-5 dark:hidden ${logoClassName ?? ""}`}
 								/>
 								<img
 									src="/wordmark-dark.webp"
 									alt="Structa"
-									className={`h-4 hidden dark:block ${logoClassName ?? ""}`}
+									className={`h-5 hidden dark:block ${logoClassName ?? ""}`}
 								/>
 							</Link>
 						</SidebarMenuButton>
