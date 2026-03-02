@@ -1,4 +1,3 @@
-import { Sidebar } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
@@ -16,16 +15,17 @@ export function NavigationHeader({
 	return (
 		<header
 			className={cn(
-				"flex w-full shrink-0 items-center gap-4 border-b px-4 h-10 text-sm font-medium",
+				"flex h-12 shrink-0 items-center gap-2 border-b px-4",
 				className,
 			)}
 		>
-			<SidebarTrigger>
-				<Sidebar />
-			</SidebarTrigger>
+			<SidebarTrigger className="-ml-1" />
 			{children && (
 				<>
-					<Separator orientation="vertical" className="h-4" />
+					<Separator
+						orientation="vertical"
+						className="mr-2 data-[orientation=vertical]:h-4"
+					/>
 					{children}
 				</>
 			)}

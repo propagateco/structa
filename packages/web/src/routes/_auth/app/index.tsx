@@ -1,7 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageContainer } from "@/components/layout/page-container";
-import { NavigationHeader } from "@/components/nav/nav-header";
-import { Card } from "@/components/ui/card";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbList,
+	BreadcrumbPage,
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export const Route = createFileRoute("/_auth/app/")({
 	component: DashboardComponent,
@@ -10,102 +15,30 @@ export const Route = createFileRoute("/_auth/app/")({
 function DashboardComponent() {
 	return (
 		<>
-			<NavigationHeader />
-			<PageContainer>
-				<div className="space-y-6">
-					<div className="flex items-center justify-between">
-						<div>
-							<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-								Dashboard
-							</h1>
-							<p className="text-gray-600 dark:text-gray-400">
-								Welcome to your renovation assistant
-							</p>
-						</div>
-					</div>
-
-					<div className="grid md:grid-cols-3 gap-6">
-						<Card className="p-6">
-							<div className="text-4xl mb-2">🏠</div>
-							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-								My Projects
-							</h3>
-							<p className="text-gray-600 dark:text-gray-400">
-								View and manage your renovation projects
-							</p>
-						</Card>
-
-						<Card className="p-6">
-							<div className="text-4xl mb-2">📐</div>
-							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-								Floor Plans
-							</h3>
-							<p className="text-gray-600 dark:text-gray-400">
-								Upload and edit floor plans
-							</p>
-						</Card>
-
-						<Card className="p-6">
-							<div className="text-4xl mb-2">💬</div>
-							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-								Ask The Clerk
-							</h3>
-							<p className="text-gray-600 dark:text-gray-400">
-								Get AI-powered renovation advice
-							</p>
-						</Card>
-					</div>
-
-					<Card className="p-6">
-						<h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-							Getting Started
-						</h2>
-						<div className="space-y-4">
-							<div className="flex items-start gap-4">
-								<div className="flex-shrink-0 w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold">
-									1
-								</div>
-								<div>
-									<h3 className="font-semibold text-gray-900 dark:text-gray-100">
-										Upload your floor plan
-									</h3>
-									<p className="text-gray-600 dark:text-gray-400 text-sm">
-										Start by uploading your existing floor plan
-									</p>
-								</div>
-							</div>
-
-							<div className="flex items-start gap-4">
-								<div className="flex-shrink-0 w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold">
-									2
-								</div>
-								<div>
-									<h3 className="font-semibold text-gray-900 dark:text-gray-100">
-										Describe your renovation
-									</h3>
-									<p className="text-gray-600 dark:text-gray-400 text-sm">
-										Tell us what changes you want to make
-									</p>
-								</div>
-							</div>
-
-							<div className="flex items-start gap-4">
-								<div className="flex-shrink-0 w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold">
-									3
-								</div>
-								<div>
-									<h3 className="font-semibold text-gray-900 dark:text-gray-100">
-										Get AI recommendations
-									</h3>
-									<p className="text-gray-600 dark:text-gray-400 text-sm">
-										Receive expert guidance from The Clerk
-									</p>
-								</div>
-							</div>
-						</div>
-					</Card>
+			<header className="flex h-16 shrink-0 items-center gap-2">
+				<div className="flex items-center gap-2 px-4">
+					<SidebarTrigger className="-ml-1" />
+					<Separator
+						orientation="vertical"
+						className="mr-2 data-[orientation=vertical]:h-4"
+					/>
+					<Breadcrumb>
+						<BreadcrumbList>
+							<BreadcrumbItem>
+								<BreadcrumbPage>Dashboard</BreadcrumbPage>
+							</BreadcrumbItem>
+						</BreadcrumbList>
+					</Breadcrumb>
 				</div>
-			</PageContainer>
+			</header>
+			<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+				<div className="grid auto-rows-min gap-4 md:grid-cols-3">
+					<div className="bg-muted/50 aspect-video rounded-xl" />
+					<div className="bg-muted/50 aspect-video rounded-xl" />
+					<div className="bg-muted/50 aspect-video rounded-xl" />
+				</div>
+				<div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+			</div>
 		</>
 	);
 }

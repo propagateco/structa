@@ -4,7 +4,8 @@ import {
 	redirect,
 	useLocation,
 } from "@tanstack/react-router";
-import { AppSidebar } from "@/components/nav/app-sidebar";
+import { AppSidebar, type SidebarUser } from "@/components/app-sidebar";
+import { getImageUrl } from "@/components/ui/image";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getAuth } from "@/lib/auth-server";
 
@@ -47,18 +48,17 @@ function AuthLayout() {
 		return <Outlet />;
 	}
 
-	const userModel = {
-		id: user.id,
+	const userModel: SidebarUser = {
 		name: user.name,
 		email: user.email,
-		image: user.image,
-		workspaceName: user.workspaceName || "My Workspace",
-		plan: user.plan,
+		avatar: user.image
+			? getImageUrl(user.image, "?width=400&height=400&format=webp")
+			: undefined,
 	};
 
 	return (
 		<SidebarProvider>
-			<AppSidebar user={userModel} currentPathname={pathname} />
+			<AppSidebar user={userModel} />
 			<SidebarInset>
 				<Outlet />
 			</SidebarInset>

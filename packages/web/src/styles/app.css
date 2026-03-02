@@ -114,6 +114,14 @@
     --color-text-muted: var(--color-muted-foreground);
     --color-link: var(--color-accent);
     --color-text-dark: var(--ds-midnight);
+    --sidebar: hsl(0 0% 98%);
+    --sidebar-foreground: hsl(240 5.3% 26.1%);
+    --sidebar-primary: hsl(240 5.9% 10%);
+    --sidebar-primary-foreground: hsl(0 0% 98%);
+    --sidebar-accent: hsl(240 4.8% 95.9%);
+    --sidebar-accent-foreground: hsl(240 5.9% 10%);
+    --sidebar-border: hsl(220 13% 91%);
+    --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 .dark {
@@ -155,6 +163,14 @@
     --border: var(--ds-mono-600);
     --theme-border-color: rgba(255, 255, 255, 0.15);
     --grid-line-rgb: 255, 255, 255;
+    --sidebar: hsl(240 5.9% 10%);
+    --sidebar-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-primary: hsl(224.3 76.3% 48%);
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(240 3.7% 15.9%);
+    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-border: hsl(240 3.7% 15.9%);
+    --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 @theme inline {
@@ -295,6 +311,14 @@
     /* Grid Lines (Light Mode) */
     --theme-border-color: rgba(200, 200, 200, 0.15);
     --grid-line-rgb: 200, 200, 200;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
 }
 
 /* ================================================
@@ -479,4 +503,195 @@ html {
 
 .animate-shake {
     animation: shake 0.5s ease-in-out;
+}
+
+/* ================================================
+   SIDEBAR UTILITIES - Tailwind v4 JIT workarounds
+   These classes use data attribute selectors that 
+   Tailwind v4 doesn't generate automatically.
+   ================================================ */
+
+/* Base width utilities */
+.w-\[--sidebar-width\] {
+    width: var(--sidebar-width);
+}
+
+.w-\[--sidebar-width-icon\] {
+    width: var(--sidebar-width-icon);
+}
+
+/* === COLLAPSIBLE: OFFCANVAS === */
+.group.peer[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:w-0 {
+    width: 0 !important;
+}
+
+.group.peer[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:left-\[calc\(var\(--sidebar-width\)\*-1\)\] {
+    left: calc(var(--sidebar-width) * -1) !important;
+}
+
+.group.peer[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:right-\[calc\(var\(--sidebar-width\)\*-1\)\] {
+    right: calc(var(--sidebar-width) * -1) !important;
+}
+
+.group.peer[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:translate-x-0 {
+    transform: translateX(0) !important;
+}
+
+.group.peer[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:after\:left-full::after {
+    left: 100% !important;
+}
+
+.group.peer[data-collapsible="offcanvas"] .group-data-\[collapsible\=offcanvas\]\:hover\:bg-sidebar:hover {
+    background-color: var(--sidebar) !important;
+}
+
+/* === COLLAPSIBLE: ICON === */
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:w-\[--sidebar-width-icon\] {
+    width: var(--sidebar-width-icon) !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:w-\[calc\(var\(--sidebar-width-icon\)_\+_theme\(spacing\.4\)\)\] {
+    width: calc(var(--sidebar-width-icon) + 1rem) !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:w-\[calc\(var\(--sidebar-width-icon\)_\+_theme\(spacing\.4\)_\+2px\)\] {
+    width: calc(var(--sidebar-width-icon) + 1rem + 2px) !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:overflow-hidden {
+    overflow: hidden !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:-mt-8 {
+    margin-top: -2rem !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:opacity-0 {
+    opacity: 0 !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:hidden {
+    display: none !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:\!size-8 {
+    width: 2rem !important;
+    height: 2rem !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:\!p-2 {
+    padding: 0.5rem !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:\!p-0 {
+    padding: 0 !important;
+}
+
+/* === SIDE: LEFT === */
+.group.peer[data-side="left"] .group-data-\[side\=left\]\:border-r {
+    border-right-width: 1px !important;
+}
+
+.group.peer[data-side="left"] .group-data-\[side\=left\]\:-right-4 {
+    right: -1rem !important;
+}
+
+.group.peer[data-side="left"] .group-data-\[side\=left\]\:-right-2 {
+    right: -0.5rem !important;
+}
+
+/* === SIDE: RIGHT === */
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:rotate-180 {
+    transform: rotate(180deg) !important;
+}
+
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:border-l {
+    border-left-width: 1px !important;
+}
+
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:left-0 {
+    left: 0 !important;
+}
+
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:-left-2 {
+    left: -0.5rem !important;
+}
+
+/* === VARIANT: FLOATING === */
+.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:rounded-lg {
+    border-radius: 0.5rem !important;
+}
+
+.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:border {
+    border-width: 1px !important;
+}
+
+.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:border-sidebar-border {
+    border-color: var(--sidebar-border) !important;
+}
+
+.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:shadow {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+}
+
+/* === PEER DATA: INSET VARIANT (SidebarInset) === */
+.peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:m-2,
+.md\:peer-data-\[variant\=inset\]\:m-2 {
+    margin: 0.5rem !important;
+}
+
+@media (min-width: 768px) {
+    .peer[data-state="collapsed"][data-variant="inset"] ~ main.md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2,
+    .md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2 {
+        margin-left: 0.5rem !important;
+    }
+    
+    .peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:ml-0,
+    .md\:peer-data-\[variant\=inset\]\:ml-0 {
+        margin-left: 0 !important;
+    }
+    
+    .peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:rounded-xl,
+    .md\:peer-data-\[variant\=inset\]\:rounded-xl {
+        border-radius: 0.75rem !important;
+    }
+    
+    .peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:shadow,
+    .md\:peer-data-\[variant\=inset\]\:shadow {
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+    }
+}
+
+/* === HAS DATA ATTRIBUTES === */
+.has-\[\[data-variant\=inset\]\]\:bg-sidebar:has([data-variant="inset"]) {
+    background-color: var(--sidebar) !important;
+}
+
+.group:has([data-sidebar="menu-action"]) .group-has-\[\[data-sidebar\=menu-action\]\]\/menu-item\:pr-8 {
+    padding-right: 2rem !important;
+}
+
+/* === RAIL CURSOR STATES === */
+[[data-side=left][data-state=collapsed]_&]\:cursor-e-resize {
+    cursor: e-resize !important;
+}
+
+[[data-side=right][data-state=collapsed]_&]\:cursor-w-resize {
+    cursor: w-resize !important;
+}
+
+[[data-side=left]_&]\:cursor-w-resize {
+    cursor: w-resize !important;
+}
+
+[[data-side=right]_&]\:cursor-e-resize {
+    cursor: e-resize !important;
+}
+
+[[data-side=left][data-collapsible=offcanvas]_&]\:-right-2 {
+    right: -0.5rem !important;
+}
+
+[[data-side=right][data-collapsible=offcanvas]_&]\:-left-2 {
+    left: -0.5rem !important;
 }

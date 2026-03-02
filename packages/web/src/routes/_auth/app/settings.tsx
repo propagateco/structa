@@ -1,12 +1,20 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import * as React from "react";
 import { toast } from "sonner";
-import { PageContainer } from "@/components/layout/page-container";
-import { NavigationHeader } from "@/components/nav/nav-header";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/_auth/app/settings")({
@@ -29,18 +37,30 @@ function SettingsComponent() {
 
 	return (
 		<>
-			<NavigationHeader />
-			<PageContainer>
-				<div className="max-w-4xl mx-auto space-y-6">
-					<div>
-						<h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-							Settings
-						</h1>
-						<p className="text-gray-600 dark:text-gray-400">
-							Manage your account settings and preferences
-						</p>
-					</div>
-
+			<header className="flex h-16 shrink-0 items-center gap-2">
+				<div className="flex items-center gap-2 px-4">
+					<SidebarTrigger className="-ml-1" />
+					<Separator
+						orientation="vertical"
+						className="mr-2 data-[orientation=vertical]:h-4"
+					/>
+					<Breadcrumb>
+						<BreadcrumbList>
+							<BreadcrumbItem className="hidden md:block">
+								<BreadcrumbLink asChild>
+									<Link to="/app">Dashboard</Link>
+								</BreadcrumbLink>
+							</BreadcrumbItem>
+							<BreadcrumbSeparator className="hidden md:block" />
+							<BreadcrumbItem>
+								<BreadcrumbPage>Settings</BreadcrumbPage>
+							</BreadcrumbItem>
+						</BreadcrumbList>
+					</Breadcrumb>
+				</div>
+			</header>
+			<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+				<div className="max-w-4xl mx-auto space-y-6 w-full">
 					<Tabs value={activeTab} onValueChange={setActiveTab}>
 						<TabsList className="grid w-full grid-cols-3">
 							<TabsTrigger value="profile">Profile</TabsTrigger>
@@ -50,9 +70,7 @@ function SettingsComponent() {
 
 						<TabsContent value="profile" className="mt-6">
 							<Card className="p-6">
-								<h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-									Profile Information
-								</h2>
+								<h2 className="text-xl font-bold mb-6">Profile Information</h2>
 								<form onSubmit={handleSave} className="space-y-4">
 									<div className="grid md:grid-cols-2 gap-4">
 										<div className="space-y-2">
@@ -73,11 +91,7 @@ function SettingsComponent() {
 											value="user@example.com"
 										/>
 									</div>
-									<Button
-										type="submit"
-										className="w-full bg-teal-600 hover:bg-teal-700"
-										disabled={isLoading}
-									>
+									<Button type="submit" className="w-full" disabled={isLoading}>
 										{isLoading ? "Saving..." : "Save Changes"}
 									</Button>
 								</form>
@@ -87,21 +101,17 @@ function SettingsComponent() {
 						<TabsContent value="account" className="mt-6">
 							<Card className="p-6 space-y-6">
 								<div>
-									<h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-										Account Settings
-									</h2>
-									<p className="text-gray-600 dark:text-gray-400 text-sm">
+									<h2 className="text-xl font-bold mb-2">Account Settings</h2>
+									<p className="text-muted-foreground text-sm">
 										Manage your account security and preferences
 									</p>
 								</div>
 
 								<div className="space-y-4">
-									<div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+									<div className="flex items-center justify-between p-4 border rounded-lg">
 										<div>
-											<div className="font-medium text-gray-900 dark:text-gray-100">
-												Email Notifications
-											</div>
-											<div className="text-sm text-gray-600 dark:text-gray-400">
+											<div className="font-medium">Email Notifications</div>
+											<div className="text-sm text-muted-foreground">
 												Receive updates about your projects
 											</div>
 										</div>
@@ -119,16 +129,12 @@ function SettingsComponent() {
 
 						<TabsContent value="preferences" className="mt-6">
 							<Card className="p-6">
-								<h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-									Preferences
-								</h2>
+								<h2 className="text-xl font-bold mb-6">Preferences</h2>
 								<div className="space-y-4">
-									<div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+									<div className="flex items-center justify-between p-4 border rounded-lg">
 										<div>
-											<div className="font-medium text-gray-900 dark:text-gray-100">
-												Dark Mode
-											</div>
-											<div className="text-sm text-gray-600 dark:text-gray-400">
+											<div className="font-medium">Dark Mode</div>
+											<div className="text-sm text-muted-foreground">
 												Switch between light and dark themes
 											</div>
 										</div>
@@ -140,12 +146,10 @@ function SettingsComponent() {
 											Toggle
 										</Button>
 									</div>
-									<div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+									<div className="flex items-center justify-between p-4 border rounded-lg">
 										<div>
-											<div className="font-medium text-gray-900 dark:text-gray-100">
-												Language
-											</div>
-											<div className="text-sm text-gray-600 dark:text-gray-400">
+											<div className="font-medium">Language</div>
+											<div className="text-sm text-muted-foreground">
 												Select your preferred language
 											</div>
 										</div>
@@ -162,7 +166,7 @@ function SettingsComponent() {
 						</TabsContent>
 					</Tabs>
 				</div>
-			</PageContainer>
+			</div>
 		</>
 	);
 }
