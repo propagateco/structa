@@ -28,7 +28,7 @@ export const Header = () => {
                 <div className="flex items-center">
                     <a href="/" className="flex items-center">
                         <img
-                            src={resolvedTheme === 'dark' ? '/wordmark-dark.svg' : '/wordmark-light.svg'}
+                            src={resolvedTheme === 'dark' ? '/wordmark-dark.svg' : '/letterhead-light.svg'}
                             alt="Logo"
                             className="h-6 w-auto md:h-8"
                         />

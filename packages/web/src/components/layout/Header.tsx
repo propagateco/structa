@@ -38,8 +38,8 @@ export const Header = () => {
                         <img
                             src={
                                 resolvedTheme === 'dark'
-                                    ? '/wordmark-dark.svg'
-                                    : '/wordmark-light.svg'
+                                    ? '/letterhead-dark.svg'
+                                    : '/letterhead-light.svg'
                             }
                             alt="Logo"
                             className="h-6 w-auto md:h-8"
