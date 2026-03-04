@@ -5,6 +5,8 @@ import {
 	useLocation,
 } from "@tanstack/react-router";
 import { AppSidebar, type SidebarUser } from "@/components/app-sidebar";
+import { NavigationHeader } from "@/components/nav/navigation-header";
+import ResponsiveBreadcrumbs from "@/components/nav/responsive-breadcrumbs";
 import { getImageUrl } from "@/components/ui/image";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { getAuth } from "@/lib/auth-server";
@@ -42,6 +44,17 @@ export const Route = createFileRoute("/_auth")({
 function AuthLayout() {
 	const { user } = Route.useRouteContext();
 	const pathname = useLocation({ select: (loc) => loc.pathname });
+	const segments = pathname.split("/").filter(Boolean);
+	const crumbs = segments.map((segment, index) => {
+		const path = `/${segments.slice(0, index + 1).join("/")}`;
+		const title =
+			segment === "app"
+				? "Dashboard"
+				: segment
+						.replace(/-/g, " ")
+						.replace(/\b\w/g, (letter) => letter.toUpperCase());
+		return { title, path };
+	});
 
 	// Onboarding routes are standalone (no sidebar)
 	if (pathname.startsWith("/onboarding")) {
@@ -58,8 +71,11 @@ function AuthLayout() {
 
 	return (
 		<SidebarProvider>
-			<AppSidebar user={userModel} />
+			<AppSidebar user={userModel} variant="sidebar" />
 			<SidebarInset>
+				<NavigationHeader>
+					<ResponsiveBreadcrumbs crumbs={crumbs} />
+				</NavigationHeader>
 				<Outlet />
 			</SidebarInset>
 		</SidebarProvider>

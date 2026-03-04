@@ -2,8 +2,6 @@ import { Link } from "@tanstack/react-router";
 import {
     Folder,
     MoreHorizontal,
-    Plus,
-    PlusSquare,
     Share,
     Trash2,
     type LucideIcon,
@@ -26,7 +24,7 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar";
 
-export function NavProjects({
+export function NavChats({
     title,
     projects,
 }: {
@@ -40,7 +38,7 @@ export function NavProjects({
 
     return (
         <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>{title}</SidebarGroupLabel>
+            <SidebarGroupLabel>Recent chats</SidebarGroupLabel>
             <SidebarMenu>
                 {projects.map((item) => (
                     <SidebarMenuItem key={item.name}>
@@ -62,28 +60,18 @@ export function NavProjects({
                                 align={isMobile ? "end" : "start"}
                             >
                                 <DropdownMenuItem>
-                                    <Folder />
-                                    <span>View Project</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Share />
-                                    <span>Share Project</span>
+                                    <Folder className="text-muted-foreground" />
+                                    <span>View Chat</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem variant={"destructive"}>
-                                    <Trash2 />
-                                    <span>Delete Project</span>
+                                <DropdownMenuItem>
+                                    <Trash2 className="text-muted-foreground" />
+                                    <span>Delete Chat</span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </SidebarMenuItem>
                 ))}
-                <SidebarMenuItem>
-                    <SidebarMenuButton>
-                        <Plus />
-                        <span>New Project</span>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
             </SidebarMenu>
         </SidebarGroup>
     );
