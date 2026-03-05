@@ -776,6 +776,11 @@ html {
 		margin-left: 0.5rem !important;
 	}
 
+	.peer[data-variant="sidebar"]
+		~ main.md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2 {
+		margin-left: 0 !important;
+	}
+
 	.peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:ml-0 {
 		margin-left: 0 !important;
 	}
