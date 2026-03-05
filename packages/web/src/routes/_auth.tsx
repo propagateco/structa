@@ -6,9 +6,11 @@ import {
 } from "@tanstack/react-router";
 import { AppSidebar, type SidebarUser } from "@/components/app-sidebar";
 import { NavigationHeader } from "@/components/nav/navigation-header";
+import { ProjectSwitcher } from "@/components/nav/project-switcher";
 import ResponsiveBreadcrumbs from "@/components/nav/responsive-breadcrumbs";
 import { getImageUrl } from "@/components/ui/image";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { ProjectSwitcherProvider } from "@/hooks/use-project-switcher";
 import { getAuth } from "@/lib/auth-server";
 
 export const Route = createFileRoute("/_auth")({
@@ -70,14 +72,17 @@ function AuthLayout() {
 	};
 
 	return (
-		<SidebarProvider>
-			<AppSidebar user={userModel} variant="sidebar" />
-			<SidebarInset>
-				<NavigationHeader>
-					<ResponsiveBreadcrumbs crumbs={crumbs} />
-				</NavigationHeader>
-				<Outlet />
-			</SidebarInset>
-		</SidebarProvider>
+		<ProjectSwitcherProvider>
+			<SidebarProvider>
+				<AppSidebar user={userModel} variant="sidebar" />
+				<SidebarInset>
+					<NavigationHeader>
+						<ProjectSwitcher />
+						<ResponsiveBreadcrumbs crumbs={crumbs} />
+					</NavigationHeader>
+					<Outlet />
+				</SidebarInset>
+			</SidebarProvider>
+		</ProjectSwitcherProvider>
 	);
 }

@@ -18,7 +18,7 @@ export function NavigationHeader({
 	return (
 		<header
 			className={cn(
-				"flex h-10 w-full shrink-0 items-center gap-4 border-b border-border px-4 text-sm font-medium",
+				"flex h-14 w-full shrink-0 items-center gap-4 border-b border-border px-4 text-sm font-medium",
 				className,
 			)}
 		>
