@@ -14,7 +14,7 @@ import {
 import { FormattedType } from '../utils/text';
 
 interface VerifyEmailProps {
-    type: 'sign-in' | 'email-verification' | 'forget-password';
+    type: 'sign-in' | 'email-verification' | 'forget-password' | 'change-email';
     validationCode: string;
     location?: { city: string; country: string } | null;
 }
