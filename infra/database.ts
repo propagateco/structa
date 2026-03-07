@@ -26,6 +26,7 @@ const neonProject = new neon.Project(
             autoscalingLimitMinCu,
             autoscalingLimitMaxCu,
         },
+        enableLogicalReplication: 'yes',
     },
     {
         provider: neonProvider,
