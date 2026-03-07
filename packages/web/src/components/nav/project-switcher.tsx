@@ -1,122 +1,166 @@
 "use client";
 
-import { useNavigate } from "@tanstack/react-router";
-import { ChevronsUpDown, Plus, X } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
-	DropdownMenu,
-	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
+	FilterableDropdownMenu,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { Kbd, KbdWrapper } from "@/components/ui/kbd";
+import { NavigationSeparator } from "@/components/ui/navigation-separator";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useKeySequenceShortcut } from "@/hooks/use-key-sequence-shortcut";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useProjectSwitcher } from "@/hooks/use-project-switcher";
-import { cn } from "@/lib/utils";
 
 export function ProjectSwitcher() {
 	const navigate = useNavigate();
 	const isMobile = useIsMobile();
 	const { activeProject, projects, setActiveProject } = useProjectSwitcher();
 	const [query, setQuery] = React.useState("");
+	const [open, setOpen] = React.useState(false);
+	const [isInputFocused, setIsInputFocused] = React.useState(false);
 
-	const filteredProjects = React.useMemo(() => {
-		const normalizedQuery = query.trim().toLowerCase();
-		if (!normalizedQuery) {
-			return projects;
-		}
-		return projects.filter((project) =>
-			project.name.toLowerCase().includes(normalizedQuery),
-		);
-	}, [projects, query]);
+	const trigger = activeProject ? (
+		<div className="flex items-center gap-2">
+			<Button
+				variant="ghost"
+				className="rounded-md px-0 ml-4 hover:bg-transparent hover:text-foreground"
+			>
+				<Link to="/app" className="max-w-32 truncate">
+					{activeProject.name}
+				</Link>
+			</Button>
+			<DropdownMenuTrigger asChild>
+				<Button
+					variant="ghost"
+					size="icon"
+					className="rounded-md text-sidebar-foreground"
+				>
+					<ChevronsUpDown className="ml-0 size-4" />
+				</Button>
+			</DropdownMenuTrigger>
+		</div>
+	) : (
+		<DropdownMenuTrigger asChild>
+			<Button variant="ghost" className="rounded-md text-sidebar-foreground">
+				<span className="max-w-32 truncate">All projects</span>
+				<ChevronsUpDown className="ml-1 size-4 opacity-70" />
+			</Button>
+		</DropdownMenuTrigger>
+	);
+
+	useKeySequenceShortcut(
+		{
+			sequence: ["c", "p"],
+			timeoutMs: 700,
+			allowInInputs: false,
+		},
+		() => {
+			setOpen(true);
+		},
+	);
 
 	return (
 		<div className="group flex items-center gap-0.5">
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant="ghost" className="rounded-md">
-						<span className="max-w-32 truncate font-medium">
-							{activeProject ? activeProject.name : "All projects"}
-						</span>
-						<ChevronsUpDown className="ml-1 size-4 opacity-70" />
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent
-					className="w-72 rounded-2xl border border-border/70 bg-popover p-2 shadow-lg"
-					align="start"
-					side={isMobile ? "bottom" : "bottom"}
-					sideOffset={8}
-				>
-					<div className="px-1 pb-2">
-						<div className="relative">
-							<Input
-								value={query}
-								onChange={(event) => setQuery(event.target.value)}
-								placeholder="Find Project..."
-								className="h-10 rounded-xl border-border/70 bg-background/40 pr-12 text-sm"
-								onClick={(event) => event.stopPropagation()}
-								onPointerDown={(event) => event.stopPropagation()}
-								onKeyDown={(event) => event.stopPropagation()}
-							/>
-							<div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-border/70 px-2 py-0.5 text-[11px] text-muted-foreground">
-								Esc
-							</div>
-						</div>
+			<FilterableDropdownMenu
+				open={open}
+				onOpenChange={setOpen}
+				trigger={
+					<Tooltip>
+						<TooltipTrigger asChild>{trigger}</TooltipTrigger>
+						<TooltipContent>
+							Change project
+							<KbdWrapper>
+								<Kbd>C</Kbd>
+								then
+								<Kbd>P</Kbd>
+							</KbdWrapper>
+						</TooltipContent>
+					</Tooltip>
+				}
+				items={projects}
+				itemToLabel={(project) => project.name}
+				query={query}
+				onQueryChange={setQuery}
+				onSelectItem={(project) => {
+					setActiveProject(project);
+					setOpen(false);
+				}}
+				selectedItem={activeProject}
+				emptyState={
+					<div className="px-3 py-3 text-sm text-muted-foreground">
+						No projects found
 					</div>
-
-					<div className="flex flex-col gap-1 px-1">
-						{filteredProjects.length ? (
-							filteredProjects.map((project) => {
-								const ProjectLogo = project.logo;
-								const isActive = project.id === activeProject?.id;
-								return (
-									<DropdownMenuItem
-										key={project.id}
-										onSelect={() => setActiveProject(project)}
-										className={cn(
-											"gap-3 rounded-xl px-2 py-2.5",
-											isActive && "bg-muted/50 text-foreground",
-										)}
-									>
-										<div className="flex size-9 items-center justify-center rounded-xl border border-border/70 bg-muted/30 text-muted-foreground">
-											{ProjectLogo ? (
-												<ProjectLogo className="size-4" />
-											) : (
-												<div className="size-2 rounded-full bg-muted-foreground/60" />
-											)}
-										</div>
-										<span className="text-sm font-medium text-foreground">
-											{project.name}
-										</span>
-									</DropdownMenuItem>
-								);
-							})
-						) : (
-							<div className="px-3 py-3 text-xs text-muted-foreground">
-								No projects found
-							</div>
-						)}
-					</div>
-
-					<DropdownMenuSeparator className="my-2" />
-
+				}
+				footer={
 					<DropdownMenuItem
 						onSelect={() => navigate({ to: "/app" })}
-						className="gap-3 rounded-xl px-2 py-2.5 text-muted-foreground hover:text-foreground"
+						className="gap-2"
 					>
-						<div className="flex size-9 items-center justify-center rounded-xl border border-border/70 bg-transparent">
-							<Plus className="size-4" />
-						</div>
-						<span className="text-sm font-medium">Create Project</span>
+						<Plus className="size-4" />
+						Create Project
 					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
+				}
+				contentProps={{
+					align: "start",
+					side: isMobile ? "bottom" : "bottom",
+					sideOffset: 8,
+					onCloseAutoFocus: (event) => event.preventDefault(),
+				}}
+				className="w-72 rounded-xl border border-border border-b bg-popover p-0 shadow-sm pb-2"
+				inputProps={{
+					onFocus: () => setIsInputFocused(true),
+					onBlur: () => setIsInputFocused(false),
+					placeholder: "Find Project...",
+				}}
+				inputAddon={
+					isInputFocused ? (
+						<Kbd>Esc</Kbd>
+					) : (
+						<KbdWrapper>
+							<Kbd>C</Kbd>
+							then
+							<Kbd>P</Kbd>
+						</KbdWrapper>
+					)
+				}
+				renderItem={(project, { isSelected }) => (
+					<>
+						<span>{project.name}</span>
+						{isSelected ? (
+							<div className="relative ml-auto flex h-6 w-6 items-center justify-center">
+								<Check className="absolute size-4 text-muted-foreground opacity-100 transition-opacity group-data-[highlighted]:opacity-0" />
+								<Button
+									variant="ghost"
+									size="icon"
+									className="absolute h-6 w-6 p-0 opacity-0 transition-opacity group-data-[highlighted]:opacity-100"
+									onClick={(event) => {
+										event.preventDefault();
+										event.stopPropagation();
+										setActiveProject(undefined);
+										setOpen(false);
+									}}
+									aria-label="Clear selected project"
+								>
+									<X className="size-3" />
+								</Button>
+							</div>
+						) : null}
+					</>
+				)}
+			/>
 			{activeProject ? (
 				<>
-					<span
-						className="mx-1 h-6 w-px bg-border opacity-0 transition-opacity duration-100 ease-in-out group-hover:opacity-100"
+					<NavigationSeparator
+						className="mx-1 opacity-0 transition-opacity duration-100 ease-in-out group-hover:opacity-100"
 						aria-hidden="true"
 					/>
 					<Button

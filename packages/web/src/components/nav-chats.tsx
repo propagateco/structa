@@ -60,12 +60,12 @@ export function NavChats({
                                 align={isMobile ? "end" : "start"}
                             >
                                 <DropdownMenuItem>
-                                    <Folder className="text-muted-foreground" />
+                                    <Folder />
                                     <span>View Chat</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                    <Trash2 className="text-muted-foreground" />
+                                <DropdownMenuItem variant="destructive">
+                                    <Trash2 />
                                     <span>Delete Chat</span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
