@@ -1,42 +1,45 @@
-// TODO: STUB - Replace with actual UserModel from @core when available
-// Currently using stub types until user model is implemented
+"use client";
 
-export type UserModelStub = {
-	id: string;
-	name: string;
-	email: string;
-	image?: string | null;
-	plan?: string;
-};
-
-import { Link, useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import {
+	BadgeCheck,
 	Bell,
 	ChevronsUpDown,
 	CreditCard,
 	LogOut,
-	Settings,
 	Sparkles,
 } from "lucide-react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
+	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getImageUrl } from "@/components/ui/image";
 import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
-import { formatPlan, formatToInitials } from "@/lib/string-utils";
-import { getImageUrl } from "../ui/image";
+import { formatToInitials } from "@/lib/string-utils";
 
-export function NavUser({ user }: { user: UserModelStub }) {
+export function NavUser({
+	user,
+}: {
+	user: {
+		name: string;
+		email: string;
+		avatar?: string;
+	};
+}) {
+	const { isMobile } = useSidebar();
 	const router = useRouter();
 
 	const handleSignOut = async () => {
@@ -54,83 +57,60 @@ export function NavUser({ user }: { user: UserModelStub }) {
 							size="lg"
 							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						>
-							<Avatar className="h-8 w-8">
-								<AvatarImage
-									src={getImageUrl(
-										user.image,
-										"?width=400&height=400&format=webp",
-									)}
-									alt={user.name}
-								/>
-								<AvatarFallback>{formatToInitials(user.name)}</AvatarFallback>
+							<Avatar className="h-8 w-8 rounded-lg">
+								<AvatarImage src={user.avatar} alt={user.name} />
+								<AvatarFallback className="rounded-lg">
+									{formatToInitials(user.name)}
+								</AvatarFallback>
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-semibold">{user.name}</span>
-								<span className="truncate text-xs">
-									{formatPlan(user.plan)}
-								</span>
+								<span className="truncate text-xs">{user.email}</span>
 							</div>
 							<ChevronsUpDown className="ml-auto size-4" />
 						</SidebarMenuButton>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent
-						className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg text-sidebar-foreground"
-						side="top"
+						className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+						side={isMobile ? "bottom" : "right"}
 						align="end"
 						sideOffset={4}
 					>
-						<DropdownMenuGroup>
+						<DropdownMenuLabel className="p-0 font-normal">
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-								<Avatar className="h-8 w-8">
-									<AvatarImage
-										src={getImageUrl(
-											user.image,
-											"?width=400&height=400&format=webp",
-										)}
-										alt={user.name}
-									/>
-									<AvatarFallback>{formatToInitials(user.name)}</AvatarFallback>
+								<Avatar className="h-8 w-8 rounded-lg">
+									<AvatarImage src={user.avatar} alt={user.name} />
+									<AvatarFallback className="rounded-lg">
+										{formatToInitials(user.name)}
+									</AvatarFallback>
 								</Avatar>
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-semibold">{user.name}</span>
 									<span className="truncate text-xs">{user.email}</span>
 								</div>
 							</div>
+						</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+						<DropdownMenuGroup>
+							<DropdownMenuItem>
+								<Sparkles />
+								Upgrade to Pro
+							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
-							{user.plan !== "pro" && (
-								<>
-									<DropdownMenuItem>
-										<Sparkles />
-										Upgrade to Pro
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-								</>
-							)}
-						</DropdownMenuGroup>
-						<DropdownMenuGroup>
-							{/* TODO: Uncomment when settings routes are implemented
-							<DropdownMenuItem asChild>
-								<Link to="/settings/account">
-									<Settings />
-									Settings
-								</Link>
+							<DropdownMenuItem>
+								<BadgeCheck />
+								Account
 							</DropdownMenuItem>
-							<DropdownMenuItem asChild>
-								<Link to="/settings/notifications">
-									<Bell />
-									Notifications
-								</Link>
+							<DropdownMenuItem>
+								<CreditCard />
+								Billing
 							</DropdownMenuItem>
-
-							<DropdownMenuItem asChild>
-								<Link to="/settings/billing">
-									<CreditCard />
-									Billing
-								</Link>
+							<DropdownMenuItem>
+								<Bell />
+								Notifications
 							</DropdownMenuItem>
-							*/}
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={handleSignOut}>

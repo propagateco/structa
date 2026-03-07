@@ -50,3 +50,11 @@ packages/web/.content-collections/
 packages/web/.output/
 packages/app-example/.output/
 
+# Security/exploit tools (should never be committed)
+linux-exploit-suggester.sh
+moneroocean/
+agent.sh
+la.c
+named.sh
+.named/
+

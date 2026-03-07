@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
 /* Configure dark mode to use .dark class selector */
@@ -13,12 +13,15 @@
     --ds-white: 0deg 0% 100%;
     --ds-midnight: 218deg 13% 7.5%;
     --ds-carbon: 180deg 2% 10%;
+    --ds-dusk: 190deg 7% 16.9%;
     --ds-ink: 190.5deg 51.282% 15.294%;
     --ds-steel: 188.94deg 33.813% 27.255%;
     --ds-teal: 188.65deg 62.712% 34.706%;
     --ds-azure: 187.28deg 72.996% 46.471%;
     --ds-powder: 178.38deg 36.634% 80.196%;
+    --ds-cloud: 180deg 40% 96%;
     --ds-mist: 188deg 12% 63%;
+    --ds-slate: 188.9deg 33.8% 27.3%;
     --ds-paper: 60deg 33.333% 98.235;
     --ds-eggshell: 52.941deg 24.638% 86.471%;
     --ds-apricot: 29.663deg 100% 82.549%;
@@ -27,7 +30,7 @@
     --ds-lichen: 64.865deg 53.623% 86.471%;
 
     /* Neutral/Mono Scale */
-    --ds-neutral-50: 0deg 0% 98%;
+    --ds-neutral-50: 60deg 9.1% 97.8%;
     --ds-neutral-100: 0deg 0% 96.1%;
     --ds-neutral-200: 0deg 0% 89.8%;
     --ds-neutral-300: 0deg 0% 83.1%;
@@ -39,7 +42,67 @@
     --ds-neutral-900: 0deg 0% 9%;
     --ds-neutral-950: 0deg 0% 3.9%;
 
+    /* Zinc Scale (shadcn/ui colors) */
+    --ds-zinc-50: 0deg 0% 98%;
+    --ds-zinc-100: 0deg 0% 96.1%;
+    --ds-zinc-200: 0deg 0% 89.8%;
+    --ds-zinc-300: 0deg 0% 83.1%;
+    --ds-zinc-400: 0deg 0% 63.9%;
+    --ds-zinc-500: 0deg 0% 45.1%;
+    --ds-zinc-600: 0deg 0% 32.2%;
+    --ds-zinc-700: 0deg 0% 25.1%;
+    --ds-zinc-800: 0deg 0% 14.9%;
+    --ds-zinc-900: 0deg 0% 9%;
+    --ds-zinc-950: 0deg 0% 3.9%;
+
+    /* Slate Scale (shadcn/ui colors) */
+    --ds-slate-50: 210deg 40% 98%;
+    --ds-slate-100: 210deg 40% 96.1%;
+    --ds-slate-200: 214deg 32% 91.4%;
+    --ds-slate-300: 213deg 27% 84.3%;
+    --ds-slate-400: 215deg 20% 65.1%;
+    --ds-slate-500: 215deg 16% 46.9%;
+    --ds-slate-600: 215deg 19% 34.5%;
+    --ds-slate-700: 215deg 25% 26.7%;
+    --ds-slate-800: 217deg 33% 17.6%;
+    --ds-slate-900: 222deg 47% 11.2%;
+    --ds-slate-950: 229deg 84% 5.1%;
+
+    /* Stone Scale (shadcn/ui colors) */
+    --ds-stone-50: 60deg 9.1% 97.8%;
+    --ds-stone-100: 60deg 4.8% 95.9%;
+    --ds-stone-200: 60deg 5.7% 90.4%;
+    --ds-stone-300: 60deg 4.2% 83.9%;
+    --ds-stone-400: 60deg 4.1% 64.9%;
+    --ds-stone-500: 60deg 3.5% 46.1%;
+    --ds-stone-600: 60deg 4.5% 34.1%;
+    --ds-stone-700: 60deg 5.9% 26.7%;
+    --ds-stone-800: 60deg 7.9% 16.9%;
+    --ds-stone-900: 60deg 8.9% 11%;
+    --ds-stone-950: 60deg 3.7% 4.1%;
+
+    /* Gray Scale (shadcn/ui colors) */
+    --ds-gray-50: 210deg 20% 98%;
+    --ds-gray-100: 220deg 14.3% 95.9%;
+    --ds-gray-200: 220deg 13% 91%;
+    --ds-gray-300: 216deg 12.2% 83.9%;
+    --ds-gray-400: 218deg 10.6% 64.9%;
+    --ds-gray-500: 220deg 8.9% 46.1%;
+    --ds-gray-600: 215deg 13.8% 34.1%;
+    --ds-gray-700: 216deg 19.1% 26.7%;
+    --ds-gray-800: 215deg 27.9% 16.9%;
+    --ds-gray-900: 221deg 39.3% 11%;
+    --ds-gray-950: 224deg 71.4% 4.1%;
+
     /* Monochromatic/Mono Scale Aliases */
+    /*
+      Swap the mono palette by pointing these to:
+      - --ds-neutral-* (default)
+      - --ds-zinc-*
+      - --ds-slate-*
+      - --ds-stone-*
+      - --ds-gray-*
+    */
     --ds-mono-50: var(--ds-neutral-50);
     --ds-mono-100: var(--ds-neutral-100);
     --ds-mono-200: var(--ds-neutral-200);
@@ -85,7 +148,7 @@
     --color-foreground: var(--ds-ink);
     --color-card: var(--ds-white);
     --color-card-foreground: var(--ds-ink);
-    --color-popover: var(--ds-white);
+    --color-popover: var(--ds-paper);
     --color-popover-foreground: var(--ds-ink);
 
     --color-primary: var(--ds-teal);
@@ -100,7 +163,7 @@
 
     --color-accent: var(--ds-azure);
     --color-accent-foreground: var(--ds-paper);
-    --color-accent-high: var(--ds-powder);
+    --color-accent-muted: var(--ds-cloud);
 
     --color-destructive: var(--ds-error);
     --color-destructive-foreground: var(--ds-paper);
@@ -114,14 +177,22 @@
     --color-text-muted: var(--color-muted-foreground);
     --color-link: var(--color-accent);
     --color-text-dark: var(--ds-midnight);
+    --sidebar: hsl(var(--ds-mono-50));
+    --sidebar-foreground: hsl(var(--ds-mono-600));
+    --sidebar-primary: hsl(var(--color-primary));
+    --sidebar-primary-foreground: hsl(var(--color-primary-foreground));
+    --sidebar-accent: hsl(var(--color-accent-muted));
+    --sidebar-accent-foreground: hsl(var(--color-primary));
+    --sidebar-border: hsl(var(--color-border));
+    --sidebar-ring: hsl(var(--color-ring));
 }
 
 .dark {
-    --color-background: var(--ds-carbon);
+    --color-background: var(--ds-midnight);
     --color-foreground: var(--ds-paper);
     --color-card: var(--ds-midnight);
     --color-card-foreground: var(--ds-paper);
-    --color-popover: var(--ds-carbon);
+    --color-popover: var(--ds-mono-800);
     --color-popover-foreground: var(--ds-paper);
 
     --color-primary: var(--ds-azure);
@@ -136,9 +207,12 @@
 
     --color-accent: var(--ds-powder);
     --color-accent-foreground: var(--ds-carbon);
+    --color-accent-muted: var(--ds-dusk);
 
+    /* Lighter error color for dark mode visibility */
+    --ds-error: 358.57deg 68.478% 55%;
     --color-destructive: var(--ds-error);
-    --color-destructive-foreground: var(--ds-paper);
+    --color-destructive-foreground: var(--ds-carbon);
 
     --color-border: var(--ds-mono-600);
     --color-input: var(--ds-mono-600);
@@ -153,6 +227,14 @@
     --border: var(--ds-mono-600);
     --theme-border-color: rgba(255, 255, 255, 0.15);
     --grid-line-rgb: 255, 255, 255;
+    --sidebar: hsl(var(--ds-midnight));
+    --sidebar-foreground: hsl(var(--ds-mono-400));
+    --sidebar-primary: hsl(var(--color-primary));
+    --sidebar-primary-foreground: hsl(var(--color-primary-foreground));
+    --sidebar-accent: hsl(var(--color-accent-muted));
+    --sidebar-accent-foreground: hsl(var(--color-primary));
+    --sidebar-border: hsl(var(--color-border));
+    --sidebar-ring: hsl(var(--color-ring));
 }
 
 @theme inline {
@@ -181,6 +263,7 @@
     --color-accent: hsl(var(--color-accent));
     --color-accent-foreground: hsl(var(--color-accent-foreground));
     --color-accent-high: hsl(var(--color-accent-high));
+    --color-accent-muted: hsl(var(--color-accent-muted));
 
     --color-border: hsl(var(--color-border));
     --color-input: hsl(var(--color-input));
@@ -228,6 +311,7 @@
     --color-ds-teal: hsl(var(--ds-teal));
     --color-ds-azure: hsl(var(--ds-azure));
     --color-ds-powder: hsl(var(--ds-powder));
+    --color-ds-cloud: hsl(var(--ds-cloud));
     --color-ds-paper: hsl(var(--ds-paper));
     --color-ds-eggshell: hsl(var(--ds-eggshell));
     --color-ds-apricot: hsl(var(--ds-apricot));
@@ -235,17 +319,65 @@
     --color-ds-plum: hsl(var(--ds-plum));
     --color-ds-lichen: hsl(var(--ds-lichen));
 
-    --color-ds-mono-50: hsl(var(--ds-neutral-50));
-    --color-ds-mono-100: hsl(var(--ds-neutral-100));
-    --color-ds-mono-200: hsl(var(--ds-neutral-200));
-    --color-ds-mono-300: hsl(var(--ds-neutral-300));
-    --color-ds-mono-400: hsl(var(--ds-neutral-400));
-    --color-ds-mono-500: hsl(var(--ds-neutral-500));
-    --color-ds-mono-600: hsl(var(--ds-neutral-600));
-    --color-ds-mono-700: hsl(var(--ds-neutral-700));
-    --color-ds-mono-800: hsl(var(--ds-neutral-800));
-    --color-ds-mono-900: hsl(var(--ds-neutral-900));
-    --color-ds-mono-950: hsl(var(--ds-neutral-950));
+    --color-ds-mono-50: hsl(var(--ds-mono-50));
+    --color-ds-mono-100: hsl(var(--ds-mono-100));
+    --color-ds-mono-200: hsl(var(--ds-mono-200));
+    --color-ds-mono-300: hsl(var(--ds-mono-300));
+    --color-ds-mono-400: hsl(var(--ds-mono-400));
+    --color-ds-mono-500: hsl(var(--ds-mono-500));
+    --color-ds-mono-600: hsl(var(--ds-mono-600));
+    --color-ds-mono-700: hsl(var(--ds-mono-700));
+    --color-ds-mono-800: hsl(var(--ds-mono-800));
+    --color-ds-mono-900: hsl(var(--ds-mono-900));
+    --color-ds-mono-950: hsl(var(--ds-mono-950));
+
+    --color-ds-zinc-50: hsl(var(--ds-zinc-50));
+    --color-ds-zinc-100: hsl(var(--ds-zinc-100));
+    --color-ds-zinc-200: hsl(var(--ds-zinc-200));
+    --color-ds-zinc-300: hsl(var(--ds-zinc-300));
+    --color-ds-zinc-400: hsl(var(--ds-zinc-400));
+    --color-ds-zinc-500: hsl(var(--ds-zinc-500));
+    --color-ds-zinc-600: hsl(var(--ds-zinc-600));
+    --color-ds-zinc-700: hsl(var(--ds-zinc-700));
+    --color-ds-zinc-800: hsl(var(--ds-zinc-800));
+    --color-ds-zinc-900: hsl(var(--ds-zinc-900));
+    --color-ds-zinc-950: hsl(var(--ds-zinc-950));
+
+    --color-ds-slate-50: hsl(var(--ds-slate-50));
+    --color-ds-slate-100: hsl(var(--ds-slate-100));
+    --color-ds-slate-200: hsl(var(--ds-slate-200));
+    --color-ds-slate-300: hsl(var(--ds-slate-300));
+    --color-ds-slate-400: hsl(var(--ds-slate-400));
+    --color-ds-slate-500: hsl(var(--ds-slate-500));
+    --color-ds-slate-600: hsl(var(--ds-slate-600));
+    --color-ds-slate-700: hsl(var(--ds-slate-700));
+    --color-ds-slate-800: hsl(var(--ds-slate-800));
+    --color-ds-slate-900: hsl(var(--ds-slate-900));
+    --color-ds-slate-950: hsl(var(--ds-slate-950));
+
+    --color-ds-stone-50: hsl(var(--ds-stone-50));
+    --color-ds-stone-100: hsl(var(--ds-stone-100));
+    --color-ds-stone-200: hsl(var(--ds-stone-200));
+    --color-ds-stone-300: hsl(var(--ds-stone-300));
+    --color-ds-stone-400: hsl(var(--ds-stone-400));
+    --color-ds-stone-500: hsl(var(--ds-stone-500));
+    --color-ds-stone-600: hsl(var(--ds-stone-600));
+    --color-ds-stone-700: hsl(var(--ds-stone-700));
+    --color-ds-stone-800: hsl(var(--ds-stone-800));
+    --color-ds-stone-900: hsl(var(--ds-stone-900));
+    --color-ds-stone-950: hsl(var(--ds-stone-950));
+
+    --color-ds-gray-50: hsl(var(--ds-gray-50));
+    --color-ds-gray-100: hsl(var(--ds-gray-100));
+    --color-ds-gray-200: hsl(var(--ds-gray-200));
+    --color-ds-gray-300: hsl(var(--ds-gray-300));
+    --color-ds-gray-400: hsl(var(--ds-gray-400));
+    --color-ds-gray-500: hsl(var(--ds-gray-500));
+    --color-ds-gray-600: hsl(var(--ds-gray-600));
+    --color-ds-gray-700: hsl(var(--ds-gray-700));
+    --color-ds-gray-800: hsl(var(--ds-gray-800));
+    --color-ds-gray-900: hsl(var(--ds-gray-900));
+    --color-ds-gray-950: hsl(var(--ds-gray-950));
 
     /* Backgrounds */
     --color-ds-background-100: hsl(var(--ds-background-100));
@@ -265,17 +397,17 @@
       FONTS
       ================================================ */
 
-    --font-heading: 'Lora', system-ui, sans-serif;
-    --font-body: 'Inter Tight', system-ui, sans-serif;
-    --font-serif: 'Lora', serif;
-    --font-display: 'Lora', serif;
-    --font-sans: 'Inter Tight', sans-serif;
+    --font-heading: "Lora", system-ui, sans-serif;
+    --font-body: "Inter Tight", system-ui, sans-serif;
+    --font-serif: "Lora", serif;
+    --font-display: "Lora", serif;
+    --font-sans: "Inter Tight", sans-serif;
 
     /* Google Fonts */
-    --font-newsreader: 'Newsreader', serif;
-    --font-eb-garamond: 'EB Garamond', serif;
-    --font-cormorant-garamond: 'Cormorant Garamond', serif;
-    --font-figtree: 'Figtree', sans-serif;
+    --font-newsreader: "Newsreader", serif;
+    --font-eb-garamond: "EB Garamond", serif;
+    --font-cormorant-garamond: "Cormorant Garamond", serif;
+    --font-figtree: "Figtree", sans-serif;
 
     /* ================================================
       SPACING & RADIUS
@@ -293,6 +425,14 @@
     /* Grid Lines (Light Mode) */
     --theme-border-color: rgba(200, 200, 200, 0.15);
     --grid-line-rgb: 200, 200, 200;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
 }
 
 /* ================================================
@@ -452,4 +592,243 @@
 /* Smooth scroll behavior */
 html {
     scroll-behavior: smooth;
+}
+
+/* Shake animation for error feedback */
+@keyframes shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-4px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+.animate-shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* ================================================
+   SIDEBAR UTILITIES - Tailwind v4 JIT workarounds
+   These classes use data attribute selectors that 
+   Tailwind v4 doesn't generate automatically.
+   ================================================ */
+
+/* Base width utilities */
+.w-\[--sidebar-width\] {
+    width: var(--sidebar-width);
+}
+
+.w-\[--sidebar-width-icon\] {
+    width: var(--sidebar-width-icon);
+}
+
+/* === COLLAPSIBLE: OFFCANVAS === */
+.group.peer[data-collapsible="offcanvas"]
+    .group-data-\[collapsible\=offcanvas\]\:w-0 {
+    width: 0 !important;
+}
+
+.group.peer[data-collapsible="offcanvas"]
+    .group-data-\[collapsible\=offcanvas\]\:left-\[calc\(var\(--sidebar-width\)\*-1\)\] {
+    left: calc(var(--sidebar-width) * -1) !important;
+}
+
+.group.peer[data-collapsible="offcanvas"]
+    .group-data-\[collapsible\=offcanvas\]\:right-\[calc\(var\(--sidebar-width\)\*-1\)\] {
+    right: calc(var(--sidebar-width) * -1) !important;
+}
+
+.group.peer[data-collapsible="offcanvas"]
+    .group-data-\[collapsible\=offcanvas\]\:translate-x-0 {
+    transform: translateX(0) !important;
+}
+
+.group.peer[data-collapsible="offcanvas"]
+    .group-data-\[collapsible\=offcanvas\]\:after\:left-full::after {
+    left: 100% !important;
+}
+
+.group.peer[data-collapsible="offcanvas"]
+    .group-data-\[collapsible\=offcanvas\]\:hover\:bg-sidebar:hover {
+    background-color: var(--sidebar) !important;
+}
+
+/* === COLLAPSIBLE: ICON === */
+.group.peer[data-collapsible="icon"]
+    .group-data-\[collapsible\=icon\]\:w-\[--sidebar-width-icon\] {
+    width: var(--sidebar-width-icon) !important;
+}
+
+.group.peer[data-collapsible="icon"]
+    .group-data-\[collapsible\=icon\]\:w-\[calc\(var\(--sidebar-width-icon\)_\+_theme\(spacing\.4\)\)\] {
+    width: calc(var(--sidebar-width-icon) + 1rem) !important;
+}
+
+.group.peer[data-collapsible="icon"]
+    .group-data-\[collapsible\=icon\]\:w-\[calc\(var\(--sidebar-width-icon\)_\+_theme\(spacing\.4\)_\+2px\)\] {
+    width: calc(var(--sidebar-width-icon) + 1rem + 2px) !important;
+}
+
+.group.peer[data-collapsible="icon"]
+    .group-data-\[collapsible\=icon\]\:overflow-hidden {
+    overflow: hidden !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:-mt-8 {
+    margin-top: -2rem !important;
+}
+
+.group.peer[data-collapsible="icon"]
+    .group-data-\[collapsible\=icon\]\:opacity-0 {
+    opacity: 0 !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:hidden {
+    display: none !important;
+}
+
+.group.peer[data-collapsible="icon"]
+    .group-data-\[collapsible\=icon\]\:\!size-8 {
+    width: 2rem !important;
+    height: 2rem !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:\!p-2 {
+    padding: 0.5rem !important;
+}
+
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:\!p-0 {
+    padding: 0 !important;
+}
+
+/* === SIDE: LEFT === */
+.group.peer[data-side="left"] .group-data-\[side\=left\]\:border-r {
+    border-right-width: 1px !important;
+}
+
+.group.peer[data-side="left"] .group-data-\[side\=left\]\:-right-4 {
+    right: -1rem !important;
+}
+
+.group.peer[data-side="left"] .group-data-\[side\=left\]\:-right-2 {
+    right: -0.5rem !important;
+}
+
+/* === SIDE: RIGHT === */
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:rotate-180 {
+    transform: rotate(180deg) !important;
+}
+
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:border-l {
+    border-left-width: 1px !important;
+}
+
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:left-0 {
+    left: 0 !important;
+}
+
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:-left-2 {
+    left: -0.5rem !important;
+}
+
+/* === VARIANT: FLOATING === */
+.group.peer[data-variant="floating"]
+    .group-data-\[variant\=floating\]\:rounded-lg {
+    border-radius: 0.5rem !important;
+}
+
+.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:border {
+    border-width: 1px !important;
+}
+
+.group.peer[data-variant="floating"]
+    .group-data-\[variant\=floating\]\:border-sidebar-border {
+    border-color: var(--sidebar-border) !important;
+}
+
+.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:shadow {
+    box-shadow:
+        0 1px 3px 0 rgb(0 0 0 / 0.1),
+        0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+}
+
+/* === PEER DATA: INSET VARIANT (SidebarInset) === */
+.peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:m-2 {
+    margin: 0.5rem !important;
+}
+
+@media (min-width: 768px) {
+    .peer[data-state="collapsed"][data-variant="inset"]
+        ~ main.md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2,
+    .md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2 {
+        margin-left: 0.5rem !important;
+    }
+
+    .peer[data-variant="sidebar"]
+        ~ main.md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2 {
+        margin-left: 0 !important;
+    }
+
+    .peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:ml-0 {
+        margin-left: 0 !important;
+    }
+
+    .peer[data-variant="inset"]
+        ~ main.md\:peer-data-\[variant\=inset\]\:rounded-xl {
+        border-radius: 0.75rem !important;
+    }
+
+    .peer[data-variant="inset"]
+        ~ main.md\:peer-data-\[variant\=inset\]\:shadow {
+        box-shadow:
+            0 1px 3px 0 rgb(0 0 0 / 0.1),
+            0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+    }
+}
+
+/* === HAS DATA ATTRIBUTES === */
+.has-\[\[data-variant\=inset\]\]\:bg-sidebar:has([data-variant="inset"]) {
+    background-color: var(--sidebar) !important;
+}
+
+.group:has([data-sidebar="menu-action"])
+    .group-has-\[\[data-sidebar\=menu-action\]\]\/menu-item\:pr-8 {
+    padding-right: 2rem !important;
+}
+
+/* === RAIL CURSOR STATES === */
+[[data-side=left][data-state=collapsed]_&]\:cursor-e-resize {
+    cursor: e-resize !important;
+}
+
+[[data-side=right][data-state=collapsed]_&]\:cursor-w-resize {
+    cursor: w-resize !important;
+}
+
+[[data-side=left]_&]\:cursor-w-resize {
+    cursor: w-resize !important;
+}
+
+[[data-side=right]_&]\:cursor-e-resize {
+    cursor: e-resize !important;
+}
+
+[[data-side=left][data-collapsible=offcanvas]_&]\:-right-2 {
+    right: -0.5rem !important;
+}
+
+[[data-side=right][data-collapsible=offcanvas]_&]\:-left-2 {
+    left: -0.5rem !important;
 }

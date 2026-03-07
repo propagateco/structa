@@ -27,7 +27,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { StructaIcon } from "@/components/ui/icons";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function ResponsiveBreadcrumbs({
@@ -112,9 +111,11 @@ export default function ResponsiveBreadcrumbs({
 
 				{crumbs.slice(-MAX_CRUMBS_TO_DISPLAY + 1).map((crumb, index, array) => (
 					<Fragment key={`fragment-${crumb.path}`}>
-						<BreadcrumbSeparator key={`separator-${crumb.path}`}>
-							<Slash />
-						</BreadcrumbSeparator>
+						{(base || index > 0) && (
+							<BreadcrumbSeparator key={`separator-${crumb.path}`}>
+								<Slash />
+							</BreadcrumbSeparator>
+						)}
 						<BreadcrumbItem key={`crumb-${crumb.path}`}>
 							{index === array.length - 1 ? (
 								<BreadcrumbPage

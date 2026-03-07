@@ -16,7 +16,6 @@ import {
 import {
     InputOTP,
     InputOTPGroup,
-    InputOTPSeparator,
     InputOTPSlot,
 } from '@/components/ui/input-otp';
 import { authClient } from '@/lib/auth-client';

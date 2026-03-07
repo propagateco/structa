@@ -38,8 +38,8 @@ export const Header = () => {
                         <img
                             src={
                                 resolvedTheme === 'dark'
-                                    ? '/wordmark-dark.svg'
-                                    : '/wordmark-light.svg'
+                                    ? '/letterhead-dark.svg'
+                                    : '/letterhead-light.svg'
                             }
                             alt="Logo"
                             className="h-6 w-auto md:h-8"
@@ -55,12 +55,12 @@ export const Header = () => {
                         start
                     </PageLink>
                     {user && (
-                        <Avatar className="size-8 ml-2 cursor-pointer">
+                        <Avatar className="size-7 cursor-pointer">
                             <AvatarImage
                                 src={user?.image || undefined}
                                 alt={user?.name || 'User'}
                             />
-                            <AvatarFallback className="text-sm">
+                            <AvatarFallback className="text-xs">
                                 {fallbackText}
                             </AvatarFallback>
                         </Avatar>

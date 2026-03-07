@@ -18,7 +18,7 @@ const Legal = () => {
                 className="flex items-center gap-2"
               >
                 <img 
-                  src="/wordmark-light.svg" 
+                  src="/letterhead-light.svg" 
                   alt="Acme Logo" 
                   className="h-8 w-auto" 
                 />
