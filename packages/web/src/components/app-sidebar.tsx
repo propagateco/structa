@@ -1,19 +1,37 @@
 import { Link } from "@tanstack/react-router";
 import {
+	Birdhouse,
+	BotMessageSquare,
+	Box,
+	Building2,
+	Container,
+	DoorClosedLocked,
+	DoorOpen,
 	Frame,
+	GalleryVerticalEnd,
+	Globe,
+	House,
+	LayoutGrid,
 	LifeBuoy,
 	Map,
+	MessageCircleQuestion,
+	MessageSquare,
+	MessageSquareDot,
 	PieChart,
+	School,
 	Send,
 	Settings2,
 	SquareTerminal,
+	UsersRound,
+	Wallet,
 } from "lucide-react";
-import type * as React from "react";
-
+import * as React from "react";
+import { NavChats } from "@/components/nav-chats";
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
+import { Logo } from "@/components/ui/logo";
 import {
 	Sidebar,
 	SidebarContent,
@@ -22,7 +40,11 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	SidebarTrigger,
+	useSidebar,
 } from "@/components/ui/sidebar";
+import { useProjectSwitcher } from "@/hooks/use-project-switcher";
+import { cn } from "@/lib/utils";
 
 // User type for the sidebar
 export type SidebarUser = {
@@ -40,34 +62,34 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 const data = {
 	navMain: [
 		{
-			title: "Dashboard",
+			title: "Overview",
 			url: "/app",
-			icon: SquareTerminal,
+			icon: LayoutGrid,
 			isActive: true,
 		},
 		{
-			title: "Getting Started",
-			url: "#",
-			icon: SquareTerminal,
-			items: [
-				{
-					title: "Upload Floor Plan",
-					url: "#",
-				},
-				{
-					title: "Describe Renovation",
-					url: "#",
-				},
-				{
-					title: "AI Recommendations",
-					url: "#",
-				},
-			],
+			title: "Chat",
+			url: "/app",
+			icon: BotMessageSquare,
+			isActive: true,
 		},
 		{
-			title: "Settings",
-			url: "/app/settings",
-			icon: Settings2,
+			title: "Budget",
+			url: "/app",
+			icon: PieChart,
+			isActive: true,
+		},
+		{
+			title: "Property Profile",
+			url: "/app",
+			icon: School,
+			isActive: true,
+		},
+		{
+			title: "Catalog",
+			url: "/app",
+			icon: GalleryVerticalEnd,
+			isActive: true,
 		},
 	],
 	navSecondary: [
@@ -82,51 +104,66 @@ const data = {
 			icon: Send,
 		},
 	],
-	projects: [
+	chats: [
 		{
-			name: "Kitchen Renovation",
+			name: "How much will it cost to build a loft extension",
 			url: "#",
-			icon: Frame,
 		},
 		{
-			name: "Loft Conversion",
+			name: "Can you help me find quotes for new radiators",
 			url: "#",
-			icon: PieChart,
 		},
 		{
-			name: "Extension",
+			name: "I think we have damp under the bay window, what should I do?",
 			url: "#",
-			icon: Map,
 		},
 	],
 };
 
-export function AppSidebar({ user, logoClassName, ...props }: AppSidebarProps) {
+export function AppSidebar({
+	user,
+	logoClassName,
+	className,
+	...props
+}: AppSidebarProps) {
+	const { state } = useSidebar();
+	const { activeProject } = useProjectSwitcher();
+
+	const navMain = React.useMemo(
+		() =>
+			data.navMain.map((item) =>
+				item.title === "Overview"
+					? {
+							...item,
+							title: activeProject?.name ?? item.title,
+						}
+					: item,
+			),
+		[activeProject?.name],
+	);
+
 	return (
-		<Sidebar {...props}>
+		<Sidebar className={cn("group", className)} {...props}>
 			<SidebarHeader>
 				<SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton size="lg" asChild>
-							<Link to="/app">
-								<img
-									src="/wordmark-light.webp"
-									alt="Structa"
-									className={`h-5 dark:hidden ${logoClassName ?? ""}`}
-								/>
-								<img
-									src="/wordmark-dark.webp"
-									alt="Structa"
-									className={`h-5 hidden dark:block ${logoClassName ?? ""}`}
-								/>
-							</Link>
-						</SidebarMenuButton>
+					<SidebarMenuItem className="flex items-center justify-between gap-2">
+						<Link to="/app" className="inline-flex px-2">
+							<Logo className={cn("h-6", logoClassName)} aria-label="Structa" />
+						</Link>
+						{state === "expanded" && (
+							<SidebarTrigger
+								className={cn(
+									"ml-1 cursor-pointer text-text-muted hover:bg-sidebar-accent hover:text-sidebar-accent-foreground dark:hover:bg-sidebar-accent/40",
+									"pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100",
+								)}
+							/>
+						)}
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain items={data.navMain} />
-				<NavProjects projects={data.projects} />
+				<NavMain items={navMain} />
+				<NavChats title="Chats" projects={data.chats} />
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
 			<SidebarFooter>

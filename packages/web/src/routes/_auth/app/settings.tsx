@@ -2,15 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import * as React from "react";
 import { toast } from "sonner";
 import { PageContainer } from "@/components/layout/page-container";
-import { NavigationHeader } from "@/components/nav/navigation-header";
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -36,21 +27,6 @@ function SettingsComponent() {
 
 	return (
 		<>
-			<NavigationHeader>
-				<Breadcrumb>
-					<BreadcrumbList>
-						<BreadcrumbItem className="hidden md:block">
-							<BreadcrumbLink asChild>
-								<Link to="/app">Dashboard</Link>
-							</BreadcrumbLink>
-						</BreadcrumbItem>
-						<BreadcrumbSeparator className="hidden md:block" />
-						<BreadcrumbItem>
-							<BreadcrumbPage>Settings</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
-			</NavigationHeader>
 			<PageContainer>
 				<Tabs value={activeTab} onValueChange={setActiveTab}>
 					<TabsList className="grid w-full grid-cols-3">

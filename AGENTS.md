@@ -35,6 +35,8 @@ For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ## Important Rules
 
+- When the user asks to commit, NEVER reset or discard unrelated changes. Only stage the specific files we touched for the requested task. If the repo has additional changes, call them out and ask whether to include them.
+
 - Write tests before implementing (TDD project) → [docs/development/TESTING.md](docs/development/TESTING.md)
 - Study patterns from `packages/app-example/` before coding
 - Only deploy to personal stage: `npx sst deploy`
