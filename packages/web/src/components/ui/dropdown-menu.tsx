@@ -219,7 +219,7 @@ function FilterableDropdownMenu<T>({
 				<div className="pb-2">
 					<InputGroup
 						className={cn(
-							"h-12 rounded-none border-x-0 border-t-0 border-sidebar-border",
+							"h-12 rounded-none border-x-0 border-t-0 border-sidebar-border has-[[data-slot=input-group-control]:focus-visible]:ring-0",
 							inputGroupClassName,
 						)}
 						{...restInputGroupProps}
