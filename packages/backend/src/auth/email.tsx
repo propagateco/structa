@@ -10,7 +10,7 @@ import { VerifyEmail } from "../../../notifications/emails/VerifyEmail";
 
 const ses = new SESv2Client();
 
-type OTPType = "sign-in" | "email-verification" | "forget-password";
+type OTPType = "sign-in" | "email-verification" | "forget-password" | "change-email";
 type SendOTPProps = {
 	email: string;
 	otp: string;
@@ -67,6 +67,14 @@ export async function sendVerificationOTP({ email, otp, type }: SendOTPProps) {
 			},
 		);
 		subject = `${otp} - Structa Sign-up Verification`;
+	} else if (type === "change-email") {
+		emailHTML = await render(
+			VerifyEmail({ type: type, validationCode: otp, location }),
+			{
+				pretty: true,
+			},
+		);
+		subject = `${otp} - Structa Email Change Verification`;
 	} else if (type === "forget-password") {
 		throw new Error(`Unsupported OTP type: ${type}`);
 	} else {
