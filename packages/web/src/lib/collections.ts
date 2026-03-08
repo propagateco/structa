@@ -45,6 +45,7 @@ export const usersCollection = createCollection(
 			// @ts-expect-error - tRPC client types need proper router inference
 			const result = await trpc.users.update.mutate({
 				name: changes.name as string | undefined,
+				workspaceName: changes.workspaceName as string | undefined,
 				image: changes.image as string | null | undefined,
 			});
 

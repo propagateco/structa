@@ -1,30 +1,28 @@
 "use client";
 
 import { useLiveQuery } from "@tanstack/react-db";
-import type { SidebarUser } from "@/components/app-sidebar";
-import { getImageUrl } from "@/components/ui/image";
 import { usersCollection } from "@/lib/collections";
 
 /**
  * Hook to get the current user from the Electric collection with real-time sync.
- * Falls back to auth context if collection is not yet synced.
+ * Uses findOne() to get a single user (Electric shape already filters to current user).
+ *
+ * Returns the raw user data from the collection - consumers should derive
+ * what they need (e.g., SidebarUser shape, avatar URL, etc.)
+ *
+ * @returns The current user or null while loading
  */
-export function useUser(): SidebarUser | null {
-	const { data: users, isLoading } = useLiveQuery((q) =>
-		q.from({ user: usersCollection }),
+export function useUser() {
+	// Use findOne() to get a single user - the Electric shape already filters
+	// to only the current authenticated user, so there's only one result
+	const { data: user, isLoading } = useLiveQuery((q) =>
+		q.from({ user: usersCollection }).findOne(),
 	);
 
-	if (isLoading || !users || users.length === 0) {
+	if (isLoading || !user) {
 		return null;
 	}
 
-	const currentUser = users[0];
-
-	return {
-		name: currentUser.name,
-		email: currentUser.email,
-		avatar: currentUser.image
-			? getImageUrl(currentUser.image, "?width=400&height=400&format=webp")
-			: undefined,
-	};
+	// Return the raw user from the collection - stable reference
+	return user;
 }

@@ -69,14 +69,15 @@ function AuthLayout() {
 	// Get user from Electric collection for real-time sync
 	const electricUser = useUser();
 
+	// Derive SidebarUser from electric user or fall back to auth context
 	const userModel: SidebarUser = {
 		name: electricUser?.name ?? user.name,
 		email: electricUser?.email ?? user.email,
-		avatar:
-			electricUser?.avatar ??
-			(user.image
+		avatar: electricUser?.image
+			? getImageUrl(electricUser.image, "?width=400&height=400&format=webp")
+			: user.image
 				? getImageUrl(user.image, "?width=400&height=400&format=webp")
-				: undefined),
+				: undefined,
 	};
 
 	return (
