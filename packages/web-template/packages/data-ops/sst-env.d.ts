@@ -38,6 +38,14 @@ declare module "sst" {
       "type": "sst.sst.Linkable"
       "web": string
     }
+    "ElectricSqlSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ElectricSqlSource": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "EncryptionKey": {
       "type": "sst.sst.Secret"
       "value": string
@@ -132,6 +140,11 @@ declare module "sst" {
     "StripeWebhookSecret": {
       "type": "sst.sst.Secret"
       "value": string
+    }
+    "SyncEngine": {
+      "secret": string
+      "source": string
+      "type": "sst.sst.Linkable"
     }
     "Web": {
       "type": "sst.aws.TanstackStart"

@@ -6,6 +6,8 @@ export const secret = {
     GoogleClientId: new sst.Secret('GoogleOAuthClientId'),
     GoogleClientSecret: new sst.Secret('GoogleOAuthClientSecret'),
     LoopsApiKey: new sst.Secret('LoopsApiKey'),
+    ElectricSqlSource: new sst.Secret('ElectricSqlSource'),
+    ElectricSqlSecret: new sst.Secret('ElectricSqlSecret'),
     PosthogPublicKey: new sst.Secret('PosthogPublicKey'),
     PosthogHost: new sst.Secret('PosthogHost'),
     StripeSecretKey: new sst.Secret('StripeSecretKey'),

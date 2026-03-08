@@ -86,7 +86,7 @@ function LayoutComponent() {
                                 fallback: 'H',
                             },
                             {
-                                src: 'https://pbs.twimg.com/profile_images/1831288380010778624/OEMqM3xX_400x400.jpg',
+                                src: 'https://pbs.twimg.com/profile_images/2027460833333133312/WBreQOPC_400x400.jpg',
                                 alt: 'Harrison, cofounder of Structa',
                                 fallback: 'H',
                             },

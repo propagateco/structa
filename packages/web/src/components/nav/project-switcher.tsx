@@ -29,12 +29,12 @@ export function ProjectSwitcher() {
     const [isInputFocused, setIsInputFocused] = React.useState(false);
 
     const trigger = activeProject ? (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 text-sm">
             <Button
                 variant="ghost"
                 className="rounded-md px-0 ml-4 hover:bg-transparent dark:hover:bg-transparent hover:text-foreground"
             >
-                <Link to="/app" className="max-w-32 truncate">
+                <Link to="/app" className="max-w-32 truncate text-sm">
                     {activeProject.name}
                 </Link>
             </Button>
@@ -52,6 +52,7 @@ export function ProjectSwitcher() {
         <DropdownMenuTrigger asChild>
             <Button
                 variant="ghost"
+                size="sm"
                 className="rounded-md text-sidebar-foreground"
             >
                 <span className="max-w-32 truncate">All projects</span>

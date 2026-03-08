@@ -50,6 +50,7 @@ export default $config({
         await import('./infra/web');
         await import('./infra/api');
         await import('./infra/database');
+        await import('./infra/sync');
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
         await import('./infra/email');
