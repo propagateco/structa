@@ -25,11 +25,11 @@ const buttonVariants = cva(
                 link: 'text-primary hover:text-primary transition-colors duration-200',
             },
             size: {
-                default: 'h-9 px-4 py-2 text-sm sm:text-base',
+                default: 'h-9 px-4 py-2 text-sm',
                 xs: 'h-6 px-2 text-xs [&_svg]:size-3 [&_svg]:shrink-0 rounded-xs',
                 sm: 'h-7 px-3 text-sm gap-1',
                 lg: 'h-9 px-4 text-sm sm:h-10 sm:px-7 sm:text-base gap-2',
-                icon: 'h-6 w-6 rounded-xs',
+                icon: 'h-6 w-6 rounded-sm',
             },
         },
         defaultVariants: {

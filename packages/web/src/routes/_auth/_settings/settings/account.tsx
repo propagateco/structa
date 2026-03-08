@@ -39,18 +39,28 @@ export const Route = createFileRoute("/_auth/_settings/settings/account")({
 });
 
 function AccountSettings() {
-	const electricUser = useUser();
+	const { user, isLoading: isUserLoading } = useUser();
 	const { mutate, isPending } = useUpdateUser();
 
 	// Get user from route context as fallback
-	const { user } = Route.useRouteContext();
+	const { authUser } = Route.useRouteContext();
+
+	// Show loading state while Electric syncs
+	if (isUserLoading) {
+		return (
+			<div className="flex items-center justify-center p-8">
+				<Skeleton className="h-8 w-48" />
+			</div>
+		);
+	}
 
 	// Derive current user values - prefer Electric user, fallback to auth context
 	// These are primitive values so they won't cause re-render loops
-	const name = electricUser?.name ?? user.name;
-	const email = electricUser?.email ?? user.email;
-	const image = electricUser?.image ?? user.image;
-	const workspaceName = electricUser?.workspaceName ?? user.workspaceName;
+	const currentUser = user ?? authUser;
+	const name = currentUser.name;
+	const email = currentUser.email;
+	const image = currentUser.image;
+	const workspaceName = currentUser.workspaceName;
 
 	const [preview, setPreview] = useState<string | null>(() => {
 		if (image) {
