@@ -5,6 +5,7 @@ import { authEmail, notifyEmail } from './email';
 import { bucket, optimisedBucket } from './storage';
 import { cdn } from './cloudfront';
 import { secret } from './secret';
+import { SyncEngine } from './sync';
 
 export const app = new sst.aws.TanStackStart('Web', {
     path: 'packages/web',
@@ -22,6 +23,7 @@ export const app = new sst.aws.TanStackStart('Web', {
         bucket,
         optimisedBucket,
         cdn,
+        SyncEngine,
         secret.GoogleClientId,
         secret.GoogleClientSecret,
         secret.StripeSecretKey,
