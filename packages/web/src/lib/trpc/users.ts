@@ -34,6 +34,7 @@ export const usersRouter = router({
 		.input(
 			z.object({
 				name: z.string().optional(),
+				workspaceName: z.string().optional(),
 				image: z.string().nullable().optional(),
 			}),
 		)

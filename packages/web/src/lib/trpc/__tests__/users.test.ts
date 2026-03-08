@@ -2,6 +2,7 @@
  * Tests for tRPC Users Router
  */
 
+import { initTRPC } from "@trpc/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock SST Resource first
@@ -88,6 +89,47 @@ vi.mock("@core/utils/geolocation", () => ({
 	extractIPAddress: vi.fn(),
 	getLocationFromIP: vi.fn(),
 }));
+
+// Mock @/lib/trpc with a simple tRPC setup for testing
+vi.mock("@/lib/trpc", () => {
+	const t = initTRPC
+		.context<{
+			session: {
+				id: string;
+				userId: string;
+				expiresAt: Date;
+				token: string;
+				createdAt: Date;
+				updatedAt: Date;
+				ipAddress: string | null;
+				userAgent: string | null;
+			};
+			user: {
+				id: string;
+				name: string | null;
+				email: string;
+				emailVerified: boolean;
+				image: string | null;
+				createdAt: Date;
+				updatedAt: Date;
+				workspaceId: string | null;
+				workspaceName: string | null;
+				role: string | null;
+				plan: string | null;
+				product: string | null;
+			};
+		}>()
+		.create();
+
+	return {
+		router: t.router,
+		protectedProcedure: t.procedure.use(({ ctx, next }) => {
+			if (!ctx.user) throw new Error("UNAUTHORIZED");
+			return next({ ctx });
+		}),
+		generateTxId: vi.fn(() => Date.now()),
+	};
+});
 
 // Import after all mocks are set up
 import { db } from "@core/drizzle";
