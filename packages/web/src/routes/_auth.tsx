@@ -33,6 +33,16 @@ export const Route = createFileRoute("/_auth")({
 		const needsOnboarding =
 			!session.user.plan || session.user.plan === "waitlist";
 
+		// Redirect to onboarding if needs onboarding
+		if (needsOnboarding && !isOnboardingRoute) {
+			throw redirect({ to: "/onboarding" });
+		}
+
+		// Redirect to app if has real plan and trying to access onboarding
+		if (!needsOnboarding && isOnboardingRoute) {
+			throw redirect({ to: "/app" });
+		}
+
 		return { authUser: session.user, session: session.session };
 	},
 	component: AuthLayout,
@@ -41,6 +51,15 @@ export const Route = createFileRoute("/_auth")({
 function AuthLayout() {
 	const { authUser } = Route.useRouteContext();
 	const pathname = useLocation({ select: (loc) => loc.pathname });
+
+	// Call ALL hooks before any early returns to satisfy React's Rules of Hooks
+	const { user, isLoading } = useUser();
+
+	// Onboarding routes are standalone (no sidebar, no Electric)
+	if (pathname.startsWith("/onboarding")) {
+		return <Outlet />;
+	}
+
 	const segments = pathname.split("/").filter(Boolean);
 	const crumbs = segments.map((segment, index) => {
 		const path = `/${segments.slice(0, index + 1).join("/")}`;
@@ -53,14 +72,6 @@ function AuthLayout() {
 		return { title, path };
 	});
 	const currentTitle = crumbs.at(-1)?.title;
-
-	// Onboarding routes are standalone (no sidebar, no Electric)
-	if (pathname.startsWith("/onboarding")) {
-		return <Outlet />;
-	}
-
-	// Get user from Electric collection for real-time sync
-	const { user, isLoading } = useUser();
 
 	// Show loading screen while Electric syncs
 	if (isLoading) {

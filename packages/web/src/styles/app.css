@@ -12,6 +12,7 @@
     /* Primary Design System Colors (HSL values) */
     --ds-white: 0deg 0% 100%;
     --ds-midnight: 218deg 13% 7.5%;
+    --ds-onyx: 218deg 13% 8.5%;
     --ds-carbon: 180deg 2% 10%;
     --ds-dusk: 190deg 7% 16.9%;
     --ds-ink: 190.5deg 51.282% 15.294%;
@@ -190,7 +191,7 @@
 .dark {
     --color-background: var(--ds-midnight);
     --color-foreground: var(--ds-paper);
-    --color-card: var(--ds-midnight);
+    --color-card: var(--ds-onyx);
     --color-card-foreground: var(--ds-paper);
     --color-popover: var(--ds-mono-800);
     --color-popover-foreground: var(--ds-paper);

@@ -8,10 +8,7 @@ interface UpdateUserInput {
 	name: string;
 	workspaceName: string;
 	image?: File;
-}
-
-interface UpdateUserContext {
-	previousUser: unknown;
+	userId: string;
 }
 
 /**
@@ -21,10 +18,12 @@ interface UpdateUserContext {
  * 1. If image provided, upload to S3 first via presigned URL
  * 2. Update via Electric collection (triggers optimistic update + tRPC)
  * 3. Collection's onUpdate handler calls tRPC mutation
+ *
+ * @param userId - The ID of the user to update
  */
-export function useUpdateUser() {
+export function useUpdateUser(userId: string) {
 	return useMutation({
-		mutationKey: ["updateUserSettings"],
+		mutationKey: ["updateUserSettings", userId],
 		mutationFn: async (values: UpdateUserInput) => {
 			let imageKey: string | undefined;
 
@@ -56,19 +55,13 @@ export function useUpdateUser() {
 				});
 
 				if (!uploadResponse.ok) {
-					throw new Error("Failed to upload image to storage");
+					throw new Error("Failed to to upload image to storage");
 				}
-			}
-
-			// Get current user ID from the collection
-			const currentUser = await usersCollection.utils.first();
-			if (!currentUser) {
-				throw new Error("No current user found in collection");
 			}
 
 			// Update via Electric collection - this triggers optimistic update
 			// and the collection's onUpdate handler calls tRPC
-			usersCollection.update(currentUser.id, (draft) => {
+			usersCollection.update(values.userId, (draft) => {
 				draft.name = values.name;
 				draft.workspaceName = values.workspaceName;
 				if (imageKey) {

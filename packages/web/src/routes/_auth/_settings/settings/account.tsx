@@ -40,10 +40,15 @@ export const Route = createFileRoute("/_auth/_settings/settings/account")({
 
 function AccountSettings() {
 	const { user, isLoading: isUserLoading } = useUser();
-	const { mutate, isPending } = useUpdateUser();
 
 	// Get user from route context as fallback
 	const { authUser } = Route.useRouteContext();
+
+	// Use Electric user if synced, fallback to auth context
+	const currentUser = user ?? authUser;
+
+	// Initialize the mutation hook with the current user's ID
+	const { mutate, isPending } = useUpdateUser(currentUser.id);
 
 	// Show loading state while Electric syncs
 	if (isUserLoading) {
@@ -54,9 +59,7 @@ function AccountSettings() {
 		);
 	}
 
-	// Derive current user values - prefer Electric user, fallback to auth context
-	// These are primitive values so they won't cause re-render loops
-	const currentUser = user ?? authUser;
+	// Derive primitive values from current user
 	const name = currentUser.name;
 	const email = currentUser.email;
 	const image = currentUser.image;
@@ -100,11 +103,17 @@ function AccountSettings() {
 
 	// Handle form submission
 	const onSubmit = (values: SettingsFormType) => {
-		mutate(values, {
-			onSuccess: () => {
-				form.reset(values);
+		mutate(
+			{
+				...values,
+				userId: authUser.id,
 			},
-		});
+			{
+				onSuccess: () => {
+					form.reset(values);
+				},
+			},
+		);
 	};
 
 	// Handle image crop completion
