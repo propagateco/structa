@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("sst", () => ({
 	Resource: {
 		SyncEngine: {
-			source: "https://api.electric.cloud/v1/shape",
+			source: "svc-test-source-id",
 			secret: "test-electric-secret-12345",
 		},
 	},
@@ -17,16 +17,16 @@ vi.mock("sst", () => ({
 // Import after mocking
 import {
 	buildElectricUpstreamUrl,
-	getElectricBaseUrl,
 	getElectricSecret,
+	getElectricSourceId,
 	proxyToElectric,
 } from "../electric-proxy";
 
 describe("Electric Proxy Utility", () => {
-	describe("getElectricBaseUrl", () => {
-		it("returns the Electric Cloud source URL", () => {
-			const url = getElectricBaseUrl();
-			expect(url).toBe("https://api.electric.cloud/v1/shape");
+	describe("getElectricSourceId", () => {
+		it("returns the Electric source ID", () => {
+			const sourceId = getElectricSourceId();
+			expect(sourceId).toBe("svc-test-source-id");
 		});
 	});
 
@@ -42,10 +42,11 @@ describe("Electric Proxy Utility", () => {
 			const request = new Request("http://localhost:3000/api/users");
 			const url = buildElectricUpstreamUrl(request, "user");
 
-			expect(url.origin).toBe("https://api.electric.cloud");
+			expect(url.origin).toBe("https://api.electric-sql.cloud");
 			expect(url.pathname).toBe("/v1/shape");
 			expect(url.searchParams.get("table")).toBe("user");
 			expect(url.searchParams.get("secret")).toBe("test-electric-secret-12345");
+			expect(url.searchParams.get("source_id")).toBe("svc-test-source-id");
 		});
 
 		it("includes where clause when provided", () => {
@@ -100,35 +101,35 @@ describe("Electric Proxy Utility", () => {
 		});
 
 		it("fetches from the upstream URL", async () => {
-			const url = new URL("https://api.electric.cloud/v1/shape?table=user");
+			const url = new URL("https://api.electric-sql.cloud/v1/shape?table=user");
 			await proxyToElectric(url);
 
 			expect(global.fetch).toHaveBeenCalledWith(url);
 		});
 
 		it("removes content-encoding header", async () => {
-			const url = new URL("https://api.electric.cloud/v1/shape?table=user");
+			const url = new URL("https://api.electric-sql.cloud/v1/shape?table=user");
 			const response = await proxyToElectric(url);
 
 			expect(response.headers.get("content-encoding")).toBeNull();
 		});
 
 		it("removes content-length header", async () => {
-			const url = new URL("https://api.electric.cloud/v1/shape?table=user");
+			const url = new URL("https://api.electric-sql.cloud/v1/shape?table=user");
 			const response = await proxyToElectric(url);
 
 			expect(response.headers.get("content-length")).toBeNull();
 		});
 
 		it("adds Vary header for cookie-based auth", async () => {
-			const url = new URL("https://api.electric.cloud/v1/shape?table=user");
+			const url = new URL("https://api.electric-sql.cloud/v1/shape?table=user");
 			const response = await proxyToElectric(url);
 
 			expect(response.headers.get("Vary")).toBe("Cookie");
 		});
 
 		it("preserves response status and body", async () => {
-			const url = new URL("https://api.electric.cloud/v1/shape?table=user");
+			const url = new URL("https://api.electric-sql.cloud/v1/shape?table=user");
 			const response = await proxyToElectric(url);
 
 			expect(response.status).toBe(200);

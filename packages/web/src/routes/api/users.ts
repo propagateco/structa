@@ -29,27 +29,45 @@ export const Route = createFileRoute("/api/users")({
 	server: {
 		handlers: {
 			GET: async ({ request }: { request: Request }) => {
-				// Validate session via better-auth
-				const session = await auth.api.getSession({
-					headers: request.headers,
-				});
+				try {
+					// Validate session via better-auth
+					const session = await auth.api.getSession({
+						headers: request.headers,
+					});
 
-				// Return 401 if not authenticated
-				if (!session) {
-					return new Response("Unauthorized", { status: 401 });
+					console.log("[api/users] Session:", session ? "found" : "not found");
+
+					// Return 401 if not authenticated
+					if (!session) {
+						return new Response("Unauthorized", { status: 401 });
+					}
+
+					// Build Electric URL with user-filtered where clause
+					// Users can only see their own profile data
+					const whereClause = `id = '${session.user.id}'`;
+					const originUrl = buildElectricUpstreamUrl(
+						request,
+						"user",
+						whereClause,
+					);
+
+					console.log("[api/users] Proxying to:", originUrl.toString());
+
+					// Proxy to Electric and return response
+					return proxyToElectric(originUrl);
+				} catch (error) {
+					console.error("[api/users] Error:", error);
+					return new Response(
+						JSON.stringify({
+							error: "Internal server error",
+							message: error instanceof Error ? error.message : "Unknown error",
+						}),
+						{
+							status: 500,
+							headers: { "Content-Type": "application/json" },
+						},
+					);
 				}
-
-				// Build Electric URL with user-filtered where clause
-				// Users can only see their own profile data
-				const whereClause = `id = '${session.user.id}'`;
-				const originUrl = buildElectricUpstreamUrl(
-					request,
-					"user",
-					whereClause,
-				);
-
-				// Proxy to Electric and return response
-				return proxyToElectric(originUrl);
 			},
 		},
 	},

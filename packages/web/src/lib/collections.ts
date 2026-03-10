@@ -4,10 +4,31 @@ import { createCollection } from "@tanstack/react-db";
 import { trpc } from "@/lib/trpc-client";
 
 /**
+ * Get the API base URL for client-side requests.
+ * Returns absolute URL to avoid "Invalid URL" errors during SSR.
+ * MUST be called at runtime (not module load time) to ensure window is available.
+ */
+const getApiBase = (): string => {
+	if (typeof window !== "undefined") {
+		return window.location.origin;
+	}
+	// Fallback for SSR - use platform URL from env
+	const platformUrl = import.meta.env.VITE_PLATFORM_URL;
+	if (platformUrl) {
+		return platformUrl;
+	}
+	throw new Error(
+		"getApiBase() called during SSR without VITE_PLATFORM_URL - ensure collection is only used client-side or set VITE_PLATFORM_URL",
+	);
+};
+
+/**
  * Users collection with Electric sync
  *
  * This collection syncs the current user's profile data via ElectricSQL.
  * Uses optimistic updates with tRPC mutations and txid-based confirmation.
+ *
+ * Note: URL is computed lazily via getter to avoid SSR issues with window.location
  *
  * Usage:
  * ```tsx
@@ -35,9 +56,11 @@ export const usersCollection = createCollection(
 		schema: selectUserSchema,
 		getKey: (item) => item.id,
 		shapeOptions: {
-			url: "/api/users",
+			// Use getter to defer URL construction until sync actually starts (client-side only)
+			get url() {
+				return `${getApiBase()}/api/users`;
+			},
 		},
-		startSync: true,
 		onUpdate: async ({ transaction }) => {
 			const { changes } = transaction.mutations[0];
 
