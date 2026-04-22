@@ -134,20 +134,19 @@ const LogoShowcase = ({
 						)}
 						<div className="flex items-center justify-center w-full h-full">
 							<DiagonalPattern show={showingPlaceholder.has(index)} />
-							<img
-								src={logo.image}
-								alt={logo.name}
-								className={cn(
-									"max-h-8 sm:max-h-10 lg:max-h-12 w-auto object-contain",
-									"transition-all duration-1000 ease-in-out",
-								)}
-								style={{
-									opacity: fadingSlots.has(index) ? 0 : 0.7,
-									filter: fadingSlots.has(index)
-										? "blur(8px) grayscale(100%)"
-										: "grayscale(100%)",
-								}}
-							/>
+<img
+                                src={logo.image}
+                                alt={logo.name}
+                                className={cn(
+    "max-h-8 sm:max-h-10 lg:max-h-12 w-auto object-contain",
+    "transition-all duration-1000 ease-in-out",
+    "grayscale brightness-125 dark:invert dark:brightness-200"
+)}
+style={{
+    opacity: fadingSlots.has(index) ? 0 : 0.7,
+    filter: fadingSlots.has(index) ? "blur(8px) grayscale(1)" : undefined,
+                                }}
+                            />
 						</div>
 					</div>
 				))}
