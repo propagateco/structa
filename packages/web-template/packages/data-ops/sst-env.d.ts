@@ -79,11 +79,6 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
-    "MarketingEmail": {
-      "configSet": string
-      "sender": string
-      "type": "sst.aws.Email"
-    }
     "NODE_TLS_REJECT_UNAUTHORIZED": {
       "type": "sst.sst.Secret"
       "value": string
@@ -154,11 +149,6 @@ declare module "sst" {
     "Web": {
       "type": "sst.aws.TanstackStart"
       "url": string
-    }
-    "anotherPersonalEmail": {
-      "configSet": string
-      "sender": string
-      "type": "sst.aws.Email"
     }
   }
 }
