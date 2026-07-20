@@ -230,10 +230,10 @@
     --grid-line-rgb: 255, 255, 255;
     --sidebar: hsl(var(--ds-midnight));
     --sidebar-foreground: hsl(var(--ds-mono-400));
-    --sidebar-primary: hsl(var(--color-primary));
+    --sidebar-primary: hsl(var(--color-accent));
     --sidebar-primary-foreground: hsl(var(--color-primary-foreground));
     --sidebar-accent: hsl(var(--color-accent-muted));
-    --sidebar-accent-foreground: hsl(var(--color-primary));
+    --sidebar-accent-foreground: hsl(var(--color-accent-foreground));
     --sidebar-border: hsl(var(--color-border));
     --sidebar-ring: hsl(var(--color-ring));
 }
@@ -837,4 +837,23 @@ html {
 
 [[data-side=right][data-collapsible=offcanvas]_&]\:-left-2 {
     left: -0.5rem !important;
+}
+
+/* === FADE-IN ANIMATION FOR DROPDOWN === */
+@layer components {
+    .fade-dropdown {
+        animation: dropdown-fadein 200ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+}
+@layer utilities {
+    @keyframes dropdown-fadein {
+        from {
+            opacity: 0;
+            transform: translateY(12px) scale(0.96);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
 }

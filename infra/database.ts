@@ -1,12 +1,12 @@
-import { RESOURCE_ENVIRONMENT, BRANCH_NAME, PROJECT_NAME } from './dns';
-import { secret } from './secret';
+import { RESOURCE_ENVIRONMENT, BRANCH_NAME, PROJECT_NAME } from "./dns";
+import { secret } from "./secret";
 
 // Autoscaling
-const autoscalingLimitMinCu = $app.stage === 'production' ? 1 : 0.25;
-const autoscalingLimitMaxCu = $app.stage === 'production' ? 2 : 0.25;
+const autoscalingLimitMinCu = 0.25;
+const autoscalingLimitMaxCu = 0.25;
 
 // Create Neon provider with API key
-const neonProvider = new neon.Provider('NeonProvider', {
+const neonProvider = new neon.Provider("NeonProvider", {
     apiKey: secret.NeonApiKey.value,
 });
 
@@ -15,7 +15,7 @@ const neonProject = new neon.Project(
     {
         name: `${PROJECT_NAME}-${RESOURCE_ENVIRONMENT}`,
         pgVersion: 17,
-        regionId: 'aws-eu-west-2',
+        regionId: "aws-eu-west-2",
         orgId: secret.NeonOrgId.value,
         historyRetentionSeconds: 21600,
         branch: {
@@ -26,15 +26,15 @@ const neonProject = new neon.Project(
             autoscalingLimitMinCu,
             autoscalingLimitMaxCu,
         },
-        enableLogicalReplication: 'yes',
+        enableLogicalReplication: "yes",
     },
     {
         provider: neonProvider,
-    }
+    },
 );
 
 export const database = neonProject;
-export const Database = new sst.Linkable('Database', {
+export const Database = new sst.Linkable("Database", {
     properties: {
         url: neonProject.connectionUri,
     },
