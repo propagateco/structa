@@ -1,8 +1,8 @@
 import { computeSHA256Checksum } from "@core/storage/storage.utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { api } from "@/lib/api";
 import { usersCollection } from "@/lib/collections";
+import { trpc } from "@/lib/trpc-client";
 
 interface UpdateUserInput {
 	name: string;
@@ -16,8 +16,11 @@ interface UpdateUserInput {
  *
  * Flow:
  * 1. If image provided, upload to S3 first via presigned URL
- * 2. Update via Electric collection (triggers optimistic update + tRPC)
- * 3. Collection's onUpdate handler calls tRPC mutation
+ * 2. Update via Electric collection (applies optimistic update)
+ * 3. Collection's onUpdate handler persists via tRPC mutation
+ * 4. Wait for the mutation to be confirmed via Electric sync (txid match).
+ *    Rejects — rolling back the optimistic update — if the server update
+ *    fails or the txid never syncs back.
  *
  * @param userId - The ID of the user to update
  */
@@ -30,19 +33,11 @@ export function useUpdateUser(userId: string) {
 			// Upload image to S3 if provided
 			if (values.image) {
 				const checksum = await computeSHA256Checksum(values.image);
-				const urlResponse = await api.storage.upload.user.image.$put({
-					json: {
-						contentType: values.image.type,
-						size: values.image.size,
-						checksum,
-					},
+				const { url, key } = await trpc.storage.uploadUserImage.mutate({
+					contentType: values.image.type,
+					size: values.image.size,
+					checksum,
 				});
-
-				if (!urlResponse.ok) {
-					throw new Error("Failed to get presigned URL for image upload");
-				}
-
-				const { url, key } = await urlResponse.json();
 				imageKey = key;
 
 				// Upload the file to S3 using the presigned URL
@@ -55,13 +50,13 @@ export function useUpdateUser(userId: string) {
 				});
 
 				if (!uploadResponse.ok) {
-					throw new Error("Failed to to upload image to storage");
+					throw new Error("Failed to upload image to storage");
 				}
 			}
 
-			// Update via Electric collection - this triggers optimistic update
-			// and the collection's onUpdate handler calls tRPC
-			usersCollection.update(values.userId, (draft) => {
+			// Update via Electric collection - applies an optimistic update and
+			// triggers the collection's onUpdate handler (tRPC mutation)
+			const transaction = usersCollection.update(values.userId, (draft) => {
 				draft.name = values.name;
 				draft.workspaceName = values.workspaceName;
 				if (imageKey) {
@@ -69,11 +64,14 @@ export function useUpdateUser(userId: string) {
 				}
 			});
 
+			// Wait until the mutation is persisted and confirmed via Electric
+			// sync (txid match) so the caller can react to the real outcome
+			await transaction.isPersisted.promise;
+
 			return { success: true };
 		},
-		onSuccess: () => {
-			toast.success("Settings saved");
-		},
+		// No success toast — the MutationDot in the header shows saved state.
+		// Toasts are reserved for errors and warnings.
 		onError: (error) => {
 			console.error("Error updating user settings:", error);
 			toast.error(

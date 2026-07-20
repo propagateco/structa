@@ -5,6 +5,7 @@ import {
 	type FixedCropperRef,
 	ImageRestriction,
 } from "react-advanced-cropper";
+import { CropperWrapper } from "./cropper-wrapper";
 
 export type CropperProps = Omit<FixedCropperProps, "wrapperComponent">;
 export type CropperRef = FixedCropperRef;
@@ -22,6 +23,7 @@ export const Cropper = forwardRef<CropperRef, CropperProps>(
 					...stencilProps,
 				}}
 				imageRestriction={ImageRestriction.stencil}
+				wrapperComponent={CropperWrapper as any}
 				backgroundClassName="bg-white"
 				backgroundWrapperClassName="bg-white"
 				{...props}

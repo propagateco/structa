@@ -1,12 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-import { createContext } from "@/lib/trpc";
+import { createContext, router } from "@/lib/trpc";
+import { storageRouter } from "@/lib/trpc/storage";
 import { usersRouter } from "@/lib/trpc/users";
 
 /**
  * Combined tRPC router
+ *
+ * Feature routers are namespaced (e.g. trpc.users.update, trpc.storage.*)
+ * so new routers (projects, floor plans, ...) can be added without path
+ * collisions.
  */
-const appRouter = usersRouter;
+const appRouter = router({
+	users: usersRouter,
+	storage: storageRouter,
+});
 
 export type AppRouter = typeof appRouter;
 

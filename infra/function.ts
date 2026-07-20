@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 import { bucket, optimisedBucket } from './storage';
-import { database } from './database';
+import { Database } from './database';
 import { createResourceName, getPathToFunction } from './utils';
 
 const imageProcessorFunction = new sst.aws.Function('ImageProcessorFunction', {
@@ -10,7 +10,18 @@ const imageProcessorFunction = new sst.aws.Function('ImageProcessorFunction', {
     memory: '1024 MB',
     timeout: '30 seconds',
     url: true,
-    link: [bucket, optimisedBucket, database],
+    // The image-processor itself doesn't read the database, but its bundle
+    // transitively imports `@core/drizzle` (via `@core/storage` →
+    // `storage.controller.ts` → `user.service.ts` → `drizzle.ts`).
+    // `drizzle.ts:7` reads `Resource.Database.url` at module top level, so
+    // the `Database` Linkable (declared in `infra/database.ts`) must be
+    // linked here — otherwise SST's `Resource` proxy throws at cold start
+    // with `Database is not linked in your sst.config.ts`.
+    //
+    // Note: `Database` (uppercase) is the `sst.Linkable` that exposes the
+    // `url` property. The lowercase `database` neon Project resource
+    // exposes nothing via the `Resource` proxy.
+    link: [bucket, optimisedBucket, Database],
 });
 
 const rewriteUrlPath = getPathToFunction('rewrite-url.js');

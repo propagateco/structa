@@ -94,7 +94,7 @@ export function ImageCropper({
 
 	return (
 		<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-			<DialogContent>
+			<DialogContent className="w-full max-w-[600px]">
 				<DialogHeader>
 					<DialogTitle>Edit image</DialogTitle>
 					<DialogDescription>{description}</DialogDescription>
