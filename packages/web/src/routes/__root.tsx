@@ -13,8 +13,8 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { PostHogProvider } from "posthog-js/react";
 import * as React from "react";
-import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "@/styles/app.css?url";
 import { updateFavicon } from "@/utils/favicon";
 import { seo } from "@/utils/seo";
@@ -177,7 +177,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body className="min-h-screen flex flex-col">
 				{children}
-				<Toaster position="top-center" richColors />
+				<Toaster position="bottom-right" />
 				<TanStackRouterDevtools position="bottom-right" />
 				<Scripts />
 			</body>

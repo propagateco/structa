@@ -1,5 +1,6 @@
 import { initTRPC } from "@trpc/server";
 import type { Session, User } from "better-auth/types";
+import { sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 
 /**
@@ -56,17 +57,19 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 });
 
 /**
- * Generate a PostgreSQL transaction ID for Electric sync confirmation
- * This is used to match optimistic updates with their confirmation in the sync stream
+ * SQL fragment that returns the current Postgres transaction ID as text.
  *
- * NOTE: With Neon HTTP connections, we can't use pg_current_xact_id() in the same
- * transaction as our mutations. For the tracer bullet, we'll return a timestamp-based
- * txid that can be matched using the awaitMatch utility instead.
+ * The `::xid` cast strips the epoch, giving the raw 32-bit value that Postgres
+ * sends in logical replication streams — which is what Electric exposes as
+ * `headers.txids` in the sync stream and what TanStack DB's `awaitTxId`
+ * matches against.
  *
- * Future improvement: Use a connection pooler that supports transactions for true txid matching.
+ * IMPORTANT: This MUST be embedded in the SAME statement as the mutation
+ * (e.g. in its RETURNING clause). neon-http runs each statement in its own
+ * implicit transaction, so reading `pg_current_xact_id()` in a separate query
+ * returns a different txid that never appears in the sync stream — causing
+ * `awaitTxId` to stall and time out, rolling back the optimistic update.
+ *
+ * @see https://tanstack.com/db/latest/docs/collections/electric-collection#debugging
  */
-export function generateTxId(): number {
-	// Use current timestamp in milliseconds as a pseudo txid
-	// This works with the awaitMatch utility in the Electric collection
-	return Date.now();
-}
+export const pgCurrentTxId = sql<string>`pg_current_xact_id()::xid::text`;

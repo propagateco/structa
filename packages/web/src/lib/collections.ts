@@ -1,7 +1,30 @@
 import { selectUserSchema } from "@core/auth/auth.sql";
+import { snakeCamelMapper } from "@electric-sql/client";
 import { electricCollectionOptions } from "@tanstack/electric-db-collection";
 import { createCollection } from "@tanstack/react-db";
 import { trpc } from "@/lib/trpc-client";
+
+/**
+ * Parse a Postgres timestamp from the Electric wire format into a Date.
+ *
+ * Electric serves values as strings in Postgres text format:
+ * - `timestamp`   → "2026-07-17 08:23:41.123456"    (no offset; stored as UTC)
+ * - `timestamptz` → "2026-07-17 08:23:41.123456+00" (with offset)
+ *
+ * The default Electric parser leaves timestamps as strings, but our collection
+ * schema (drizzle-zod) expects Date objects.
+ */
+const parsePgTimestamp = (value: string): Date => {
+	const iso = value
+		.replace(" ", "T")
+		// Normalize "+00" → "+00:00" so Date parsing is reliable cross-browser
+		.replace(
+			/([+-]\d{2})(\d{2})?$/,
+			(_match, hours, minutes) => `${hours}:${minutes ?? "00"}`,
+		);
+	// `timestamp` columns carry no offset — drizzle writes UTC via toISOString()
+	return new Date(/(Z|[+-]\d{2}:\d{2})$/.test(iso) ? iso : `${iso}Z`);
+};
 
 /**
  * Get the API base URL for client-side requests.
@@ -60,12 +83,20 @@ export const usersCollection = createCollection(
 			get url() {
 				return `${getApiBase()}/api/users`;
 			},
+			// The user table uses snake_case columns (created_at, workspace_id, ...)
+			// while the app schema is camelCase. Map column names on the way in.
+			columnMapper: snakeCamelMapper(),
+			// Electric leaves non-scalar types as strings; parse timestamps into
+			// Date objects so rows match the collection schema (z.date()).
+			parser: {
+				timestamp: parsePgTimestamp,
+				timestamptz: parsePgTimestamp,
+			},
 		},
 		onUpdate: async ({ transaction }) => {
 			const { changes } = transaction.mutations[0];
 
 			// Call tRPC mutation to persist changes
-			// @ts-expect-error - tRPC client types need proper router inference
 			const result = await trpc.users.update.mutate({
 				name: changes.name as string | undefined,
 				workspaceName: changes.workspaceName as string | undefined,

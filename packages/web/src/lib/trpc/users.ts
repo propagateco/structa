@@ -1,8 +1,8 @@
-import { selectUserSchema, updateUserSchema, user } from "@core/auth/auth.sql";
+import { selectUserSchema, user } from "@core/auth/auth.sql";
 import { db } from "@core/drizzle";
-import { eq } from "drizzle-orm";
+import { eq, getTableColumns } from "drizzle-orm";
 import { z } from "zod";
-import { generateTxId, protectedProcedure, router } from "@/lib/trpc";
+import { pgCurrentTxId, protectedProcedure, router } from "@/lib/trpc";
 
 /**
  * Users tRPC router
@@ -28,7 +28,15 @@ export const usersRouter = router({
 
 	/**
 	 * Update the current user's profile
-	 * Returns txid for Electric sync confirmation
+	 *
+	 * Returns the Postgres txid of the mutation so the Electric collection can
+	 * wait for the change to sync back (optimistic update confirmation).
+	 *
+	 * The txid is read with `pg_current_xact_id()` in the RETURNING clause of
+	 * the UPDATE itself. neon-http executes each statement in its own implicit
+	 * transaction, so this is the same transaction that performs the write —
+	 * a separate `SELECT pg_current_xact_id()` would return a different txid
+	 * that never appears in the Electric stream.
 	 */
 	update: protectedProcedure
 		.input(
@@ -39,37 +47,36 @@ export const usersRouter = router({
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
-			// Validate input against schema
-			const validatedInput = updateUserSchema.parse({
-				...input,
-				id: ctx.user.id,
-			});
-
-			// Update user in database
-			const [updatedUser] = await db
+			// drizzle skips `undefined` values in .set(), so only provided fields
+			// are updated. `null` is written explicitly (e.g. clearing the image).
+			const [row] = await db
 				.update(user)
 				.set({
-					...validatedInput,
+					name: input.name,
+					workspaceName: input.workspaceName,
+					image: input.image,
 					updatedAt: new Date(),
 				})
 				.where(eq(user.id, ctx.user.id))
-				.returning();
+				.returning({
+					...getTableColumns(user),
+					// Same-statement read → same transaction as the write
+					txid: pgCurrentTxId,
+				});
 
-			if (!updatedUser) {
+			if (!row) {
 				throw new Error("UPDATE_FAILED");
 			}
 
-			// Generate txid for sync confirmation
-			const txid = generateTxId();
+			const { txid, ...updatedUser } = row;
+			const parsedTxid = Number.parseInt(txid, 10);
+			if (Number.isNaN(parsedTxid)) {
+				throw new Error("TXID_FAILED");
+			}
 
 			return {
 				data: selectUserSchema.parse(updatedUser),
-				txid,
+				txid: parsedTxid,
 			};
 		}),
 });
-
-/**
- * App router type for tRPC client
- */
-export type AppRouter = typeof usersRouter;
