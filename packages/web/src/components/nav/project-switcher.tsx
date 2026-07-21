@@ -1,5 +1,3 @@
-'use client';
-
 import { Link, useNavigate } from '@tanstack/react-router';
 import { Check, ChevronsUpDown, Plus, X } from 'lucide-react';
 import * as React from 'react';
@@ -32,7 +30,7 @@ export function ProjectSwitcher() {
         <div className="flex items-center gap-2 text-sm">
             <Button
                 variant="ghost"
-                className="rounded-md px-0 ml-4 hover:bg-transparent dark:hover:bg-transparent hover:text-foreground"
+                className=" px-0 ml-4 hover:bg-transparent dark:hover:bg-transparent hover:text-foreground"
             >
                 <Link to="/app" className="max-w-32 truncate text-sm">
                     {activeProject.name}
@@ -42,7 +40,7 @@ export function ProjectSwitcher() {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="rounded-md text-sidebar-foreground"
+                    className="text-sidebar-foreground"
                 >
                     <ChevronsUpDown className="ml-0 size-4" />
                 </Button>
@@ -50,11 +48,7 @@ export function ProjectSwitcher() {
         </div>
     ) : (
         <DropdownMenuTrigger asChild>
-            <Button
-                variant="ghost"
-                size="sm"
-                className="rounded-md text-sidebar-foreground"
-            >
+            <Button variant="ghost" className="text-sidebar-foreground">
                 <span className="max-w-32 truncate">All projects</span>
                 <ChevronsUpDown className="ml-1 size-4 opacity-70" />
             </Button>
@@ -119,7 +113,7 @@ export function ProjectSwitcher() {
                     sideOffset: 8,
                     onCloseAutoFocus: event => event.preventDefault(),
                 }}
-                className="w-72 rounded-xl border border-border border-b bg-popover p-0 shadow-sm pb-2"
+                className="w-72 border border-border border-b bg-popover p-0 shadow-sm pb-2"
                 inputProps={{
                     onFocus: () => setIsInputFocused(true),
                     onBlur: () => setIsInputFocused(false),
@@ -164,17 +158,17 @@ export function ProjectSwitcher() {
             {activeProject ? (
                 <>
                     <NavigationSeparator
-                        className="mx-1 opacity-0 transition-opacity duration-100 ease-in-out group-hover:opacity-100"
+                        className="mx-1 opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-100"
                         aria-hidden="true"
                     />
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="opacity-0 transition-opacity duration-100 ease-in-out group-hover:opacity-100"
+                        className=" [&_svg]:size-3 opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-100"
                         onClick={() => setActiveProject(undefined)}
                         aria-label="Clear project selection"
                     >
-                        <X className="size-4" />
+                        <X />
                     </Button>
                 </>
             ) : null}

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
 /* Configure dark mode to use .dark class selector */
@@ -12,6 +12,7 @@
     /* Primary Design System Colors (HSL values) */
     --ds-white: 0deg 0% 100%;
     --ds-midnight: 218deg 13% 7.5%;
+    --ds-onyx: 218deg 13% 8.5%;
     --ds-carbon: 180deg 2% 10%;
     --ds-dusk: 190deg 7% 16.9%;
     --ds-ink: 190.5deg 51.282% 15.294%;
@@ -177,7 +178,7 @@
     --color-text-muted: var(--color-muted-foreground);
     --color-link: var(--color-accent);
     --color-text-dark: var(--ds-midnight);
-    --sidebar: hsl(var(--ds-mono-50));
+    --sidebar: hsl(var(--ds-paper));
     --sidebar-foreground: hsl(var(--ds-mono-600));
     --sidebar-primary: hsl(var(--color-primary));
     --sidebar-primary-foreground: hsl(var(--color-primary-foreground));
@@ -190,7 +191,7 @@
 .dark {
     --color-background: var(--ds-midnight);
     --color-foreground: var(--ds-paper);
-    --color-card: var(--ds-midnight);
+    --color-card: var(--ds-onyx);
     --color-card-foreground: var(--ds-paper);
     --color-popover: var(--ds-mono-800);
     --color-popover-foreground: var(--ds-paper);
@@ -292,6 +293,11 @@
 
     --color-destructive: hsl(var(--color-destructive));
     --color-destructive-foreground: hsl(var(--color-destructive-foreground));
+
+    /* Shadows */
+    --shadow-menu:
+        0 0 0 1px rgba(0, 0, 0, 0.08), 0px 1px 1px rgba(0, 0, 0, 0.02),
+        0px 4px 8px -4px rgba(0, 0, 0, 0.04), 0px 16px 24px -8px rgba(0, 0, 0, 0.06);
 
     /* Text Colors */
     --color-text: hsl(var(--color-text));
@@ -397,17 +403,17 @@
       FONTS
       ================================================ */
 
-    --font-heading: "Lora", system-ui, sans-serif;
-    --font-body: "Inter Tight", system-ui, sans-serif;
-    --font-serif: "Lora", serif;
-    --font-display: "Lora", serif;
-    --font-sans: "Inter Tight", sans-serif;
+    --font-heading: 'Lora', system-ui, sans-serif;
+    --font-body: 'Inter Tight', system-ui, sans-serif;
+    --font-serif: 'Lora', serif;
+    --font-display: 'Lora', serif;
+    --font-sans: 'Inter Tight', sans-serif;
 
     /* Google Fonts */
-    --font-newsreader: "Newsreader", serif;
-    --font-eb-garamond: "EB Garamond", serif;
-    --font-cormorant-garamond: "Cormorant Garamond", serif;
-    --font-figtree: "Figtree", sans-serif;
+    --font-newsreader: 'Newsreader', serif;
+    --font-eb-garamond: 'EB Garamond', serif;
+    --font-cormorant-garamond: 'Cormorant Garamond', serif;
+    --font-figtree: 'Figtree', sans-serif;
 
     /* ================================================
       SPACING & RADIUS
@@ -635,162 +641,162 @@ html {
 }
 
 /* === COLLAPSIBLE: OFFCANVAS === */
-.group.peer[data-collapsible="offcanvas"]
+.group.peer[data-collapsible='offcanvas']
     .group-data-\[collapsible\=offcanvas\]\:w-0 {
     width: 0 !important;
 }
 
-.group.peer[data-collapsible="offcanvas"]
+.group.peer[data-collapsible='offcanvas']
     .group-data-\[collapsible\=offcanvas\]\:left-\[calc\(var\(--sidebar-width\)\*-1\)\] {
     left: calc(var(--sidebar-width) * -1) !important;
 }
 
-.group.peer[data-collapsible="offcanvas"]
+.group.peer[data-collapsible='offcanvas']
     .group-data-\[collapsible\=offcanvas\]\:right-\[calc\(var\(--sidebar-width\)\*-1\)\] {
     right: calc(var(--sidebar-width) * -1) !important;
 }
 
-.group.peer[data-collapsible="offcanvas"]
+.group.peer[data-collapsible='offcanvas']
     .group-data-\[collapsible\=offcanvas\]\:translate-x-0 {
     transform: translateX(0) !important;
 }
 
-.group.peer[data-collapsible="offcanvas"]
+.group.peer[data-collapsible='offcanvas']
     .group-data-\[collapsible\=offcanvas\]\:after\:left-full::after {
     left: 100% !important;
 }
 
-.group.peer[data-collapsible="offcanvas"]
+.group.peer[data-collapsible='offcanvas']
     .group-data-\[collapsible\=offcanvas\]\:hover\:bg-sidebar:hover {
     background-color: var(--sidebar) !important;
 }
 
 /* === COLLAPSIBLE: ICON === */
-.group.peer[data-collapsible="icon"]
+.group.peer[data-collapsible='icon']
     .group-data-\[collapsible\=icon\]\:w-\[--sidebar-width-icon\] {
     width: var(--sidebar-width-icon) !important;
 }
 
-.group.peer[data-collapsible="icon"]
+.group.peer[data-collapsible='icon']
     .group-data-\[collapsible\=icon\]\:w-\[calc\(var\(--sidebar-width-icon\)_\+_theme\(spacing\.4\)\)\] {
     width: calc(var(--sidebar-width-icon) + 1rem) !important;
 }
 
-.group.peer[data-collapsible="icon"]
+.group.peer[data-collapsible='icon']
     .group-data-\[collapsible\=icon\]\:w-\[calc\(var\(--sidebar-width-icon\)_\+_theme\(spacing\.4\)_\+2px\)\] {
     width: calc(var(--sidebar-width-icon) + 1rem + 2px) !important;
 }
 
-.group.peer[data-collapsible="icon"]
+.group.peer[data-collapsible='icon']
     .group-data-\[collapsible\=icon\]\:overflow-hidden {
     overflow: hidden !important;
 }
 
-.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:-mt-8 {
+.group.peer[data-collapsible='icon'] .group-data-\[collapsible\=icon\]\:-mt-8 {
     margin-top: -2rem !important;
 }
 
-.group.peer[data-collapsible="icon"]
+.group.peer[data-collapsible='icon']
     .group-data-\[collapsible\=icon\]\:opacity-0 {
     opacity: 0 !important;
 }
 
-.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:hidden {
+.group.peer[data-collapsible='icon'] .group-data-\[collapsible\=icon\]\:hidden {
     display: none !important;
 }
 
-.group.peer[data-collapsible="icon"]
+.group.peer[data-collapsible='icon']
     .group-data-\[collapsible\=icon\]\:\!size-8 {
     width: 2rem !important;
     height: 2rem !important;
 }
 
-.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:\!p-2 {
+.group.peer[data-collapsible='icon'] .group-data-\[collapsible\=icon\]\:\!p-2 {
     padding: 0.5rem !important;
 }
 
-.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:\!p-0 {
+.group.peer[data-collapsible='icon'] .group-data-\[collapsible\=icon\]\:\!p-0 {
     padding: 0 !important;
 }
 
 /* === SIDE: LEFT === */
-.group.peer[data-side="left"] .group-data-\[side\=left\]\:border-r {
+.group.peer[data-side='left'] .group-data-\[side\=left\]\:border-r {
     border-right-width: 1px !important;
 }
 
-.group.peer[data-side="left"] .group-data-\[side\=left\]\:-right-4 {
+.group.peer[data-side='left'] .group-data-\[side\=left\]\:-right-4 {
     right: -1rem !important;
 }
 
-.group.peer[data-side="left"] .group-data-\[side\=left\]\:-right-2 {
+.group.peer[data-side='left'] .group-data-\[side\=left\]\:-right-2 {
     right: -0.5rem !important;
 }
 
 /* === SIDE: RIGHT === */
-.group.peer[data-side="right"] .group-data-\[side\=right\]\:rotate-180 {
+.group.peer[data-side='right'] .group-data-\[side\=right\]\:rotate-180 {
     transform: rotate(180deg) !important;
 }
 
-.group.peer[data-side="right"] .group-data-\[side\=right\]\:border-l {
+.group.peer[data-side='right'] .group-data-\[side\=right\]\:border-l {
     border-left-width: 1px !important;
 }
 
-.group.peer[data-side="right"] .group-data-\[side\=right\]\:left-0 {
+.group.peer[data-side='right'] .group-data-\[side\=right\]\:left-0 {
     left: 0 !important;
 }
 
-.group.peer[data-side="right"] .group-data-\[side\=right\]\:-left-2 {
+.group.peer[data-side='right'] .group-data-\[side\=right\]\:-left-2 {
     left: -0.5rem !important;
 }
 
 /* === VARIANT: FLOATING === */
-.group.peer[data-variant="floating"]
+.group.peer[data-variant='floating']
     .group-data-\[variant\=floating\]\:rounded-lg {
     border-radius: 0.5rem !important;
 }
 
-.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:border {
+.group.peer[data-variant='floating'] .group-data-\[variant\=floating\]\:border {
     border-width: 1px !important;
 }
 
-.group.peer[data-variant="floating"]
+.group.peer[data-variant='floating']
     .group-data-\[variant\=floating\]\:border-sidebar-border {
     border-color: var(--sidebar-border) !important;
 }
 
-.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:shadow {
+.group.peer[data-variant='floating'] .group-data-\[variant\=floating\]\:shadow {
     box-shadow:
         0 1px 3px 0 rgb(0 0 0 / 0.1),
         0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
 }
 
 /* === PEER DATA: INSET VARIANT (SidebarInset) === */
-.peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:m-2 {
+.peer[data-variant='inset'] ~ main.md\:peer-data-\[variant\=inset\]\:m-2 {
     margin: 0.5rem !important;
 }
 
 @media (min-width: 768px) {
-    .peer[data-state="collapsed"][data-variant="inset"]
+    .peer[data-state='collapsed'][data-variant='inset']
         ~ main.md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2,
     .md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2 {
         margin-left: 0.5rem !important;
     }
 
-    .peer[data-variant="sidebar"]
+    .peer[data-variant='sidebar']
         ~ main.md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2 {
         margin-left: 0 !important;
     }
 
-    .peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:ml-0 {
+    .peer[data-variant='inset'] ~ main.md\:peer-data-\[variant\=inset\]\:ml-0 {
         margin-left: 0 !important;
     }
 
-    .peer[data-variant="inset"]
+    .peer[data-variant='inset']
         ~ main.md\:peer-data-\[variant\=inset\]\:rounded-xl {
         border-radius: 0.75rem !important;
     }
 
-    .peer[data-variant="inset"]
+    .peer[data-variant='inset']
         ~ main.md\:peer-data-\[variant\=inset\]\:shadow {
         box-shadow:
             0 1px 3px 0 rgb(0 0 0 / 0.1),
@@ -799,11 +805,11 @@ html {
 }
 
 /* === HAS DATA ATTRIBUTES === */
-.has-\[\[data-variant\=inset\]\]\:bg-sidebar:has([data-variant="inset"]) {
+.has-\[\[data-variant\=inset\]\]\:bg-sidebar:has([data-variant='inset']) {
     background-color: var(--sidebar) !important;
 }
 
-.group:has([data-sidebar="menu-action"])
+.group:has([data-sidebar='menu-action'])
     .group-has-\[\[data-sidebar\=menu-action\]\]\/menu-item\:pr-8 {
     padding-right: 2rem !important;
 }

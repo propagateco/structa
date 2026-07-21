@@ -2,9 +2,10 @@ import { Domain, domain, Stage, dnsAdapter } from './dns';
 import { apiRouter } from './api';
 import { Database } from './database';
 import { authEmail, notifyEmail } from './email';
-import { bucket, optimisedBucket } from './storage';
+import { bucket, optimisedBucket, bucketRegion, optimisedBucketRegion } from './storage';
 import { cdn } from './cloudfront';
 import { secret } from './secret';
+import { SyncEngine } from './sync';
 
 export const app = new sst.aws.TanStackStart('Web', {
     path: 'packages/web',
@@ -22,6 +23,7 @@ export const app = new sst.aws.TanStackStart('Web', {
         bucket,
         optimisedBucket,
         cdn,
+        SyncEngine,
         secret.GoogleClientId,
         secret.GoogleClientSecret,
         secret.StripeSecretKey,
@@ -44,5 +46,20 @@ export const app = new sst.aws.TanStackStart('Web', {
         VITE_API_URL: apiRouter.url,
         VITE_PLATFORM_URL: Domain.properties.web,
         VITE_COOKIE_PREFIX: Stage.properties.cookiePrefix,
+        // CloudFront distribution that fronts the image-processor Lambda
+        // + OptimisedStorage bucket. Prepending this to bare S3 object
+        // keys (e.g. `users/user-.../images/image-xxx`) yields a URL that
+        // CloudFront rewrites via `rewrite-url.js` and processes on demand
+        // — e.g. `?width=400&height=400&format=webp` returns a transformed
+        // webp variant. Without this, the browser resolves the bare key
+        // relative to the current page (e.g. `/settings/users/...`) and
+        // gets a 404.
+        VITE_CDN_URL: cdn.properties.url,
+        // Pin S3Client region to each bucket's actual region so presigned
+        // URLs are signed against the correct regional endpoint. Without
+        // this, the SDK uses the Lambda's AWS_REGION (eu-west-2) which
+        // mismatches buckets created in us-east-1 → CORS-busting 301s.
+        STORAGE_BUCKET_REGION: bucketRegion,
+        OPTIMISED_STORAGE_BUCKET_REGION: optimisedBucketRegion,
     },
 });

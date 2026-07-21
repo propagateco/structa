@@ -9,8 +9,6 @@ import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { appleAccountQueryOptions } from "@/clients/apple/apple.query.client";
-import { stripeAccountQueryOptions } from "@/clients/stripe/stripe.query.client";
 import { useUpdateUserSettingsMutation } from "@/clients/user/user.mutation.client";
 import { userQueryOptions } from "@/clients/user/user.query.client";
 import {
@@ -47,15 +45,8 @@ function RouteComponent() {
 	const { data: user, isPending: isUserLoading } = useQuery(userQueryOptions);
 	const { mutate, isPending } = useUpdateUserSettingsMutation();
 
-	if (isUserLoading || !user) {
-		return <AccountPageSkeleton />;
-	}
-
-	const [preview, setPreview] = useState<string | null>(
-		user.image
-			? getImageUrl(user.image, "?width=400&height=400&format=webp")
-			: null,
-	);
+	// ✅ ALL hooks must be called before any conditional returns
+	const [preview, setPreview] = useState<string | null>(null);
 	const [originalImage, setOriginalImage] = useState<string | null>(null);
 	const [isCropperOpen, setIsCropperOpen] = useState<boolean>(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -64,26 +55,30 @@ function RouteComponent() {
 	const form = useForm<SettingsFormType>({
 		resolver: zodResolver(SettingsForm),
 		defaultValues: {
-			name: user.name,
-			workspaceName: user.workspaceName,
+			name: user?.name ?? "",
+			workspaceName: user?.workspaceName ?? "",
 		},
 	});
 
-	// Handle form submission
-	const onSubmit = (values: SettingsFormType) => {
-		mutate(values, {
-			onSuccess: () => {
-				// Reset the form with the same values to clear the dirty state
-				form.reset(values);
-			},
-		});
-	};
+	// Update form and preview when user data loads
+	useEffect(() => {
+		if (user) {
+			form.reset({
+				name: user.name,
+				workspaceName: user.workspaceName ?? "",
+			});
+			if (user.image) {
+				setPreview(
+					getImageUrl(user.image, "?width=400&height=400&format=webp"),
+				);
+			}
+		}
+	}, [user, form]);
 
 	// Handle image crop completion
 	const handleCropComplete = (croppedImageUrl: string) => {
 		setPreview(croppedImageUrl);
 
-		// Convert the cropped image URL to a File object
 		if (selectedFile) {
 			const croppedFile = dataURLtoFile(croppedImageUrl, selectedFile.name);
 			form.setValue("image", croppedFile, {
@@ -93,24 +88,21 @@ function RouteComponent() {
 	};
 
 	// Handle image upload with react-dropzone
-	const onDrop = React.useCallback(
-		(acceptedFiles: File[]) => {
-			if (acceptedFiles.length > 0) {
-				const file = acceptedFiles[0];
-				setSelectedFile(file);
+	const onDrop = React.useCallback((acceptedFiles: File[]) => {
+		if (acceptedFiles.length > 0) {
+			const file = acceptedFiles[0];
+			setSelectedFile(file);
 
-				const reader = new FileReader();
-				reader.onload = () => {
-					if (typeof reader.result === "string") {
-						setOriginalImage(reader.result);
-						setIsCropperOpen(true);
-					}
-				};
-				reader.readAsDataURL(file);
-			}
-		},
-		[form],
-	);
+			const reader = new FileReader();
+			reader.onload = () => {
+				if (typeof reader.result === "string") {
+					setOriginalImage(reader.result);
+					setIsCropperOpen(true);
+				}
+			};
+			reader.readAsDataURL(file);
+		}
+	}, []);
 
 	const { getRootProps, getInputProps, fileRejections } = useDropzone({
 		onDrop,
@@ -136,6 +128,20 @@ function RouteComponent() {
 			}
 		}
 	}, [fileRejections]);
+
+	// Handle form submission
+	const onSubmit = (values: SettingsFormType) => {
+		mutate(values, {
+			onSuccess: () => {
+				form.reset(values);
+			},
+		});
+	};
+
+	// ✅ NOW we can do the conditional return after all hooks
+	if (isUserLoading || !user) {
+		return <AccountPageSkeleton />;
+	}
 
 	return (
 		<>

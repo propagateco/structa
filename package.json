@@ -13,6 +13,8 @@
 		"packages/functions",
 		"packages/notifications"
 	],
+	"os": ["darwin", "linux", "win32"],
+	"cpu": ["x64", "arm64"],
 	"scripts": {
 		"prepare": "husky",
 		"test": "vitest run --exclude '**/packages/solidtype/**'",
@@ -87,6 +89,14 @@
 		"react": "19.2.0",
 		"react-dom": "19.2.0",
 		"@noble/ciphers": "^2.1.1"
+	},
+	"optionalDependencies": {
+		"lightningcss-darwin-arm64": "1.31.1",
+		"lightningcss-darwin-x64": "1.31.1",
+		"lightningcss-linux-x64-gnu": "1.31.1",
+		"lightningcss-linux-x64-musl": "1.31.1",
+		"lightningcss-linux-arm64-gnu": "1.31.1",
+		"lightningcss-linux-arm64-musl": "1.31.1"
 	},
 	"lint-staged": {
 		"packages/core/**/*.{ts,tsx,js,jsx}": [
