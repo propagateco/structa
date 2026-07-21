@@ -1,13 +1,13 @@
-import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { Check, ChevronRight, Circle } from 'lucide-react';
-import * as React from 'react';
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Check, ChevronRight, Circle } from "lucide-react";
+import * as React from "react";
 import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
-} from '@/components/ui/input-group';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/input-group";
+import { cn } from "@/lib/utils";
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -22,20 +22,20 @@ const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
 const dropdownMenuSubTriggerVariants = cva(
-    'flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    "flex cursor-default select-none items-center rounded-md px-2 py-1 text-xs outline-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
     {
         variants: {
             variant: {
                 default:
-                    'focus:bg-sidebar-accent focus:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[highlighted]:bg-sidebar-accent data-[highlighted]:text-sidebar-accent-foreground',
+                    "focus:bg-secondary focus:text-foreground data-[state=open]:bg-secondary data-[highlighted]:bg-secondary data-[highlighted]:text-foreground",
                 destructive:
-                    'text-destructive hover:bg-destructive/10 active:bg-destructive/10 focus:bg-destructive/10 data-[state=open]:bg-destructive/10 data-[highlighted]:bg-destructive/10',
+                    "text-destructive hover:bg-destructive/10 active:bg-destructive/10 focus:bg-destructive/10 data-[state=open]:bg-destructive/10 data-[highlighted]:bg-destructive/10",
             },
         },
         defaultVariants: {
-            variant: 'default',
+            variant: "default",
         },
-    }
+    },
 );
 
 const DropdownMenuSubTrigger = React.forwardRef<
@@ -48,8 +48,8 @@ const DropdownMenuSubTrigger = React.forwardRef<
         ref={ref}
         className={cn(
             dropdownMenuSubTriggerVariants({ variant }),
-            inset && 'pl-8',
-            className
+            inset && "pl-8",
+            className,
         )}
         {...props}
     >
@@ -67,8 +67,8 @@ const DropdownMenuSubContent = React.forwardRef<
     <DropdownMenuPrimitive.SubContent
         ref={ref}
         className={cn(
-            'z-50 min-w-[8rem] overflow-hidden rounded-md border-none bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]',
-            className
+            "z-50 min-w-[8rem] overflow-hidden rounded-md border-none bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]",
+            className,
         )}
         {...props}
     />
@@ -85,9 +85,9 @@ const DropdownMenuContent = React.forwardRef<
             ref={ref}
             sideOffset={sideOffset}
             className={cn(
-                'z-50 border border-border dark:border-none max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-sm bg-popover p-2 text-popover-foreground shadow-sm',
-                'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]',
-                className
+                "z-50 border border-border dark:border-none max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-md bg-popover p-1 text-popover-foreground shadow-sm",
+                "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]",
+                className,
             )}
             {...props}
         />
@@ -153,15 +153,15 @@ function FilterableDropdownMenu<T>({
         ...restInputProps
     } = inputProps ?? {};
 
-    const focusMenuItem = React.useCallback((direction: 'first' | 'last') => {
+    const focusMenuItem = React.useCallback((direction: "first" | "last") => {
         const itemsToFocus = menuRef.current?.querySelectorAll<HTMLElement>(
-            '[role=menuitem]:not([data-disabled=true])'
+            "[role=menuitem]:not([data-disabled=true])",
         );
         if (!itemsToFocus?.length) {
             return;
         }
         const target =
-            direction === 'first'
+            direction === "first"
                 ? itemsToFocus[0]
                 : itemsToFocus[itemsToFocus.length - 1];
         target?.focus();
@@ -173,10 +173,10 @@ function FilterableDropdownMenu<T>({
             return items;
         }
         if (filterFn) {
-            return items.filter(item => filterFn(item, normalizedQuery));
+            return items.filter((item) => filterFn(item, normalizedQuery));
         }
-        return items.filter(item =>
-            itemToLabel(item).toLowerCase().includes(normalizedQuery)
+        return items.filter((item) =>
+            itemToLabel(item).toLowerCase().includes(normalizedQuery),
         );
     }, [filterFn, itemToLabel, items, query]);
 
@@ -188,14 +188,14 @@ function FilterableDropdownMenu<T>({
     }, [open]);
 
     const handleInputKeyDown = (
-        event: React.KeyboardEvent<HTMLInputElement>
+        event: React.KeyboardEvent<HTMLInputElement>,
     ) => {
-        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             event.preventDefault();
-            focusMenuItem(event.key === 'ArrowDown' ? 'first' : 'last');
+            focusMenuItem(event.key === "ArrowDown" ? "first" : "last");
             return;
         }
-        if (event.key === 'Enter' && filteredItems.length === 1) {
+        if (event.key === "Enter" && filteredItems.length === 1) {
             event.preventDefault();
             const [item] = filteredItems;
             if (item) {
@@ -218,25 +218,28 @@ function FilterableDropdownMenu<T>({
                 className={cn(className, contentClassName)}
                 {...restContentProps}
             >
-                <div className="pb-2">
+                <div className="pb-1">
                     <InputGroup
                         className={cn(
-                            'h-12 rounded-none border-x-0 border-t-0 border-sidebar-border has-[[data-slot=input-group-control]:focus-visible]:ring-0',
-                            inputGroupClassName
+                            "h-10 rounded-none border-x-0 border-t-0 border-border has-[[data-slot=input-group-control]:focus-visible]:ring-0",
+                            inputGroupClassName,
                         )}
                         {...restInputGroupProps}
                     >
                         <InputGroupInput
                             ref={inputRef}
                             value={query}
-                            onChange={event => {
+                            onChange={(event) => {
                                 inputOnChange?.(event);
                                 onQueryChange(event.target.value);
                             }}
                             placeholder={placeholder}
-                            className={cn('h-12 px-3 text-sm', inputClassName)}
-                            onClick={event => event.stopPropagation()}
-                            onPointerDown={event => event.stopPropagation()}
+                            className={cn(
+                                "h-10 px-2 text-xs md:text-xs",
+                                inputClassName,
+                            )}
+                            onClick={(event) => event.stopPropagation()}
+                            onPointerDown={(event) => event.stopPropagation()}
                             onKeyDown={handleInputKeyDown}
                             {...restInputProps}
                         />
@@ -251,7 +254,7 @@ function FilterableDropdownMenu<T>({
                     </InputGroup>
                 </div>
 
-                <div className="flex flex-col gap-1 px-2">
+                <div className="flex flex-col gap-0.5 px-1">
                     {filteredItems.length
                         ? filteredItems.map((item, index) => {
                               const isSelected = selectedItem
@@ -261,14 +264,14 @@ function FilterableDropdownMenu<T>({
                                   <DropdownMenuItem
                                       key={itemToLabel(item) + index}
                                       onSelect={() => onSelectItem(item)}
-                                      className="group flex items-center py-2"
+                                      className="group flex items-center py-1.5"
                                   >
                                       {renderItem(item, { isSelected })}
                                   </DropdownMenuItem>
                               );
                           })
                         : (emptyState ?? (
-                              <div className="px-3 py-3 text-sm text-muted-foreground">
+                              <div className="px-2 py-2 text-xs text-muted-foreground">
                                   No items found
                               </div>
                           ))}
@@ -276,8 +279,8 @@ function FilterableDropdownMenu<T>({
 
                 {footer ? (
                     <>
-                        <DropdownMenuSeparator className="my-2" />
-                        <div className="flex flex-col px-2">{footer}</div>
+                        <DropdownMenuSeparator className="my-1" />
+                        <div className="flex flex-col px-0">{footer}</div>
                     </>
                 ) : null}
             </DropdownMenuContent>
@@ -286,20 +289,20 @@ function FilterableDropdownMenu<T>({
 }
 
 const dropdownMenuItemVariants = cva(
-    'relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0',
+    "relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 text-xs outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
     {
         variants: {
             variant: {
                 default:
-                    'data-[active=true]:bg-sidebar-accent data-[active=true]:text-primary dark:data-[active=true]:bg-primary/5 hover:bg-sidebar-accent hover:text-primary dark:hover:bg-primary/5 focus:bg-sidebar-accent focus:text-sidebar-accent-foreground data-[highlighted]:bg-sidebar-accent data-[highlighted]:text-primary dark:data-[highlighted]:bg-primary/5',
+                    "data-[active=true]:bg-secondary data-[active=true]:text-foreground hover:bg-secondary hover:text-foreground focus:bg-secondary focus:text-foreground data-[highlighted]:bg-secondary data-[highlighted]:text-foreground",
                 destructive:
-                    'text-destructive hover:bg-destructive/10 data-[active=true]:bg-destructive/10 focus:bg-destructive/10 data-[highlighted]:bg-destructive/10',
+                    "text-destructive hover:bg-destructive/10 data-[active=true]:bg-destructive/10 focus:bg-destructive/10 data-[highlighted]:bg-destructive/10",
             },
         },
         defaultVariants: {
-            variant: 'default',
+            variant: "default",
         },
-    }
+    },
 );
 
 const DropdownMenuItem = React.forwardRef<
@@ -312,8 +315,8 @@ const DropdownMenuItem = React.forwardRef<
         ref={ref}
         className={cn(
             dropdownMenuItemVariants({ variant }),
-            inset && 'pl-8',
-            className
+            inset && "pl-8",
+            className,
         )}
         {...props}
     />
@@ -327,8 +330,8 @@ const DropdownMenuCheckboxItem = React.forwardRef<
     <DropdownMenuPrimitive.CheckboxItem
         ref={ref}
         className={cn(
-            'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-sidebar-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-            className
+            "relative flex cursor-pointer select-none items-center rounded-md py-1 pl-8 pr-2 text-xs outline-none transition-colors focus:bg-secondary focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+            className,
         )}
         checked={checked}
         {...props}
@@ -351,8 +354,8 @@ const DropdownMenuRadioItem = React.forwardRef<
     <DropdownMenuPrimitive.RadioItem
         ref={ref}
         className={cn(
-            'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-sidebar-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-            className
+            "relative flex cursor-pointer select-none items-center rounded-md py-1 pl-8 pr-2 text-xs outline-none transition-colors focus:bg-secondary focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+            className,
         )}
         {...props}
     >
@@ -375,9 +378,9 @@ const DropdownMenuLabel = React.forwardRef<
     <DropdownMenuPrimitive.Label
         ref={ref}
         className={cn(
-            'px-2 py-1.5 text-sm font-semibold',
-            inset && 'pl-8',
-            className
+            "px-2 py-1 text-xs font-medium",
+            inset && "pl-8",
+            className,
         )}
         {...props}
     />
@@ -390,7 +393,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DropdownMenuPrimitive.Separator
         ref={ref}
-        className={cn('-mx-1 my-1 h-px bg-sidebar-border', className)}
+        className={cn("-mx-1 my-0.5 h-px bg-border", className)}
         {...props}
     />
 ));
@@ -403,14 +406,14 @@ const DropdownMenuShortcut = ({
     return (
         <span
             className={cn(
-                'ml-auto text-xs tracking-widest opacity-60',
-                className
+                "ml-auto text-xs tracking-widest opacity-60",
+                className,
             )}
             {...props}
         />
     );
 };
-DropdownMenuShortcut.displayName = 'DropdownMenuShortcut';
+DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
 export {
     DropdownMenu,

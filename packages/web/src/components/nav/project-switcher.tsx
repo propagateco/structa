@@ -1,36 +1,37 @@
-import { Link, useNavigate } from '@tanstack/react-router';
-import { Check, ChevronsUpDown, Plus, X } from 'lucide-react';
-import * as React from 'react';
-import { Button } from '@/components/ui/button';
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
+import * as React from "react";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenuItem,
     DropdownMenuTrigger,
     FilterableDropdownMenu,
-} from '@/components/ui/dropdown-menu';
-import { Kbd, KbdWrapper } from '@/components/ui/kbd';
-import { NavigationSeparator } from '@/components/ui/navigation-separator';
+} from "@/components/ui/dropdown-menu";
+import { Kbd, KbdWrapper } from "@/components/ui/kbd";
+import { NavigationSeparator } from "@/components/ui/navigation-separator";
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { useKeySequenceShortcut } from '@/hooks/use-key-sequence-shortcut';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useProjectSwitcher } from '@/hooks/use-project-switcher';
+} from "@/components/ui/tooltip";
+import { useKeySequenceShortcut } from "@/hooks/use-key-sequence-shortcut";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useProjectSwitcher } from "@/hooks/use-project-switcher";
 
 export function ProjectSwitcher() {
     const navigate = useNavigate();
     const isMobile = useIsMobile();
     const { activeProject, projects, setActiveProject } = useProjectSwitcher();
-    const [query, setQuery] = React.useState('');
+    const [query, setQuery] = React.useState("");
     const [open, setOpen] = React.useState(false);
     const [isInputFocused, setIsInputFocused] = React.useState(false);
 
     const trigger = activeProject ? (
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-1 text-xs md:text-xs">
             <Button
                 variant="ghost"
                 className=" px-0 ml-4 hover:bg-transparent dark:hover:bg-transparent hover:text-foreground"
+                size={"sm"}
             >
                 <Link to="/app" className="max-w-32 truncate text-sm">
                     {activeProject.name}
@@ -48,7 +49,11 @@ export function ProjectSwitcher() {
         </div>
     ) : (
         <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="text-sidebar-foreground">
+            <Button
+                variant="ghost"
+                className="text-sidebar-foreground"
+                size={"sm"}
+            >
                 <span className="max-w-32 truncate">All projects</span>
                 <ChevronsUpDown className="ml-1 size-4 opacity-70" />
             </Button>
@@ -57,13 +62,13 @@ export function ProjectSwitcher() {
 
     useKeySequenceShortcut(
         {
-            sequence: ['c', 'p'],
+            sequence: ["c", "p"],
             timeoutMs: 700,
             allowInInputs: false,
         },
         () => {
             setOpen(true);
-        }
+        },
     );
 
     return (
@@ -85,39 +90,41 @@ export function ProjectSwitcher() {
                     </Tooltip>
                 }
                 items={projects}
-                itemToLabel={project => project.name}
+                itemToLabel={(project) => project.name}
                 query={query}
                 onQueryChange={setQuery}
-                onSelectItem={project => {
+                onSelectItem={(project) => {
                     setActiveProject(project);
                     setOpen(false);
                 }}
                 selectedItem={activeProject}
                 emptyState={
-                    <div className="px-3 py-3 text-sm text-muted-foreground">
+                    <div className="px-3 py-3 text-xs text-muted-foreground">
                         No projects found
                     </div>
                 }
                 footer={
-                    <DropdownMenuItem
-                        onSelect={() => navigate({ to: '/app' })}
-                        className="gap-2"
-                    >
-                        <Plus className="size-4" />
-                        Create Project
-                    </DropdownMenuItem>
+                    <div className="px-1">
+                        <DropdownMenuItem
+                            onSelect={() => navigate({ to: "/app" })}
+                            className="gap-1.5"
+                        >
+                            <Plus className="size-4" />
+                            Create Project
+                        </DropdownMenuItem>
+                    </div>
                 }
                 contentProps={{
-                    align: 'start',
-                    side: isMobile ? 'bottom' : 'bottom',
+                    align: "start",
+                    side: isMobile ? "bottom" : "bottom",
                     sideOffset: 8,
-                    onCloseAutoFocus: event => event.preventDefault(),
+                    onCloseAutoFocus: (event) => event.preventDefault(),
                 }}
-                className="w-72 border border-border border-b bg-popover p-0 shadow-sm pb-2"
+                className="w-72 border border-border border-b bg-popover p-0 shadow-sm pb-2 text-xs"
                 inputProps={{
                     onFocus: () => setIsInputFocused(true),
                     onBlur: () => setIsInputFocused(false),
-                    placeholder: 'Find Project...',
+                    placeholder: "Find Project...",
                 }}
                 inputAddon={
                     isInputFocused ? (
@@ -134,13 +141,13 @@ export function ProjectSwitcher() {
                     <>
                         <span>{project.name}</span>
                         {isSelected ? (
-                            <div className="relative ml-auto flex h-6 w-6 items-center justify-center">
+                            <div className="relative ml-auto flex h-4 w-4 items-center justify-center">
                                 <Check className="absolute size-4 text-muted-foreground opacity-100 transition-opacity group-data-[highlighted]:opacity-0" />
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="absolute h-6 w-6 p-0 opacity-0 transition-opacity group-data-[highlighted]:opacity-100"
-                                    onClick={event => {
+                                    className="absolute h-3 w-3 p-0 opacity-0 transition-opacity group-data-[highlighted]:opacity-100"
+                                    onClick={(event) => {
                                         event.preventDefault();
                                         event.stopPropagation();
                                         setActiveProject(undefined);

@@ -15,7 +15,7 @@ export function NavBreadcrumb({ crumbs }: NavBreadcrumbProps) {
 			<div className="flex items-center gap-2 px-4">
 				{state === "collapsed" && (
 					<>
-						<SidebarTrigger className="ml-1 text-text-muted">
+						<SidebarTrigger className="ml-1">
 							<Sidebar />
 						</SidebarTrigger>
 						<Separator orientation="vertical" className="mr-2 h-4" />
