@@ -67,7 +67,7 @@ export function NavUser({
                                 </AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-semibold">
+                                <span className="truncate font-normal text-foreground">
                                     {user.name}
                                 </span>
                                 <span className="truncate text-xs">

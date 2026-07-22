@@ -1,5 +1,6 @@
-import { ChevronRight, type LucideIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { ChevronRight } from "lucide-react";
+import type * as React from "react";
 
 import {
     Collapsible,
@@ -24,7 +25,7 @@ export function NavMain({
     items: {
         title: string;
         url: string;
-        icon: LucideIcon;
+        icon: React.ComponentType<{ className?: string }>;
         isActive?: boolean;
         items?: {
             title: string;
@@ -34,7 +35,6 @@ export function NavMain({
 }) {
     return (
         <SidebarGroup>
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) => (
                     <Collapsible

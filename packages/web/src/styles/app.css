@@ -145,41 +145,41 @@
       SEMANTIC TOKEN VARIABLES
       ================================================ */
 
-    --color-background: var(--ds-paper);
-    --color-foreground: var(--ds-ink);
-    --color-card: var(--ds-white);
-    --color-card-foreground: var(--ds-ink);
-    --color-popover: var(--ds-paper);
-    --color-popover-foreground: var(--ds-ink);
+    --color-background: var(--ds-neutral-50);
+    --color-foreground: var(--ds-neutral-900);
+    --color-card: var(--ds-neutral-50);
+    --color-card-foreground: var(--ds-neutral-900);
+    --color-popover: var(--ds-neutral-50);
+    --color-popover-foreground: var(--ds-neutral-900);
 
-    --color-primary: var(--ds-teal);
-    --color-primary-foreground: var(--ds-paper);
+    --color-primary: var(--ds-neutral-900);
+    --color-primary-foreground: var(--ds-neutral-50);
 
-    --color-secondary: var(--ds-mono-200);
-    --color-secondary-foreground: var(--ds-ink);
+    --color-secondary: var(--ds-neutral-200);
+    --color-secondary-foreground: var(--ds-neutral-900);
 
-    --color-muted: var(--ds-mono-100);
-    --color-muted-foreground: var(--ds-mono-500);
-    --color-muted-background: var(--ds-paper);
+    --color-muted: var(--ds-neutral-100);
+    --color-muted-foreground: var(--ds-neutral-500);
+    --color-muted-background: var(--ds-neutral-50);
 
     --color-accent: var(--ds-azure);
-    --color-accent-foreground: var(--ds-paper);
-    --color-accent-muted: var(--ds-cloud);
+    --color-accent-foreground: var(--ds-neutral-50);
+    --color-accent-muted: var(--ds-neutral-100);
 
     --color-destructive: var(--ds-error);
-    --color-destructive-foreground: var(--ds-paper);
+    --color-destructive-foreground: var(--ds-neutral-50);
 
-    --color-border: var(--ds-mono-300);
-    --color-input: var(--ds-mono-300);
-    --color-ring: var(--ds-mono-300);
+    --color-border: var(--ds-neutral-300);
+    --color-input: var(--ds-neutral-300);
+    --color-ring: var(--ds-neutral-300);
 
     --color-text: var(--color-foreground);
-    --color-text-secondary: var(--ds-steel);
+    --color-text-secondary: var(--ds-neutral-600);
     --color-text-muted: var(--color-muted-foreground);
     --color-link: var(--color-accent);
-    --color-text-dark: var(--ds-midnight);
-    --sidebar: hsl(var(--ds-paper));
-    --sidebar-foreground: hsl(var(--ds-mono-600));
+    --color-text-dark: var(--ds-neutral-950);
+    --sidebar: hsl(var(--ds-neutral-50));
+    --sidebar-foreground: hsl(var(--ds-neutral-600));
     --sidebar-primary: hsl(var(--color-primary));
     --sidebar-primary-foreground: hsl(var(--color-primary-foreground));
     --sidebar-accent: hsl(var(--color-accent-muted));
@@ -189,47 +189,47 @@
 }
 
 .dark {
-    --color-background: var(--ds-midnight);
-    --color-foreground: var(--ds-paper);
-    --color-card: var(--ds-onyx);
-    --color-card-foreground: var(--ds-paper);
-    --color-popover: var(--ds-mono-800);
-    --color-popover-foreground: var(--ds-paper);
+    --color-background: var(--ds-neutral-950);
+    --color-foreground: var(--ds-neutral-50);
+    --color-card: var(--ds-neutral-900);
+    --color-card-foreground: var(--ds-neutral-50);
+    --color-popover: var(--ds-neutral-800);
+    --color-popover-foreground: var(--ds-neutral-50);
 
-    --color-primary: var(--ds-azure);
-    --color-primary-foreground: var(--ds-carbon);
+    --color-primary: var(--ds-neutral-50);
+    --color-primary-foreground: var(--ds-neutral-900);
 
-    --color-secondary: var(--ds-mono-800);
-    --color-secondary-foreground: var(--ds-mist);
+    --color-secondary: var(--ds-neutral-800);
+    --color-secondary-foreground: var(--ds-neutral-400);
 
-    --color-muted: var(--ds-mono-500);
-    --color-muted-foreground: var(--ds-mono-400);
-    --color-muted-background: var(--ds-carbon);
+    --color-muted: var(--ds-neutral-500);
+    --color-muted-foreground: var(--ds-neutral-400);
+    --color-muted-background: var(--ds-neutral-900);
 
     --color-accent: var(--ds-powder);
-    --color-accent-foreground: var(--ds-carbon);
-    --color-accent-muted: var(--ds-dusk);
+    --color-accent-foreground: var(--ds-neutral-900);
+    --color-accent-muted: var(--ds-neutral-800);
 
     /* Lighter error color for dark mode visibility */
     --ds-error: 358.57deg 68.478% 55%;
     --color-destructive: var(--ds-error);
-    --color-destructive-foreground: var(--ds-carbon);
+    --color-destructive-foreground: var(--ds-neutral-900);
 
-    --color-border: var(--ds-mono-600);
-    --color-input: var(--ds-mono-600);
-    --color-ring: var(--ds-mono-600);
+    --color-border: var(--ds-neutral-600);
+    --color-input: var(--ds-neutral-600);
+    --color-ring: var(--ds-neutral-600);
 
     --color-text: var(--color-foreground);
     --color-text-secondary: var(--color-secondary-foreground);
     --color-text-muted: var(--color-muted-foreground);
     --color-link: var(--color-accent);
-    --color-text-dark: var(--ds-midnight);
+    --color-text-dark: var(--ds-neutral-950);
 
-    --border: var(--ds-mono-600);
+    --border: var(--ds-neutral-600);
     --theme-border-color: rgba(255, 255, 255, 0.15);
     --grid-line-rgb: 255, 255, 255;
-    --sidebar: hsl(var(--ds-midnight));
-    --sidebar-foreground: hsl(var(--ds-mono-400));
+    --sidebar: hsl(var(--ds-neutral-950));
+    --sidebar-foreground: hsl(var(--ds-neutral-400));
     --sidebar-primary: hsl(var(--color-accent));
     --sidebar-primary-foreground: hsl(var(--color-primary-foreground));
     --sidebar-accent: hsl(var(--color-accent-muted));
@@ -452,6 +452,22 @@
 @layer base {
     body {
         @apply bg-background text-foreground antialiased font-body;
+    }
+
+    /* Icon stroke weight + color normalization.
+       Both Lucide (`svg.lucide`) and Hugeicons (`.hugeicon` class added by
+       the wrappers in app-sidebar.tsx) render with `stroke="currentColor"`
+       by default, so they already inherit the surrounding text color.
+       These rules enforce that contract defensively and force a uniform
+       1px stroke weight so the two libraries share the same visual weight.
+       CSS `stroke-width` overrides the SVG presentation attribute set by
+       both libraries. If you ever need a different weight on a specific
+       icon, use an inline style (style={{ strokeWidth: 1.5 }}) — inline
+       styles are real CSS properties and win on specificity. */
+    svg.lucide,
+    svg.hugeicon {
+        color: currentColor;
+        stroke-width: 1px;
     }
 
     h1,

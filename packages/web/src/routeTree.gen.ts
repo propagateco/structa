@@ -18,6 +18,7 @@ import { Route as UseCasesLoftRouteImport } from './routes/use-cases/loft'
 import { Route as UseCasesKitchenRouteImport } from './routes/use-cases/kitchen'
 import { Route as UseCasesExtensionRouteImport } from './routes/use-cases/extension'
 import { Route as ApiUsersRouteImport } from './routes/api/users'
+import { Route as MarketingTmpRouteImport } from './routes/_marketing/tmp'
 import { Route as MarketingTermsRouteImport } from './routes/_marketing/terms'
 import { Route as MarketingPrivacyRouteImport } from './routes/_marketing/privacy'
 import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
@@ -78,6 +79,11 @@ const ApiUsersRoute = ApiUsersRouteImport.update({
   id: '/api/users',
   path: '/api/users',
   getParentRoute: () => rootRouteImport,
+} as any)
+const MarketingTmpRoute = MarketingTmpRouteImport.update({
+  id: '/tmp',
+  path: '/tmp',
+  getParentRoute: () => MarketingRoute,
 } as any)
 const MarketingTermsRoute = MarketingTermsRouteImport.update({
   id: '/terms',
@@ -179,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof MarketingAboutRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
+  '/tmp': typeof MarketingTmpRoute
   '/api/users': typeof ApiUsersRoute
   '/use-cases/extension': typeof UseCasesExtensionRoute
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
@@ -203,6 +210,7 @@ export interface FileRoutesByTo {
   '/about': typeof MarketingAboutRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
+  '/tmp': typeof MarketingTmpRoute
   '/api/users': typeof ApiUsersRoute
   '/use-cases/extension': typeof UseCasesExtensionRoute
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
@@ -232,6 +240,7 @@ export interface FileRoutesById {
   '/_marketing/about': typeof MarketingAboutRoute
   '/_marketing/privacy': typeof MarketingPrivacyRoute
   '/_marketing/terms': typeof MarketingTermsRoute
+  '/_marketing/tmp': typeof MarketingTmpRoute
   '/api/users': typeof ApiUsersRoute
   '/use-cases/extension': typeof UseCasesExtensionRoute
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
@@ -259,6 +268,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy'
     | '/terms'
+    | '/tmp'
     | '/api/users'
     | '/use-cases/extension'
     | '/use-cases/kitchen'
@@ -283,6 +293,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy'
     | '/terms'
+    | '/tmp'
     | '/api/users'
     | '/use-cases/extension'
     | '/use-cases/kitchen'
@@ -311,6 +322,7 @@ export interface FileRouteTypes {
     | '/_marketing/about'
     | '/_marketing/privacy'
     | '/_marketing/terms'
+    | '/_marketing/tmp'
     | '/api/users'
     | '/use-cases/extension'
     | '/use-cases/kitchen'
@@ -408,6 +420,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/users'
       preLoaderRoute: typeof ApiUsersRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_marketing/tmp': {
+      id: '/_marketing/tmp'
+      path: '/tmp'
+      fullPath: '/tmp'
+      preLoaderRoute: typeof MarketingTmpRouteImport
+      parentRoute: typeof MarketingRoute
     }
     '/_marketing/terms': {
       id: '/_marketing/terms'
@@ -601,6 +620,7 @@ interface MarketingRouteChildren {
   MarketingAboutRoute: typeof MarketingAboutRoute
   MarketingPrivacyRoute: typeof MarketingPrivacyRoute
   MarketingTermsRoute: typeof MarketingTermsRoute
+  MarketingTmpRoute: typeof MarketingTmpRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
   MarketingGuidesSlugRoute: typeof MarketingGuidesSlugRoute
   MarketingGuidesIndexRoute: typeof MarketingGuidesIndexRoute
@@ -610,6 +630,7 @@ const MarketingRouteChildren: MarketingRouteChildren = {
   MarketingAboutRoute: MarketingAboutRoute,
   MarketingPrivacyRoute: MarketingPrivacyRoute,
   MarketingTermsRoute: MarketingTermsRoute,
+  MarketingTmpRoute: MarketingTmpRoute,
   MarketingIndexRoute: MarketingIndexRoute,
   MarketingGuidesSlugRoute: MarketingGuidesSlugRoute,
   MarketingGuidesIndexRoute: MarketingGuidesIndexRoute,

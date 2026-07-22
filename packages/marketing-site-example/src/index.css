@@ -5,6 +5,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Lucide icons render with `stroke="currentColor"` by default, so they
+   already inherit the surrounding text color. This rule enforces that
+   contract defensively and forces a uniform 1px stroke weight. CSS
+   `stroke-width` overrides the SVG presentation attribute set by
+   lucide-react. Use an inline style (style={{ strokeWidth: 1.5 }}) if a
+   specific icon ever needs a different weight. */
+svg.lucide {
+    color: currentColor;
+    stroke-width: 1px;
+}
+
 :root {
     --background: var(--ds-background-200);
     --foreground: var(--ds-ink);

@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import {
-    Folder,
+    FolderClosed,
     MoreHorizontal,
     Plus,
-    PlusSquare,
+    Eye,
     Share,
     Trash2,
     type LucideIcon,
@@ -46,6 +46,7 @@ export function NavProjects({
                     <SidebarMenuItem key={item.name}>
                         <SidebarMenuButton asChild>
                             <Link to={item.url}>
+                                <FolderClosed />
                                 <span>{item.name}</span>
                             </Link>
                         </SidebarMenuButton>
@@ -62,7 +63,7 @@ export function NavProjects({
                                 align={isMobile ? "end" : "start"}
                             >
                                 <DropdownMenuItem>
-                                    <Folder />
+                                    <Eye />
                                     <span>View Project</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
