@@ -53,6 +53,24 @@ For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - Agents search logs for errors, warnings, and diagnostic information
 - For more SST dev mode options, see [docs/development/DEVELOPMENT_TOOLS.md](docs/development/DEVELOPMENT_TOOLS.md#sst-dev-mode)
 
+## Browser Verification (authed routes)
+
+For UI checks of the auth-gated `/app` route with `@dev-browser` / agent-browser,
+authenticate the persistent profile first — **one command, idempotent**:
+
+```bash
+./scripts/agent-login.sh
+```
+
+It opens `/app` with a persistent Chrome profile (`~/.structa-agent`); if the
+session is valid it exits immediately, otherwise it walks the email-OTP login
+(reading the OTP from the DB via `scripts/get-otp.ts`) and applies
+`scripts/bypass-onboarding.ts` if the test user lacks a `plan`. After it
+succeeds, all subsequent `agent-browser --profile ~/.structa-agent …` calls
+are already authenticated — repeat only on session expiry (~7d).
+
+Details: [docs/development/TESTING.md#agent-browser-workflow-dev-browser-agent](docs/development/TESTING.md#agent-browser-workflow-dev-browser-agent)
+
 ## Project Context
 
 - **Vision**: [docs/OVERVIEW.md](docs/OVERVIEW.md)

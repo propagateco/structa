@@ -106,6 +106,36 @@ When using Chrome DevTools MCP to test authenticated routes:
 - **Session Persistence**: Once logged in, session cookies persist
 - **Test User Plan**: Users without a `plan` or with `plan: "waitlist"` redirect to onboarding
 
+### agent-browser workflow (dev-browser agent)
+
+The same login flow is automated end-to-end by [`scripts/agent-login.sh`](../../scripts/agent-login.sh), which drives `agent-browser` with a **persistent Chrome profile** (`~/.structa-agent`) and reads the OTP straight from the database via `scripts/get-otp.ts`. It is idempotent: if the profile already holds a valid session it exits 0 with no login; otherwise it walks email-OTP, applies `bypass-onboarding.ts` if it lands on `/onboarding`, and reloads `/app`.
+
+```bash
+# One command — run from the repo root while `sst dev` is up:
+./scripts/agent-login.sh                       # authenticates, then exits on /app
+
+# Subsequent UI-agent work reuses the same profile (already authenticated):
+agent-browser --profile ~/.structa-agent open http://localhost:3000/app
+agent-browser --profile ~/.structa-agent snapshot -i
+```
+
+Manual equivalent (what the script does internally):
+
+| Step | Action | Command |
+|------|--------|---------|
+| 1 | Open login (persisted profile) | `agent-browser --profile ~/.structa-agent open http://localhost:3000/app` |
+| 2 | (If bounced to /login) snapshot | `agent-browser --profile ~/.structa-agent snapshot -i` |
+| 3 | Enter email | `agent-browser --profile ~/.structa-agent find placeholder "Enter your email" fill "agent@structa.dev"` |
+| 4 | Click continue | `agent-browser --profile ~/.structa-agent find role button click --name "Continue with Email"` |
+| 5 | Get OTP from DB | `OTP=$(npx sst shell npx tsx scripts/get-otp.ts agent@structa.dev)` |
+| 6 | Enter OTP (auto-submits at 6 digits) | `agent-browser --profile ~/.structa-agent fill 'input[data-input-otp-input="true"]' "$OTP"` |
+| 7 | If on /onboarding, apply plan + reload | `npx sst shell npx tsx scripts/bypass-onboarding.ts agent@structa.dev` then `open /app` |
+
+Notes:
+- **Profile survives restarts** — repeat logins are *not* needed; only re-run `agent-login.sh` when the better-auth session expires (~7d default).
+- **`input-otp`** renders one composite input (`input[data-input-otp-input="true"]`); `fill`-ing 6 chars triggers `verify-code-form`'s auto-submit effect.
+- **Don't commit session state** — the profile lives at `~/.structa-agent` (outside the repo). Never copy it into the repo or commit it.
+
 ---
 
 ## Related Documentation

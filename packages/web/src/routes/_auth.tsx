@@ -5,10 +5,9 @@ import {
 	useLocation,
 } from "@tanstack/react-router";
 import { AppSidebar, type SidebarUser } from "@/components/app-sidebar";
+import { DevLevaPanel } from "@/components/dev/dev-leva";
 import { NavigationHeader } from "@/components/nav/navigation-header";
 import { ProjectSwitcher } from "@/components/nav/project-switcher";
-import ResponsiveBreadcrumbs from "@/components/nav/responsive-breadcrumbs";
-import { ErrorScreen } from "@/components/ui/error-screen";
 import { getImageUrl } from "@/components/ui/image";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -102,6 +101,7 @@ function AuthLayout() {
 							<ProjectSwitcher />
 						</NavigationHeader>
 						<Outlet />
+						<DevLevaPanel />
 					</SidebarInset>
 				</SidebarProvider>
 			</ProjectSwitcherProvider>
