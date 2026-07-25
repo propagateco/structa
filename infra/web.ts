@@ -9,6 +9,14 @@ import { SyncEngine } from './sync';
 
 export const app = new sst.aws.TanStackStart('Web', {
     path: 'packages/web',
+    // SST Console autodeploy container caps the Node V8 heap at ~2GB by
+    // default, which the Nitro/SSR bundle pass exceeds (framer-motion + the
+    // TanStack Start router graph). Raise the old-space limit so the build
+    // doesn't get SIGABRT'd mid-bundle. This only affects `npm run build`,
+    // not the runtime Lambda. See logs from 22 Jul 2026 autodeploy failure:
+    //   "FATAL ERROR: Reached heap limit Allocation failed - JavaScript
+    //    heap out of memory" during the nitro env build.
+    buildCommand: 'NODE_OPTIONS=--max-old-space-size=4096 npm run build',
     domain: {
         name: domain,
         redirects: ['www.' + domain],
