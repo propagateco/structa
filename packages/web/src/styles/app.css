@@ -1,8 +1,10 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
 
-/* Configure dark mode to use .dark class selector */
-@custom-variant dark (&:where(.dark, .dark *));
+/* Configure dark mode to use .dark class selector.
+   Matches the latest shadcn/ui Tailwind v4 scaffold. */
+@custom-variant dark (&:is(.dark *));
 
 /* ================================================
    DESIGN SYSTEM COLORS (from packages/marketing-site-example)
@@ -244,7 +246,6 @@
      ================================================ */
 
     --color-background: hsl(var(--color-background));
-    --color-background-pure: hsl(var(--color-background-pure));
     --color-foreground: hsl(var(--color-foreground));
     --color-card: hsl(var(--color-card));
     --color-card-foreground: hsl(var(--color-card-foreground));
@@ -420,6 +421,17 @@
       ================================================ */
 
     --radius: 0.5rem;
+
+    /* Derived radius scale — matches the shadcn/ui Tailwind v4
+       scaffold so `rounded-sm|md|lg|xl|2xl|3xl|4xl` share a
+       single source of truth via `--radius`. */
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
 
     /* ================================================
       GRID SYSTEM
