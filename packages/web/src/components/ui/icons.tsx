@@ -32,16 +32,15 @@ const structaIconSizeVariants = cva('', {
 
 export interface StructaIconProps
     extends
-        React.HTMLAttributes<HTMLDivElement>,
+        React.ComponentProps<"div">,
         VariantProps<typeof structaIconColorVariants>,
         VariantProps<typeof structaIconSizeVariants> {}
 
-const StructaIcon = React.forwardRef<HTMLDivElement, StructaIconProps>(
-    (props, ref) => {
-        const { className, variant, size, ...restProps } = props;
+function StructaIcon({ className, variant, size, ref, ...restProps }: StructaIconProps) {
         return (
             <div
                 ref={ref}
+                data-slot="structa-icon"
                 className={cn(structaIconColorVariants({ variant }), className)}
                 {...restProps}
             >
@@ -127,10 +126,7 @@ const StructaIcon = React.forwardRef<HTMLDivElement, StructaIconProps>(
                 </svg>
             </div>
         );
-    }
-);
-
-StructaIcon.displayName = 'StructaIcon';
+}
 
 export { StructaIcon, structaIconColorVariants, structaIconSizeVariants };
 

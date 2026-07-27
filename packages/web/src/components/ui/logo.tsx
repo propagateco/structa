@@ -26,13 +26,12 @@ const logoVariants = cva(
 
 export interface LogoProps
     extends
-        React.HTMLAttributes<HTMLSpanElement>,
+        React.ComponentProps<"span">,
         VariantProps<typeof logoVariants> {
     "aria-label"?: string;
 }
 
-const Logo = React.forwardRef<HTMLSpanElement, LogoProps>(
-    ({ className, size, variant, ...props }, ref) => {
+function Logo({ className, size, variant, ref, ...props }: LogoProps) {
         const lightMask = {
             WebkitMaskImage: "url(/letterhead-light.svg)",
             maskImage: "url(/letterhead-light.svg)",
@@ -58,6 +57,7 @@ const Logo = React.forwardRef<HTMLSpanElement, LogoProps>(
         return (
             <span
                 ref={ref}
+                data-slot="logo"
                 role="img"
                 aria-label={props["aria-label"] ?? "Structa"}
                 className={cn(logoVariants({ size, variant }), className)}
@@ -73,9 +73,6 @@ const Logo = React.forwardRef<HTMLSpanElement, LogoProps>(
                 />
             </span>
         );
-    },
-);
-
-Logo.displayName = "Logo";
+}
 
 export { Logo, logoVariants };

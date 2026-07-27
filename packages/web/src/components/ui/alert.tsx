@@ -32,58 +32,56 @@ const alertActionVariants = cva("", {
     },
 });
 
-const Alert = React.forwardRef<
-    HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
+function Alert({
+    className,
+    variant,
+    ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof alertVariants>) {
+    return (
     <div
-        ref={ref}
+        data-slot="alert"
         role="alert"
         className={cn(alertVariants({ variant }), className)}
         {...props}
     />
-));
-Alert.displayName = "Alert";
+    );
+}
 
-const AlertTitle = React.forwardRef<
-    HTMLParagraphElement,
-    React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
+function AlertTitle({ className, ...props }: React.ComponentProps<"h5">) {
+    return (
     <h5
-        ref={ref}
+        data-slot="alert-title"
         className={cn(
             "mb-1 font-medium leading-none tracking-tight",
             className,
         )}
         {...props}
     />
-));
-AlertTitle.displayName = "AlertTitle";
+    );
+}
 
-const AlertDescription = React.forwardRef<
-    HTMLParagraphElement,
-    React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
+function AlertDescription({ className, ...props }: React.ComponentProps<"div">) {
+    return (
     <div
-        ref={ref}
+        data-slot="alert-description"
         className={cn("text-sm [&_p]:leading-relaxed", className)}
         {...props}
     />
-));
-AlertDescription.displayName = "AlertDescription";
+    );
+}
 
-const AlertAction = React.forwardRef<
-    HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement> &
-        VariantProps<typeof alertActionVariants>
->(({ className, position, ...props }, ref) => (
+function AlertAction({
+    className,
+    position,
+    ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof alertActionVariants>) {
+    return (
     <div
-        ref={ref}
         data-slot="alert-action"
         className={cn(alertActionVariants({ position }), className)}
         {...props}
     />
-));
-AlertAction.displayName = "AlertAction";
+    );
+}
 
 export { Alert, AlertTitle, AlertDescription, AlertAction };

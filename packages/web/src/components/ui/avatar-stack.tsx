@@ -8,7 +8,7 @@ interface AvatarItem {
     fallback?: string;
 }
 
-interface AvatarStackProps {
+interface AvatarStackProps extends React.ComponentProps<"div"> {
     avatars: AvatarItem[];
     className?: string;
     maxDisplay?: number;
@@ -19,14 +19,24 @@ interface AvatarStackProps {
  * Inspired by ui.sh creator avatars
  * Leftmost avatar appears on top (higher z-index)
  */
-const AvatarStack = React.forwardRef<HTMLDivElement, AvatarStackProps>(
-    ({ avatars, className, maxDisplay = 3 }, ref) => {
+function AvatarStack({
+    avatars,
+    className,
+    maxDisplay = 3,
+    ref,
+    ...props
+}: AvatarStackProps) {
         const displayAvatars = avatars.slice(0, maxDisplay);
         const remainingCount = avatars.length - maxDisplay;
         const lastIndex = displayAvatars.length - 1;
 
         return (
-            <div ref={ref} className={cn('flex shrink-0', className)}>
+            <div
+                ref={ref}
+                data-slot="avatar-stack"
+                className={cn('flex shrink-0', className)}
+                {...props}
+            >
                 {displayAvatars.map((avatar, index) => (
                     <Avatar
                         key={avatar.src}
@@ -53,9 +63,7 @@ const AvatarStack = React.forwardRef<HTMLDivElement, AvatarStackProps>(
                 )}
             </div>
         );
-    }
-);
-AvatarStack.displayName = 'AvatarStack';
+}
 
 export { AvatarStack };
 export type { AvatarStackProps, AvatarItem };
