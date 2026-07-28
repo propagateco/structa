@@ -133,7 +133,7 @@
     --color-background-2: var(--ds-background-200);
     --color-surface: var(--color-background-1);
     --color-surface-hover: var(--ds-neutral-100);
-    --color-surface-active: var(--ds-neutral-200);
+    --color-surface-active: var(--ds-neutral-100);
 
     --color-background: var(--color-background-1);
     --color-foreground: var(--ds-neutral-800);
@@ -221,7 +221,7 @@
     --color-background-2: var(--ds-background-200);
     --color-surface: var(--color-background-1);
     --color-surface-hover: var(--ds-neutral-800);
-    --color-surface-active: var(--ds-neutral-700);
+    --color-surface-active: var(--ds-neutral-800);
 
     --color-background: var(--color-background-1);
     --color-foreground: var(--ds-neutral-50);
@@ -240,7 +240,7 @@
     --color-muted-foreground: var(--ds-neutral-400);
     --color-muted-background: var(--ds-neutral-900);
 
-    --color-accent: var(--ds-powder);
+    --color-accent: var(--ds-azure);
     --color-accent-foreground: var(--ds-neutral-900);
     --color-accent-muted: var(--ds-neutral-800);
 
