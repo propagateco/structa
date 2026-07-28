@@ -27,7 +27,7 @@ const dropdownMenuSubTriggerVariants = cva(
         variants: {
             variant: {
                 default:
-                    "focus:bg-muted focus:text-foreground data-[state=open]:bg-muted data-[highlighted]:bg-muted data-[highlighted]:text-foreground",
+                    "focus:bg-surface-hover focus:text-foreground data-[state=open]:bg-surface-active data-[highlighted]:bg-surface-hover data-[highlighted]:text-foreground",
                 destructive:
                     "text-destructive hover:bg-destructive/10 active:bg-destructive/10 focus:bg-destructive/10 data-[state=open]:bg-destructive/10 data-[highlighted]:bg-destructive/10",
             },
@@ -90,7 +90,7 @@ function DropdownMenuContent({
                 data-slot="dropdown-menu-content"
                 sideOffset={sideOffset}
                 className={cn(
-                    "z-50 border border-border dark:border-none max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-md bg-popover p-1 text-popover-foreground shadow-sm",
+                    "z-50 border border-border dark:border-none max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-md bg-popover p-2 text-popover-foreground shadow-sm",
                     "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-dropdown-menu-content-transform-origin]",
                     className,
                 )}
@@ -292,12 +292,12 @@ function FilterableDropdownMenu<T>({
 }
 
 const dropdownMenuItemVariants = cva(
-    "relative my-0.5 flex cursor-pointer select-none items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
+    "relative my-0.5 flex cursor-pointer select-none items-center gap-2 rounded-md px-2.5 py-1.5 text-sm text-sidebar-foreground outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
     {
         variants: {
             variant: {
                 default:
-                    "data-[active=true]:bg-muted data-[active=true]:text-foreground hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground data-[highlighted]:bg-muted data-[highlighted]:text-foreground",
+                    "hover:bg-surface-hover hover:text-foreground focus:bg-surface-hover focus:text-foreground active:bg-surface-active data-[active=true]:bg-surface-hover data-[active=true]:text-foreground data-[highlighted]:bg-surface-hover data-[highlighted]:text-foreground",
                 destructive:
                     "text-destructive hover:bg-destructive/10 data-[active=true]:bg-destructive/10 focus:bg-destructive/10 data-[highlighted]:bg-destructive/10",
             },
@@ -339,7 +339,7 @@ function DropdownMenuCheckboxItem({
         <DropdownMenuPrimitive.CheckboxItem
             data-slot="dropdown-menu-checkbox-item"
             className={cn(
-                "relative my-0.5 flex cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-2.5 text-sm outline-none transition-colors focus:bg-muted focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                "relative my-0.5 flex cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-2.5 text-sm outline-none transition-colors focus:bg-surface-hover focus:text-foreground active:bg-surface-active data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                 className,
             )}
             checked={checked}
@@ -364,7 +364,7 @@ function DropdownMenuRadioItem({
         <DropdownMenuPrimitive.RadioItem
             data-slot="dropdown-menu-radio-item"
             className={cn(
-                "relative my-0.5 flex cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-2.5 text-sm outline-none transition-colors focus:bg-muted focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                "relative my-0.5 flex cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-2.5 text-sm outline-none transition-colors focus:bg-surface-hover focus:text-foreground active:bg-surface-active data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                 className,
             )}
             {...props}

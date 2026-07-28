@@ -29,14 +29,14 @@ const buttonVariants = cva(
                     "bg-primary text-primary-foreground hover:bg-primary/90",
                 destructive:
                     "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40",
-                remove: "border border-input bg-background text-text-secondary hover:bg-muted hover:text-text active:bg-muted",
+                remove: "border border-input bg-control text-text-secondary hover:border-border-hover hover:bg-control-hover hover:text-text active:border-border-active active:bg-control-active",
                 outline:
-                    "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+                    "border border-input bg-control shadow-xs hover:border-border-hover hover:bg-control-hover hover:text-foreground active:border-border-active active:bg-control-active",
                 secondary:
-                    "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-                ghost: "hover:bg-muted hover:text-foreground",
+                    "bg-secondary text-secondary-foreground hover:bg-surface-hover active:bg-surface-active",
+                ghost: "hover:bg-surface-hover hover:text-foreground active:bg-surface-active",
                 ghostPrimary:
-                    "text-foreground hover:bg-secondary hover:text-foreground",
+                    "text-foreground hover:bg-surface-hover hover:text-foreground active:bg-surface-active",
                 link: "text-primary underline-offset-4 hover:underline",
             },
             size: {
@@ -125,4 +125,3 @@ function Button({
 }
 
 export { Button, buttonVariants };
-
