@@ -77,19 +77,13 @@ function AuthLayout() {
 		return <LoadingScreen />;
 	}
 
-	// Helper to convert user to SidebarUser shape
-	const toSidebarUser = (
-		userData: NonNullable<typeof user> | typeof authUser,
-	): SidebarUser => ({
-		name: userData.name,
-		email: userData.email,
-		avatar: userData.image
-			? getImageUrl(userData.image, "?width=400&height=400&format=webp")
-			: undefined,
-	});
-
-	// Use Electric user if synced, fallback to auth user
-	const displayUser = toSidebarUser(user ?? authUser);
+	// Use Electric user if synced, fallback to auth user.
+	// Spread preserves all fields so NavUser can access id, plan, etc.
+	const rawUser = user ?? authUser;
+	const displayUser: SidebarUser = {
+		...rawUser,
+		image: getImageUrl(rawUser.image, "?width=400&height=400&format=webp") ?? null,
+	};
 
 	return (
 		<TooltipProvider>

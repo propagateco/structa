@@ -1,14 +1,12 @@
-"use client";
-
+import type { SchemaType } from "@structa/core/user/user.model";
 import { Link, useRouter } from "@tanstack/react-router";
 import {
-    BadgeCheck,
     Bell,
     ChevronsUpDown,
+    Cog,
+    Contrast,
     CreditCard,
     DoorOpen,
-    LogOut,
-    Sparkles,
     UserCircle,
 } from "lucide-react";
 
@@ -28,17 +26,10 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
-import { formatToInitials } from "@/lib/string-utils";
+import { formatPlan, formatToInitials } from "@/lib/string-utils";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
-export function NavUser({
-    user,
-}: {
-    user: {
-        name: string;
-        email: string;
-        avatar?: string;
-    };
-}) {
+export function NavUser({ user }: { user: SchemaType }) {
     const { isMobile } = useSidebar();
     const router = useRouter();
 
@@ -57,21 +48,21 @@ export function NavUser({
                             size="lg"
                             className="data-[state=open]:bg-secondary data-[state=open]:text-foreground"
                         >
-                            <Avatar className="h-8 w-8 rounded-lg">
+                            <Avatar className="h-8 w-8 rounded-full">
                                 <AvatarImage
-                                    src={user.avatar}
+                                    src={user.image ?? undefined}
                                     alt={user.name}
                                 />
-                                <AvatarFallback className="rounded-lg">
+                                <AvatarFallback className="rounded-full">
                                     {formatToInitials(user.name)}
                                 </AvatarFallback>
                             </Avatar>
-                            <div className="grid flex-1 text-left text-sm leading-tight">
+                            <div className="grid flex-1 text-left text-base">
                                 <span className="truncate font-normal text-foreground">
                                     {user.name}
                                 </span>
                                 <span className="truncate text-xs">
-                                    {user.email}
+                                    {formatPlan(user.plan)}
                                 </span>
                             </div>
                             <ChevronsUpDown className="ml-auto size-4" />
@@ -85,42 +76,42 @@ export function NavUser({
                     >
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                                <Avatar className="h-8 w-8 rounded-lg">
+                                <Avatar className="size-8 rounded-full">
                                     <AvatarImage
-                                        src={user.avatar}
+                                        src={user.image ?? undefined}
                                         alt={user.name}
                                     />
                                     <AvatarFallback className="rounded-lg">
                                         {formatToInitials(user.name)}
                                     </AvatarFallback>
                                 </Avatar>
-                                <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-semibold">
+                                <div className="grid flex-1 text-left">
+                                    <span className="truncate text-sm font-medium text-text">
                                         {user.name}
                                     </span>
-                                    <span className="truncate text-xs">
+                                    <span className="truncate text-xs text-muted-foreground">
                                         {user.email}
                                     </span>
                                 </div>
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
-                                <Sparkles />
-                                Upgrade to Pro
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                        <DropdownMenuGroup>
                             <DropdownMenuItem asChild>
                                 <Link to="/settings/account">
                                     <UserCircle />
-                                    Account
+                                    Profile
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link to="/settings/account">
+                                    <Cog />
+                                    Settings
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <Link to="/settings/billing">
                                     <CreditCard />
-                                    Billing
+                                    Subscription
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
@@ -128,6 +119,18 @@ export function NavUser({
                                     <Bell />
                                     Notifications
                                 </Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem
+                                onSelect={(e) => e.preventDefault()}
+                                className="py-1 justify-between"
+                            >
+                                <span className="flex items-center gap-2">
+                                    <Contrast className="size-4" />
+                                    Appearance
+                                </span>
+                                <ThemeToggle variant="default" size="xs" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuItem

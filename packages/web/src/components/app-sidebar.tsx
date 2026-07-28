@@ -4,15 +4,9 @@ import {
     ChartAnalysisIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import type { SchemaType } from "@structa/core/user/user.model";
 import { Link } from "@tanstack/react-router";
-import {
-    GalleryVerticalEnd,
-    LayoutGrid,
-    LifeBuoy,
-    PieChart,
-    Plus,
-    Send,
-} from "lucide-react";
+import { GalleryVerticalEnd, LayoutGrid, Plus } from "lucide-react";
 import * as React from "react";
 import { NavChats } from "@/components/nav-chats";
 import { NavMain } from "@/components/nav-main";
@@ -50,12 +44,9 @@ const EntranceStairs = makeHugeicon(EntranceStairsIcon);
 const Archive04 = makeHugeicon(Archive04Icon);
 const ChartAnalysis = makeHugeicon(ChartAnalysisIcon);
 
-// User type for the sidebar
-export type SidebarUser = {
-    name: string;
-    email: string;
-    avatar?: string;
-};
+// User type for the sidebar — the canonical DB type from the core package.
+// NavUser receives the full user object so it can access id, plan, etc.
+export type SidebarUser = SchemaType;
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
     user: SidebarUser;
