@@ -22,12 +22,12 @@ const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
 const dropdownMenuSubTriggerVariants = cva(
-    "flex cursor-default select-none items-center rounded-md px-2 py-1 text-xs outline-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+    "flex cursor-default select-none items-center gap-2.5 rounded-md px-2.5 py-2 text-sm outline-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
     {
         variants: {
             variant: {
                 default:
-                    "focus:bg-secondary focus:text-foreground data-[state=open]:bg-secondary data-[highlighted]:bg-secondary data-[highlighted]:text-foreground",
+                    "focus:bg-muted focus:text-foreground data-[state=open]:bg-muted data-[highlighted]:bg-muted data-[highlighted]:text-foreground",
                 destructive:
                     "text-destructive hover:bg-destructive/10 active:bg-destructive/10 focus:bg-destructive/10 data-[state=open]:bg-destructive/10 data-[highlighted]:bg-destructive/10",
             },
@@ -292,12 +292,12 @@ function FilterableDropdownMenu<T>({
 }
 
 const dropdownMenuItemVariants = cva(
-    "relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 text-xs outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
+    "relative my-0.5 flex cursor-pointer select-none items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0",
     {
         variants: {
             variant: {
                 default:
-                    "data-[active=true]:bg-secondary data-[active=true]:text-foreground hover:bg-secondary hover:text-foreground focus:bg-secondary focus:text-foreground data-[highlighted]:bg-secondary data-[highlighted]:text-foreground",
+                    "data-[active=true]:bg-muted data-[active=true]:text-foreground hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground data-[highlighted]:bg-muted data-[highlighted]:text-foreground",
                 destructive:
                     "text-destructive hover:bg-destructive/10 data-[active=true]:bg-destructive/10 focus:bg-destructive/10 data-[highlighted]:bg-destructive/10",
             },
@@ -339,7 +339,7 @@ function DropdownMenuCheckboxItem({
         <DropdownMenuPrimitive.CheckboxItem
             data-slot="dropdown-menu-checkbox-item"
             className={cn(
-                "relative flex cursor-pointer select-none items-center rounded-md py-1 pl-8 pr-2 text-xs outline-none transition-colors focus:bg-secondary focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                "relative my-0.5 flex cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-2.5 text-sm outline-none transition-colors focus:bg-muted focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                 className,
             )}
             checked={checked}
@@ -364,7 +364,7 @@ function DropdownMenuRadioItem({
         <DropdownMenuPrimitive.RadioItem
             data-slot="dropdown-menu-radio-item"
             className={cn(
-                "relative flex cursor-pointer select-none items-center rounded-md py-1 pl-8 pr-2 text-xs outline-none transition-colors focus:bg-secondary focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+                "relative my-0.5 flex cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-2.5 text-sm outline-none transition-colors focus:bg-muted focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                 className,
             )}
             {...props}
@@ -390,7 +390,7 @@ function DropdownMenuLabel({
         <DropdownMenuPrimitive.Label
             data-slot="dropdown-menu-label"
             className={cn(
-                "px-2 py-1 text-xs font-medium",
+                "px-2.5 py-1.5 text-sm font-medium",
                 inset && "pl-8",
                 className,
             )}
@@ -406,7 +406,7 @@ function DropdownMenuSeparator({
     return (
         <DropdownMenuPrimitive.Separator
             data-slot="dropdown-menu-separator"
-            className={cn("-mx-1 my-0.5 h-px bg-border", className)}
+            className={cn("-mx-1.5 my-1 h-px bg-border", className)}
             {...props}
         />
     );

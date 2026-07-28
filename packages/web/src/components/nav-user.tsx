@@ -6,6 +6,7 @@ import {
     Bell,
     ChevronsUpDown,
     CreditCard,
+    DoorOpen,
     LogOut,
     Sparkles,
     UserCircle,
@@ -18,7 +19,6 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -78,7 +78,7 @@ export function NavUser({
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                        className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                        className="w-[--radix-dropdown-menu-trigger-width] min-w-64 rounded-lg"
                         side={isMobile ? "bottom" : "right"}
                         align="end"
                         sideOffset={4}
@@ -104,14 +104,12 @@ export function NavUser({
                                 </div>
                             </div>
                         </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
                                 <Sparkles />
                                 Upgrade to Pro
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem asChild>
                                 <Link to="/settings/account">
@@ -132,12 +130,11 @@ export function NavUser({
                                 </Link>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
                         <DropdownMenuItem
                             variant="destructive"
                             onClick={handleSignOut}
                         >
-                            <LogOut />
+                            <DoorOpen />
                             Log out
                         </DropdownMenuItem>
                     </DropdownMenuContent>
