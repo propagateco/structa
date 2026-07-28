@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
 /* Configure dark mode to use .dark class selector.
@@ -45,67 +45,40 @@
     --ds-neutral-900: oklch(0.2044 0 0);
     --ds-neutral-950: oklch(0.1445 0 0);
 
-    /* Zinc Scale (shadcn/ui colors) */
-    --ds-zinc-50: oklch(0.9848 0 0);
-    --ds-zinc-100: oklch(0.9703 0 0);
-    --ds-zinc-200: oklch(0.9219 0 0);
-    --ds-zinc-300: oklch(0.8697 0 0);
-    --ds-zinc-400: oklch(0.7153 0 0);
-    --ds-zinc-500: oklch(0.5555 0 0);
-    --ds-zinc-600: oklch(0.439 0 0);
-    --ds-zinc-700: oklch(0.3715 0 0);
-    --ds-zinc-800: oklch(0.2686 0 0);
-    --ds-zinc-900: oklch(0.2044 0 0);
-    --ds-zinc-950: oklch(0.1445 0 0);
+    /* Custom type scale — overrides Tailwind v4's @layer theme defaults.
+       Uses --text-* names to match the utility class CSS variable references.
+       text-sm=13px, text-base=14px, text-md=16px */
+    --text-sm: 0.8125rem;
+    --text-base: 0.875rem;
+    --text-md: 1rem;
 
-    /* Slate Scale (shadcn/ui colors) */
-    --ds-slate-50: oklch(0.9838 0.0035 247.8583);
-    --ds-slate-100: oklch(0.9684 0.0068 247.8951);
-    --ds-slate-200: oklch(0.9291 0.0126 255.0243);
-    --ds-slate-300: oklch(0.8719 0.0195 253.3621);
-    --ds-slate-400: oklch(0.7108 0.0347 256.7869);
-    --ds-slate-500: oklch(0.5555 0.0397 256.8166);
-    --ds-slate-600: oklch(0.446 0.0367 256.8271);
-    --ds-slate-700: oklch(0.3724 0.039 256.8465);
-    --ds-slate-800: oklch(0.2811 0.0374 259.6943);
-    --ds-slate-900: oklch(0.2083 0.0394 265.5325);
-    --ds-slate-950: oklch(0.1302 0.0421 265.213);
+    /* Geist Gray Alpha Scale — theme-aware neutral overlays that work on
+       top of both primary and secondary surfaces. */
+    --ds-gray-alpha-100: rgb(0 0 0 / 5%);
+    --ds-gray-alpha-200: rgb(0 0 0 / 8%);
+    --ds-gray-alpha-300: rgb(0 0 0 / 10%);
+    --ds-gray-alpha-400: rgb(0 0 0 / 8%);
+    --ds-gray-alpha-500: rgb(0 0 0 / 21%);
+    --ds-gray-alpha-600: rgb(0 0 0 / 34%);
+    --ds-gray-alpha-700: rgb(0 0 0 / 44%);
+    --ds-gray-alpha-800: rgb(0 0 0 / 51%);
+    --ds-gray-alpha-900: rgb(0 0 0 / 61%);
+    --ds-gray-alpha-1000: rgb(0 0 0 / 91%);
 
-    /* Stone Scale (shadcn/ui colors) */
-    --ds-stone-50: oklch(0.9845 0.0013 106.4239);
-    --ds-stone-100: oklch(0.97 0.0013 106.4239);
-    --ds-stone-200: oklch(0.93 0.0037 106.4718);
-    --ds-stone-300: oklch(0.8802 0.0047 106.4951);
-    --ds-stone-400: oklch(0.7332 0.0104 106.6529);
-    --ds-stone-500: oklch(0.5759 0.0123 106.7807);
-    --ds-stone-600: oklch(0.4682 0.0123 106.8664);
-    --ds-stone-700: oklch(0.3994 0.0131 106.9799);
-    --ds-stone-800: oklch(0.3008 0.0119 107.095);
-    --ds-stone-900: oklch(0.2355 0.0093 107.0922);
-    --ds-stone-950: oklch(0.1485 0.0016 106.5962);
+    /* Geist Purple Scale — reserved for AI, Clerk, Pro and experimental
+       product features rather than general interaction states. */
+    --ds-purple-100: oklch(96.65% 0.0244 312.19);
+    --ds-purple-200: oklch(96.73% 0.0228 309.8);
+    --ds-purple-300: oklch(94.85% 0.0364 310.15);
+    --ds-purple-400: oklch(91.77% 0.0614 312.82);
+    --ds-purple-500: oklch(81.26% 0.1409 310.8);
+    --ds-purple-600: oklch(72.07% 0.2083 308.19);
+    --ds-purple-700: oklch(55.5% 0.3008 306.12);
+    --ds-purple-800: oklch(48.58% 0.2638 305.73);
+    --ds-purple-900: oklch(47.18% 0.2579 304);
+    --ds-purple-1000: oklch(23.96% 0.13 305.66);
 
-    /* Gray Scale (shadcn/ui colors) */
-    --ds-gray-50: oklch(0.9843 0.0017 247.8393);
-    --ds-gray-100: oklch(0.9671 0.0029 264.542);
-    --ds-gray-200: oklch(0.9278 0.0058 264.5314);
-    --ds-gray-300: oklch(0.8715 0.0094 258.3383);
-    --ds-gray-400: oklch(0.7136 0.0192 261.485);
-    --ds-gray-500: oklch(0.5513 0.0233 264.3647);
-    --ds-gray-600: oklch(0.4459 0.0263 256.8018);
-    --ds-gray-700: oklch(0.3742 0.0302 258.3561);
-    --ds-gray-800: oklch(0.2784 0.0296 256.848);
-    --ds-gray-900: oklch(0.2102 0.0319 264.7715);
-    --ds-gray-950: oklch(0.1294 0.0273 261.6711);
-
-    /* Monochromatic/Mono Scale Aliases */
-    /*
-      Swap the mono palette by pointing these to:
-      - --ds-neutral-* (default)
-      - --ds-zinc-*
-      - --ds-slate-*
-      - --ds-stone-*
-      - --ds-gray-*
-    */
+    /* Monochromatic utility aliases */
     --ds-mono-50: var(--ds-neutral-50);
     --ds-mono-100: var(--ds-neutral-100);
     --ds-mono-200: var(--ds-neutral-200);
@@ -118,41 +91,56 @@
     --ds-mono-900: var(--ds-neutral-900);
     --ds-mono-950: var(--ds-neutral-950);
 
-    /* Backgrounds */
+    /* Backgrounds — Background 1 is the default canvas/component surface.
+       Background 2 is reserved for subtle section and inset differentiation. */
     --ds-background-100: var(--ds-white);
-    --ds-background-200: var(--ds-paper);
+    --ds-background-200: var(--ds-neutral-50);
 
-    /* Status Colors */
-    --ds-success: oklch(0.8233 0.2022 152.3902);
-    --ds-success-foreground: var(--ds-ink);
-    --ds-success-toast: var(--ds-lichen);
-    --ds-success-toast-foreground: var(--ds-steel);
+    /* Status Colors — Geist-style semantic scale.
+       Solid colors are for high-contrast indicators; toast colors use the
+       subtle background/text pairing recommended for badges and pills. */
+    --ds-success: oklch(51.75% 0.1453 147.65);
+    --ds-success-foreground: oklch(29.15% 0.1197 147.38);
+    --ds-success-toast: oklch(96.92% 0.037 147.15);
+    --ds-success-toast-foreground: oklch(29.15% 0.1197 147.38);
+    --ds-success-border: oklch(91.49% 0.0976 146.24);
 
-    --ds-info: oklch(0.554 0.0871 211.6158);
-    --ds-info-foreground: var(--ds-paper);
-    --ds-info-toast: var(--ds-powder);
-    --ds-info-toast-foreground: var(--ds-steel);
+    --ds-info: oklch(53.18% 0.2399 256.99);
+    --ds-info-foreground: oklch(26.67% 0.1099 254.34);
+    --ds-info-toast: oklch(96.29% 0.0195 250.59);
+    --ds-info-toast-foreground: oklch(26.67% 0.1099 254.34);
+    --ds-info-border: oklch(91.58% 0.0473 245.12);
 
-    --ds-warning: oklch(0.7837 0.1584 72.9006);
-    --ds-warning-foreground: var(--ds-ink);
-    --ds-warning-toast: var(--ds-apricot);
-    --ds-warning-toast-foreground: var(--ds-terra);
+    --ds-warning: oklch(52.79% 0.1496 54.65);
+    --ds-warning-foreground: oklch(30.83% 0.099 45.48);
+    --ds-warning-toast: oklch(96.81% 0.0495 90.24);
+    --ds-warning-toast-foreground: oklch(30.83% 0.099 45.48);
+    --ds-warning-border: oklch(91.02% 0.1322 88.25);
 
-    --ds-error: oklch(0.4496 0.1613 25.6977);
-    --ds-error-foreground: var(--ds-paper);
-    --ds-error-toast: var(--ds-error);
-    --ds-error-toast-foreground: var(--ds-paper);
+    --ds-error: oklch(54.99% 0.232 25.29);
+    --ds-error-foreground: oklch(24.8% 0.1041 18.86);
+    --ds-error-toast: oklch(95.41% 0.0299 14.25);
+    --ds-error-toast-foreground: oklch(24.8% 0.1041 18.86);
+    --ds-error-border: oklch(91.51% 0.0471 19.8);
 
     /* ================================================
       SEMANTIC TOKEN VARIABLES
       ================================================ */
 
-    --color-background: var(--ds-neutral-50);
-    --color-foreground: var(--ds-neutral-900);
-    --color-card: var(--ds-neutral-50);
-    --color-card-foreground: var(--ds-neutral-900);
-    --color-popover: var(--ds-neutral-50);
-    --color-popover-foreground: var(--ds-neutral-900);
+    /* Geist-inspired usage roles. These intentionally preserve Structa's
+       existing base backgrounds rather than introducing darker canvases. */
+    --color-background-1: var(--ds-background-100);
+    --color-background-2: var(--ds-background-200);
+    --color-surface: var(--color-background-1);
+    --color-surface-hover: var(--ds-neutral-100);
+    --color-surface-active: var(--ds-neutral-200);
+
+    --color-background: var(--color-background-1);
+    --color-foreground: var(--ds-neutral-800);
+    --color-card: var(--ds-white);
+    --color-card-foreground: var(--ds-neutral-800);
+    --color-popover: var(--ds-white);
+    --color-popover-foreground: var(--ds-neutral-800);
 
     --color-primary: var(--ds-neutral-900);
     --color-primary-foreground: var(--ds-neutral-50);
@@ -160,9 +148,9 @@
     --color-secondary: var(--ds-neutral-200);
     --color-secondary-foreground: var(--ds-neutral-900);
 
-    --color-muted: var(--ds-neutral-100);
+    --color-muted: var(--color-surface-hover);
     --color-muted-foreground: var(--ds-neutral-500);
-    --color-muted-background: var(--ds-neutral-50);
+    --color-muted-background: var(--ds-neutral-100);
 
     --color-accent: var(--ds-azure);
     --color-accent-foreground: var(--ds-neutral-50);
@@ -172,15 +160,23 @@
     --color-destructive-foreground: var(--ds-neutral-50);
 
     --color-border: var(--ds-neutral-300);
-    --color-input: var(--ds-neutral-300);
-    --color-ring: var(--ds-neutral-300);
+    --color-border-hover: var(--ds-neutral-400);
+    --color-border-active: var(--ds-neutral-500);
+    --color-input: var(--color-border);
+    --color-ring: var(--color-border-active);
 
-    --color-text: var(--color-foreground);
-    --color-text-secondary: var(--ds-neutral-600);
+    --color-control: var(--color-surface);
+    --color-control-hover: var(--color-surface-hover);
+    --color-control-active: var(--color-surface-active);
+
+    --color-text-primary: var(--ds-neutral-800);
+    --color-text: var(--ds-neutral-600);
+    --color-text-secondary: var(--ds-neutral-500);
+    --color-text-disabled: var(--ds-neutral-400);
     --color-text-muted: var(--color-muted-foreground);
     --color-link: var(--color-accent);
-    --color-text-dark: var(--ds-neutral-950);
-    --sidebar: var(--ds-neutral-50);
+    --color-text-dark: var(--ds-neutral-900);
+    --sidebar: var(--ds-white);
     --sidebar-foreground: var(--ds-neutral-600);
     --sidebar-primary: var(--color-primary);
     --sidebar-primary-foreground: var(--color-primary-foreground);
@@ -188,10 +184,46 @@
     --sidebar-accent-foreground: var(--color-primary);
     --sidebar-border: var(--color-border);
     --sidebar-ring: var(--color-ring);
+
+    /* Popover tokens — match sidebar equivalents */
+    --popover: var(--ds-white);
+    --popover-foreground: var(--ds-neutral-600);
+    --popover-primary-foreground: var(--color-primary-foreground);
 }
 
 .dark {
-    --color-background: var(--ds-neutral-950);
+    --ds-gray-alpha-100: rgb(255 255 255 / 6%);
+    --ds-gray-alpha-200: rgb(255 255 255 / 9%);
+    --ds-gray-alpha-300: rgb(255 255 255 / 13%);
+    --ds-gray-alpha-400: rgb(255 255 255 / 14%);
+    --ds-gray-alpha-500: rgb(255 255 255 / 24%);
+    --ds-gray-alpha-600: rgb(255 255 255 / 51%);
+    --ds-gray-alpha-700: rgb(255 255 255 / 54%);
+    --ds-gray-alpha-800: rgb(255 255 255 / 47%);
+    --ds-gray-alpha-900: rgb(255 255 255 / 61%);
+    --ds-gray-alpha-1000: rgb(255 255 255 / 92%);
+
+    --ds-purple-100: oklch(22.34% 0.0779 316.87);
+    --ds-purple-200: oklch(25.91% 0.0921 314.41);
+    --ds-purple-300: oklch(31.98% 0.1219 312.41);
+    --ds-purple-400: oklch(35.93% 0.1504 309.78);
+    --ds-purple-500: oklch(40.99% 0.1721 307.92);
+    --ds-purple-600: oklch(55.5% 0.2191 306.12);
+    --ds-purple-700: oklch(55.5% 0.2186 306.12);
+    --ds-purple-800: oklch(48.58% 0.2102 305.73);
+    --ds-purple-900: oklch(69.87% 0.2037 309.51);
+    --ds-purple-1000: oklch(96.1% 0.0304 316.46);
+
+    --ds-background-100: var(--ds-neutral-900);
+    --ds-background-200: var(--ds-neutral-800);
+
+    --color-background-1: var(--ds-background-100);
+    --color-background-2: var(--ds-background-200);
+    --color-surface: var(--color-background-1);
+    --color-surface-hover: var(--ds-neutral-800);
+    --color-surface-active: var(--ds-neutral-700);
+
+    --color-background: var(--color-background-1);
     --color-foreground: var(--ds-neutral-50);
     --color-card: var(--ds-neutral-900);
     --color-card-foreground: var(--ds-neutral-50);
@@ -204,7 +236,7 @@
     --color-secondary: var(--ds-neutral-800);
     --color-secondary-foreground: var(--ds-neutral-400);
 
-    --color-muted: var(--ds-neutral-500);
+    --color-muted: var(--color-surface-hover);
     --color-muted-foreground: var(--ds-neutral-400);
     --color-muted-background: var(--ds-neutral-900);
 
@@ -212,25 +244,57 @@
     --color-accent-foreground: var(--ds-neutral-900);
     --color-accent-muted: var(--ds-neutral-800);
 
-    /* Lighter error color for dark mode visibility */
-    --ds-error: oklch(0.5966 0.1938 24.1071);
+    /* Geist dark status colors: color 9 for text/icons and color 2/10 for
+       subtle badge/toast surfaces. Error intentionally resolves to #fe2158. */
+    --ds-success: oklch(73.1% 0.2158 148.29);
+    --ds-success-foreground: var(--ds-neutral-900);
+    --ds-success-toast: oklch(27.12% 0.0895 150.09);
+    --ds-success-toast-foreground: oklch(96.76% 0.056 154.18);
+    --ds-success-border: oklch(34.39% 0.1039 147.78);
+
+    --ds-info: oklch(71.7% 0.1648 250.7936);
+    --ds-info-foreground: var(--ds-neutral-900);
+    --ds-info-toast: oklch(25.45% 0.0811 255.8);
+    --ds-info-toast-foreground: oklch(96.75% 0.0179 242.4234);
+    --ds-info-border: oklch(34.1% 0.121 254.74);
+
+    --ds-warning: oklch(77.21% 0.1991 64.28);
+    --ds-warning-foreground: var(--ds-neutral-900);
+    --ds-warning-toast: oklch(24.95% 0.0642 64.78);
+    --ds-warning-toast-foreground: oklch(96.7% 0.0418 84.59);
+    --ds-warning-border: oklch(35.53% 0.0903 66.3);
+
+    --ds-error: oklch(64.25% 0.244 15.8973);
+    --ds-error-foreground: var(--ds-neutral-900);
+    --ds-error-toast: oklch(25.93% 0.0834 19.02);
+    --ds-error-toast-foreground: oklch(95.6% 0.0293 6.61);
+    --ds-error-border: oklch(35.27% 0.1273 21.23);
+
     --color-destructive: var(--ds-error);
     --color-destructive-foreground: var(--ds-neutral-900);
 
     --color-border: var(--ds-neutral-600);
-    --color-input: var(--ds-neutral-600);
-    --color-ring: var(--ds-neutral-600);
+    --color-border-hover: var(--ds-neutral-500);
+    --color-border-active: var(--ds-neutral-400);
+    --color-input: var(--color-border);
+    --color-ring: var(--color-border-active);
 
+    --color-control: var(--color-surface);
+    --color-control-hover: var(--color-surface-hover);
+    --color-control-active: var(--color-surface-active);
+
+    --color-text-primary: var(--ds-neutral-50);
     --color-text: var(--color-foreground);
     --color-text-secondary: var(--color-secondary-foreground);
+    --color-text-disabled: var(--ds-neutral-500);
     --color-text-muted: var(--color-muted-foreground);
     --color-link: var(--color-accent);
-    --color-text-dark: var(--ds-neutral-950);
+    --color-text-dark: var(--ds-neutral-900);
 
     --border: var(--ds-neutral-600);
     --theme-border-color: rgba(255, 255, 255, 0.15);
     --grid-line-rgb: 255, 255, 255;
-    --sidebar: var(--ds-neutral-950);
+    --sidebar: var(--ds-neutral-900);
     --sidebar-foreground: var(--ds-neutral-400);
     --sidebar-primary: var(--color-accent);
     --sidebar-primary-foreground: var(--color-primary-foreground);
@@ -238,6 +302,11 @@
     --sidebar-accent-foreground: var(--color-accent-foreground);
     --sidebar-border: var(--color-border);
     --sidebar-ring: var(--color-ring);
+
+    /* Popover tokens — match sidebar equivalents */
+    --popover: var(--ds-neutral-900);
+    --popover-foreground: var(--ds-neutral-400);
+    --popover-primary-foreground: var(--color-primary-foreground);
 }
 
 @theme inline {
@@ -246,11 +315,17 @@
      ================================================ */
 
     --color-background: var(--color-background);
+    --color-background-1: var(--color-background-1);
+    --color-background-2: var(--color-background-2);
+    --color-surface: var(--color-surface);
+    --color-surface-hover: var(--color-surface-hover);
+    --color-surface-active: var(--color-surface-active);
     --color-foreground: var(--color-foreground);
     --color-card: var(--color-card);
     --color-card-foreground: var(--color-card-foreground);
     --color-popover: var(--color-popover);
     --color-popover-foreground: var(--color-popover-foreground);
+    --color-popover-primary-foreground: var(--popover-primary-foreground);
 
     --color-primary: var(--color-primary);
     --color-primary-foreground: var(--color-primary-foreground);
@@ -268,29 +343,39 @@
     --color-accent-muted: var(--color-accent-muted);
 
     --color-border: var(--color-border);
+    --color-border-hover: var(--color-border-hover);
+    --color-border-active: var(--color-border-active);
     --color-input: var(--color-input);
     --color-ring: var(--color-ring);
+
+    --color-control: var(--color-control);
+    --color-control-hover: var(--color-control-hover);
+    --color-control-active: var(--color-control-active);
 
     /* Status Colors */
     --color-success: var(--ds-success);
     --color-success-foreground: var(--ds-success-foreground);
     --color-success-toast: var(--ds-success-toast);
     --color-success-toast-foreground: var(--ds-success-toast-foreground);
+    --color-success-border: var(--ds-success-border);
 
     --color-info: var(--ds-info);
     --color-info-foreground: var(--ds-info-foreground);
     --color-info-toast: var(--ds-info-toast);
     --color-info-toast-foreground: var(--ds-info-toast-foreground);
+    --color-info-border: var(--ds-info-border);
 
     --color-warning: var(--ds-warning);
     --color-warning-foreground: var(--ds-warning-foreground);
     --color-warning-toast: var(--ds-warning-toast);
     --color-warning-toast-foreground: var(--ds-warning-toast-foreground);
+    --color-warning-border: var(--ds-warning-border);
 
     --color-error: var(--ds-error);
     --color-error-foreground: var(--ds-error-foreground);
     --color-error-toast: var(--ds-error-toast);
     --color-error-toast-foreground: var(--ds-error-toast-foreground);
+    --color-error-border: var(--ds-error-border);
 
     --color-destructive: var(--color-destructive);
     --color-destructive-foreground: var(--color-destructive-foreground);
@@ -298,11 +383,14 @@
     /* Shadows */
     --shadow-menu:
         0 0 0 1px rgba(0, 0, 0, 0.08), 0px 1px 1px rgba(0, 0, 0, 0.02),
-        0px 4px 8px -4px rgba(0, 0, 0, 0.04), 0px 16px 24px -8px rgba(0, 0, 0, 0.06);
+        0px 4px 8px -4px rgba(0, 0, 0, 0.04),
+        0px 16px 24px -8px rgba(0, 0, 0, 0.06);
 
     /* Text Colors */
     --color-text: var(--color-text);
+    --color-text-primary: var(--color-text-primary);
     --color-text-secondary: var(--color-text-secondary);
+    --color-text-disabled: var(--color-text-disabled);
     --color-text-muted: var(--color-text-muted);
     --color-link: var(--color-link);
     --color-text-dark: var(--color-text-dark);
@@ -338,53 +426,27 @@
     --color-ds-mono-900: var(--ds-mono-900);
     --color-ds-mono-950: var(--ds-mono-950);
 
-    --color-ds-zinc-50: var(--ds-zinc-50);
-    --color-ds-zinc-100: var(--ds-zinc-100);
-    --color-ds-zinc-200: var(--ds-zinc-200);
-    --color-ds-zinc-300: var(--ds-zinc-300);
-    --color-ds-zinc-400: var(--ds-zinc-400);
-    --color-ds-zinc-500: var(--ds-zinc-500);
-    --color-ds-zinc-600: var(--ds-zinc-600);
-    --color-ds-zinc-700: var(--ds-zinc-700);
-    --color-ds-zinc-800: var(--ds-zinc-800);
-    --color-ds-zinc-900: var(--ds-zinc-900);
-    --color-ds-zinc-950: var(--ds-zinc-950);
+    --color-ds-gray-alpha-100: var(--ds-gray-alpha-100);
+    --color-ds-gray-alpha-200: var(--ds-gray-alpha-200);
+    --color-ds-gray-alpha-300: var(--ds-gray-alpha-300);
+    --color-ds-gray-alpha-400: var(--ds-gray-alpha-400);
+    --color-ds-gray-alpha-500: var(--ds-gray-alpha-500);
+    --color-ds-gray-alpha-600: var(--ds-gray-alpha-600);
+    --color-ds-gray-alpha-700: var(--ds-gray-alpha-700);
+    --color-ds-gray-alpha-800: var(--ds-gray-alpha-800);
+    --color-ds-gray-alpha-900: var(--ds-gray-alpha-900);
+    --color-ds-gray-alpha-1000: var(--ds-gray-alpha-1000);
 
-    --color-ds-slate-50: var(--ds-slate-50);
-    --color-ds-slate-100: var(--ds-slate-100);
-    --color-ds-slate-200: var(--ds-slate-200);
-    --color-ds-slate-300: var(--ds-slate-300);
-    --color-ds-slate-400: var(--ds-slate-400);
-    --color-ds-slate-500: var(--ds-slate-500);
-    --color-ds-slate-600: var(--ds-slate-600);
-    --color-ds-slate-700: var(--ds-slate-700);
-    --color-ds-slate-800: var(--ds-slate-800);
-    --color-ds-slate-900: var(--ds-slate-900);
-    --color-ds-slate-950: var(--ds-slate-950);
-
-    --color-ds-stone-50: var(--ds-stone-50);
-    --color-ds-stone-100: var(--ds-stone-100);
-    --color-ds-stone-200: var(--ds-stone-200);
-    --color-ds-stone-300: var(--ds-stone-300);
-    --color-ds-stone-400: var(--ds-stone-400);
-    --color-ds-stone-500: var(--ds-stone-500);
-    --color-ds-stone-600: var(--ds-stone-600);
-    --color-ds-stone-700: var(--ds-stone-700);
-    --color-ds-stone-800: var(--ds-stone-800);
-    --color-ds-stone-900: var(--ds-stone-900);
-    --color-ds-stone-950: var(--ds-stone-950);
-
-    --color-ds-gray-50: var(--ds-gray-50);
-    --color-ds-gray-100: var(--ds-gray-100);
-    --color-ds-gray-200: var(--ds-gray-200);
-    --color-ds-gray-300: var(--ds-gray-300);
-    --color-ds-gray-400: var(--ds-gray-400);
-    --color-ds-gray-500: var(--ds-gray-500);
-    --color-ds-gray-600: var(--ds-gray-600);
-    --color-ds-gray-700: var(--ds-gray-700);
-    --color-ds-gray-800: var(--ds-gray-800);
-    --color-ds-gray-900: var(--ds-gray-900);
-    --color-ds-gray-950: var(--ds-gray-950);
+    --color-ds-purple-100: var(--ds-purple-100);
+    --color-ds-purple-200: var(--ds-purple-200);
+    --color-ds-purple-300: var(--ds-purple-300);
+    --color-ds-purple-400: var(--ds-purple-400);
+    --color-ds-purple-500: var(--ds-purple-500);
+    --color-ds-purple-600: var(--ds-purple-600);
+    --color-ds-purple-700: var(--ds-purple-700);
+    --color-ds-purple-800: var(--ds-purple-800);
+    --color-ds-purple-900: var(--ds-purple-900);
+    --color-ds-purple-1000: var(--ds-purple-1000);
 
     /* Backgrounds */
     --color-ds-background-100: var(--ds-background-100);
@@ -404,17 +466,17 @@
       FONTS
       ================================================ */
 
-    --font-heading: 'Lora', system-ui, sans-serif;
-    --font-body: 'Inter Tight', system-ui, sans-serif;
-    --font-serif: 'Lora', serif;
-    --font-display: 'Lora', serif;
-    --font-sans: 'Inter Tight', sans-serif;
+    --font-heading: "Lora", system-ui, sans-serif;
+    --font-body: "Inter Tight", system-ui, sans-serif;
+    --font-serif: "Lora", serif;
+    --font-display: "Lora", serif;
+    --font-sans: "Inter Tight", sans-serif;
 
     /* Google Fonts */
-    --font-newsreader: 'Newsreader', serif;
-    --font-eb-garamond: 'EB Garamond', serif;
-    --font-cormorant-garamond: 'Cormorant Garamond', serif;
-    --font-figtree: 'Figtree', sans-serif;
+    --font-newsreader: "Newsreader", serif;
+    --font-eb-garamond: "EB Garamond", serif;
+    --font-cormorant-garamond: "Cormorant Garamond", serif;
+    --font-figtree: "Figtree", sans-serif;
 
     /* ================================================
       SPACING & RADIUS
@@ -463,7 +525,7 @@
 
 @layer base {
     body {
-        @apply bg-background text-foreground antialiased font-body;
+        @apply bg-background text-text antialiased font-body;
     }
 
     /* Icon stroke weight + color normalization.
@@ -480,6 +542,17 @@
     svg.hugeicon {
         color: currentColor;
         stroke-width: 1px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    strong,
+    b {
+        @apply text-foreground;
     }
 
     h1,
@@ -542,7 +615,12 @@
 
 .scrollbar-custom {
     scrollbar-width: thin;
-    scrollbar-color: color-mix(in oklch, var(--color-muted-foreground) 30%, transparent) transparent;
+    scrollbar-color: color-mix(
+            in oklch,
+            var(--color-muted-foreground) 30%,
+            transparent
+        )
+        transparent;
 }
 
 .scrollbar-custom::-webkit-scrollbar {
@@ -555,12 +633,20 @@
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb {
-    background: color-mix(in oklch, var(--color-muted-foreground) 30%, transparent);
+    background: color-mix(
+        in oklch,
+        var(--color-muted-foreground) 30%,
+        transparent
+    );
     border-radius: 2px;
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in oklch, var(--color-muted-foreground) 40%, transparent);
+    background: color-mix(
+        in oklch,
+        var(--color-muted-foreground) 40%,
+        transparent
+    );
 }
 
 /* Add smooth transitions */
@@ -669,162 +755,162 @@ html {
 }
 
 /* === COLLAPSIBLE: OFFCANVAS === */
-.group.peer[data-collapsible='offcanvas']
+.group.peer[data-collapsible="offcanvas"]
     .group-data-\[collapsible\=offcanvas\]\:w-0 {
     width: 0 !important;
 }
 
-.group.peer[data-collapsible='offcanvas']
+.group.peer[data-collapsible="offcanvas"]
     .group-data-\[collapsible\=offcanvas\]\:left-\[calc\(var\(--sidebar-width\)\*-1\)\] {
     left: calc(var(--sidebar-width) * -1) !important;
 }
 
-.group.peer[data-collapsible='offcanvas']
+.group.peer[data-collapsible="offcanvas"]
     .group-data-\[collapsible\=offcanvas\]\:right-\[calc\(var\(--sidebar-width\)\*-1\)\] {
     right: calc(var(--sidebar-width) * -1) !important;
 }
 
-.group.peer[data-collapsible='offcanvas']
+.group.peer[data-collapsible="offcanvas"]
     .group-data-\[collapsible\=offcanvas\]\:translate-x-0 {
     transform: translateX(0) !important;
 }
 
-.group.peer[data-collapsible='offcanvas']
+.group.peer[data-collapsible="offcanvas"]
     .group-data-\[collapsible\=offcanvas\]\:after\:left-full::after {
     left: 100% !important;
 }
 
-.group.peer[data-collapsible='offcanvas']
+.group.peer[data-collapsible="offcanvas"]
     .group-data-\[collapsible\=offcanvas\]\:hover\:bg-sidebar:hover {
     background-color: var(--sidebar) !important;
 }
 
 /* === COLLAPSIBLE: ICON === */
-.group.peer[data-collapsible='icon']
+.group.peer[data-collapsible="icon"]
     .group-data-\[collapsible\=icon\]\:w-\[--sidebar-width-icon\] {
     width: var(--sidebar-width-icon) !important;
 }
 
-.group.peer[data-collapsible='icon']
+.group.peer[data-collapsible="icon"]
     .group-data-\[collapsible\=icon\]\:w-\[calc\(var\(--sidebar-width-icon\)_\+_theme\(spacing\.4\)\)\] {
     width: calc(var(--sidebar-width-icon) + 1rem) !important;
 }
 
-.group.peer[data-collapsible='icon']
+.group.peer[data-collapsible="icon"]
     .group-data-\[collapsible\=icon\]\:w-\[calc\(var\(--sidebar-width-icon\)_\+_theme\(spacing\.4\)_\+2px\)\] {
     width: calc(var(--sidebar-width-icon) + 1rem + 2px) !important;
 }
 
-.group.peer[data-collapsible='icon']
+.group.peer[data-collapsible="icon"]
     .group-data-\[collapsible\=icon\]\:overflow-hidden {
     overflow: hidden !important;
 }
 
-.group.peer[data-collapsible='icon'] .group-data-\[collapsible\=icon\]\:-mt-8 {
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:-mt-8 {
     margin-top: -2rem !important;
 }
 
-.group.peer[data-collapsible='icon']
+.group.peer[data-collapsible="icon"]
     .group-data-\[collapsible\=icon\]\:opacity-0 {
     opacity: 0 !important;
 }
 
-.group.peer[data-collapsible='icon'] .group-data-\[collapsible\=icon\]\:hidden {
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:hidden {
     display: none !important;
 }
 
-.group.peer[data-collapsible='icon']
+.group.peer[data-collapsible="icon"]
     .group-data-\[collapsible\=icon\]\:\!size-8 {
     width: 2rem !important;
     height: 2rem !important;
 }
 
-.group.peer[data-collapsible='icon'] .group-data-\[collapsible\=icon\]\:\!p-2 {
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:\!p-2 {
     padding: 0.5rem !important;
 }
 
-.group.peer[data-collapsible='icon'] .group-data-\[collapsible\=icon\]\:\!p-0 {
+.group.peer[data-collapsible="icon"] .group-data-\[collapsible\=icon\]\:\!p-0 {
     padding: 0 !important;
 }
 
 /* === SIDE: LEFT === */
-.group.peer[data-side='left'] .group-data-\[side\=left\]\:border-r {
+.group.peer[data-side="left"] .group-data-\[side\=left\]\:border-r {
     border-right-width: 1px !important;
 }
 
-.group.peer[data-side='left'] .group-data-\[side\=left\]\:-right-4 {
+.group.peer[data-side="left"] .group-data-\[side\=left\]\:-right-4 {
     right: -1rem !important;
 }
 
-.group.peer[data-side='left'] .group-data-\[side\=left\]\:-right-2 {
+.group.peer[data-side="left"] .group-data-\[side\=left\]\:-right-2 {
     right: -0.5rem !important;
 }
 
 /* === SIDE: RIGHT === */
-.group.peer[data-side='right'] .group-data-\[side\=right\]\:rotate-180 {
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:rotate-180 {
     transform: rotate(180deg) !important;
 }
 
-.group.peer[data-side='right'] .group-data-\[side\=right\]\:border-l {
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:border-l {
     border-left-width: 1px !important;
 }
 
-.group.peer[data-side='right'] .group-data-\[side\=right\]\:left-0 {
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:left-0 {
     left: 0 !important;
 }
 
-.group.peer[data-side='right'] .group-data-\[side\=right\]\:-left-2 {
+.group.peer[data-side="right"] .group-data-\[side\=right\]\:-left-2 {
     left: -0.5rem !important;
 }
 
 /* === VARIANT: FLOATING === */
-.group.peer[data-variant='floating']
+.group.peer[data-variant="floating"]
     .group-data-\[variant\=floating\]\:rounded-lg {
     border-radius: 0.5rem !important;
 }
 
-.group.peer[data-variant='floating'] .group-data-\[variant\=floating\]\:border {
+.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:border {
     border-width: 1px !important;
 }
 
-.group.peer[data-variant='floating']
+.group.peer[data-variant="floating"]
     .group-data-\[variant\=floating\]\:border-sidebar-border {
     border-color: var(--sidebar-border) !important;
 }
 
-.group.peer[data-variant='floating'] .group-data-\[variant\=floating\]\:shadow {
+.group.peer[data-variant="floating"] .group-data-\[variant\=floating\]\:shadow {
     box-shadow:
         0 1px 3px 0 rgb(0 0 0 / 0.1),
         0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
 }
 
 /* === PEER DATA: INSET VARIANT (SidebarInset) === */
-.peer[data-variant='inset'] ~ main.md\:peer-data-\[variant\=inset\]\:m-2 {
+.peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:m-2 {
     margin: 0.5rem !important;
 }
 
 @media (min-width: 768px) {
-    .peer[data-state='collapsed'][data-variant='inset']
+    .peer[data-state="collapsed"][data-variant="inset"]
         ~ main.md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2,
     .md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2 {
         margin-left: 0.5rem !important;
     }
 
-    .peer[data-variant='sidebar']
+    .peer[data-variant="sidebar"]
         ~ main.md\:peer-data-\[state\=collapsed\]\:peer-data-\[variant\=inset\]\:ml-2 {
         margin-left: 0 !important;
     }
 
-    .peer[data-variant='inset'] ~ main.md\:peer-data-\[variant\=inset\]\:ml-0 {
+    .peer[data-variant="inset"] ~ main.md\:peer-data-\[variant\=inset\]\:ml-0 {
         margin-left: 0 !important;
     }
 
-    .peer[data-variant='inset']
+    .peer[data-variant="inset"]
         ~ main.md\:peer-data-\[variant\=inset\]\:rounded-xl {
         border-radius: 0.75rem !important;
     }
 
-    .peer[data-variant='inset']
+    .peer[data-variant="inset"]
         ~ main.md\:peer-data-\[variant\=inset\]\:shadow {
         box-shadow:
             0 1px 3px 0 rgb(0 0 0 / 0.1),
@@ -833,11 +919,11 @@ html {
 }
 
 /* === HAS DATA ATTRIBUTES === */
-.has-\[\[data-variant\=inset\]\]\:bg-sidebar:has([data-variant='inset']) {
+.has-\[\[data-variant\=inset\]\]\:bg-sidebar:has([data-variant="inset"]) {
     background-color: var(--sidebar) !important;
 }
 
-.group:has([data-sidebar='menu-action'])
+.group:has([data-sidebar="menu-action"])
     .group-has-\[\[data-sidebar\=menu-action\]\]\/menu-item\:pr-8 {
     padding-right: 2rem !important;
 }
@@ -874,6 +960,12 @@ html {
     }
 }
 @layer utilities {
+    /* Custom text-md utility (not in Tailwind defaults) */
+    .text-md {
+        font-size: var(--text-md);
+        line-height: var(--tw-leading, var(--text-md--line-height, 1.5));
+    }
+
     @keyframes dropdown-fadein {
         from {
             opacity: 0;
