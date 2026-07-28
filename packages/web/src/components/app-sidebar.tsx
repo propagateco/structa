@@ -66,31 +66,26 @@ const data = {
             title: "New Chat",
             url: "/app",
             icon: Plus,
-            isActive: true,
         },
         {
             title: "Projects",
             url: "/app",
             icon: GalleryVerticalEnd,
-            isActive: true,
         },
         {
             title: "Documents",
             url: "/app",
             icon: Archive04,
-            isActive: true,
         },
         {
             title: "Budget",
             url: "/app",
             icon: ChartAnalysis,
-            isActive: true,
         },
         {
             title: "Property Profile",
             url: "/app",
             icon: EntranceStairs,
-            isActive: true,
         },
     ],
     projects: [

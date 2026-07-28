@@ -42,7 +42,11 @@ export function NavMain({
                         defaultOpen={item.isActive}
                     >
                         <SidebarMenuItem>
-                            <SidebarMenuButton asChild tooltip={item.title}>
+                            <SidebarMenuButton
+                                asChild
+                                tooltip={item.title}
+                                isActive={item.isActive}
+                            >
                                 <Link to={item.url}>
                                     <item.icon />
                                     <span>{item.title}</span>
