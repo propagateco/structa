@@ -1,4 +1,9 @@
-import { IS_DEPLOYED_STAGE, RESOURCE_ENVIRONMENT, BRANCH_NAME, PROJECT_NAME } from "./dns";
+import {
+    IS_DEPLOYED_STAGE,
+    RESOURCE_ENVIRONMENT,
+    BRANCH_NAME,
+    PROJECT_NAME,
+} from "./dns";
 import { secret } from "./secret";
 import { NeonProjectData } from "./neon-project-data";
 
@@ -13,7 +18,7 @@ const neonProvider = new neon.Provider("NeonProvider", {
 
 // Compute the database connection URL based on the stage.
 // For permanent stages (dev, production): create a full Neon project.
-// For preview/personal stages: create a branch + endpoint in the dev project.
+// For preview/personal stages: create a branch + endpoint in dev project.
 const databaseUrl: $util.Output<string> = (() => {
     if (IS_DEPLOYED_STAGE) {
         const neonProject = new neon.Project(
