@@ -150,6 +150,8 @@ declare module "sst" {
     }
     "SyncEngine": {
       "type": "sst.sst.Linkable"
+      "source": string
+      "secret": string
     }
     "Web": {
       "type": "sst.aws.TanstackStart"
