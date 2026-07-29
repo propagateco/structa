@@ -10,51 +10,43 @@ const neonProvider = new neon.Provider("NeonProvider", {
     apiKey: secret.NeonApiKey.value,
 });
 
-// The database URL output. Assigned conditionally below.
-let databaseUrl: $util.Output<string>;
-
-// For permanent stages (dev, production): create a full Neon project with
-// its own branch, endpoint, and database. The neon.Project resource handles
-// everything in one resource, and its connectionUri output provides the full
-// connection string.
-//
-// For preview (pr-*) and personal stages: create a branch and endpoint inside
-// the shared dev Neon project instead of provisioning a new project. The
-// connection URI is built from the endpoint host and the dev project's default
-// role and database credentials.
-if (IS_DEPLOYED_STAGE) {
-    const neonProject = new neon.Project(
-        `NeonProject`,
-        {
-            name: `${PROJECT_NAME}-${RESOURCE_ENVIRONMENT}`,
-            pgVersion: 17,
-            regionId: "aws-eu-west-2",
-            orgId: secret.NeonOrgId.value,
-            historyRetentionSeconds: 21600,
-            branch: {
-                name: BRANCH_NAME,
-                databaseName: `${PROJECT_NAME}-${RESOURCE_ENVIRONMENT}-db`,
+// Compute the database connection URL based on the stage.
+// For permanent stages (dev, production): create a full Neon project.
+// For preview/personal stages: create a branch + endpoint in the dev project.
+const databaseUrl: $util.Output<string> = (() => {
+    if (IS_DEPLOYED_STAGE) {
+        const neonProject = new neon.Project(
+            `NeonProject`,
+            {
+                name: `${PROJECT_NAME}-${RESOURCE_ENVIRONMENT}`,
+                pgVersion: 17,
+                regionId: "aws-eu-west-2",
+                orgId: secret.NeonOrgId.value,
+                historyRetentionSeconds: 21600,
+                branch: {
+                    name: BRANCH_NAME,
+                    databaseName: `${PROJECT_NAME}-${RESOURCE_ENVIRONMENT}-db`,
+                },
+                defaultEndpointSettings: {
+                    autoscalingLimitMinCu,
+                    autoscalingLimitMaxCu,
+                },
+                enableLogicalReplication: "yes",
             },
-            defaultEndpointSettings: {
-                autoscalingLimitMinCu,
-                autoscalingLimitMaxCu,
+            {
+                provider: neonProvider,
             },
-            enableLogicalReplication: "yes",
-        },
-        {
-            provider: neonProvider,
-        },
-    );
+        );
 
-    databaseUrl = neonProject.connectionUri;
-} else {
-    // Look up the shared dev Neon project by ID from secrets
+        return neonProject.connectionUri;
+    }
+
+    // Preview/personal stage: look up the shared dev Neon project
     const devProject = neon.getProjectOutput(
         { id: secret.NeonProjectId.value },
         { provider: neonProvider },
     );
 
-    // Create a branch based on the dev branch
     const branch = new neon.Branch(
         `NeonBranch-${$app.stage}`,
         {
@@ -65,7 +57,6 @@ if (IS_DEPLOYED_STAGE) {
         { provider: neonProvider },
     );
 
-    // Create a read/write endpoint for the preview branch
     const endpoint = new neon.Endpoint(
         `NeonEndpoint-${$app.stage}`,
         {
@@ -80,12 +71,8 @@ if (IS_DEPLOYED_STAGE) {
         { provider: neonProvider },
     );
 
-    // Build the connection URI from the endpoint host and the dev project's
-    // default role/database credentials. Neon branches inherit the default
-    // role and database from the parent branch, so the credentials are the
-    // same across all branches in the project.
-    databaseUrl = $interpolate`postgresql://${devProject.databaseUser}:${devProject.databasePassword}@${endpoint.host}:5432/${devProject.databaseName}`;
-}
+    return $interpolate`postgresql://${devProject.databaseUser}:${devProject.databasePassword}@${endpoint.host}:5432/${devProject.databaseName}`;
+})();
 
 export const Database = new sst.Linkable("Database", {
     properties: {
