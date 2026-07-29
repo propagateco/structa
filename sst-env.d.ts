@@ -37,6 +37,14 @@ declare module "sst" {
       "type": "sst.sst.Linkable"
       "web": string
     }
+    "ElectricCloudApiToken": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ElectricCloudProjectId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "ElectricSqlSecret": {
       "type": "sst.sst.Secret"
       "value": string

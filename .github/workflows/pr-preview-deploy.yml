@@ -87,10 +87,11 @@ jobs:
         timeout-minutes: 30
         needs: quality-checks
         environment: dev
-        # Skip deployment for draft PRs and dependabot
+        # Skip deployment for draft PRs and dependabot.
+        # For workflow_dispatch, we always proceed.
         if: |
-            github.event.pull_request.draft == false &&
-            github.actor != 'dependabot[bot]'
+            (github.event_name == 'workflow_dispatch') ||
+            (github.event.pull_request.draft == false && github.actor != 'dependabot[bot]')
 
         outputs:
             web_url: ${{ steps.get_urls.outputs.web_url }}
