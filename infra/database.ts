@@ -10,6 +10,9 @@ const neonProvider = new neon.Provider("NeonProvider", {
     apiKey: secret.NeonApiKey.value,
 });
 
+// The database URL output. Assigned conditionally below.
+let databaseUrl: $util.Output<string>;
+
 // For permanent stages (dev, production): create a full Neon project with
 // its own branch, endpoint, and database. The neon.Project resource handles
 // everything in one resource, and its connectionUri output provides the full
@@ -43,11 +46,7 @@ if (IS_DEPLOYED_STAGE) {
         },
     );
 
-    export const Database = new sst.Linkable("Database", {
-        properties: {
-            url: neonProject.connectionUri,
-        },
-    });
+    databaseUrl = neonProject.connectionUri;
 } else {
     // Look up the shared dev Neon project by ID from secrets
     const devProject = neon.getProjectOutput(
@@ -85,11 +84,11 @@ if (IS_DEPLOYED_STAGE) {
     // default role/database credentials. Neon branches inherit the default
     // role and database from the parent branch, so the credentials are the
     // same across all branches in the project.
-    const connectionUri = $interpolate`postgresql://${devProject.databaseUser}:${devProject.databasePassword}@${endpoint.host}:5432/${devProject.databaseName}`;
-
-    export const Database = new sst.Linkable("Database", {
-        properties: {
-            url: connectionUri,
-        },
-    });
+    databaseUrl = $interpolate`postgresql://${devProject.databaseUser}:${devProject.databasePassword}@${endpoint.host}:5432/${devProject.databaseName}`;
 }
+
+export const Database = new sst.Linkable("Database", {
+    properties: {
+        url: databaseUrl,
+    },
+});
