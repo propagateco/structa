@@ -17,10 +17,6 @@ const imageProcessorFunction = new sst.aws.Function('ImageProcessorFunction', {
     // the `Database` Linkable (declared in `infra/database.ts`) must be
     // linked here — otherwise SST's `Resource` proxy throws at cold start
     // with `Database is not linked in your sst.config.ts`.
-    //
-    // Note: `Database` (uppercase) is the `sst.Linkable` that exposes the
-    // `url` property. The lowercase `database` neon Project resource
-    // exposes nothing via the `Resource` proxy.
     link: [bucket, optimisedBucket, Database],
 });
 

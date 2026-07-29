@@ -1,5 +1,5 @@
 import { domain, Stage, Domain, dnsAdapter } from './dns';
-import { database, Database } from './database';
+import { Database } from './database';
 import { bucket, optimisedBucket, bucketRegion, optimisedBucketRegion } from './storage';
 import { cdn } from './cloudfront';
 import { secret } from './secret';
@@ -14,7 +14,6 @@ const api = new sst.aws.Function('Api', {
         Domain,
         Stage,
         Database,
-        database,
         bucket,
         optimisedBucket,
         cdn,
