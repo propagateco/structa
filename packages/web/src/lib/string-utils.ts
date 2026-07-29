@@ -22,14 +22,14 @@ export const formatWorkspaceName = (workspaceName: string) => {
 	return workspaceName.slice(0, 1).toLocaleUpperCase();
 };
 
+/** Map for plan values to their display labels. */
+const PLAN_LABELS: Record<string, string> = {
+	trial: "Free Trial",
+	starter: "Starter",
+	pro: "Pro",
+};
+
 export const formatPlan = (plan: string | null | undefined) => {
 	if (!plan) return "Free Trial";
-	switch (plan) {
-		case "trial":
-			return "Free Trial";
-		case "pro":
-			return "Pro Plan";
-		default:
-			return "Free Trial";
-	}
+	return PLAN_LABELS[plan] ?? capitalizeFirstLetter(plan);
 };

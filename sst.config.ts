@@ -4,6 +4,19 @@
 // to regenerate neon provider configuration. Issue was transient Pulumi registry
 // availability problem affecting terraform-provider downloads.
 // Check if running in CI (GitHub Actions) - OIDC provides credentials directly
+//
+// SST v3 → v4 Migration (Jul 29, 2026):
+// Upgraded SST from ^3.17.38 to ^4.17.1. SST v4 ships with Pulumi AWS v7
+// (@pulumi/aws@7.12.0), dropping the transitive aws-sdk v2 dep. The `aws` and
+// `cloudflare` providers are preloaded by SST v4; `neon` is an external
+// provider pinned explicitly below.
+//
+// One-time migration steps (performed separately):
+//   1. Backup state: npx sst state export --stage <stage>
+//   2. Run: npx sst refresh --stage <stage>
+//   3. Review: npx sst diff --stage <stage>
+//   4. Deploy: npx sst deploy --stage <stage>
+// See: docs/workflow/DEPLOYMENT.md for full procedure.
 const isCI = process.env.GITHUB_ACTIONS === 'true';
 export default $config({
     app(input) {
@@ -26,25 +39,17 @@ export default $config({
                     region: 'eu-west-2',
                 },
                 neon: '0.9.0',
-                'aws-native': {
-                    version: '1.49.0',
-                    region: 'eu-west-2',
-                },
-                cloudflare: '6.13.0',
+                cloudflare: '6.15.0',
             },
         };
     },
     async run() {
-        // Transform to add required lambda:InvokeFunction permission for Function URLs
-        // See: https://github.com/anomalyco/sst/issues/6198
-        $transform(aws.lambda.FunctionUrl, (args, opts, name) => {
-            new awsnative.lambda.Permission(`${name}InvokePermission`, {
-                action: 'lambda:InvokeFunction',
-                functionName: args.functionName,
-                principal: '*',
-                invokedViaFunctionUrl: true, // Restricts to Function URL invocations only (secure)
-            });
-        });
+        // NOTE: SST v4's Function component (function.ts:2756-2775) already creates
+        // the required lambda.Permission for Function URLs internally — both the
+        // InvokeFunctionUrl and InvokeFunction permissions with invokedViaFunctionUrl.
+        // The old v3 $transform workaround is no longer needed and was removed because
+        // it caused a 409 ResourceConflictException (concurrent update) — the transform
+        // tried to AddPermission at the same time SST was creating the FunctionUrl.
         const dns = await import('./infra/dns');
         await import('./infra/github');
         await import('./infra/web');

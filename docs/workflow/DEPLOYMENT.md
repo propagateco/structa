@@ -127,6 +127,46 @@ Deployments to `dev` and `production` are triggered by **CI pipelines** after:
 
 ---
 
+## Migration Notes (SST v3 → v4)
+
+**Migration Date:** Jul 29, 2026
+
+This section documents the SST v3 → v4 migration process. The upgrade was performed to drop the transitive `aws-sdk` v2 dependency (causing deprecation warnings) and to upgrade the embedded Pulumi AWS provider from v6 to v7.
+
+### Key Changes
+
+| Category | v3 | v4 |
+|----------|----|----|
+| SST version | `^3.17.38` | `^4.17.1` |
+| Pulumi AWS | v6 (internal) | v7.12.0 (internal) |
+| `aws-native` | `1.49.0` | `1.73.1` |
+| AWS SDK | v2 (transitive dep) | `aws4fetch` (removed) |
+
+### One-Time State Migration
+
+After merging, run the following for each permanent stage (`dev`, `production`):
+
+```bash
+# 1. Export state backup
+npx sst state export --stage <stage>
+
+# 2. Refresh state with the new providers
+npx sst refresh --stage <stage>
+
+# 3. Review pending changes
+npx sst diff --stage <stage>
+
+# 4. Deploy
+npx sst deploy --stage <stage>
+```
+
+**⚠️ Important:** These operations are **one-way**. After migrating state, you cannot downgrade SST. Test on a personal stage first.
+
+### Code Review Checklist
+
+- [ ] `sst.config.ts`: provider versions, `$transform` block compatible with `aws-native@1.73.1`
+- [ ] All SST imports use v4 API surface
+
 ## Related Documentation
 
 | Topic | Document |

@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { createSelectSchema, createUpdateSchema } from "drizzle-zod";
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
@@ -100,3 +101,7 @@ export const accountRelations = relations(account, ({ one }) => ({
 		references: [user.id],
 	}),
 }));
+
+// Zod schemas for Electric sync and tRPC validation
+export const selectUserSchema = createSelectSchema(user);
+export const updateUserSchema = createUpdateSchema(user);

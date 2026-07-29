@@ -26,7 +26,50 @@ import {
 	getExpiresInSeconds,
 } from "./storage.utils";
 
-const s3 = new S3Client({});
+/**
+ * S3 clients per bucket region.
+ *
+ * Each bucket may reside in a different AWS region (the Storage bucket
+ * is in us-east-1, OptimisedStorage in eu-west-2). Presigned URLs must
+ * be signed with the bucket's own region, otherwise S3 returns a 301
+ * redirect to the bucket's regional endpoint with no
+ * `Access-Control-Allow-Origin` header — the browser then refuses to
+ * follow it cross-origin, breaking client-side uploads.
+ *
+ * The bucket regions are injected at deploy time via the
+ * `STORAGE_BUCKET_REGION` and `OPTIMISED_STORAGE_BUCKET_REGION`
+ * environment variables (configured in `infra/api.ts` and
+ * `infra/web.ts` from the Pulumi Output of each bucket's `region`).
+ *
+ * Pass `region: undefined` (env var unset, e.g. running unit tests
+ * outside SST) to fall back to the AWS SDK default resolution chain.
+ */
+const storageS3 = new S3Client({
+	region: process.env.STORAGE_BUCKET_REGION,
+});
+
+const optimisedS3 = new S3Client({
+	region: process.env.OPTIMISED_STORAGE_BUCKET_REGION,
+});
+
+/**
+ * Pick the S3 client whose region matches the bucket's own region.
+ *
+ * Presigned URL signing is regional — a signature issued with
+ * `<region>/s3/aws4_request` only matches S3 requests hitting the
+ * same regional endpoint. PUT-ing to `Resource.Storage` (us-east-1)
+ * with a URL signed for eu-west-2 results in a 301 to the correct
+ * regional endpoint, no `Access-Control-Allow-Origin` header, and a
+ * CORS failure in the browser.
+ *
+ * Falls back to `storageS3` (which itself falls back to the AWS SDK
+ * default region resolution if `STORAGE_BUCKET_REGION` is unset) for
+ * buckets not recognised at call time.
+ */
+function getS3ClientForBucket(bucket: string): S3Client {
+	if (bucket === Resource.OptimisedStorage.name) return optimisedS3;
+	return storageS3;
+}
 
 /**
  * Presigned URL Generation
@@ -39,7 +82,7 @@ export async function getUploadUrl(
 	expiry?: ExpiryOptions,
 ): Promise<string> {
 	return getSignedUrl(
-		s3,
+		storageS3,
 		new PutObjectCommand({
 			Bucket: Resource.Storage.name,
 			Key: buildObjectKey(object.reference),
@@ -55,7 +98,7 @@ export async function getDownloadUrl(
 	expiry?: ExpiryOptions,
 ): Promise<string> {
 	return getSignedUrl(
-		s3,
+		storageS3,
 		new GetObjectCommand({
 			Bucket: Resource.Storage.name,
 			Key: buildObjectKey(object.reference),
@@ -90,7 +133,7 @@ export async function uploadFile(
 			CacheControl: cacheControl,
 		});
 
-		await s3.send(putCommand);
+		await getS3ClientForBucket(bucket).send(putCommand);
 
 		if (metrics) {
 			metrics.upload = performance.now() - startTime;
@@ -119,7 +162,7 @@ export async function downloadFile(
 			Bucket: bucket,
 			Key: key,
 		});
-		const response = await s3.send(getCommand);
+		const response = await getS3ClientForBucket(bucket).send(getCommand);
 
 		const image = Buffer.from(await response.Body!.transformToByteArray());
 		const contentType = response.ContentType || "image/jpeg";
@@ -152,7 +195,7 @@ export async function deleteFile(bucket: string, key: string): Promise<void> {
 			Bucket: bucket,
 			Key: key,
 		});
-		await s3.send(deleteCommand);
+		await getS3ClientForBucket(bucket).send(deleteCommand);
 	} catch (error) {
 		console.error("Error deleting file from S3", { bucket, key, error });
 		throw new StorageServiceError("Error deleting file", {
@@ -178,7 +221,7 @@ export async function deleteFolder(
 				Prefix: prefix,
 				ContinuationToken: continuationToken,
 			});
-			const list = await s3.send(listCommand);
+			const list = await getS3ClientForBucket(bucket).send(listCommand);
 			const keys = list.Contents?.map((obj) => ({ Key: obj.Key! })) ?? [];
 			if (keys.length > 0) {
 				const deleteCommand = new DeleteObjectsCommand({
@@ -187,7 +230,7 @@ export async function deleteFolder(
 				});
 
 				// Delete the objects in batches
-				const deleted = await s3.send(deleteCommand);
+				const deleted = await getS3ClientForBucket(bucket).send(deleteCommand);
 				count += deleted.Deleted?.length || 0;
 				if (deleted.Errors) {
 					deleted.Errors.map((error) =>

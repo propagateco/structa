@@ -1,18 +1,16 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-export interface GridLoaderIconProps extends React.SVGAttributes<SVGSVGElement> {}
+export interface GridLoaderIconProps extends React.ComponentProps<"svg"> {}
 
-export const GridLoaderIcon = React.forwardRef<
-    SVGSVGElement,
-    GridLoaderIconProps
->(({ className, ...props }, ref) => {
+export function GridLoaderIcon({ className, ref, ...props }: GridLoaderIconProps) {
     return (
         <svg
             viewBox="0 0 105 105"
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
             className={cn('size-4', className)}
+            data-slot="grid-loader-icon"
             ref={ref}
             {...props}
         >
@@ -109,14 +107,11 @@ export const GridLoaderIcon = React.forwardRef<
             </circle>
         </svg>
     );
-});
+}
 
-export interface PuffLoaderIconProps extends React.SVGAttributes<SVGSVGElement> {}
+export interface PuffLoaderIconProps extends React.ComponentProps<"svg"> {}
 
-export const PuffLoaderIcon = React.forwardRef<
-    SVGSVGElement,
-    PuffLoaderIconProps
->(({ className, ...props }, ref) => {
+export function PuffLoaderIcon({ className, ref, ...props }: PuffLoaderIconProps) {
     return (
         <svg
             viewBox="0 0 44 44"
@@ -124,6 +119,7 @@ export const PuffLoaderIcon = React.forwardRef<
             stroke="currentColor"
             strokeWidth="2"
             className={cn('size-4', className)}
+            data-slot="puff-loader-icon"
             ref={ref}
             {...props}
         >
@@ -176,19 +172,17 @@ export const PuffLoaderIcon = React.forwardRef<
             </g>
         </svg>
     );
-});
+}
 
-export interface OrbitLoaderIconProps extends React.SVGAttributes<SVGSVGElement> {}
+export interface OrbitLoaderIconProps extends React.ComponentProps<"svg"> {}
 
-export const OrbitLoaderIcon = React.forwardRef<
-    SVGSVGElement,
-    OrbitLoaderIconProps
->(({ className, ...props }, ref) => {
+export function OrbitLoaderIcon({ className, ref, ...props }: OrbitLoaderIconProps) {
     return (
         <svg
             viewBox="0 0 100 100"
             xmlns="http://www.w3.org/2000/svg"
             className={cn('size-4', className)}
+            data-slot="orbit-loader-icon"
             ref={ref}
             {...props}
         >
@@ -221,14 +215,11 @@ export const OrbitLoaderIcon = React.forwardRef<
             </circle>
         </svg>
     );
-});
+}
 
-export interface SnakeLoaderIconProps extends React.SVGAttributes<SVGSVGElement> {}
+export interface SnakeLoaderIconProps extends React.ComponentProps<"svg"> {}
 
-export const SnakeLoaderIcon = React.forwardRef<
-    SVGSVGElement,
-    SnakeLoaderIconProps
->(({ className, ...props }, ref) => {
+export function SnakeLoaderIcon({ className, ref, ...props }: SnakeLoaderIconProps) {
     return (
         <svg
             viewBox="0 14 32 4"
@@ -236,6 +227,7 @@ export const SnakeLoaderIcon = React.forwardRef<
             preserveAspectRatio="none"
             fill="currentColor"
             className={cn('size-4', className)}
+            data-slot="snake-loader-icon"
             ref={ref}
             {...props}
         >
@@ -290,20 +282,18 @@ export const SnakeLoaderIcon = React.forwardRef<
             </path>
         </svg>
     );
-});
+}
 
-export interface TwoBodyLoaderIconProps extends React.SVGAttributes<SVGSVGElement> {}
+export interface TwoBodyLoaderIconProps extends React.ComponentProps<"svg"> {}
 
-export const TwoBodyLoaderIcon = React.forwardRef<
-    SVGSVGElement,
-    TwoBodyLoaderIconProps
->(({ className, ...props }, ref) => {
+export function TwoBodyLoaderIcon({ className, ref, ...props }: TwoBodyLoaderIconProps) {
     return (
         <svg
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
             className={cn('size-4', className)}
+            data-slot="two-body-loader-icon"
             ref={ref}
             {...props}
         >
@@ -355,10 +345,4 @@ export const TwoBodyLoaderIcon = React.forwardRef<
             </g>
         </svg>
     );
-});
-
-GridLoaderIcon.displayName = 'GridLoaderIcon';
-PuffLoaderIcon.displayName = 'PuffLoaderIcon';
-OrbitLoaderIcon.displayName = 'OrbitLoaderIcon';
-SnakeLoaderIcon.displayName = 'SnakeLoaderIcon';
-TwoBodyLoaderIcon.displayName = 'TwoBodyLoaderIcon';
+}

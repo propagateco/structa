@@ -3,6 +3,7 @@ import {
     Folder,
     MoreHorizontal,
     Share,
+    Eye,
     Trash2,
     type LucideIcon,
 } from "lucide-react";
@@ -38,7 +39,7 @@ export function NavChats({
 
     return (
         <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>Recent chats</SidebarGroupLabel>
+            <SidebarGroupLabel>{title}</SidebarGroupLabel>
             <SidebarMenu>
                 {projects.map((item) => (
                     <SidebarMenuItem key={item.name}>
@@ -60,7 +61,7 @@ export function NavChats({
                                 align={isMobile ? "end" : "start"}
                             >
                                 <DropdownMenuItem>
-                                    <Folder />
+                                    <Eye />
                                     <span>View Chat</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />

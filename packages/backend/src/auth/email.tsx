@@ -10,7 +10,11 @@ import { VerifyEmail } from "../../../notifications/emails/VerifyEmail";
 
 const ses = new SESv2Client();
 
-type OTPType = "sign-in" | "email-verification" | "forget-password" | "change-email";
+type OTPType =
+	| "sign-in"
+	| "email-verification"
+	| "forget-password"
+	| "change-email";
 type SendOTPProps = {
 	email: string;
 	otp: string;

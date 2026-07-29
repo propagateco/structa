@@ -3,6 +3,13 @@ import { PageLink } from '@/components/ui/link';
 import { DiamondCorner, Container } from '@/components/layout';
 import { useTheme } from '@/components/theme-provider';
 import { authClient } from '@/lib/auth-client';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from '@/components/ui/dropdown-menu';
+import { LogOut } from 'lucide-react';
 
 export const Header = () => {
     const { resolvedTheme } = useTheme();
@@ -55,16 +62,36 @@ export const Header = () => {
                         start
                     </PageLink>
                     {user && (
-                        <Avatar className="size-7 cursor-pointer">
-                            <AvatarImage
-                                src={user?.image || undefined}
-                                alt={user?.name || 'User'}
-                            />
-                            <AvatarFallback className="text-xs">
-                                {fallbackText}
-                            </AvatarFallback>
-                        </Avatar>
-                    )}
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Avatar className="size-7 cursor-pointer">
+        <AvatarImage
+          src={user?.image || undefined}
+          alt={user?.name || 'User'}
+        />
+        <AvatarFallback className="text-xs">
+          {fallbackText}
+        </AvatarFallback>
+      </Avatar>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent 
+      align="end"
+      className="min-w-32 shadow-2xl fade-dropdown"
+    >
+      <DropdownMenuItem
+        variant="destructive"
+        onClick={async () => {
+          await authClient.signOut();
+          window.location.href = '/login';
+        }}
+        className="gap-2"
+      >
+        <LogOut className="size-4" />
+        Log out
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+)}
                 </div>
             </Container>
         </header>

@@ -671,6 +671,40 @@ export function Footer() {
 
 ---
 
+## Prototyping interactions with Leva (dev-only)
+
+When a task asks you to *prototype* an interaction (drawing, snapping,
+gestures, canvas behaviour, tuning maths/physics constants), reach for
+[Leva](https://github.com/pmndrs/leva) instead of hard-coding constants —
+sweeping parameter changes instantly makes finding good ideas easy.
+
+The plumbing already exists and is dev-only by construction (leva never ships
+to prod; verified via `npm run build`):
+
+| File | Role |
+|------|------|
+| `packages/web/src/components/dev/dev-leva.tsx` | Global floating `<Leva />` panel, mounted once in `routes/_auth.tsx`. Any `useControls(...)` anywhere in the tree registers into it — no per-component mounting. |
+| `packages/web/src/routes/_auth/app/lab.tsx` | Dev-only sandbox route `/app/lab`. `beforeLoad` redirects to `/app` when `!import.meta.env.DEV`; scene is lazy-loaded behind the same guard. |
+| `packages/web/src/lab/lab-scene.tsx` | Reference scene — copy as the starting point for a new prototype. |
+
+### Steps when instructed to create a new prototype component
+
+1. Build the scene at `packages/web/src/lab/<name>-scene.tsx`, modelled on
+   `lab/lab-scene.tsx`; export a named component.
+2. Wire it into `routes/_auth/app/lab.tsx` via a DEV-guarded lazy import. Keep
+   the guard — never let `import("leva")` become statically reachable in prod.
+3. Colocate `useControls` next to the interaction. Reactive values for
+   React-driven UI (`useControls("Folder", {...})`); isolated
+   `useCreateStore()` + `store.get("Folder.key")` for canvas/rAF loops.
+4. Capture winning presets via Leva's clipboard (JSON export), then paste them
+   back into code as constants.
+5. Verify `npm run typecheck`, `npx biome check`, and `npm run build` (no
+   `leva` chunk in `.output`).
+
+See `packages/web/src/components/AGENTS.md` for the full do/don't list.
+
+---
+
 ## Phase 1.3 Checklist
 
 - [ ] `auth/` directory created
@@ -688,6 +722,7 @@ export function Footer() {
 - [ ] `footer.tsx` created
 - [ ] TypeScript compiles (`npm run typecheck`)
 - [ ] All imports resolve correctly
+- [ ] Interaction prototypes use Leva via `dev/dev-leva.tsx` + `/app/lab` (see above)
 
 ---
 

@@ -37,7 +37,7 @@ function RouteComponent() {
                         <LoginCodeForm />
                     </div>
 
-                    <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:font-medium [&_a]:transition-colors [&_a]:ease-in-out [&_a]:duration-200 hover:[&_a]:text-accent">
+                    <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:font-medium [&_a]:transition-colors [&_a]:ease-in-out [&_a]:duration-200 [&_a:hover]:text-accent">
                         By clicking continue, you agree to our{' '}
                         <a href="https://structa.so/terms-of-service">
                             Terms of Service
