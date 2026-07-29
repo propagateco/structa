@@ -47,7 +47,7 @@ export default $config({
                     version: '1.73.1',
                     region: 'eu-west-2',
                 },
-                cloudflare: '6.13.0',
+                cloudflare: '6.15.0',
             },
         };
     },
