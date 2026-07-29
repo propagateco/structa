@@ -1,11 +1,12 @@
 import { IS_DEPLOYED_STAGE, RESOURCE_ENVIRONMENT, BRANCH_NAME, PROJECT_NAME } from "./dns";
 import { secret } from "./secret";
+import { NeonProjectData } from "./neon-project-data";
 
 // Autoscaling
 const autoscalingLimitMinCu = 0.25;
 const autoscalingLimitMaxCu = 0.25;
 
-// Create Neon provider with API key
+// Create Neon provider with API key (used for Project/Branch/Endpoint resources)
 const neonProvider = new neon.Provider("NeonProvider", {
     apiKey: secret.NeonApiKey.value,
 });
@@ -41,16 +42,18 @@ const databaseUrl: $util.Output<string> = (() => {
         return neonProject.connectionUri;
     }
 
-    // Preview/personal stage: look up the shared dev Neon project
-    const devProject = neon.getProjectOutput(
-        { id: secret.NeonProjectId.value },
-        { provider: neonProvider },
-    );
+    // Preview/personal stage: look up the shared dev Neon project directly via
+    // the Neon REST API (avoids the opaque Pulumi Terraform-provider invoke
+    // error that occurs for new stages with neon.getProjectOutput).
+    const devProject = new NeonProjectData("NeonProjectData", {
+        projectId: secret.NeonProjectId.value,
+        apiKey: secret.NeonApiKey.value,
+    });
 
     const branch = new neon.Branch(
         `NeonBranch-${$app.stage}`,
         {
-            projectId: devProject.id,
+            projectId: devProject.projectId,
             name: `${PROJECT_NAME}-${$app.stage}-branch`,
             parentId: devProject.defaultBranchId,
         },
@@ -60,7 +63,7 @@ const databaseUrl: $util.Output<string> = (() => {
     const endpoint = new neon.Endpoint(
         `NeonEndpoint-${$app.stage}`,
         {
-            projectId: devProject.id,
+            projectId: devProject.projectId,
             branchId: branch.id,
             regionId: "aws-eu-west-2",
             type: "read_write",
