@@ -3,11 +3,15 @@ import { Link, useRouter } from "@tanstack/react-router";
 import {
     Bell,
     ChevronsUpDown,
+    CircleHelp,
     Cog,
     Contrast,
     CreditCard,
     DoorOpen,
+    House,
+    MessageSquareText,
     UserCircle,
+    Zap,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,6 +21,7 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -25,9 +30,9 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { authClient } from "@/lib/auth-client";
 import { formatPlan, formatToInitials } from "@/lib/string-utils";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function NavUser({ user }: { user: SchemaType }) {
     const { isMobile } = useSidebar();
@@ -98,12 +103,6 @@ export function NavUser({ user }: { user: SchemaType }) {
                         <DropdownMenuGroup>
                             <DropdownMenuItem asChild>
                                 <Link to="/settings/account">
-                                    <UserCircle />
-                                    Profile
-                                </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link to="/settings/account">
                                     <Cog />
                                     Settings
                                 </Link>
@@ -111,13 +110,7 @@ export function NavUser({ user }: { user: SchemaType }) {
                             <DropdownMenuItem asChild>
                                 <Link to="/settings/billing">
                                     <CreditCard />
-                                    Subscription
-                                </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link to="/settings/notifications">
-                                    <Bell />
-                                    Notifications
+                                    Billing
                                 </Link>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
@@ -133,6 +126,22 @@ export function NavUser({ user }: { user: SchemaType }) {
                                 <ThemeToggle variant="default" size="xs" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
+                        <DropdownMenuItem asChild>
+                            <Link to="/">
+                                <House />
+                                Home Page
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                            <MessageSquareText />
+                            Feedback
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link to="/help">
+                                <CircleHelp />
+                                Help
+                            </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem
                             variant="destructive"
                             onClick={handleSignOut}
@@ -140,6 +149,16 @@ export function NavUser({ user }: { user: SchemaType }) {
                             <DoorOpen />
                             Log out
                         </DropdownMenuItem>
+                        {user.plan !== "pro" && (
+                            <DropdownMenuItem
+                                asChild
+                                className="bg-primary text-primary-foreground hover:bg-primary/90 focus:bg-primary/90 focus:text-primary-foreground data-[highlighted]:bg-primary/90 data-[highlighted]:text-primary-foreground my-1 justify-center"
+                            >
+                                <Link to="/settings/billing">
+                                    Upgrade to Pro
+                                </Link>
+                            </DropdownMenuItem>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>
