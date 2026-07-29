@@ -38,32 +38,31 @@ export interface PageLinkProps
 		VariantProps<typeof pageLinkVariants> {
 	children: React.ReactNode;
 	className?: string;
+	ref?: React.ComponentPropsWithRef<"a">["ref"];
 	arrowForward?: boolean;
 	arrowBack?: boolean;
 	/** Optional params for dynamic routes (e.g., { postId: 'my-first-blog-post' } for /blog/post/$postId) */
 	params?: Record<string, string>;
 }
 
-export const PageLink = React.forwardRef<HTMLAnchorElement, PageLinkProps>(
-	(
-		{
-			variant,
-			size,
-			arrowForward,
-			arrowBack,
-			className,
-			children,
-			params,
-			...props
-		},
-		ref,
-	) => {
+export function PageLink({
+        ref,
+        variant,
+        size,
+        arrowForward,
+        arrowBack,
+        className,
+        children,
+        params,
+        ...props
+}: PageLinkProps) {
 		const showForwardArrow = arrowForward;
 		const showBackArrow = !arrowForward && arrowBack;
 
 		return (
 			<Link
 				ref={ref}
+				data-slot="page-link"
 				className={cn(pageLinkVariants({ variant, size, className }))}
 				params={params}
 				{...props}
@@ -76,21 +75,20 @@ export const PageLink = React.forwardRef<HTMLAnchorElement, PageLinkProps>(
 					<ArrowRight className="transition-transform group-hover:translate-x-1" />
 				)}
 			</Link>
-		);
-	},
-);
-PageLink.displayName = "PageLink";
+	);
+}
 
 export interface ArrowLinkProps extends LinkProps {
 	children: React.ReactNode;
 	className?: string;
+	ref?: React.ComponentPropsWithRef<"a">["ref"];
 }
 
-export const ArrowLink = React.forwardRef<HTMLAnchorElement, ArrowLinkProps>(
-	({ to, className, children, ...props }, ref) => {
+export function ArrowLink({ to, className, children, ref, ...props }: ArrowLinkProps) {
 		return (
 			<Link
 				to={to}
+				data-slot="arrow-link"
 				className={cn(
 					"flex items-center text-primary hover:text-accent dark:hover:text-accent cursor-pointer group",
 					className,
@@ -102,22 +100,25 @@ export const ArrowLink = React.forwardRef<HTMLAnchorElement, ArrowLinkProps>(
 				<ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
 			</Link>
 		);
-	},
-);
-ArrowLink.displayName = "ArrowLink";
+}
 
 export interface HomeIconLinkProps
 	extends Omit<LinkProps, "to">,
 		VariantProps<typeof structaIconColorVariants>,
 		VariantProps<typeof structaIconSizeVariants> {
 	className?: string;
+	ref?: React.ComponentPropsWithRef<"a">["ref"];
 	onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export const HomeIconLink = React.forwardRef<
-	HTMLAnchorElement,
-	HomeIconLinkProps
->(({ className, variant, size, onClick, ...props }, ref) => {
+export function HomeIconLink({
+	className,
+	variant,
+	size,
+	onClick,
+	ref,
+	...props
+}: HomeIconLinkProps) {
 	const location = useLocation();
 
 	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -131,6 +132,7 @@ export const HomeIconLink = React.forwardRef<
 	return (
 		<Link
 			to="/"
+			data-slot="home-icon-link"
 			className={cn(
 				"flex items-center hover:opacity-80 transition-opacity cursor-pointer",
 				className,
@@ -142,8 +144,7 @@ export const HomeIconLink = React.forwardRef<
 			<StructaIcon size={size} variant={variant} />
 		</Link>
 	);
-});
-HomeIconLink.displayName = "HomeIconLink";
+}
 
 /**
  * A link that scrolls to the top of the current page if we're already on that route,
@@ -152,13 +153,18 @@ HomeIconLink.displayName = "HomeIconLink";
 export interface ScrollToTopLinkProps extends LinkProps {
 	children: React.ReactNode;
 	className?: string;
+	ref?: React.ComponentPropsWithRef<"a">["ref"];
 	onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export const ScrollToTopLink = React.forwardRef<
-	HTMLAnchorElement,
-	ScrollToTopLinkProps
->(({ to, className, onClick, children, ...props }, ref) => {
+export function ScrollToTopLink({
+	to,
+	className,
+	onClick,
+	children,
+	ref,
+	...props
+}: ScrollToTopLinkProps) {
 	const location = useLocation();
 
 	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -172,6 +178,7 @@ export const ScrollToTopLink = React.forwardRef<
 	return (
 		<Link
 			to={to}
+			data-slot="scroll-to-top-link"
 			className={className}
 			ref={ref}
 			onClick={handleClick}
@@ -180,5 +187,4 @@ export const ScrollToTopLink = React.forwardRef<
 			{children}
 		</Link>
 	);
-});
-ScrollToTopLink.displayName = "ScrollToTopLink";
+}

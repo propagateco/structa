@@ -21,6 +21,7 @@ import { Route as ApiUsersRouteImport } from './routes/api/users'
 import { Route as MarketingTmpRouteImport } from './routes/_marketing/tmp'
 import { Route as MarketingTermsRouteImport } from './routes/_marketing/terms'
 import { Route as MarketingPrivacyRouteImport } from './routes/_marketing/privacy'
+import { Route as MarketingHelpRouteImport } from './routes/_marketing/help'
 import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
 import { Route as AuthSettingsRouteImport } from './routes/_auth/_settings'
 import { Route as AuthOnboardingRouteImport } from './routes/_auth/_onboarding'
@@ -94,6 +95,11 @@ const MarketingTermsRoute = MarketingTermsRouteImport.update({
 const MarketingPrivacyRoute = MarketingPrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingHelpRoute = MarketingHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => MarketingRoute,
 } as any)
 const MarketingAboutRoute = MarketingAboutRouteImport.update({
@@ -189,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/blog': typeof BlogRoute
   '/about': typeof MarketingAboutRoute
+  '/help': typeof MarketingHelpRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
   '/tmp': typeof MarketingTmpRoute
@@ -215,6 +222,7 @@ export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/blog': typeof BlogRoute
   '/about': typeof MarketingAboutRoute
+  '/help': typeof MarketingHelpRoute
   '/privacy': typeof MarketingPrivacyRoute
   '/terms': typeof MarketingTermsRoute
   '/tmp': typeof MarketingTmpRoute
@@ -246,6 +254,7 @@ export interface FileRoutesById {
   '/_auth/_onboarding': typeof AuthOnboardingRouteWithChildren
   '/_auth/_settings': typeof AuthSettingsRouteWithChildren
   '/_marketing/about': typeof MarketingAboutRoute
+  '/_marketing/help': typeof MarketingHelpRoute
   '/_marketing/privacy': typeof MarketingPrivacyRoute
   '/_marketing/terms': typeof MarketingTermsRoute
   '/_marketing/tmp': typeof MarketingTmpRoute
@@ -275,6 +284,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blog'
     | '/about'
+    | '/help'
     | '/privacy'
     | '/terms'
     | '/tmp'
@@ -301,6 +311,7 @@ export interface FileRouteTypes {
     | '/'
     | '/blog'
     | '/about'
+    | '/help'
     | '/privacy'
     | '/terms'
     | '/tmp'
@@ -331,6 +342,7 @@ export interface FileRouteTypes {
     | '/_auth/_onboarding'
     | '/_auth/_settings'
     | '/_marketing/about'
+    | '/_marketing/help'
     | '/_marketing/privacy'
     | '/_marketing/terms'
     | '/_marketing/tmp'
@@ -452,6 +464,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof MarketingPrivacyRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/help': {
+      id: '/_marketing/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof MarketingHelpRouteImport
       parentRoute: typeof MarketingRoute
     }
     '/_marketing/about': {
@@ -639,6 +658,7 @@ const LoginRouteWithChildren = LoginRoute._addFileChildren(LoginRouteChildren)
 
 interface MarketingRouteChildren {
   MarketingAboutRoute: typeof MarketingAboutRoute
+  MarketingHelpRoute: typeof MarketingHelpRoute
   MarketingPrivacyRoute: typeof MarketingPrivacyRoute
   MarketingTermsRoute: typeof MarketingTermsRoute
   MarketingTmpRoute: typeof MarketingTmpRoute
@@ -649,6 +669,7 @@ interface MarketingRouteChildren {
 
 const MarketingRouteChildren: MarketingRouteChildren = {
   MarketingAboutRoute: MarketingAboutRoute,
+  MarketingHelpRoute: MarketingHelpRoute,
   MarketingPrivacyRoute: MarketingPrivacyRoute,
   MarketingTermsRoute: MarketingTermsRoute,
   MarketingTmpRoute: MarketingTmpRoute,

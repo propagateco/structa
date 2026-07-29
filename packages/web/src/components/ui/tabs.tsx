@@ -7,76 +7,64 @@ import { cn } from '@/lib/utils';
 
 const Tabs = TabsPrimitive.Root;
 
-const TabsList = React.forwardRef<
-    React.ElementRef<typeof TabsPrimitive.List>,
-    React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
+function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
+  return (
     <TabsPrimitive.List
-        ref={ref}
+        data-slot="tabs-list"
         className={cn(
             'inline-flex h-10 items-center justify-center rounded-md bg-gray-100 dark:bg-gray-800 p-1 text-gray-500 dark:text-gray-400',
             className
         )}
         {...props}
     />
-));
-TabsList.displayName = TabsPrimitive.List.displayName;
+  )
+}
 
-const TabsTrigger = React.forwardRef<
-    React.ElementRef<typeof TabsPrimitive.Trigger>,
-    React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
+  return (
     <TabsPrimitive.Trigger
-        ref={ref}
+        data-slot="tabs-trigger"
         className={cn(
             'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
             className
         )}
         {...props}
     />
-));
-TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
+  )
+}
 
-const TabsContent = React.forwardRef<
-    React.ElementRef<typeof TabsPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(({ className, ...props }, ref) => (
+function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) {
+  return (
     <TabsPrimitive.Content
-        ref={ref}
+        data-slot="tabs-content"
         className={cn(
             'mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2',
             className
         )}
         {...props}
     />
-));
-TabsContent.displayName = TabsPrimitive.Content.displayName;
+  )
+}
 
 const TabNav = NavigationMenuPrimitive.Root;
 
-const TabNavList = React.forwardRef<
-    React.ElementRef<typeof NavigationMenuPrimitive.List>,
-    React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>
->(({ className, ...props }, ref) => (
+function TabNavList({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.List>) {
+  return (
     <NavigationMenuPrimitive.List
-        ref={ref}
+        data-slot="tab-nav-list"
         className={cn(
             'inline-flex items-center justify-center bg-transparent p-0 text-text-muted h-full',
             className
         )}
         {...props}
     />
-));
-TabNavList.displayName = NavigationMenuPrimitive.List.displayName;
+  )
+}
 
-const TabNavLink = React.forwardRef<
-    React.ElementRef<typeof Link>,
-    React.ComponentPropsWithoutRef<typeof Link> & {
-        active?: boolean;
-    }
->(({ className, children, active, ...props }, ref) => (
+function TabNavLink({ className, children, active, ...props }: React.ComponentProps<typeof Link> & { active?: boolean }) {
+  return (
     <Link
-        ref={ref}
+        data-slot="tab-nav-link"
         to={props.href}
         className={cn(
             'group inline-flex items-center justify-center whitespace-nowrap text-sm font-normal ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-foreground',
@@ -98,8 +86,8 @@ const TabNavLink = React.forwardRef<
                 : children}
         </div>
     </Link>
-));
-TabNavLink.displayName = 'TabNavLink';
+  )
+}
 
 export {
     Tabs,
