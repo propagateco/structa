@@ -43,6 +43,7 @@ export interface NeonProjectDataInputs {
 
 export interface NeonProjectDataOutputs {
     projectId: string;
+    apiKey: string;
     defaultBranchId: string;
     databaseUser: string;
     databaseName: string;
@@ -78,6 +79,7 @@ class NeonProjectDataProvider
             id: projectId,
             outs: {
                 projectId,
+                apiKey,
                 defaultBranchId: project.default_branch_id,
                 databaseUser: project.database_user,
                 databaseName: project.database_name,
@@ -104,6 +106,7 @@ class NeonProjectDataProvider
                 id,
                 outs: {
                     projectId: id,
+                    apiKey: inputs.apiKey ?? "",
                     defaultBranchId: project.default_branch_id,
                     databaseUser: project.database_user,
                     databaseName: project.database_name,
@@ -117,6 +120,7 @@ class NeonProjectDataProvider
                 id,
                 outs: {
                     projectId: "",
+                    apiKey: "",
                     defaultBranchId: "",
                     databaseUser: "",
                     databaseName: "",
@@ -160,6 +164,7 @@ class NeonProjectDataProvider
  */
 export class NeonProjectData extends pulumi.dynamic.Resource {
     public readonly projectId!: pulumi.Output<string>;
+    public readonly apiKey!: pulumi.Output<string>;
     public readonly defaultBranchId!: pulumi.Output<string>;
     public readonly databaseUser!: pulumi.Output<string>;
     public readonly databaseName!: pulumi.Output<string>;
