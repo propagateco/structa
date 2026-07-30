@@ -1,4 +1,3 @@
-import * as pulumi from "@pulumi/pulumi";
 import {
     IS_DEPLOYED_STAGE,
     RESOURCE_ENVIRONMENT,
@@ -63,7 +62,7 @@ const databaseUrl: $util.Output<string> = (() => {
             // avoid output-resolution timing issues with Pulumi dynamic
             // resources — the project ID is the same value we pass in.
             projectId: secret.NeonProjectId.value,
-            name: `${PROJECT_NAME}-${$app.stage}-branch`,
+            name: `${$app.stage}`,
             parentId: devProject.defaultBranchId,
         },
         { provider: neonProvider, dependsOn: devProject },
