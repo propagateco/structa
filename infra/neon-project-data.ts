@@ -109,7 +109,6 @@ class NeonProjectDataProvider
             );
         }
         const defaultBranchId = defaultBranch.id;
-        const roleName = defaultBranch.name;
 
         // 2. Fetch the database(s) on the default branch to get the actual
         //    database name and owner (role).
@@ -133,7 +132,7 @@ class NeonProjectDataProvider
         //    or project detail endpoints.
         const connRes = await apiGet<NeonConnectionUri>(
             `${NEON_API_BASE}/projects/${projectId}/connection_uri` +
-                `?database_name=${databaseName}&role_name=${roleName}`,
+                `?database_name=${databaseName}&role_name=${databaseUser}`,
             headers,
         );
 
@@ -173,7 +172,6 @@ class NeonProjectDataProvider
                 (b) => b.default === true,
             );
             const defaultBranchId = defaultBranch?.id ?? "";
-            const roleName = defaultBranch?.name ?? "";
 
             const dbsRes = await apiGet<{ databases: NeonDatabase[] }>(
                 `${NEON_API_BASE}/projects/${id}/branches/${defaultBranchId}/databases`,
@@ -185,7 +183,7 @@ class NeonProjectDataProvider
 
             const connRes = await apiGet<NeonConnectionUri>(
                 `${NEON_API_BASE}/projects/${id}/connection_uri` +
-                    `?database_name=${databaseName}&role_name=${roleName}`,
+                    `?database_name=${databaseName}&role_name=${databaseUser}`,
                 headers,
             );
 
