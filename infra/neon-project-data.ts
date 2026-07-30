@@ -269,17 +269,25 @@ export class NeonProjectData extends pulumi.dynamic.Resource {
         args: NeonProjectDataInputs,
         opts?: pulumi.CustomResourceOptions,
     ) {
+        // NOTE: Properties with `undefined` initial values may not get proper
+        // Output objects created by the Pulumi engine during module
+        // evaluation, causing references like devProject.databaseUser to
+        // be the raw `undefined` value at program-build time.  Using
+        // `pulumi.output("")` forces Pulumi to create Output wrappers for
+        // every property, and the provider's create() return values
+        // override them.
+        const none = pulumi.output("");
         super(
             new NeonProjectDataProvider(),
             name,
             {
                 projectId: args.projectId,
                 apiKey: args.apiKey,
-                defaultBranchId: undefined,
-                databaseUser: undefined,
-                databaseName: undefined,
-                databasePassword: undefined,
-                databaseHost: undefined,
+                defaultBranchId: none,
+                databaseUser: none,
+                databaseName: none,
+                databasePassword: none,
+                databaseHost: none,
             },
             opts,
         );

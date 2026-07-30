@@ -1,3 +1,4 @@
+import * as pulumi from "@pulumi/pulumi";
 import {
     IS_DEPLOYED_STAGE,
     RESOURCE_ENVIRONMENT,
@@ -49,7 +50,7 @@ const databaseUrl: $util.Output<string> = (() => {
 
     // Preview/personal stage: look up the shared dev Neon project directly via
     // the Neon REST API (avoids the opaque Pulumi Terraform-provider invoke
-    // error that occurs for new stages with neon.getProjectOutput).
+    // error that occurs for new stages with neon.getProject/getProjectOutput).
     const devProject = new NeonProjectData("NeonProjectData", {
         projectId: secret.NeonProjectId.value,
         apiKey: secret.NeonApiKey.value,

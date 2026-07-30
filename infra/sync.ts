@@ -15,10 +15,25 @@ const { syncSource, syncSecret } = (() => {
     }
 
     const sync = new ElectricCloudSync('ElectricCloudSync', {
-        databaseUrl: Database.properties.url,
+        // Pass the endpoint host (resolves correctly) and Neon credentials,
+        // so the provider can construct a valid database URL by fetching
+        // user / password / database name from the Neon API directly.
+        // This bypasses dynamic-resource output timing issues (the URL
+        // constructed from devProject outputs would contain "undefined").
+        endpointHost: Database.properties.url.apply((url) => {
+            try {
+                return new URL(url).hostname;
+            } catch {
+                return "";
+            }
+        }),
+        neonApiKey: secret.NeonApiKey.value,
+        neonProjectId: secret.NeonProjectId.value,
         apiToken: secret.ElectricCloudApiToken.value,
         projectId: secret.ElectricCloudProjectId.value,
         stage: $app.stage,
+    }, {
+        dependsOn: [Database],
     });
 
     return {
