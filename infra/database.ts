@@ -58,17 +58,20 @@ const databaseUrl: $util.Output<string> = (() => {
     const branch = new neon.Branch(
         `NeonBranch-${$app.stage}`,
         {
-            projectId: devProject.projectId,
+            // Use the secret directly (not the dynamic resource output) to
+            // avoid output-resolution timing issues with Pulumi dynamic
+            // resources — the project ID is the same value we pass in.
+            projectId: secret.NeonProjectId.value,
             name: `${PROJECT_NAME}-${$app.stage}-branch`,
             parentId: devProject.defaultBranchId,
         },
-        { provider: neonProvider },
+        { provider: neonProvider, dependsOn: devProject },
     );
 
     const endpoint = new neon.Endpoint(
         `NeonEndpoint-${$app.stage}`,
         {
-            projectId: devProject.projectId,
+            projectId: secret.NeonProjectId.value,
             branchId: branch.id,
             regionId: "aws-eu-west-2",
             type: "read_write",
