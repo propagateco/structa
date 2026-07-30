@@ -32,6 +32,16 @@ async function apiGet<T = any>(
     return res.json() as Promise<T>;
 }
 
+/** Extract the database name (pathname) from a postgres connection URI. */
+function dbNameFromUri(uri: string): string {
+    try {
+        const u = new URL(uri);
+        return u.pathname.replace(/^\//, "");
+    } catch {
+        return "";
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Interfaces
 // ---------------------------------------------------------------------------
@@ -52,6 +62,26 @@ export interface NeonProjectDataOutputs {
 }
 
 // ---------------------------------------------------------------------------
+// Internal types from Neon REST API responses
+// ---------------------------------------------------------------------------
+
+interface NeonBranch {
+    id: string;
+    name: string;
+    default?: boolean;
+    primary?: boolean;
+}
+
+interface NeonDatabase {
+    name: string;
+    owner_name: string;
+}
+
+interface NeonConnectionUri {
+    uri: string;
+}
+
+// ---------------------------------------------------------------------------
 // Provider
 // ---------------------------------------------------------------------------
 
@@ -64,27 +94,66 @@ class NeonProjectDataProvider
         const { projectId, apiKey } = inputs;
         const headers = auth(apiKey);
 
-        // Fetch project details from the Neon REST API directly.
-        // The Pulumi Terraform provider's getProjectOutput invoke has been
-        // observed to fail with an empty gRPC error for new stages, so we
-        // bypass it with this direct API call.
-        const data = await apiGet<{ project: any }>(
-            `${NEON_API_BASE}/projects/${projectId}`,
+        // 1. Find the default branch so we can use its ID as parent for
+        //    preview branches, and look up its database(s).
+        const branchesRes = await apiGet<{ branches: NeonBranch[] }>(
+            `${NEON_API_BASE}/projects/${projectId}/branches`,
+            headers,
+        );
+        const defaultBranch = branchesRes.branches.find(
+            (b) => b.default === true,
+        );
+        if (!defaultBranch) {
+            throw new Error(
+                `No default branch found for project ${projectId}`,
+            );
+        }
+        const defaultBranchId = defaultBranch.id;
+        const roleName = defaultBranch.name;
+
+        // 2. Fetch the database(s) on the default branch to get the actual
+        //    database name and owner (role).
+        const dbsRes = await apiGet<{ databases: NeonDatabase[] }>(
+            `${NEON_API_BASE}/projects/${projectId}/branches/${defaultBranchId}/databases`,
+            headers,
+        );
+        // Pick the first non-template database.
+        const db = dbsRes.databases[0];
+        if (!db) {
+            throw new Error(
+                `No database found on default branch ${defaultBranchId}`,
+            );
+        }
+        const databaseName = db.name;
+        const databaseUser = db.owner_name;
+
+        // 3. Fetch the connection URI so we get the role password and host.
+        //    The password is only returned in create-project responses and via
+        //    this connection_uri endpoint — it is not available from the role
+        //    or project detail endpoints.
+        const connRes = await apiGet<NeonConnectionUri>(
+            `${NEON_API_BASE}/projects/${projectId}/connection_uri` +
+                `?database_name=${databaseName}&role_name=${roleName}`,
             headers,
         );
 
-        const project = data.project;
+        const uri = new URL(connRes.uri);
+        const databaseHost = uri.hostname;
+        const databasePassword = decodeURIComponent(uri.password);
+        // databaseName from the URI should match what we got from the
+        // databases endpoint, but we parse it as a safety check.
+        const parsedDbName = dbNameFromUri(connRes.uri);
 
         return {
             id: projectId,
             outs: {
                 projectId,
                 apiKey,
-                defaultBranchId: project.default_branch_id,
-                databaseUser: project.database_user,
-                databaseName: project.database_name,
-                databasePassword: project.database_password,
-                databaseHost: project.database_host,
+                defaultBranchId,
+                databaseUser,
+                databaseName: parsedDbName || databaseName,
+                databasePassword,
+                databaseHost,
             },
         };
     }
@@ -93,29 +162,50 @@ class NeonProjectDataProvider
         id: string,
         inputs: NeonProjectDataInputs,
     ): Promise<pulumi.dynamic.ReadResult> {
-        // On re-read, try to fetch the project again.
-        // If the project no longer exists, return empty outputs.
         const headers = auth(inputs.apiKey ?? "");
         try {
-            const data = await apiGet<{ project: any }>(
-                `${NEON_API_BASE}/projects/${id}`,
+            // Same 3-step logic as create().
+            const branchesRes = await apiGet<{ branches: NeonBranch[] }>(
+                `${NEON_API_BASE}/projects/${id}/branches`,
                 headers,
             );
-            const project = data.project;
+            const defaultBranch = branchesRes.branches.find(
+                (b) => b.default === true,
+            );
+            const defaultBranchId = defaultBranch?.id ?? "";
+            const roleName = defaultBranch?.name ?? "";
+
+            const dbsRes = await apiGet<{ databases: NeonDatabase[] }>(
+                `${NEON_API_BASE}/projects/${id}/branches/${defaultBranchId}/databases`,
+                headers,
+            );
+            const db = dbsRes.databases[0];
+            const databaseName = db?.name ?? "";
+            const databaseUser = db?.owner_name ?? "";
+
+            const connRes = await apiGet<NeonConnectionUri>(
+                `${NEON_API_BASE}/projects/${id}/connection_uri` +
+                    `?database_name=${databaseName}&role_name=${roleName}`,
+                headers,
+            );
+
+            const uri = new URL(connRes.uri);
+            const databaseHost = uri.hostname;
+            const databasePassword = decodeURIComponent(uri.password);
+
             return {
                 id,
                 outs: {
                     projectId: id,
                     apiKey: inputs.apiKey ?? "",
-                    defaultBranchId: project.default_branch_id,
-                    databaseUser: project.database_user,
-                    databaseName: project.database_name,
-                    databasePassword: project.database_password,
-                    databaseHost: project.database_host,
+                    defaultBranchId,
+                    databaseUser,
+                    databaseName: dbNameFromUri(connRes.uri) || databaseName,
+                    databasePassword,
+                    databaseHost,
                 },
             };
         } catch {
-            // Project not found — empty outs so Pulumi can recreate
             return {
                 id,
                 outs: {
@@ -150,6 +240,11 @@ class NeonProjectDataProvider
  * data source to avoid an opaque gRPC invoke error that occurs for new
  * stages with neon.getProjectOutput.
  *
+ * Makes three API calls:
+ *   1. GET /projects/{id}/branches              – finds the default branch
+ *   2. GET /projects/{id}/branches/{id}/databases – gets database name + role
+ *   3. GET /projects/{id}/connection_uri         – gets role password + host
+ *
  * Inputs:
  *   projectId – The Neon project ID
  *   apiKey    – Neon API key (must have project read access)
@@ -157,7 +252,7 @@ class NeonProjectDataProvider
  * Outputs:
  *   projectId        – Same as input (for convenience)
  *   defaultBranchId  – The project's default branch ID
- *   databaseUser     – The project's database user
+ *   databaseUser     – The project's database user (role name)
  *   databaseName     – The project's database name
  *   databasePassword – The project's database password
  *   databaseHost     – The project's database host
