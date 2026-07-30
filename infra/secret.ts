@@ -8,6 +8,8 @@ export const secret = {
     LoopsApiKey: new sst.Secret('LoopsApiKey'),
     ElectricSqlSource: new sst.Secret('ElectricSqlSource'),
     ElectricSqlSecret: new sst.Secret('ElectricSqlSecret'),
+    ElectricCloudApiToken: new sst.Secret('ElectricCloudApiToken'),
+    ElectricCloudProjectId: new sst.Secret('ElectricCloudProjectId'),
     PosthogPublicKey: new sst.Secret('PosthogPublicKey'),
     PosthogHost: new sst.Secret('PosthogHost'),
     StripeSecretKey: new sst.Secret('StripeSecretKey'),

@@ -37,6 +37,14 @@ declare module "sst" {
       "type": "sst.sst.Linkable"
       "web": string
     }
+    "ElectricCloudApiToken": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "ElectricCloudProjectId": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "ElectricSqlSecret": {
       "type": "sst.sst.Secret"
       "value": string
@@ -141,9 +149,9 @@ declare module "sst" {
       "value": string
     }
     "SyncEngine": {
-      "secret": string
-      "source": string
       "type": "sst.sst.Linkable"
+      "source": string
+      "secret": string
     }
     "Web": {
       "type": "sst.aws.TanstackStart"
