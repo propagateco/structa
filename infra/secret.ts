@@ -3,7 +3,6 @@ export const secret = {
     NeonOrgId: new sst.Secret('NeonOrgId'),
     NeonApiKey: new sst.Secret('NeonApiKey'),
     NeonProjectId: new sst.Secret('NeonProjectId'),
-    NeonConnectionUri: new sst.Secret('NeonConnectionUri'),
     GoogleClientId: new sst.Secret('GoogleOAuthClientId'),
     GoogleClientSecret: new sst.Secret('GoogleOAuthClientSecret'),
     LoopsApiKey: new sst.Secret('LoopsApiKey'),

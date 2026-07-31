@@ -47,15 +47,21 @@ const databaseUrl: $util.Output<string> = (() => {
     }
 
     // Preview/personal stage: create a branch + endpoint in the shared dev
-    // Neon project, then rewrite the dev project's connection URI (stored in
-    // the NeonConnectionUri secret) to point at this stage's endpoint host.
+    // Neon project, then rewrite the dev project's connection URI to point at
+    // this stage's endpoint host.
     //
-    // Only the host has to be computed at deploy time — it comes from the real
-    // neon.Endpoint resource, whose outputs resolve reliably when SST snapshots
-    // linkable properties. The credentials come from a secret, which resolves
-    // synchronously at program load. (Pulumi dynamic-resource outputs — like
-    // the old NeonProjectData ones — serialize as "undefined" at that point,
-    // so the URL built from them was never valid.)
+    // The connection URI comes from the neon provider's getProject data
+    // source (managed by SST, no extra secret). Only the host has to be
+    // computed at deploy time — it comes from the real neon.Endpoint resource,
+    // whose outputs resolve reliably when SST snapshots linkable properties.
+    // (Pulumi dynamic-resource outputs — like the old NeonProjectData ones —
+    // serialize as "undefined" at that point, so the URL built from them was
+    // never valid.)
+    const devProject = neon.getProjectOutput(
+        { id: secret.NeonProjectId.value },
+        { provider: neonProvider },
+    );
+
     const branch = new neon.Branch(
         `NeonBranch-${$app.stage}`,
         {
@@ -80,10 +86,10 @@ const databaseUrl: $util.Output<string> = (() => {
     );
 
     // The dev project's credentials are valid on every branch of the project;
-    // only the compute endpoint differs per stage. Rewrite the secret's URI to
-    // use the preview endpoint's host.
+    // only the compute endpoint differs per stage. Rewrite the data source's
+    // connection URI to use the preview endpoint's host.
     return $util
-        .all([secret.NeonConnectionUri.value, endpoint.host])
+        .all([devProject.connectionUri, endpoint.host])
         .apply(([connectionUri, host]) => {
             const parsed = new URL(connectionUri);
             const port = parsed.port || "5432";
