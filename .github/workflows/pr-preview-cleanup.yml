@@ -48,7 +48,7 @@ jobs:
                   aws-region: ${{ env.AWS_REGION }}
 
             - name: Clear any stale SST lock
-              run: npx sst unlock --stage ${{ env.STAGE_NAME }}
+              run: npx sst unlock --stage ${{ env.STAGE_NAME }} --print-logs
               continue-on-error: true
               env:
                   AWS_PROFILE: ''
@@ -56,7 +56,7 @@ jobs:
                   CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
 
             - name: Destroy SST environment
-              run: npx sst remove --stage ${{ env.STAGE_NAME }}
+              run: npx sst remove --stage ${{ env.STAGE_NAME }} --print-logs
               continue-on-error: true
               env:
                   AWS_PROFILE: ''
@@ -65,7 +65,7 @@ jobs:
 
             - name: Unlock SST on cancellation/failure
               if: always()
-              run: npx sst unlock --stage ${{ env.STAGE_NAME }}
+              run: npx sst unlock --stage ${{ env.STAGE_NAME }} --print-logs
               env:
                   AWS_PROFILE: ''
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
 
             - name: Retry cleanup after unlock (if previous step failed)
               if: failure()
-              run: npx sst remove --stage ${{ env.STAGE_NAME }}
+              run: npx sst remove --stage ${{ env.STAGE_NAME }} --print-logs
               env:
                   AWS_PROFILE: ''
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
