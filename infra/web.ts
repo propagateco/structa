@@ -1,4 +1,4 @@
-import { Domain, domain, Stage, dnsAdapter, IS_DEPLOYED_STAGE } from './dns';
+import { Domain, domain, Stage, dnsAdapter } from './dns';
 import { apiRouter } from './api';
 import { Database } from './database';
 import { authEmail, notifyEmail } from './email';
@@ -17,16 +17,11 @@ export const app = new sst.aws.TanStackStart('Web', {
     //   "FATAL ERROR: Reached heap limit Allocation failed - JavaScript
     //    heap out of memory" during the nitro env build.
     buildCommand: 'NODE_OPTIONS=--max-old-space-size=4096 npm run build',
-    // Custom domain only for dev/production. Preview stages use the
-    // auto-generated CloudFront URL to avoid the slow ACM cert validation +
-    // CloudFront distribution setup (15-30 min for new distributions).
-    domain: IS_DEPLOYED_STAGE
-        ? {
-              name: domain,
-              redirects: ['www.' + domain],
-              dns: dnsAdapter,
-          }
-        : undefined,
+    domain: {
+        name: domain,
+        redirects: ['www.' + domain],
+        dns: dnsAdapter,
+    },
     link: [
         Stage,
         Domain,
@@ -49,15 +44,20 @@ export const app = new sst.aws.TanStackStart('Web', {
         secret.ExpoOwner,
         secret.BetterAuthSecret,
         secret.LoopsApiKey,
+        // Used at runtime to resolve the Electric Cloud sync source id +
+        // secret on preview stages (the ElectricCloudSync dynamic resource's
+        // outputs cannot be baked into the SyncEngine link).
+        secret.ElectricCloudApiToken,
+        secret.ElectricCloudProjectId,
     ],
     environment: {
-        BETTER_AUTH_URL: IS_DEPLOYED_STAGE ? Domain.properties.web : undefined,
-        PLATFORM_URL: IS_DEPLOYED_STAGE ? Domain.properties.web : undefined,
+        BETTER_AUTH_URL: Domain.properties.web,
+        PLATFORM_URL: Domain.properties.web,
         REACT_APP_STRIPE_PUBLISHABLE_KEY: secret.StripePublishableKey.value,
         VITE_PUBLIC_POSTHOG_KEY: secret.PosthogPublicKey.value,
         VITE_PUBLIC_POSTHOG_HOST: secret.PosthogHost.value,
         VITE_API_URL: apiRouter.url,
-        VITE_PLATFORM_URL: IS_DEPLOYED_STAGE ? Domain.properties.web : undefined,
+        VITE_PLATFORM_URL: Domain.properties.web,
         VITE_COOKIE_PREFIX: Stage.properties.cookiePrefix,
         // CloudFront distribution that fronts the image-processor Lambda
         // + OptimisedStorage bucket. Prepending this to bare S3 object
