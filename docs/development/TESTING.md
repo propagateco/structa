@@ -8,6 +8,8 @@ This document describes Test-Driven Development approach used in Structa monorep
 - [Test Organization](#test-organization)
 - [Test Guidelines](#test-guidelines)
 - [Browser Automation Testing](#browser-automation-testing)
+- [Interactive UI Testing in PR Previews](#interactive-ui-testing-in-pr-previews)
+- [Reporting Validation Findings on the PR](#reporting-validation-findings-on-the-pr)
 - [Related Documentation](#related-documentation)
 
 ---
@@ -135,6 +137,101 @@ Notes:
 - **Profile survives restarts** — repeat logins are *not* needed; only re-run `agent-login.sh` when the better-auth session expires (~7d default).
 - **`input-otp`** renders one composite input (`input[data-input-otp-input="true"]`); `fill`-ing 6 chars triggers `verify-code-form`'s auto-submit effect.
 - **Don't commit session state** — the profile lives at `~/.structa-agent` (outside the repo). Never copy it into the repo or commit it.
+
+---
+
+## Interactive UI Testing in PR Previews
+
+When a PR's preview environment is deployed (CI comments the URLs), test the
+changes **in the browser** before considering the work done. This is the
+validation step that completes acceptance criteria. It applies to the
+dev-browser subagent, the frontend-ui-ux-engineer agent, or any agent with
+bash access.
+
+### 1. Authenticate the agent-browser profile (bot login)
+
+No OTP or DB access needed on previews — the dev-only bot-login endpoint
+creates a session for the bot user (`agent@structa.dev`):
+
+```bash
+./scripts/agent-login.sh --bot https://pr-<N>.dev.structa.so
+```
+
+This replays a session cookie into the persistent profile (`~/.structa-agent`).
+Subsequent agent-browser commands reuse it (see
+[WORKTREES.md — Bot Authentication](./WORKTREES.md)):
+
+```bash
+agent-browser --profile ~/.structa-agent open https://pr-<N>.dev.structa.so/app
+```
+
+### 2. The verification checklist
+
+Test the changed behavior against the PR's described changes and acceptance
+criteria using **all four evidence channels**:
+
+| Channel | Command | What to look for |
+|---------|---------|------------------|
+| **UI elements** | `snapshot -i`, then `click @e1` / `fill @e2 "text"` | Expected UI exists, is interactive, and behaves per the acceptance criteria |
+| **Screenshots** | `screenshot <path>.png` (`--full` for full page) | Visual correctness: layout, spacing, empty/loading/error states; check at least one narrow viewport too |
+| **Console logs** | `console` | No uncaught errors, React warnings, or console-level failures |
+| **Network logs** | `network requests`; record flows with `network har start` → act → `network har stop <file>.har` | Requests succeed (2xx/3xx), expected endpoints are called, no unexpected 4xx/5xx, websockets/SSE connect |
+
+Working loop:
+
+1. `open` the target URL — start at the changed route, then follow the user journey.
+2. `snapshot -i` → interact via refs → **re-snapshot after every page change**.
+3. Screenshot key states (initial, filled, submitted, error).
+4. Run `console` after each major interaction and `network requests` at the end.
+5. If anything looks wrong, capture it: screenshot + `network har` capture + the
+   exact console/network output, then reproduce in isolation if possible.
+
+### 3. Report findings as a PR comment
+
+After testing, post a structured validation comment on the PR. This is how
+acceptance criteria get closed and how failures are handed off to another
+developer:
+
+```bash
+gh pr comment <N> --body-file /tmp/validation.md
+```
+
+Template:
+
+```markdown
+## Browser Validation (agent-browser)
+**Stage:** pr-<N> · **URL:** https://pr-<N>.dev.structa.so
+
+**Status:** ✅ Pass / ⚠️ Partial / ❌ Fail
+
+### Acceptance criteria
+- [x] AC-1 — <criterion> (verified: screenshot `…/page.png`, interacted with …)
+- [ ] AC-2 — <criterion> **FAILED** — <what happened>
+
+### Evidence
+- **Screenshots:** <paths>
+- **Console:** clean / <errors found>
+- **Network:** <summary, e.g. all 2xx; one failed POST /api/x → 500>
+
+### Issues found (for a developer to pick up)
+- **Issue 1:** <what's wrong>
+  - Repro: <steps>
+  - Evidence: <console/network output, screenshot path>
+  - Suggested next step: <one-liner>
+```
+
+Rules:
+
+- **Be evidence-based** — attach screenshots and paste console/network output,
+  not just "it works" / "it's broken".
+- **Never close a story that touches UI without browser validation.**
+- **If something is not right, flag it** — mark the affected acceptance
+  criteria as failing and describe the issue with reproduction steps. Do not
+  silently fix unrelated problems or expand scope; leave a clear handoff for
+  another developer to pick up.
+- If the dev-browser **subagent** did the testing, it returns its findings to
+  the orchestrating agent, who posts the comment (the subagent itself is
+  read-only for bash).
 
 ---
 

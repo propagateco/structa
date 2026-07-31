@@ -107,6 +107,11 @@ are already authenticated — repeat only on session expiry (~7d).
 Details: [docs/development/TESTING.md#agent-browser-workflow-dev-browser-agent](docs/development/TESTING.md#agent-browser-workflow-dev-browser-agent)
 and [docs/development/WORKTREES.md](docs/development/WORKTREES.md#bot-authentication)
 
+**After UI checks, post a validation comment on the PR** — evidence
+(screenshots, console logs, network logs) against the acceptance criteria,
+flagging anything that's wrong for another developer to pick up:
+[docs/development/TESTING.md#reporting-validation-findings-on-the-pr](docs/development/TESTING.md#reporting-validation-findings-on-the-pr)
+
 ## Project Context
 
 - **Vision**: [docs/OVERVIEW.md](docs/OVERVIEW.md)

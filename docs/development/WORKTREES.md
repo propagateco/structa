@@ -80,6 +80,11 @@ gh pr create --base dev --head my-feature --fill
 # 5. Wait for the preview URL comment on the PR, then test interactively
 ./scripts/agent-login.sh --bot https://pr-123.dev.structa.so
 agent-browser --profile ~/.structa-agent open https://pr-123.dev.structa.so/app
+
+# 6. After browser testing, post a validation comment on the PR (evidence:
+#    screenshots, console logs, network logs) to close acceptance criteria
+#    or flag issues for another developer — see TESTING.md
+gh pr comment 123 --body-file /tmp/validation.md
 ```
 
 > **Why `dev`?** Branch protection on `dev` requires passing CI checks but
