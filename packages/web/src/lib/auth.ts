@@ -8,6 +8,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { emailOTP, openAPI } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { Resource } from "sst";
+import { botLoginPlugin } from "./bot-login";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -148,6 +149,9 @@ export const auth = betterAuth({
 				await sendVerificationOTP({ email, otp, type });
 			},
 		}),
+		// Bot-login is dev-only: never registered in production, so the
+		// `/bot-login` endpoint returns 404 there (unknown auth path).
+		...(Resource.App.stage === "production" ? [] : [botLoginPlugin()]),
 		{
 			id: "verification-location",
 			schema: {
