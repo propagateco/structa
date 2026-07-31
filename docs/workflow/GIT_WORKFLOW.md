@@ -20,11 +20,22 @@ This document describes Git workflow, PR process, and quality checks used in Str
 
 This project uses a **trunk-based development** approach with PRs:
 
-- **Feature branches** are created from `production`
-- **PRs** are opened to merge back into `production`
-- **CI checks** must pass before merge
-- **Human approval** required for production PRs
-- **SST Console** autodeploys after merge
+- **Feature branches** are created from `dev` (the active integration branch)
+- **PRs** are opened against `dev` by default
+- **CI checks** must pass before merge (typecheck, lint, tests)
+- **`dev`**: PR required, no human approval (CI is the gate) — the fast loop
+  for agents and day-to-day work
+- **`production`**: PR required, 1 approval, stricter review — promotes
+  `dev` (or a hotfix branch) to production
+- **GitHub Actions** deploys the `dev` stage on merge (`deploy.yml`);
+  production deploys from `production` branch only
+- **Each PR also deploys a `pr-N` preview environment** — see
+  [Worktrees & the No-Dev-Server Workflow](../development/WORKTREES.md) and
+  [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+> **No local dev server:** for the agent workflow, do not run `npx sst dev`.
+> Work in an isolated worktree, run local checks only, and test interactively
+> against the `pr-N` preview via the bot login.
 
 ---
 
@@ -57,10 +68,12 @@ npm test             # Run all tests
 
 ## Code Review
 
-**Human reviewer must:**
+**For production PRs, a human reviewer must:**
 - ✅ Review code changes
 - ✅ Verify CI passed
 - ✅ Approve PR before merge
+
+**For `dev` PRs** no approval is required — passing CI checks is the gate.
 
 ---
 
@@ -134,7 +147,8 @@ npm test
 
 | Topic | Document |
 |-------|----------|
-| Quality tools (checked by CI) | [../development/QUALITY_TOOLS.md](../development/QUALITY_TOOLS.md) |
+| Development tools (checked by CI) | [../development/DEVELOPMENT_TOOLS.md](../development/DEVELOPMENT_TOOLS.md) |
+| Worktrees & the no-dev-server workflow | [../development/WORKTREES.md](../development/WORKTREES.md) |
 | Testing (run by CI) | [../development/TESTING.md](../development/TESTING.md) |
 | Deployment (triggered by CI) | [DEPLOYMENT.md](./DEPLOYMENT.md) |
 | Coding style (checked by CI) | [../development/CODING_STYLE.md](../development/CODING_STYLE.md) |

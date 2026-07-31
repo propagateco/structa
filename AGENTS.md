@@ -25,6 +25,7 @@ For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 | Topic | Location |
 |-------|----------|
 | Development tools (Biome, Vitest, TypeScript, SST Dev) | [docs/development/DEVELOPMENT_TOOLS.md](docs/development/DEVELOPMENT_TOOLS.md) |
+| Git worktrees & the no-dev-server workflow | [docs/development/WORKTREES.md](docs/development/WORKTREES.md) |
 | Testing philosophy & TDD workflow | [docs/development/TESTING.md](docs/development/TESTING.md) |
 | Coding conventions & style | [docs/development/CODING_STYLE.md](docs/development/CODING_STYLE.md) |
 | Debugging & log locations | [docs/development/DEBUGGING.md](docs/development/DEBUGGING.md) |
@@ -41,6 +42,34 @@ For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - Study patterns from `packages/app-example/` before coding
 - Only deploy to personal stage: `npx sst deploy`
 - Never run `npx sst deploy --stage dev` or `--stage production` (CI only)
+
+## Agent Development Workflow (No Local Dev Server)
+
+Agents do **not** run `npx sst dev`. Instead:
+
+1. Work in an isolated worktree: `./scripts/worktree-setup.sh -c <branch>`
+   (or `-c` omitted for an existing branch). Never work directly in a shared
+   checkout if a worktree exists for the branch.
+2. Run only local, offline checks before committing:
+   ```bash
+   npm run typecheck && npm run check:fix && npm test
+   ```
+3. Push and open a PR against **`dev`** (not `production`):
+   ```bash
+   git push -u origin HEAD:<branch>
+   gh pr create --base dev --head <branch> --fill
+   ```
+4. CI deploys a `pr-N` preview environment (own Neon branch, seeded from the
+   dev database — includes the bot user). Wait for the preview URL comment,
+   then test interactively with agent-browser, authenticated via the bot
+   login (no OTP):
+   ```bash
+   ./scripts/agent-login.sh --bot <preview-url>
+   agent-browser --profile ~/.structa-agent open <preview-url>/app
+   ```
+5. Clean up after merge: `git worktree remove .worktrees/<branch>`.
+
+Details & rationale: [docs/development/WORKTREES.md](docs/development/WORKTREES.md)
 
 ## Local Development
 
@@ -69,7 +98,14 @@ session is valid it exits immediately, otherwise it walks the email-OTP login
 succeeds, all subsequent `agent-browser --profile ~/.structa-agent …` calls
 are already authenticated — repeat only on session expiry (~7d).
 
+**Against a PR preview** (no local DB, no OTP) use the bot login instead:
+
+```bash
+./scripts/agent-login.sh --bot <preview-url>
+```
+
 Details: [docs/development/TESTING.md#agent-browser-workflow-dev-browser-agent](docs/development/TESTING.md#agent-browser-workflow-dev-browser-agent)
+and [docs/development/WORKTREES.md](docs/development/WORKTREES.md#bot-authentication)
 
 ## Project Context
 
