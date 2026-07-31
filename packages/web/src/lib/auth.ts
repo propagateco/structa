@@ -10,6 +10,12 @@ import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { Resource } from "sst";
 import { botLoginPlugin } from "./bot-login";
 
+// Only the dev/production stages have a custom domain with a real
+// BETTER_AUTH_URL env var (see infra/web.ts). Everything else (previews,
+// personal stages) serves from an auto-generated CloudFront URL.
+const isDeployedStage =
+	Resource.App.stage === "production" || Resource.App.stage === "dev";
+
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg",
@@ -27,8 +33,15 @@ export const auth = betterAuth({
 	},
 	advanced: {
 		cookiePrefix: Resource.Stage.cookiePrefix,
+		// Cross-subdomain cookies require a baseURL (set via the
+		// BETTER_AUTH_URL env var), which only deployed stages get
+		// (infra/web.ts). Previews/personal stages serve from an
+		// auto-generated CloudFront URL where the custom domain does not
+		// exist, so host-only cookies are the correct behaviour there —
+		// enabling crossSubDomainCookies without a baseURL makes
+		// better-auth throw on every auth request.
 		crossSubDomainCookies: {
-			enabled: Resource.Domain.web !== "http://localhost:3000",
+			enabled: isDeployedStage,
 		},
 		defaultCookieAttributes: {
 			sameSite: "none",
