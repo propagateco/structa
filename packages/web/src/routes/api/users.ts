@@ -45,7 +45,7 @@ export const Route = createFileRoute("/api/users")({
 					// Build Electric URL with user-filtered where clause
 					// Users can only see their own profile data
 					const whereClause = `id = '${session.user.id}'`;
-					const originUrl = buildElectricUpstreamUrl(
+					const originUrl = await buildElectricUpstreamUrl(
 						request,
 						"user",
 						whereClause,

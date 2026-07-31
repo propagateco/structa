@@ -5,7 +5,6 @@ import {
     PROJECT_NAME,
 } from "./dns";
 import { secret } from "./secret";
-import { NeonProjectData } from "./neon-project-data";
 
 // Autoscaling
 const autoscalingLimitMinCu = 0.25;
@@ -47,25 +46,29 @@ const databaseUrl: $util.Output<string> = (() => {
         return neonProject.connectionUri;
     }
 
-    // Preview/personal stage: look up the shared dev Neon project directly via
-    // the Neon REST API (avoids the opaque Pulumi Terraform-provider invoke
-    // error that occurs for new stages with neon.getProject/getProjectOutput).
-    const devProject = new NeonProjectData("NeonProjectData", {
-        projectId: secret.NeonProjectId.value,
-        apiKey: secret.NeonApiKey.value,
-    });
+    // Preview/personal stage: create a branch + endpoint in the shared dev
+    // Neon project, then rewrite the dev project's connection URI to point at
+    // this stage's endpoint host.
+    //
+    // The connection URI comes from the neon provider's getProject data
+    // source (managed by SST, no extra secret). Only the host has to be
+    // computed at deploy time — it comes from the real neon.Endpoint resource,
+    // whose outputs resolve reliably when SST snapshots linkable properties.
+    // (Pulumi dynamic-resource outputs — like the old NeonProjectData ones —
+    // serialize as "undefined" at that point, so the URL built from them was
+    // never valid.)
+    const devProject = neon.getProjectOutput(
+        { id: secret.NeonProjectId.value },
+        { provider: neonProvider },
+    );
 
     const branch = new neon.Branch(
         `NeonBranch-${$app.stage}`,
         {
-            // Use the secret directly (not the dynamic resource output) to
-            // avoid output-resolution timing issues with Pulumi dynamic
-            // resources — the project ID is the same value we pass in.
             projectId: secret.NeonProjectId.value,
             name: `${$app.stage}`,
-            parentId: devProject.defaultBranchId,
         },
-        { provider: neonProvider, dependsOn: devProject },
+        { provider: neonProvider },
     );
 
     const endpoint = new neon.Endpoint(
@@ -82,7 +85,16 @@ const databaseUrl: $util.Output<string> = (() => {
         { provider: neonProvider },
     );
 
-    return $interpolate`postgresql://${devProject.databaseUser}:${devProject.databasePassword}@${endpoint.host}:5432/${devProject.databaseName}`;
+    // The dev project's credentials are valid on every branch of the project;
+    // only the compute endpoint differs per stage. Rewrite the data source's
+    // connection URI to use the preview endpoint's host.
+    return $util
+        .all([devProject.connectionUri, endpoint.host])
+        .apply(([connectionUri, host]) => {
+            const parsed = new URL(connectionUri);
+            const port = parsed.port || "5432";
+            return `postgresql://${parsed.username}:${encodeURIComponent(parsed.password)}@${host}:${port}${parsed.pathname}${parsed.search}`;
+        });
 })();
 
 export const Database = new sst.Linkable("Database", {

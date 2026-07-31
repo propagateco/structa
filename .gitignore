@@ -34,7 +34,9 @@ node_modules
 *.tsbuildinfo
 
 # OpenCode local configuration
-.opencode/
+.opencode/*
+!.opencode/agent/
+!.opencode/agent/*
 
 # TanStack build cache
 packages/web/.tanstack/tmp/

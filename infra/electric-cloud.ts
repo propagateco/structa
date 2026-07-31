@@ -238,8 +238,10 @@ class ElectricCloudSyncProvider
      * Build a database URL from Neon API data + the preview endpoint host.
      * Called when the pre-constructed databaseUrl contains "undefined".
      *
-     * Makes the same three Neon API calls as NeonProjectDataProvider.create()
-     * but returns the connection URI re-written to use `endpointHost`.
+     * Fetches the dev project's connection URI via the Neon API (branches →
+     * databases → connection_uri) and re-writes the host to `endpointHost`.
+     * The dev credentials are valid on every branch of the project; only the
+     * compute endpoint differs per stage.
      */
     private async buildDatabaseUrl(
         apiKey: string,

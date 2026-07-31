@@ -1,166 +1,128 @@
-# Git Worktrees with SST: Setup & Guardrails
+# Agent Workflow: Isolated Worktrees + PR Preview Testing + Bot Auth
+
+**See:** [GitHub Issue #61](https://github.com/propagateco/structa/issues/61)
 
 ## Summary
 
-Document and lightly tool the workflow for using git worktrees with this SST
-repo so multiple branches can be developed in parallel without state
-collisions, port clashes, or tripping the known SST v4 `.sst` path-substring
-bug.
+Reframe the dev workflow so that **agents never run a local dev server**. Instead:
+1. Agents work in isolated git worktrees, make code changes, and run local quality checks (typecheck, lint, test).
+2. Agents open PRs against `dev`. CI runs quality checks + deploys a `pr-N` preview environment.
+3. Agents test interactively in the PR preview using `agent-browser`, authenticated as a bot user.
+4. A lightweight bot-login endpoint (dev-only) lets agents authenticate without the OTP flow.
 
 ---
 
 ## Motivation
 
-Git worktrees let you check out several branches of the same repo into
-separate directories simultaneously — ideal for context-switching between
-features without stashing, or for running parallel agent sessions on
-isolated branches. For this repo there are two real obstacles worth
-engineering around:
+### What changed since this issue was filed
 
-1. **Stage collisions.** `sst.config.ts` uses `home: "aws"`, so Pulumi
-   state lives in S3 keyed by `app + stage`, not by directory. SST's own
-   docs state that two `sst dev` sessions against the same stage will
-   disconnect each other ("the person that connected first will get
-   disconnected"). Our `.sst/stage` caches the default `hking`, so a naive
-   `sst dev` in a new worktree would silently target the same stack as the
-   main checkout.
+| Then | Now |
+|---|---|
+| SST v3 (`3.19.3`) | SST v4 (`4.17.1`) — migration complete |
+| No PR preview environments | `pr-preview-deploy.yml` exists — full CI → deploy → comment flow |
+| No Neon branching | `infra/database.ts` creates Neon branches per preview stage |
+| No agent login tooling | `scripts/agent-login.sh` + `get-otp.ts` exist (local-dev only) |
+| #58 (v3→v4 migration) pending | #58 closed, migration done |
+| `.sst` path-substring bug was a future risk | Bug is still open upstream — guardrail still needed |
 
-2. **SST v4 `.sst` path-substring bug** (upstream, open). SST v4's esbuild
-   `InjectGlobals` plugin uses a naive `strings.Contains(args.Path, ".sst")`
-   check, so any project directory whose absolute path contains `.sst`
-   anywhere — e.g. `git worktree add ../structa.sst-v4-upgrade`, a default
-   of some worktree tools — silently skips global injection into
-   `sst.config.ts` and throws `ReferenceError: sst is not defined` on
-   `dev`/`deploy`/`diff`. Ref: anomalyco/sst#6937. We are on v3.19.3 today
-   and immune, but issue #58 (v3 → v4 migration) will expose us. Worth
-   landing a naming convention *before* the upgrade.
+### The old model (what we're moving away from)
 
-A third, minor concern: `sst dev` starts the multiplexer, web frontend, live
-Lambda, and a tunnel. Running two `sst dev` sessions in parallel can clash
-on the multiplexer port (currently `0.0.0.0:13557`) despite per-stage
-resource name scoping.
+The original issue assumed agents would run `sst dev` inside worktrees, needing stage collision prevention, port hygiene, etc. That's complex, resource-heavy, and fragile.
 
----
+### The new model
 
-## Goals
-
-- Establish a worktree + stage naming convention that prevents Pulumi state
-  collisions by construction.
-- Provide a small `scripts/worktree-setup.sh` helper so the convention is
-  one-command and hard to get wrong.
-- Document the pitfalls (stage collisions, port clashes, v4 path bug) in
-  `docs/development/` so future contributors don't rediscover them.
-- Confirm the setup works on this repo end-to-end (one parallel
-  `sst dev` smoke test in two worktrees).
-
-## Non-Goals
-
-- Switching SST's `home` to `local` state.
-- Multi-AWS-account-per-developer setups (team uses a single dev account
-  with stage-scoped resources today).
-- Worktree-aware isolation of databases or external services — out of scope
-  for v1; tracked separately if it becomes a problem.
-- Changing the default `production` branch or git workflow.
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                     AGENT WORKFLOW (per iteration)                   │
+│                                                                      │
+│  1. git worktree add .worktrees/<branch> <branch>                    │
+│     (scripts/worktree-setup.sh automates this)                       │
+│                                                                      │
+│  2. Make code changes in the worktree                                │
+│     Run: npm run typecheck && npm run check:fix && npm test          │
+│                                                                      │
+│  3. Commit + push → Open PR targeting `dev`                          │
+│     CI runs quality checks + deploys pr-N preview environment        │
+│     (Neon branch is auto-created; bot user exists via copy-on-write) │
+│                                                                      │
+│  4. Visit PR preview URL with agent-browser                          │
+│     Authenticate via bot-login endpoint (no OTP)                     │
+│     Test the feature interactively                                   │
+│                                                                      │
+│  5. PR merged → preview destroyed (auto-cleanup)                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
 ## Technical Approach
 
-### What's already true in this repo (verified)
+### 1. Bot-Login API Endpoint (`POST /api/auth/bot-login`)
 
-| Check | State |
-|---|---|
-| `.sst` in `.gitignore` (line 8) | ✅ Each worktree gets a clean local `.sst/` |
-| `.worktrees/` in `.gitignore` (line 2) | ✅ Worktree root already planned for |
-| SST version | 3.19.3 (v3 / ion) |
-| `home` in `sst.config.ts` | `home: "aws"` — state in S3, keyed by `app + stage` |
-| `.sst/pulumi/` | Empty — confirms state is remote |
-| `.sst/stage` | Contains `hking` (cached default for `sst dev`) |
+A single dev-only endpoint that shortcuts the OTP flow for the bot user.
 
-No prerequisite changes to `.gitignore` or `sst.config.ts` are needed.
+**Guardrails:**
+- Only registered in non-production stages (check `$app.stage` at auth-config time)
+- Only works for the configured bot email (`agent@structa.dev`)
+- Returns 404 in production — no security surface
 
-### Convention: branch-derived personal stages
-
-Stage scheme: `<user>-<branch>` — matches SST's personal-stage model and
-ensures two developers working the same branch aliased into their own
-worktrees never collide.
-
+**Agent usage:**
 ```bash
-# from the main checkout
-git worktree add .worktrees/feat-a feat-a
-cd .worktrees/feat-a
-npm install
-sst dev --stage hking-feat-a        # <user>-<branch>
+curl -X POST https://pr-61.xyz.structa.dev/api/auth/bot-login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"agent@structa.dev"}' \
+  -c /tmp/cookies.txt
+
+agent-browser --profile ~/.structa-agent \
+  open https://pr-61.xyz.structa.dev/app
 ```
 
-Path scheme `.worktrees/<branch>` deliberately avoids the `<repo>.<branch>`
-naming that would trip the v4 `.sst` substring bug (no `.sst` ever appears
-in the absolute path, regardless of branch name).
+### 2. Retool `scripts/worktree-setup.sh`
 
-### `scripts/worktree-setup.sh` (proposed, small)
+Rewrite the worktree helper to reflect the new no-dev-server workflow.
 
-Responsibilities:
-1. Validate branch name and absence of `.sst` substring in the resolved
-   absolute path (fail fast with a clear message — defense against v4).
-2. `git worktree add .worktrees/<branch> <branch>`.
-3. Run `npm install` in the new worktree.
-4. Print the exact `sst dev --stage <user>-<branch>` command, deriving
-   `<user>` from `whoami` (matching SST's personal-stage default) and
-   sanitizing the branch name (strip `origin/`, replace `/` with `-`).
+### 3. `docs/development/WORKTREES.md`
 
-~40 lines of bash. No production code touched.
+Document the full model — isolation, `.sst` bug, bot-login auth, PR preview cycle.
 
-### Documentation: `docs/development/WORKTREES.md` (proposed)
+### 4. Update `docs/workflow/GIT_WORKFLOW.md`
 
-A short page covering:
-- The model: state is in S3 keyed by `app + stage`; local `.sst/` is throwaway.
-- The naming convention and why (v4 path bug callout).
-- The stage collision rule — never reuse a stage across two `sst dev` sessions.
-- Port hygiene when running two `sst dev` sessions in parallel.
-- A "Known upstream issues" section linking anomalyco/sst#6937 and the v3→v4
-  migration (issue #58).
+Reflect that feature branches target `dev`, and document the PR → preview → test → merge cycle.
+
+### 5. Update `AGENTS.md`
+
+Codify the no-dev-server, worktree-based, PR-preview-tested workflow.
+
+### 6. Update `scripts/agent-login.sh`
+
+Add a `--bot` mode that calls the bot-login endpoint instead of OTP flow.
 
 ---
 
 ## Tasks
 
-- [ ] Add `scripts/worktree-setup.sh` (branch derivation, `.sst` guard,
-      `npm install`, prints `sst dev --stage` command).
-- [ ] Add `docs/development/WORKTREES.md` (workflow + pitfalls + upstream
-      bug links).
-- [ ] Add a one-line pointer in `docs/development/DEVELOPMENT_TOOLS.md` to
-      the new WORKTREES page.
-- [ ] Smoke test: create two worktrees, run `sst dev --stage hking-<a>` in
-      one and `sst dev --stage hking-<b>` in another; confirm both stay
-      connected and resources are stage-scoped in AWS.
-- [ ] Cross-reference issue #58 (v3 → v4 migration): add a checklist item
-      to verify the `.sst` path-substring bug is fixed before upgrading,
-      or that our convention continues to avoid it.
+- [ ] **Backend: Bot-login endpoint** — Add `POST /api/auth/bot-login` in `packages/backend`, gated by stage check
+- [ ] **Worktree setup script** — Rewrite `scripts/worktree-setup.sh` with no-dev-server workflow
+- [ ] **Worktree docs** — Write `docs/development/WORKTREES.md`
+- [ ] **Git workflow docs** — Update `docs/workflow/GIT_WORKFLOW.md` (target `dev`, PR preview cycle)
+- [ ] **Agent instructions** — Update `AGENTS.md` to codify the workflow
+- [ ] **Dev tools cross-ref** — Add one-line pointer in `docs/development/DEVELOPMENT_TOOLS.md`
+- [ ] **Agent-login update** — Update `scripts/agent-login.sh` with `--bot` mode for preview environments
+- [ ] **Smoke test** — Open a test PR, verify the full cycle: worktree → push → preview deploy → bot-login → agent-browser test → merge → cleanup
 
 ## Acceptance Criteria
 
-- [ ] `scripts/worktree-setup.sh <branch>` creates a worktree under
-      `.worktrees/<branch>`, installs deps, and prints the correct
-      `sst dev --stage <user>-<branch>` command.
-- [ ] The script refuses to create a worktree whose absolute path contains
-      `.sst` and explains why.
-- [ ] Two `sst dev` sessions in two worktrees with distinct `--stage` values
-      run simultaneously without one disconnecting the other.
-- [ ] `docs/development/WORKTREES.md` documents the stage-collision rule,
-      port considerations, and the v4 `.sst` path bug.
-- [ ] No changes to `.gitignore` or `sst.config.ts` are required by this work.
+- [ ] `POST /api/auth/bot-login` returns a valid session cookie for `agent@structa.dev` in dev/preview stages and 404 in production
+- [ ] `scripts/worktree-setup.sh <branch>` creates `.worktrees/<branch>`, installs deps, prints the workflow (no `sst dev` command)
+- [ ] The script refuses paths containing `.sst` and explains why
+- [ ] `scripts/agent-login.sh --bot <preview-url>` authenticates without OTP and exits on `/app`
+- [ ] `docs/development/WORKTREES.md` documents the isolation model, `.sst` bug, bot-login auth, and PR preview cycle
+- [ ] Full end-to-end test: agent creates a worktree → makes a visible change → opens PR → CI deploys → agent visits preview URL → bot-login → verifies change in browser
 
----
+## Non-Goals
 
-## Additional Context
-
-- Related: #58 (SST v3 → v4 migration) — the v4 `.sst` substring bug is the
-  main reason to land a naming convention now.
-- Upstream bug: https://github.com/anomalyco/sst/issues/6937
-- SST personal-stage docs: https://sst.dev/docs/basics/
-- SST stage-management guide:
-  https://mintlify.wiki/anomalyco/sst/guides/stage-management
-
-## Labels
-
-`refactor` `dev-workflow`
+- Running `sst dev` in worktrees
+- Multi-developer stage collision handling (irrelevant without local dev server)
+- Changing the production deployment pipeline
+- Adding real user auth methods (bot-login is dev-only)
+- Changing branch protection rules

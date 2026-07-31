@@ -197,7 +197,8 @@ npx sst dev                 # Default multiplexed mode with tabbed UI (Linux/mac
 | Topic | Document |
 |-------|----------|
 | Testing philosophy & TDD workflow | [TESTING.md](./TESTING.md) |
+| Git worktrees & the no-dev-server workflow | [WORKTREES.md](./WORKTREES.md) |
 | Coding style (enforced by Biome) | [CODING_STYLE.md](./CODING_STYLE.md) |
 | Debugging & log locations | [DEBUGGING.md](./DEBUGGING.md) |
 | Git workflow (quality checks in CI) | [../workflow/GIT_WORKFLOW.md](../workflow/GIT_WORKFLOW.md) |
-| Tech stack (Vitest, Biome, TypeScript) | [../stack/TECH_STACK.md](../stack/TECH_STACK.md) |
+| Tech stack (Vitest, Biome, TypeScript) | [../architecture/TECH_STACK.md](../architecture/TECH_STACK.md) |

@@ -3,31 +3,40 @@
 # agent-login.sh — authenticate the agent-browser profile behind Structa's
 # auth-gated `/app` route, idempotently.
 #
-# Why this exists:
-#   Structa uses better-auth email-OTP login (no password), and `/app`
-#   additionally requires the user to have a non-"waitlist" `plan`. This
-#   script:
-#     1. Opens `/app` with a persistent Chrome profile (`~/.structa-agent`).
-#     2. If already authenticated (session cookie valid), exits 0.
-#     3. Otherwise walks the email-OTP login flow, reading the OTP straight
-#        from the Postgres `verification` table via scripts/get-otp.ts.
-#     4. If the freshly-logged-in user lands on `/onboarding` (no plan), it
-#        runs scripts/bypass-onboarding.ts once and reloads `/app`.
+# Two modes:
+#
+#   OTP mode (default) — for local dev against a running `sst dev`:
+#     Structa uses better-auth email-OTP login (no password), and `/app`
+#     additionally requires the user to have a non-"waitlist" `plan`. This
+#     mode:
+#       1. Opens `/app` with a persistent Chrome profile (`~/.structa-agent`).
+#       2. If already authenticated (session cookie valid), exits 0.
+#       3. Otherwise walks the email-OTP login flow, reading the OTP straight
+#          from the Postgres `verification` table via scripts/get-otp.ts.
+#       4. If the freshly-logged-in user lands on `/onboarding` (no plan), it
+#          runs scripts/bypass-onboarding.ts once and reloads `/app`.
+#     Requires `sst dev` to be running (this repo's convention — agents never
+#     start it); get-otp.ts and bypass-onboarding.ts use `npx sst shell` to
+#     reach the database.
+#
+#   Bot mode (--bot) — for PR preview environments (no local DB, no OTP):
+#     POSTs the dev-only /api/auth/bot-login endpoint as the bot user
+#     (agent@structa.dev), replays the session cookie into the profile, then
+#     opens /app. No sst dev and no database access needed.
+#       ./scripts/agent-login.sh --bot https://pr-123.dev.structa.so
 #
 # Prerequisites:
-#   - `sst dev` is already running (this repo's convention — agents never
-#     start it). scripts/get-otp.ts and scripts/bypass-onboarding.ts use
-#     `npx sst shell` to reach the database.
 #   - `agent-browser` is on PATH (the dev-browser agent already has it).
-#   - First run only: a real human must complete Google's consent screen if
-#     you'd rather use OAuth — but this script uses email OTP, so no human
-#     step is needed as long as the email below is allowed to sign in.
+#   - First run only (OTP mode): a real human must complete Google's consent
+#     screen if you'd rather use OAuth — but this script uses email OTP, so no
+#     human step is needed as long as the email below is allowed to sign in.
 #
 # Usage:
-#   ./scripts/agent-login.sh                      # default email + profile
+#   ./scripts/agent-login.sh                          # OTP mode, localhost
+#   ./scripts/agent-login.sh http://localhost:3000/app   # OTP mode, custom target
+#   ./scripts/agent-login.sh --bot <preview-url>      # bot-login against a preview
 #   AGENT_EMAIL=agent@structa.dev ./scripts/agent-login.sh
 #   AGENT_PROFILE=~/.structa-agent ./scripts/agent-login.sh
-#   ./scripts/agent-login.sh http://localhost:3000/app   # optional target URL
 #
 # Exit codes:
 #   0  authenticated (profile now holds a valid session cookie)
@@ -37,6 +46,45 @@ set -euo pipefail
 
 AGENT_EMAIL="${AGENT_EMAIL:-agent@structa.dev}"
 AGENT_PROFILE="${AGENT_PROFILE:-$HOME/.structa-agent}"
+
+usage() {
+	cat >&2 <<'EOF'
+Usage:
+  ./scripts/agent-login.sh [target-url]          OTP login (default: http://localhost:3000/app)
+  ./scripts/agent-login.sh --bot <preview-url>   bot-login against a PR preview (no OTP / DB)
+
+Environment:
+  AGENT_EMAIL     bot/test user email (default: agent@structa.dev)
+  AGENT_PROFILE   Chrome profile dir (default: ~/.structa-agent)
+EOF
+}
+
+# Parse flags: --bot <url> consumes the preview URL; anything else is the
+# OTP-mode positional target.
+BOT_MODE=false
+BOT_URL=""
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		--bot)
+			BOT_MODE=true
+			shift
+			if [[ $# -eq 0 ]]; then
+				usage
+				exit 1
+			fi
+			BOT_URL="$1"
+			shift
+			;;
+		-h | --help)
+			usage
+			exit 0
+			;;
+		*)
+			break
+			;;
+	esac
+done
+
 TARGET="${1:-http://localhost:3000/app}"
 WEB_BASE="${WEB_BASE:-http://localhost:3000}"
 
@@ -47,6 +95,137 @@ AB=(agent-browser --profile "$AGENT_PROFILE")
 log() { printf '[agent-login] %s\n' "$*" >&2; }
 
 current_url() { "${AB[@]}" get url; }
+
+# Navigate to a URL and wait for the page to settle. `tab new` (rather than
+# `open`) is used so the new tab becomes active even when the persistent
+# profile restores tabs from a previous browser session.
+navigate() {
+	"${AB[@]}" tab new "$1" >/dev/null
+	"${AB[@]}" wait --load networkidle >/dev/null 2>&1 || true
+}
+
+# ----------------------------------------------------------------------
+# Bot mode: login against a PR preview via the dev-only bot-login endpoint.
+# ----------------------------------------------------------------------
+bot_login() {
+	local base host
+	base="${BOT_URL%/}"
+	base="$(printf '%s' "$base" | sed -E 's#^(https?://[^/]+).*#\1#')"
+	if [[ ! "$base" =~ ^https?:// ]]; then
+		log "Invalid preview URL: $BOT_URL"
+		return 1
+	fi
+	host="$(printf '%s' "$base" | sed -E 's#^https?://##; s#/.*##')"
+	local target="$base/app"
+
+	log "Bot mode against $base (email: $AGENT_EMAIL)…"
+
+	# 1. Happy path: already authenticated.
+	local url
+	navigate "$target"
+	url="$(current_url)"
+	case "$url" in
+		*/app)
+			log "Already authenticated (URL=$url)."
+			return 0
+			;;
+		*/login*)
+			log "Not authenticated (URL=$url). Logging in via bot-login…"
+			;;
+		*/onboarding*)
+			log "Bot user has no plan (URL=$url). Seed $AGENT_EMAIL with a plan in the dev DB."
+			return 1
+			;;
+		*)
+			log "Unexpected URL after open: $url"
+			return 1
+			;;
+	esac
+
+	# 2. POST the dev-only bot-login endpoint. Headers are captured to a temp
+	#    file so the session cookie can be replayed into the profile; the body
+	#    is kept for error messages. Cookie values are never echoed.
+	local headers body code
+	headers="$(mktemp)"
+	body="$(mktemp)"
+	trap 'rm -f "$headers" "$body"' RETURN
+	code="$(curl -sS -o "$body" -D "$headers" -w '%{http_code}' \
+		-X POST "$base/api/auth/bot-login" \
+		-H 'Content-Type: application/json' \
+		--data "{\"email\":\"$AGENT_EMAIL\"}")"
+
+	if [[ "$code" == "404" ]]; then
+		log "bot-login returned 404 — the endpoint is dev-only and disabled on this stage."
+		return 1
+	fi
+	if [[ "$code" != "2"* ]]; then
+		log "bot-login failed (HTTP $code): $(tr -d '\r\n' < "$body" | head -c 300)"
+		return 1
+	fi
+
+	# 3. Replay every Set-Cookie from the response into the profile.
+	#    `--secure`/`--sameSite None` are only valid on https origins (CDP
+	#    rejects Secure cookies set from http://); previews are always https.
+	local domain_attr="" line cookie name value
+	local cookie_flags=(--path / --httpOnly)
+	if [[ "$base" == https* ]]; then
+		cookie_flags+=(--secure --sameSite None)
+	fi
+	while IFS= read -r line; do
+		line="${line%%$'\r'*}"
+		[[ "$line" =~ ^[Ss]et-[Cc]ookie:[[:space:]]*(.*)$ ]] || continue
+		cookie="${BASH_REMATCH[1]}"
+		name="${cookie%%=*}"
+		# Keep only RFC 6265 token chars that cookie names actually use
+		# (blocking whitespace/quotes/semicolons as injection hygiene).
+		name="${name//[^a-zA-Z0-9._-]/}"
+		value="${cookie#*=}"
+		value="${value%%;*}"
+		[[ -n "$name" && -n "$value" ]] || continue
+		if [[ "$cookie" =~ [Dd]omain=([^;]+) ]]; then
+			domain_attr="${BASH_REMATCH[1]}"
+		fi
+		if [[ -n "$domain_attr" ]]; then
+			"${AB[@]}" cookies set "$name" "$value" \
+				--domain "$domain_attr" "${cookie_flags[@]}" >/dev/null
+		else
+			"${AB[@]}" cookies set "$name" "$value" \
+				--url "$base" "${cookie_flags[@]}" >/dev/null
+		fi
+		log "Cookie '$name' replayed into profile."
+	done < "$headers"
+
+	# 4. Verify the session is accepted.
+	navigate "$target"
+	url="$(current_url)"
+	case "$url" in
+		*/app)
+			log "Authenticated as $AGENT_EMAIL; now on /app."
+			return 0
+			;;
+		*/onboarding*)
+			log "Authenticated but needs a plan (URL=$url). Seed $AGENT_EMAIL with a plan in the dev DB."
+			return 1
+			;;
+		*)
+			log "Session not accepted (URL=$url)."
+			return 1
+			;;
+	esac
+}
+
+if $BOT_MODE; then
+	if [[ $# -gt 0 ]]; then
+		usage
+		exit 1
+	fi
+	bot_login
+	exit $?
+fi
+
+# ----------------------------------------------------------------------
+# OTP mode below (requires sst dev).
+# ----------------------------------------------------------------------
 
 # Run a repo helper under `sst shell` (reads from the live dev DB).
 with_sst() { npx sst shell npx tsx "$@"; }
@@ -66,9 +245,7 @@ ensure_plan() {
 # 1. Try the happy path: already authenticated.
 # ----------------------------------------------------------------------
 log "Opening $TARGET with profile $AGENT_PROFILE …"
-"${AB[@]}" open "$TARGET" >/dev/null
-# Give TanStack Start a moment to run the beforeLoad redirect (unauthed → /login).
-"${AB[@]}" wait --load networkidle >/dev/null 2>&1 || true
+navigate "$TARGET"
 URL="$(current_url)"
 
 case "$URL" in
@@ -82,8 +259,7 @@ case "$URL" in
 	*/onboarding*)
 		log "Authenticated but needs a plan (URL=$URL)."
 		ensure_plan
-		"${AB[@]}" open "$TARGET" >/dev/null
-		"${AB[@]}" wait --load networkidle >/dev/null 2>&1 || true
+		navigate "$TARGET"
 		URL="$(current_url)"
 		case "$URL" in
 			*/app) log "Plan applied; now on /app."; exit 0 ;;
@@ -147,8 +323,7 @@ case "$URL" in
 	*/onboarding*)
 		log "On /onboarding — applying plan and reloading /app…"
 		ensure_plan
-		"${AB[@]}" open "$TARGET" >/dev/null
-		"${AB[@]}" wait --load networkidle >/dev/null 2>&1 || true
+		navigate "$TARGET"
 		URL="$(current_url)"
 		case "$URL" in
 			*/app) log "Plan applied; now on /app."; exit 0 ;;
