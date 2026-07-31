@@ -49,8 +49,9 @@ non-destructive shell commands.
 3. Drive the page: `click @<id>`, `fill @<id> "text"`, `select @<id> "<option>"`
    — then `snapshot -i` again to see the result
 4. Iterate until you have exercised the acceptance criteria for the story
-5. When finished, `agent-browser close` (the profile persists, so other
-   sessions stay logged in)
+5. When finished, `agent-browser close` (note: bot-mode session cookies set
+   via CDP do not persist across `close` — the orchestrator should re-run
+   `agent-login.sh --bot` after a restart)
 
 Wait for async content with `wait` / `wait for text`. Use `get text @<id>` to
 extract content and `is visible @<id>` to assert presence.

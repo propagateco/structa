@@ -96,7 +96,9 @@ session is valid it exits immediately, otherwise it walks the email-OTP login
 (reading the OTP from the DB via `scripts/get-otp.ts`) and applies
 `scripts/bypass-onboarding.ts` if the test user lacks a `plan`. After it
 succeeds, all subsequent `agent-browser --profile ~/.structa-agent …` calls
-are already authenticated — repeat only on session expiry (~7d).
+are already authenticated — repeat only on session expiry (~7d) for OTP mode.
+Bot-mode cookies (CDP-set, for PR previews) do not persist to disk — re-login
+after each `agent-browser close`.
 
 **Against a PR preview** (no local DB, no OTP) use the bot login instead:
 

@@ -134,7 +134,7 @@ Manual equivalent (what the script does internally):
 | 7 | If on /onboarding, apply plan + reload | `npx sst shell npx tsx scripts/bypass-onboarding.ts agent@structa.dev` then `open /app` |
 
 Notes:
-- **Profile survives restarts** — repeat logins are *not* needed; only re-run `agent-login.sh` when the better-auth session expires (~7d default).
+- **Profile survives restarts (OTP mode)** — Chrome flushes the session cookie to disk, so repeat logins are *not* needed until the better-auth session expires (~7d). **Bot mode (PR previews):** CDP-set cookies do not persist across `agent-browser close` — re-run `agent-login.sh --bot` after each browser restart (idempotent, ~10s).
 - **`input-otp`** renders one composite input (`input[data-input-otp-input="true"]`); `fill`-ing 6 chars triggers `verify-code-form`'s auto-submit effect.
 - **Don't commit session state** — the profile lives at `~/.structa-agent` (outside the repo). Never copy it into the repo or commit it.
 
@@ -158,7 +158,9 @@ creates a session for the bot user (`agent@structa.dev`):
 ```
 
 This replays a session cookie into the persistent profile (`~/.structa-agent`).
-Subsequent agent-browser commands reuse it (see
+Subsequent agent-browser commands reuse it within the same daemon lifetime.
+Bot-mode cookies don't survive `agent-browser close` — re-run `agent-login.sh
+--bot` after each browser restart (see
 [WORKTREES.md — Bot Authentication](./WORKTREES.md)):
 
 ```bash
