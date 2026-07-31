@@ -6,11 +6,7 @@
  * rules, so it gets the tests.
  */
 import { describe, expect, it, vi } from "vitest";
-import {
-	BOT_EMAIL,
-	BotLoginError,
-	loginBotUser,
-} from "../bot-login";
+import { BOT_EMAIL, BotLoginError, loginBotUser } from "../bot-login";
 
 const BOT_USER = {
 	id: "user-bot-123",

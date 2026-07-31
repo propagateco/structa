@@ -113,9 +113,7 @@ export function botLoginPlugin(): BetterAuthPlugin {
 							email: ctx.body.email,
 							findUser: async (email) => {
 								const found =
-									await ctx.context.internalAdapter.findUserByEmail(
-										email,
-									);
+									await ctx.context.internalAdapter.findUserByEmail(email);
 								return found ? found.user : null;
 							},
 							createSession: (userId) =>
