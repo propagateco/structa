@@ -728,10 +728,10 @@ See `packages/web/src/components/AGENTS.md` for the full do/don't list.
 
 ## Related Files
 
-- **Previous Phase:** `specs/plan/02-authentication-backend.md`
-- **Next Phase:** `specs/plan/04-routes-protected-pages.md`
-- **Parent Phase Spec:** `specs/plan/01-project-setup.md` (original combined plan)
-- **Master Overview:** `specs/plan/00-overview.md`
+- **Previous Phase:** `.plan/STR-003-fonts.md`
+- **Next Phase:** (planned)
+- **Parent Phase Spec:** `.plan/STR-001-project-setup.md`
+- **Master Overview:** `.plan/index.md`
 
 ---
 
