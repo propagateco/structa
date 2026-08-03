@@ -2,7 +2,7 @@
 
 Type: wayfinder-research
 Map: iss-011-chat-map.md
-Status: open
+Status: resolved
 
 ## Question
 
@@ -37,3 +37,21 @@ Research findings (AFK via /research subagent) covering, at minimum:
 
 Resolution: findings captured as markdown in `docs/research/chat/`, context pointer appended
 here, ticket closed. Feeds iss-015 (run endpoint) and iss-014 (streaming choice).
+
+## Resolution
+
+Research findings captured in `docs/research/chat/ai-provider-sdk.md`. Gist: use **TanStack AI**
+(`@tanstack/ai` + `@tanstack/ai-openai`) with OpenAI `gpt-4.1-mini` ($0.40/$1.60 per 1M, 1M
+context) on the Hono backend — the on-vision choice for an all-TanStack repo (the issues
+literally say "TanStack AI"). The framework-agnostic core runs on Hono: `chat()` returns an
+`AsyncIterable<StreamChunk>` (AG-UI chunks) for server-side `for await`, and
+`toServerSentEventsResponse(stream)` frames SSE on any Node backend; AG-UI chunk types map
+directly onto the iss-012 `content`/`tool_call`/`tool_result`/`done`/`error` schema. Trade-off:
+`@tanstack/ai` is Beta (v0.42) with no SST-maintained Lambda-streaming example — the Vercel AI
+SDK (`ai` + `@ai-sdk/openai`) stays as the pragmatic fallback if that bites (flag in iss-015).
+Key lives as an SST secret (`OpenAIKey`, `--fallback` value for `pr-N` previews); the endpoint
+streams SSE via `streamHandle` + `streaming: true`. Wire vocabulary is decided: the five event
+names (`content`/`tool_call`/`tool_result`/`done`/`error`) stay — AG-UI is producer-internal
+behind the mapping function, so a future SDK/provider swap touches only that function. Open
+questions for iss-015: placement/proxy path, history trust, SSE fast-path shape, and UK
+data-residency stance.

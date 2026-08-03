@@ -2,7 +2,7 @@
 
 Type: wayfinder-research
 Map: iss-011-chat-map.md
-Status: open
+Status: resolved
 
 ## Question
 
@@ -40,3 +40,16 @@ Research findings (AFK via /research subagent) covering, at minimum:
 
 Resolution: findings captured as markdown in `docs/research/chat/` (or similar), context
 pointer appended here, ticket closed. Feeds iss-014 (architecture decision).
+
+## Resolution
+
+Research findings captured in `docs/research/chat/durable-stream-options.md`. Gist: make
+the durable stream an append-only `chat_run_events` table in the existing Neon Postgres
+((run_id, seq) PK, seq = cursor), with ElectricSQL as both the live delivery transport and
+the refresh/replay/dedupe mechanism — the client already gets sub-100 ms row-level updates
+via shapes, so durability is free and SSE/WebSocket become optional latency fast-paths
+(SSE is capped at ~60 s through the CloudFront Router and Lambda response streaming has a
+no-flush ~100 KB buffer, so it is not a durability mechanism). The event schema
+(`content`/`tool_call`/`tool_result`/`done`/`error` as jsonb payloads folded in seq order)
+and the run lifecycle (`chat_runs.status` as the state machine) are defined, with open
+questions on coalescing, SSE fast-path placement, and `seq` assignment flagged for iss-014.
