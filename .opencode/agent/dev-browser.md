@@ -56,7 +56,7 @@ non-destructive shell commands.
 Wait for async content with `wait` / `wait for text`. Use `get text @<id>` to
 extract content and `is visible @<id>` to assert presence.
 
-## Evidence — capture all four channels (see docs/development/TESTING.md)
+## Evidence — capture all four channels (see docs/core/development/testing.md)
 1. **UI elements** — element ids + text from `snapshot -i`
 2. **Screenshots** — `screenshot <name>.png` (use `--full` for full-page;
    add a narrow mobile-width capture when responsive layout matters). Files
@@ -82,7 +82,7 @@ Return a structured report to your orchestrator:
 
 Flag problems honestly rather than silently working around them; never claim a
 story passes without browser evidence. Your orchestrator posts the validation
-comment on the PR using the template in docs/development/TESTING.md.
+comment on the PR using the template in docs/core/development/testing.md.
 
 ## Key commands
 `open`, `snapshot -i`, `click @id`, `fill @id "value"`, `select @id "option"`,

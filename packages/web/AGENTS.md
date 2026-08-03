@@ -33,7 +33,7 @@ npx shadcn@latest add @assistant-ui/chat
 
 ## Best Practices
 
-See [docs/design/UI.md](../../docs/design/UI.md) for:
+See [docs/core/design/ui.md](../../docs/core/design/ui.md) for:
 - Typography guidelines
 - Component patterns (cva, forwardRef, cn())
 - Layout components (TexturedSection)

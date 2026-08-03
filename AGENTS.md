@@ -18,27 +18,27 @@ npm test             # Run tests
 - `packages/backend` – API endpoints, external integrations
 - Reference projects: `packages/app-example/`, `packages/marketing-site-example/`
 
-For detailed architecture, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+For detailed architecture, see [docs/core/architecture/overview.md](docs/core/architecture/overview.md)
 
 ## Progressive Documentation
 
 | Topic | Location |
 |-------|----------|
-| Development tools (Biome, Vitest, TypeScript, SST Dev) | [docs/development/DEVELOPMENT_TOOLS.md](docs/development/DEVELOPMENT_TOOLS.md) |
-| Git worktrees & the no-dev-server workflow | [docs/development/WORKTREES.md](docs/development/WORKTREES.md) |
-| Testing philosophy & TDD workflow | [docs/development/TESTING.md](docs/development/TESTING.md) |
-| Coding conventions & style | [docs/development/CODING_STYLE.md](docs/development/CODING_STYLE.md) |
-| Debugging & log locations | [docs/development/DEBUGGING.md](docs/development/DEBUGGING.md) |
-| UI components (shadcn) & best practices | [docs/design/UI.md](docs/design/UI.md) |
-| Tech stack with documentation links | [docs/architecture/TECH_STACK.md](docs/architecture/TECH_STACK.md) |
-| Git workflow & PR process | [docs/workflow/GIT_WORKFLOW.md](docs/workflow/GIT_WORKFLOW.md) |
-| Deployment rules | [docs/workflow/DEPLOYMENT.md](docs/workflow/DEPLOYMENT.md) |
+| Development tools (Biome, Vitest, TypeScript, SST Dev) | [docs/core/development/development_tools.md](docs/core/development/development_tools.md) |
+| Git worktrees & the no-dev-server workflow | [docs/core/development/worktrees.md](docs/core/development/worktrees.md) |
+| Testing philosophy & TDD workflow | [docs/core/development/testing.md](docs/core/development/testing.md) |
+| Coding conventions & style | [docs/core/development/coding_style.md](docs/core/development/coding_style.md) |
+| Debugging & log locations | [docs/core/development/debugging.md](docs/core/development/debugging.md) |
+| UI components (shadcn) & best practices | [docs/core/design/ui.md](docs/core/design/ui.md) |
+| Tech stack with documentation links | [docs/core/architecture/tech_stack.md](docs/core/architecture/tech_stack.md) |
+| Git workflow & PR process | [docs/core/workflow/git_workflow.md](docs/core/workflow/git_workflow.md) |
+| Deployment rules | [docs/core/workflow/deployment.md](docs/core/workflow/deployment.md) |
 
 ## Important Rules
 
 - When the user asks to commit, NEVER reset or discard unrelated changes. Only stage the specific files we touched for the requested task. If the repo has additional changes, call them out and ask whether to include them.
 
-- Write tests before implementing (TDD project) → [docs/development/TESTING.md](docs/development/TESTING.md)
+- Write tests before implementing (TDD project) → [docs/core/development/testing.md](docs/core/development/testing.md)
 - Study patterns from `packages/app-example/` before coding
 - Only deploy to personal stage: `npx sst deploy`
 - Never run `npx sst deploy --stage dev` or `--stage production` (CI only)
@@ -69,7 +69,7 @@ Agents do **not** run `npx sst dev`. Instead:
    ```
 5. Clean up after merge: `git worktree remove .worktrees/<branch>`.
 
-Details & rationale: [docs/development/WORKTREES.md](docs/development/WORKTREES.md)
+Details & rationale: [docs/core/development/worktrees.md](docs/core/development/worktrees.md)
 
 ## Local Development
 
@@ -80,7 +80,7 @@ Details & rationale: [docs/development/WORKTREES.md](docs/development/WORKTREES.
 - **Important**: Agents assume `sst dev` is already running - they only read and analyze logs
 - Use `--mode=mono` to see all logs (Functions, Tasks, Frontends, Services) in one terminal
 - Agents search logs for errors, warnings, and diagnostic information
-- For more SST dev mode options, see [docs/development/DEVELOPMENT_TOOLS.md](docs/development/DEVELOPMENT_TOOLS.md#sst-dev-mode)
+- For more SST dev mode options, see [docs/core/development/development_tools.md](docs/core/development/development_tools.md#sst-dev-mode)
 
 ## Browser Verification (authed routes)
 
@@ -106,21 +106,41 @@ after each `agent-browser close`.
 ./scripts/agent-login.sh --bot <preview-url>
 ```
 
-Details: [docs/development/TESTING.md#agent-browser-workflow-dev-browser-agent](docs/development/TESTING.md#agent-browser-workflow-dev-browser-agent)
-and [docs/development/WORKTREES.md](docs/development/WORKTREES.md#bot-authentication)
+Details: [docs/core/development/testing.md#agent-browser-workflow-dev-browser-agent](docs/core/development/testing.md#agent-browser-workflow-dev-browser-agent)
+and [docs/core/development/worktrees.md](docs/core/development/worktrees.md#bot-authentication)
 
 **After UI checks, post a validation comment on the PR** — evidence
 (screenshots, console logs, network logs) against the acceptance criteria,
 flagging anything that's wrong for another developer to pick up:
-[docs/development/TESTING.md#reporting-validation-findings-on-the-pr](docs/development/TESTING.md#reporting-validation-findings-on-the-pr)
+[docs/core/development/testing.md#3-report-findings-as-a-pr-comment](docs/core/development/testing.md#3-report-findings-as-a-pr-comment)
 
 ## Project Context
 
-- **Vision**: [docs/OVERVIEW.md](docs/OVERVIEW.md)
-- **Architecture**: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- **Maths & Physics Rules**: [docs/maths/]
-- **Current Status**: [docs/STATUS.md](docs/STATUS.md)
-- **Development Plan**: [specs/plan/00-overview.md](specs/plan/00-overview.md)
+- **Vision**: [docs/core/overview.md](docs/core/overview.md)
+- **Architecture**: [docs/core/architecture/overview.md](docs/core/architecture/overview.md)
+- **Strategy**: [docs/strategy/memo.md](docs/strategy/memo.md)
+- **Research**: [docs/research/maths/](docs/research/maths/)
+- **Plan**: See `.plan/` directory
+
+## Navigating Docs with kdb
+
+This project uses [kdb](https://kdb.digimata.dev) as a knowledge graph for documentation. Use it to find broken links, trace references, and navigate the doc structure.
+
+```bash
+kdb check docs/           # Find broken links across all docs
+kdb refs <file>           # Find every doc that links to a target
+kdb deps <file>           # Show outbound dependencies
+kdb tree docs/            # Visualize doc structure
+```
+
+**Doc layout:**
+- `docs/core/` — Architecture, dev practices, workflows
+- `docs/tools/` — Feature ideas and specs
+- `docs/strategy/` — Product vision, GTM
+- `docs/research/` — Maths, physics, domain knowledge
+- `docs/landing/` — Marketing (empty)
+- `.issues/` — Draft feature proposals (push to GH when ready)
+- `.plan/` — Deep-dive planning specs
 
 ## Subdirectory Overrides
 

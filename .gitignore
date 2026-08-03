@@ -1,6 +1,9 @@
 # worktrees
 .worktrees/
 
+# kdb
+.kdb/
+
 # dependencies
 node_modules
 
