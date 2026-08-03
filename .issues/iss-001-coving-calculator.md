@@ -1,5 +1,7 @@
 # Interactive Coving Calculator with SVG Diagrams
 
+**See:** [GitHub Issue #40](https://github.com/propagateco/structa/issues/40)
+
 ## Summary
 
 Create a standalone tool page for calculating crown molding/coving compound angles with fully interactive SVG diagrams. Users can adjust angles by dragging SVG elements directly or using shadcn UI controls, with real-time visual feedback in both 2D technical and 3D perspective views.

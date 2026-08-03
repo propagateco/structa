@@ -146,3 +146,21 @@ kdb tree docs/            # Visualize doc structure
 
 If a subdirectory includes its own `AGENTS.md`, its instructions take precedence
 for files within that subtree.
+
+## Agent skills
+
+### Issue tracker
+
+Issues are drafted and tracked as local markdown files under `.issues/` (`iss-NNN-slug.md`),
+pushed to GitHub when ready. Open GitHub issues can be imported with
+`npm run issues:sync -w @structa/scripts`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Five canonical triage roles, recorded as a `Status:` line in each `.issues/` file:
+`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`.
+See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.

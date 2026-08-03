@@ -11,7 +11,8 @@
 		"packages/backend",
 		"packages/core",
 		"packages/functions",
-		"packages/notifications"
+		"packages/notifications",
+		"packages/scripts"
 	],
 	"os": ["darwin", "linux", "win32"],
 	"cpu": ["x64", "arm64"],
