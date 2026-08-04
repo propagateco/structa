@@ -75,36 +75,45 @@ and the same repo changes below apply — only the event-mapping layer differs. 
 drop-in-equivalent for this tracer bullet; don't re-litigate unless the beta blocks something
 concrete (flag it in iss-015).
 
-### Provider: OpenAI, model `gpt-4.1-mini`
+### Provider: OpenAI, model `gpt-5.6-luna`
 
-Default: **OpenAI `gpt-4.1-mini`** — `$0.40`/`$1.60` per 1M input/output tokens, 1M-token
-context, low latency (~0.55 s TTFB, no reasoning step), and explicitly strong tool calling.
-Matches the vision doc's primary. It is the cheapest "capable" model with a 1M context window;
-output is ~3× cheaper than Claude Haiku 4.5 and ~1.9× cheaper than Gemini 3 Flash.
+Default: **OpenAI `gpt-5.6-luna`** — `$0.20`/`$1.20` per 1M input/output tokens, 1.05M-token
+context, tool use + multi-step workflows, no reasoning step (fast first token). Chosen in the
+iss-015 grilling (user: "won't be using GPT 4.1 mini as it's quite old"); cheaper than
+gpt-4.1-mini ($0.40/$1.60) on both axes with a larger window. Cached input `$0.02`/1M
+(prompt caching) once prompts stabilize. Prompts >272K input tokens bill at 2× input / 1.5×
+output — keep context small, as below.
 
 | Provider · model | $ input / 1M | $ output / 1M | Context | Notes |
 |---|---|---|---|---|
-| **OpenAI gpt-4.1-mini** ⭐ | 0.40 | 1.60 | 1M | Legacy-but-current; best value with headroom |
-| OpenAI gpt-5-mini | 0.25 | 2.00 | 128K | Newer gen, cheaper input, pricier output, small window |
-| OpenAI gpt-5.4-mini | 0.75 | 4.50 | 400K | 4.1-mini's eventual successor |
-| OpenAI gpt-4o-mini | 0.15 | 0.60 | 128K | Cost floor if spend ever matters more than context |
-| Google Gemini 3 Flash | 0.50 | 3.00 | 1M | Best price-per-token with thinking control; great alt |
+| **OpenAI gpt-5.6-luna** ⭐ | 0.20 | 1.20 | 1.05M | Default; cheapest capable 1M+ window |
+| OpenAI gpt-5.6-terra | 2.00 | 12.00 | 1.05M | Heavier tier for later safety-critical answers |
+| OpenAI gpt-5.6-sol | 5.00 | 30.00 | 1.05M | Top tier; per-question escalation only |
+| OpenAI gpt-4.1-mini | 0.40 | 1.60 | 1M | Old gen; superseded — do not default to this |
+| Google Gemini 3 Flash | 0.50 | 3.00 | 1M | Great alt; thinking control |
 | Anthropic Claude Haiku 4.5 | 1.00 | 5.00 | 200K | Higher per-answer quality; ~3× output cost |
 
+(Prices from the OpenAI pricing table after the 2026-07-30 price cut.)
+
 Reasoning:
-- **Cost**: at ~1k input + ~300 output tokens/request, gpt-4.1-mini ≈ `$0.0009`/turn — effectively
-  free at consumer SaaS volumes, so the real axes are answer quality and latency, not absolute
-  cost. Choose the model tier for UX, not pennies.
-- **Context window**: 1M tokens is headroom, not a target. Keep per-request context small
-  (last ~10–20 messages + system prompt + injected project context); cap/truncate history. Use
-  the 1M window later when project-context RAG lands (survey docs, floor-plan data), and lean on
-  prompt caching (OpenAI cached input `$0.10`/1M) once prompts stabilize.
+- **Cost**: at ~1k input + ~300 output tokens/request, gpt-5.6-luna ≈ `$0.00056`/turn — free at
+  consumer SaaS volumes, so the real axes are answer quality and latency, not absolute cost.
+  Choose the model tier for UX, not pennies.
+- **Context window**: 1.05M tokens is headroom, not a target. Keep per-request context small
+  (last ~10–20 messages + system prompt + injected project context); the iss-014 409
+  one-active-run guard guarantees the server-loaded history is complete, so **no client caps are
+  needed**. Use the big window later when project-context RAG lands (survey docs, floor-plan
+  data) and lean on prompt caching (cached input `$0.02`/1M) once prompts stabilize.
 - **Latency**: interactive chat wants first token < ~1 s — avoid reasoning/thinking-on defaults.
-  Escalate to a stronger model (Claude Haiku/Sonnet, Gemini 3 Flash) per-question later if
-  renovation-safety answers need more care; keep gpt-4.1-mini as the router default.
-- **Data residency (UK, eu-west-2)**: OpenAI offers Regional Processing (10% uplift on eligible
-  models); Anthropic and Google have EU residency. Worth a grilling/domain question for a UK
-  consumer product, not a blocker for the tracer bullet.
+  Escalate per-question later to gpt-5.6-terra/sol, Claude Haiku/Sonnet, or Gemini 3 Flash if
+  renovation-safety answers need more care; keep gpt-5.6-luna as the router default.
+- **Provider swap (EU path)**: gpt-5.6-luna is the default, **not a lock-in** — the
+  `@tanstack/ai-openai` adapter takes a base URL, so EU-hosted open-weight providers (Scaleway
+  Generative APIs — Paris, GDPR, OpenAI-compatible, "switch from OpenAI in one line of code";
+  Mistral — France) are a drop-in swap when UK/EU data residency becomes a requirement. MVP
+  stance (iss-015): **US processing accepted**; revisit residency in a grilling when it matters.
+- **MCP / agent-native exposure**: user's stated direction, **out of scope for v1** — the
+  `tool_call`/`tool_result` event schema leaves room; revisit in a future session.
 
 ## Key management with SST
 
@@ -128,7 +137,7 @@ Follow the repo's existing secret pattern (`infra/secret.ts`, `infra/api.ts`):
    `packages/core/src/utils/encryption.ts:15` and `packages/web/src/lib/auth.ts:25`:
    ```ts
     // @tanstack/ai-openai adapter — construct the model from the linked secret
-    const { text } = openaiText("gpt-4.1-mini", { apiKey: Resource.OpenAIKey.value });
+    const { text } = openaiText("gpt-5.6-luna", { apiKey: Resource.OpenAIKey.value });
    ```
 4. **Set per stage**:
    ```bash
@@ -211,14 +220,20 @@ contract leaves a `writeEvent(event, seq)` hook in place.
   adapters — Anthropic/Gemini — when alternates are wired; adapter swap is one line).
 - `infra/secret.ts` + `infra/api.ts`: `OpenAIKey` secret (above).
 
-## Open questions for iss-015 (grilling)
+## Open questions for iss-015 (grilling) — all resolved
 
-1. **Placement/proxy**: call `https://api.<domain>/chat/run` directly via the existing `hc`
-   client, or add a web-side `/api/chat/run` proxy route (like `routes/api/auth/$.ts`)? Affects
-   SSE CORS + cross-subdomain cookie handling.
-2. **History trust**: until persistence lands (iss-016), does the client pass `history`, or does
-   the endpoint load prior turns from `chat_messages`/`chat_run_events` by `sessionId`? Trusting
-   client history is cheaper but open to token-cost abuse.
+1. **Placement/proxy** — **resolved** (iss-015): same-origin **web proxy → backend** — the
+   browser calls `POST /api/chat/run` on the web platform and a TanStack file route
+   (`routes/api/chat/run.ts`, `$.ts`-style like `routes/api/auth/$.ts`) relays server-to-server
+   to the backend Hono route with a shared internal credential. Not the direct `hc` client →
+   `api.<domain>`: cross-subdomain cookies exist only on deployed stages, and previews use
+   host-only cookies, so direct browser→api.<domain> calls 401 there. SSE + cookies stay
+   same-origin in every stage.
+2. **History trust** — **resolved** (iss-015): the endpoint **loads prior turns by `sessionId`**
+   from `chat_messages`/`chat_run_events` (SolidType `hydrateTranscript` style); the client does
+   **not** pass `history`. The iss-014 409 one-active-run guard guarantees the loaded history is
+   complete, so no client-side caps are needed. Implies the minimal persistence schema ships
+   with the tracer bullet (iss-016 pulled forward).
 3. ~~**SDK ratification + wire vocabulary**~~ — **resolved**: TanStack AI (`@tanstack/ai` +
    `@tanstack/ai-openai`) is decided (Recommendation above), and the wire keeps **our five event
    names** (`content`/`tool_call`/`tool_result`/`done`/`error` from iss-012) rather than adopting
@@ -228,7 +243,11 @@ contract leaves a `writeEvent(event, seq)` hook in place.
    `TEXT_STARTED`/`TEXT_DELTA`/`TEXT_COMPLETE`, `THINKING_*`, `TOOL_CALL_STARTED`/`ACCEPTED`/
    `EXECUTED` — and storing raw chunk types would leak a young, versioned protocol into the
    long-lived `seq`-cursor table.)
-4. **SSE fast-path shape**: given the ~60 s Router cap + Lambda no-flush buffer, is SSE even the
-   right fast-path, or should first-token latency ride Electric alone? (iss-012 flags this too.)
-5. **Data residency / key policy**: UK GDPR stance (OpenAI Regional Processing uplift vs
-   Anthropic/Gemini EU residency) and any per-user rate/cost cap on the provider key.
+4. **SSE fast-path shape** — **resolved** (iss-014): SSE is **skipped for v1** — the POST acks
+   the runId and Electric delivers the stream. Revisit a fast-path only if first-token latency
+   measured in the build demands it.
+5. **Data residency / key policy** — **resolved** (iss-015): **US processing accepted for the
+   MVP** (not a tracer-bullet blocker); default model **gpt-5.6-luna** (user: gpt-4.1-mini is
+   old), with EU-hosted open-weight (Scaleway/Mistral) a one-line swap via the adapter `baseURL`;
+   **per-user soft rate cap (~30 runs/hr)** on the provider key — enforceable because history is
+   server-loaded. MCP / agent-native exposure = future session, out of scope.

@@ -34,7 +34,7 @@ reconnection — all with workspace/project scoping enforced.
   iss-015, iss-016, iss-018, iss-019), `/prototype` (iss-017). No `CONTEXT.md` exists yet —
   `/domain-modeling` creates it lazily when The Clerk vocabulary gets settled.
 - **Open tickets**: scan `.issues/` for `Map: iss-011-chat-map.md` with `Status: open`.
-  Frontier = open, unblocked, unclaimed (currently iss-014). Claim by setting
+  Frontier = open, unblocked, unclaimed (currently iss-016). Claim by setting
   `Status: claimed` before working.
 - **Quality**: local checks only before commit (`npm run typecheck && npm run check:fix &&
   npm test`); UI verification via agent-browser + bot login.
@@ -46,12 +46,13 @@ reconnection — all with workspace/project scoping enforced.
   + free refresh/replay/dedupe; SSE is an optional latency fast-path, not the durability mechanism
   (~60 s CloudFront cap, Lambda no-flush buffer). Event schema + run lifecycle defined in the findings.
 - [AI provider + SDK research](iss-013-ai-provider-sdk-research.md) — **TanStack AI**
-  (`@tanstack/ai` + `@tanstack/ai-openai`) on Hono with OpenAI `gpt-4.1-mini` default — on-vision
+  (`@tanstack/ai` + `@tanstack/ai-openai`) on Hono with OpenAI default — on-vision
   for the all-TanStack repo; `chat()` AsyncIterable server-side + `toServerSentEventsResponse`
   SSE, AG-UI chunks mapped to the `content`/`tool_call`/`tool_result`/`done`/`error` schema; key
   as SST secret `OpenAIKey` (with fallback for pr-N previews); SSE via `streamHandle` +
   `streaming: true`. Vercel AI SDK kept as fallback if the Beta bites. Wire keeps the five event
-  names — AG-UI is producer-internal behind the mapping.
+  names — AG-UI is producer-internal behind the mapping. (Default model tier revised in iss-015 →
+  gpt-5.6-luna.)
 - [Durable stream architecture decision](iss-014-durable-stream-architecture-decision.md) —
   append-only `chat_run_events` ((run_id, seq) PK) in Neon, Electric = live delivery + free
   replay/reconnect; `chat_runs.status` is the run state machine; terminal `done`/`error` events
@@ -59,6 +60,16 @@ reconnection — all with workspace/project scoping enforced.
   assistant message materialized on error iff partial content; one active run per session (409
   guard), no per-tab cursor / SharedWorker; in-process `seq++` (single writer); client-generated
   run_id + idempotent POST; stale-run recovery (~5 min running → error).
+- [Chat run endpoint & transport](iss-015-chat-run-endpoint-streaming-transport.md) —
+  same-origin **web proxy → backend** (`routes/api/chat/run.ts` file route relays
+  server-to-server with a shared internal credential; not direct `hc` → api.<domain> —
+  cross-subdomain cookies only on deployed stages, previews 401). **Server-loaded history** by
+  sessionId (no client-passed history; 409 guard ⇒ complete ⇒ no caps) — minimal
+  `chat_runs`/`chat_messages` schema ships with the tracer bullet (iss-016 pulled forward).
+  **Model default: OpenAI gpt-5.6-luna** ($0.20/$1.20 per 1M, 1.05M ctx; supersedes iss-013's
+  gpt-4.1-mini). EU-hosted open-weight (Scaleway/Mistral) = one-line swap via adapter baseURL;
+  MCP / agent-native exposure = future session, out of scope; US processing OK for MVP; per-user
+  soft rate cap (~30 runs/hr).
 
 ## Not yet specified
 
@@ -66,12 +77,11 @@ Fog toward the destination — graduates into tickets as the frontier advances:
 
 - **Tool calling for The Clerk** — the durable event schema carries `tool_call` /
   `tool_result` events, but *which* tools (if any) v1 has is unresolved. Decided after the
-  streaming foundation lands, when prompt context is real.
+  streaming foundation lands, when prompt context is real. (MCP / agent-native exposure is a
+  later session — iss-015.)
 - **Project context for prompts** — what The Clerk knows per project (floor-plan spatial
   data? survey docs? material specs?) and how it's injected. The vision says context-aware
   answers; the chat foundation must leave room without building it now.
-- **Multi-tab concurrency** — `tanstack-ai.md` mentions per-session workers/SharedWorker;
-  whether two tabs can run the same session without clashing is fog for this effort.
 
 ## Out of scope
 
