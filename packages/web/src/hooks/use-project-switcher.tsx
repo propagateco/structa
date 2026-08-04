@@ -31,7 +31,7 @@ export function ProjectSwitcherProvider({
 }) {
     const [activeProject, setActiveProject] = React.useState<
         Project | undefined
-    >(staticProjects[0]);
+    >(undefined);
 
     const value = React.useMemo(
         () => ({

@@ -140,7 +140,7 @@
     --color-card: var(--ds-white);
     --color-card-foreground: var(--ds-neutral-800);
     --color-popover: var(--ds-white);
-    --color-popover-foreground: var(--ds-neutral-800);
+    --color-popover-foreground: var(--ds-neutral-500);
 
     --color-primary: var(--ds-neutral-900);
     --color-primary-foreground: var(--ds-neutral-50);
