@@ -33,6 +33,7 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MarketingGuidesSlugRouteImport } from './routes/_marketing/guides/$slug'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
+import { Route as AuthAppPrototypeChatRouteImport } from './routes/_auth/app/prototype-chat'
 import { Route as AuthAppLabRouteImport } from './routes/_auth/app/lab'
 import { Route as AuthOnboardingOnboardingIndexRouteImport } from './routes/_auth/_onboarding/onboarding/index'
 import { Route as AuthSettingsSettingsNotificationsRouteImport } from './routes/_auth/_settings/settings/notifications'
@@ -155,6 +156,11 @@ const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
   path: '/app/settings',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthAppPrototypeChatRoute = AuthAppPrototypeChatRouteImport.update({
+  id: '/app/prototype-chat',
+  path: '/app/prototype-chat',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthAppLabRoute = AuthAppLabRouteImport.update({
   id: '/app/lab',
   path: '/app/lab',
@@ -204,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/lab': typeof AuthAppLabRoute
+  '/app/prototype-chat': typeof AuthAppPrototypeChatRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
@@ -231,6 +238,7 @@ export interface FileRoutesByTo {
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/lab': typeof AuthAppLabRoute
+  '/app/prototype-chat': typeof AuthAppPrototypeChatRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
@@ -264,6 +272,7 @@ export interface FileRoutesById {
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/_auth/app/lab': typeof AuthAppLabRoute
+  '/_auth/app/prototype-chat': typeof AuthAppPrototypeChatRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
   '/_marketing/guides/$slug': typeof MarketingGuidesSlugRoute
@@ -293,6 +302,7 @@ export interface FileRouteTypes {
     | '/use-cases/kitchen'
     | '/use-cases/loft'
     | '/app/lab'
+    | '/app/prototype-chat'
     | '/app/settings'
     | '/login/code'
     | '/guides/$slug'
@@ -320,6 +330,7 @@ export interface FileRouteTypes {
     | '/use-cases/kitchen'
     | '/use-cases/loft'
     | '/app/lab'
+    | '/app/prototype-chat'
     | '/app/settings'
     | '/login/code'
     | '/guides/$slug'
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/use-cases/loft'
     | '/_marketing/'
     | '/_auth/app/lab'
+    | '/_auth/app/prototype-chat'
     | '/_auth/app/settings'
     | '/_login/login/code'
     | '/_marketing/guides/$slug'
@@ -550,6 +562,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppSettingsRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/app/prototype-chat': {
+      id: '/_auth/app/prototype-chat'
+      path: '/app/prototype-chat'
+      fullPath: '/app/prototype-chat'
+      preLoaderRoute: typeof AuthAppPrototypeChatRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/app/lab': {
       id: '/_auth/app/lab'
       path: '/app/lab'
@@ -630,6 +649,7 @@ interface AuthRouteChildren {
   AuthOnboardingRoute: typeof AuthOnboardingRouteWithChildren
   AuthSettingsRoute: typeof AuthSettingsRouteWithChildren
   AuthAppLabRoute: typeof AuthAppLabRoute
+  AuthAppPrototypeChatRoute: typeof AuthAppPrototypeChatRoute
   AuthAppSettingsRoute: typeof AuthAppSettingsRoute
   AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
@@ -638,6 +658,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthOnboardingRoute: AuthOnboardingRouteWithChildren,
   AuthSettingsRoute: AuthSettingsRouteWithChildren,
   AuthAppLabRoute: AuthAppLabRoute,
+  AuthAppPrototypeChatRoute: AuthAppPrototypeChatRoute,
   AuthAppSettingsRoute: AuthAppSettingsRoute,
   AuthAppIndexRoute: AuthAppIndexRoute,
 }

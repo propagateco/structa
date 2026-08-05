@@ -149,6 +149,8 @@ declare module "sst" {
       "value": string
     }
     "SyncEngine": {
+      "secret": string
+      "source": string
       "type": "sst.sst.Linkable"
     }
     "Web": {
