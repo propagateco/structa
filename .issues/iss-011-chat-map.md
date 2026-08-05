@@ -34,7 +34,7 @@ reconnection — all with workspace/project scoping enforced.
   iss-015, iss-016, iss-018, iss-019), `/prototype` (iss-017). No `CONTEXT.md` exists yet —
   `/domain-modeling` creates it lazily when The Clerk vocabulary gets settled.
 - **Open tickets**: scan `.issues/` for `Map: iss-011-chat-map.md` with `Status: open`.
-  Frontier = open, unblocked, unclaimed (currently iss-016). Claim by setting
+  Frontier = open, unblocked, unclaimed (currently iss-017). Claim by setting
   `Status: claimed` before working.
 - **Quality**: local checks only before commit (`npm run typecheck && npm run check:fix &&
   npm test`); UI verification via agent-browser + bot login.
@@ -70,6 +70,20 @@ reconnection — all with workspace/project scoping enforced.
   gpt-4.1-mini). EU-hosted open-weight (Scaleway/Mistral) = one-line swap via adapter baseURL;
   MCP / agent-native exposure = future session, out of scope; US processing OK for MVP; per-user
   soft rate cap (~30 runs/hr).
+- [Chat persistence schema & Electric sync](iss-016-chat-persistence-schema-electric-sync-design.md) —
+  four tables, text PKs (client-generated uuids): `chat_sessions` (context enum
+  project/editor/mcp/api, nullable `document_id` placeholder, title + denormalized
+  `message_count`/`last_message_at`), `chat_messages` (role, content, `run_id` on assistant rows
+  only, no status/updated_at), `chat_runs` (status running|complete|error + error_code/message),
+  `chat_run_events` (PK (run_id, seq), **session_id denormalized** = session-scoped stream, jsonb
+  payload, pgEnum type). Shapes: user-level `where user_id` for sessions/messages/runs +
+  session-scoped events shape with an ownership pre-check. **Backend-owned writes** (user message
+  idempotent by client `message_id`; sessions created on first run; client collections read-only;
+  optimistic+txid pattern reserved for iss-005 title rename). Run lifecycle: 409 guard + stale-run
+  recovery (~5 min); start in one tx; per-chunk `seq++` writes; terminal = done/error event +
+  status + materialize assistant row (iff partial) + `message_count`/`last_message_at`. **Ack is
+  the terminal response, not 202-early** (serverless; ~120 s run cap; fetch-failure → check
+  `chat_runs.status`). Retry: same runId → existing run; new attempt → new runId.
 
 ## Not yet specified
 
