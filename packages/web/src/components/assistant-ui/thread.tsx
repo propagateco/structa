@@ -154,7 +154,10 @@ const ThreadRoot: FC<{ isEmpty: boolean }> = ({ isEmpty }) => {
             <ThreadScrollToBottom />
             <ThreadFollowupSuggestions />
             <Composer />
-            <AuiIf condition={(s) => isNewChatView(s) && s.composer.isEmpty}>
+            {/* Welcome-state suggestions. `composer.isEmpty` never resolves
+                true with the external-store runtime, so gate on the new-chat
+                view alone — suggestions stay visible while composing. */}
+            <AuiIf condition={isNewChatView}>
               <ThreadSuggestions />
             </AuiIf>
           </ThreadPrimitive.ViewportFooter>
