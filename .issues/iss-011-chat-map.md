@@ -34,7 +34,7 @@ reconnection — all with workspace/project scoping enforced.
   iss-015, iss-016, iss-018, iss-019), `/prototype` (iss-017). No `CONTEXT.md` exists yet —
   `/domain-modeling` creates it lazily when The Clerk vocabulary gets settled.
 - **Open tickets**: scan `.issues/` for `Map: iss-011-chat-map.md` with `Status: open`.
-  Frontier = open, unblocked, unclaimed (currently iss-017). Claim by setting
+  Frontier = open, unblocked, unclaimed (currently iss-018). Claim by setting
   `Status: claimed` before working.
 - **Quality**: local checks only before commit (`npm run typecheck && npm run check:fix &&
   npm test`); UI verification via agent-browser + bot login.
@@ -84,6 +84,15 @@ reconnection — all with workspace/project scoping enforced.
   status + materialize assistant row (iff partial) + `message_count`/`last_message_at`. **Ack is
   the terminal response, not 202-early** (serverless; ~120 s run cap; fetch-failure → check
   `chat_runs.status`). Retry: same runId → existing run; new attempt → new runId.
+
+- [Chat UX design](iss-017-chat-ux-design.md) — **raw per-session events shape hook** (outside
+  collections, fold by `(run_id, seq)`); **active-session-only** subscription (tear down on
+  switch, reconstruct from collections on return); **fetch promise** drives live run-state,
+  `chat_runs` collection is restore/verification; **single bubble per run** with inline
+  collapsible tool chips **replayed from durable events**; retry = new run appended below
+  (failed bubble stays visible); **no stop button v1** — composer disables while in-flight;
+  **New Chat** = local session upserted on first run. Prototype per /prototype on a throwaway
+  branch. Feeds iss-018; unblocks iss-004/iss-009.
 
 ## Not yet specified
 
