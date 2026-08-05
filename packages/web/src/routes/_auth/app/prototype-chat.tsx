@@ -13,6 +13,11 @@ import { useMockChat } from "@/lib/chat-mock/use-mock-chat";
  * `prototype/chat-layout`. Deliberately NOT DEV-guarded (unlike `/app/lab`):
  * it is verified against a CI preview production build. It is never linked
  * from the product nav and is removed when the prototype lands.
+ *
+ * Session navigation lives in the app sidebar while this route is active:
+ * "Recent chats" lists the mock sessions and the sidebar "New chat" button
+ * creates one (see AppSidebar). The variants below only vary thread-area
+ * chrome.
  */
 const searchSchema = z.object({
 	variant: z.enum(CHAT_VARIANTS).optional(),
