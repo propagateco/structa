@@ -76,6 +76,7 @@
 		"wrangler": "^4.66.0"
 	},
 	"dependencies": {
+		"@pulumi/pulumi": "^3.256.0",
 		"class-variance-authority": "^0.7.1",
 		"hast-util-to-string": "^3.0.1",
 		"hono": "^4.10.4",
