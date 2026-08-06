@@ -36,7 +36,7 @@ export function VariantSwitcher({ variant }: { variant: PrototypeVariant }) {
 	return (
 		<fieldset
 			aria-label="Prototype layout variant"
-			className="fixed bottom-4 left-4 z-50 flex items-center gap-0.5 rounded-full border bg-background/95 p-1 shadow-lg backdrop-blur"
+			className="pointer-events-none fixed bottom-4 left-4 z-50 flex items-center gap-0.5 rounded-full border bg-background/95 p-1 shadow-lg backdrop-blur"
 		>
 			<span className="text-muted-foreground px-2 text-xs">
 				Prototype · layout
@@ -48,7 +48,7 @@ export function VariantSwitcher({ variant }: { variant: PrototypeVariant }) {
 					search={{ variant: name }}
 					title={`${VARIANT_LABELS[name]} (press ${index + 1})`}
 					className={cn(
-						"flex h-7 items-center gap-1.5 rounded-full px-2.5 text-xs transition-colors",
+						"pointer-events-auto flex h-7 items-center gap-1.5 rounded-full px-2.5 text-xs transition-colors",
 						variant === name
 							? "bg-primary text-primary-foreground"
 							: "text-muted-foreground hover:bg-muted hover:text-foreground",
