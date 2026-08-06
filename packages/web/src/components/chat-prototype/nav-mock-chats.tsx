@@ -17,7 +17,12 @@ import {
 	useSidebar,
 } from "@/components/ui/sidebar";
 import { mockEngine } from "@/lib/chat-mock/use-mock-chat";
-import { RunningDot, sessionRunning, useSessions } from "./session-list";
+import {
+	RunningDot,
+	sessionPreview,
+	sessionRunning,
+	useSessions,
+} from "./session-list";
 
 /**
  * Mock chat sessions surfaced in the app sidebar's "Recent chats" section
@@ -38,10 +43,18 @@ export function NavMockChats() {
 						<SidebarMenuButton
 							tooltip={session.title}
 							isActive={session.id === active?.id}
+							className="h-auto min-h-8 items-start py-1.5"
 							onClick={() => mockEngine.switchSession(session.id)}
 						>
 							<RunningDot running={sessionRunning(session)} />
-							<span className="min-w-0 flex-1 truncate">{session.title}</span>
+							<span className="min-w-0 flex-1">
+								<span className="block truncate text-sm leading-4">
+									{session.title}
+								</span>
+								<span className="text-muted-foreground/70 block truncate text-xs leading-4 font-normal">
+									{sessionPreview(session)}
+								</span>
+							</span>
 						</SidebarMenuButton>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>

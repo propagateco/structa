@@ -23,6 +23,11 @@ export function sessionRunning(session: MockSession) {
 	return session.runs.at(-1)?.status === "running";
 }
 
+/** The user's first input, used as the compact session preview. */
+export function sessionPreview(session: MockSession) {
+	return session.runs[0]?.prompt ?? "No messages yet";
+}
+
 /** Small running indicator used across variants. */
 export function RunningDot({ running }: { running: boolean }) {
 	if (!running) return null;
