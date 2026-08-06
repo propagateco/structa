@@ -7,9 +7,13 @@
  * `threadId` points at the new session so the runtime's `__internal_setAdapter`
  * recreates the main thread.
  */
-import type {
-	ExternalStoreAdapter,
-	ThreadSuggestion,
+
+import {
+	CompositeAttachmentAdapter,
+	type ExternalStoreAdapter,
+	SimpleImageAttachmentAdapter,
+	SimpleTextAttachmentAdapter,
+	type ThreadSuggestion,
 } from "@assistant-ui/react";
 import type { MockEngine } from "./engine";
 import { convertMessage, deriveMessages, extractText } from "./fold";
@@ -21,6 +25,11 @@ export const SUGGESTIONS: ThreadSuggestion[] = [
 	{ prompt: "Compare the two renovation quotes" },
 	{ prompt: "What patio material fits a $3.5k budget?" },
 ];
+
+const attachmentAdapter = new CompositeAttachmentAdapter([
+	new SimpleImageAttachmentAdapter(),
+	new SimpleTextAttachmentAdapter(),
+]);
 
 export function buildAdapter(
 	state: MockState,
@@ -60,6 +69,7 @@ export function buildAdapter(
 		suggestions: SUGGESTIONS,
 
 		adapters: {
+			attachments: attachmentAdapter,
 			threadList: {
 				threadId: state.activeSessionId,
 				isLoading: false,
