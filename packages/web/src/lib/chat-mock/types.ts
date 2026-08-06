@@ -48,6 +48,8 @@ export type MockRun = {
 export type MockSession = {
 	id: string;
 	title: string;
+	/** Set only after the user explicitly renames the session. */
+	renamedTitle?: string;
 	createdAt: number;
 	/** Ordered oldest → newest. Retried runs append (failed bubble stays). */
 	runs: MockRun[];

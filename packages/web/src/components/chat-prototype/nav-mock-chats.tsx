@@ -1,12 +1,14 @@
 "use client";
 
-import { MoreHorizontal, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
 	SidebarGroup,
 	SidebarGroupLabel,
@@ -19,7 +21,7 @@ import {
 import { mockEngine } from "@/lib/chat-mock/use-mock-chat";
 import {
 	RunningDot,
-	sessionPreview,
+	sessionLabel,
 	sessionRunning,
 	useSessions,
 } from "./session-list";
@@ -33,6 +35,22 @@ import {
 export function NavMockChats() {
 	const { sessions, active } = useSessions();
 	const { isMobile } = useSidebar();
+	const [renaming, setRenaming] = useState<{
+		id: string;
+		value: string;
+	} | null>(null);
+	const renameInputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (renaming) renameInputRef.current?.select();
+	}, [renaming]);
+
+	const commitRename = () => {
+		if (!renaming) return;
+		const title = renaming.value.trim();
+		if (title) mockEngine.renameSession(renaming.id, title);
+		setRenaming(null);
+	};
 
 	return (
 		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -40,22 +58,39 @@ export function NavMockChats() {
 			<SidebarMenu>
 				{sessions.map((session) => (
 					<SidebarMenuItem key={session.id}>
-						<SidebarMenuButton
-							tooltip={session.title}
-							isActive={session.id === active?.id}
-							className="h-auto min-h-8 items-start py-1.5"
-							onClick={() => mockEngine.switchSession(session.id)}
-						>
-							<RunningDot running={sessionRunning(session)} />
-							<span className="min-w-0 flex-1">
-								<span className="block truncate text-sm leading-4">
-									{session.title}
+						{renaming?.id === session.id ? (
+							<Input
+								ref={renameInputRef}
+								autoFocus
+								aria-label="Rename chat"
+								value={renaming.value}
+								className="h-8 min-w-0 px-2 text-sm"
+								onChange={(event) =>
+									setRenaming({ ...renaming, value: event.target.value })
+								}
+								onBlur={commitRename}
+								onKeyDown={(event) => {
+									if (event.key === "Enter") {
+										event.preventDefault();
+										commitRename();
+									} else if (event.key === "Escape") {
+										event.preventDefault();
+										setRenaming(null);
+									}
+								}}
+							/>
+						) : (
+							<SidebarMenuButton
+								tooltip={sessionLabel(session)}
+								isActive={session.id === active?.id}
+								onClick={() => mockEngine.switchSession(session.id)}
+							>
+								<RunningDot running={sessionRunning(session)} />
+								<span className="min-w-0 flex-1 truncate text-sm">
+									{sessionLabel(session)}
 								</span>
-								<span className="text-muted-foreground/70 block truncate text-xs leading-4 font-normal">
-									{sessionPreview(session)}
-								</span>
-							</span>
-						</SidebarMenuButton>
+							</SidebarMenuButton>
+						)}
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<SidebarMenuAction showOnHover>
@@ -68,6 +103,17 @@ export function NavMockChats() {
 								side={isMobile ? "bottom" : "right"}
 								align={isMobile ? "end" : "start"}
 							>
+								<DropdownMenuItem
+									onSelect={() =>
+										setRenaming({
+											id: session.id,
+											value: sessionLabel(session),
+										})
+									}
+								>
+									<Pencil />
+									<span>Rename</span>
+								</DropdownMenuItem>
 								<DropdownMenuItem
 									variant="destructive"
 									onClick={() => mockEngine.deleteSession(session.id)}

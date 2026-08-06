@@ -23,9 +23,9 @@ export function sessionRunning(session: MockSession) {
 	return session.runs.at(-1)?.status === "running";
 }
 
-/** The user's first input, used as the compact session preview. */
-export function sessionPreview(session: MockSession) {
-	return session.runs[0]?.prompt ?? "No messages yet";
+/** The sidebar label: first input until the user explicitly renames it. */
+export function sessionLabel(session: MockSession) {
+	return session.renamedTitle ?? session.runs[0]?.prompt ?? session.title;
 }
 
 /** Small running indicator used across variants. */

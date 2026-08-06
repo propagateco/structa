@@ -482,7 +482,10 @@ export function createMockEngine(): MockEngine {
 	const renameSession = (sessionId: string, title: string) => {
 		mutate((draft) => {
 			const session = draft.sessions.find((s) => s.id === sessionId);
-			if (session) session.title = title;
+			if (session) {
+				session.title = title;
+				session.renamedTitle = title;
+			}
 		});
 	};
 
