@@ -5,9 +5,10 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { SchemaType } from "@structa/core/user/user.model";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { GalleryVerticalEnd, LayoutGrid, Plus } from "lucide-react";
 import * as React from "react";
+import { NavMockChats } from "@/components/chat-prototype/nav-mock-chats";
 import { NavChats } from "@/components/nav-chats";
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
@@ -25,6 +26,7 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar";
 import { useProjectSwitcher } from "@/hooks/use-project-switcher";
+import { mockEngine } from "@/lib/chat-mock/use-mock-chat";
 import { cn } from "@/lib/utils";
 
 // Wrap a Hugeicon so it can be used interchangeably with a Lucide icon
@@ -127,17 +129,30 @@ export function AppSidebar({
     const { state } = useSidebar();
     const { activeProject } = useProjectSwitcher();
 
+    // While the iss-017 chat-layout prototype route is active, the sidebar
+    // adopts the mock chat: "New chat" creates a session and "Recent chats"
+    // lists the mock sessions (see NavMockChats).
+    const pathname = useLocation({ select: (loc) => loc.pathname });
+    const onPrototypeChat = pathname.startsWith("/app/prototype-chat");
+
     const navMain = React.useMemo(
         () =>
-            data.navMain.map((item) =>
-                item.title === "Overview"
-                    ? {
-                          ...item,
-                          title: activeProject?.name ?? item.title,
-                      }
-                    : item,
-            ),
-        [activeProject?.name],
+            data.navMain.map((item) => {
+                if (item.title === "Overview") {
+                    return {
+                        ...item,
+                        title: activeProject?.name ?? item.title,
+                    };
+                }
+                if (onPrototypeChat && item.title === "New Chat") {
+                    return {
+                        ...item,
+                        onClick: () => mockEngine.createSession(),
+                    };
+                }
+                return item;
+            }),
+        [activeProject?.name, onPrototypeChat],
     );
 
     return (
@@ -165,7 +180,11 @@ export function AppSidebar({
             <SidebarContent>
                 <NavMain items={navMain} />
                 <NavProjects title="Projects" projects={data.projects} />
-                <NavChats title="Recent chats" projects={data.chats} />
+                {onPrototypeChat ? (
+                    <NavMockChats />
+                ) : (
+                    <NavChats title="Recent chats" projects={data.chats} />
+                )}
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={user} />

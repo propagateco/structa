@@ -209,7 +209,10 @@ provider, SDK choice, key management → iss-013.
 **All six resolved — see [iss-014's Resolution](../../../.issues/iss-014-durable-stream-architecture-decision.md).**
 Answers in brief: per-chunk writes (no timer); SSE skipped for v1; materialize on error iff
 partial content; terminal events stored as rows (yes); multi-tab = one active run per session,
-no per-tab cursor; `seq` = in-process counter (single writer), mechanics to iss-016.
+no per-tab cursor; `seq` = in-process counter (single writer).
+The final DDL (`chat_sessions`/`chat_messages`/`chat_runs`/`chat_run_events`), the
+`session_id`-scoped events shape, and the run-lifecycle transactions are locked in
+[iss-016's Resolution](../../../.issues/iss-016-chat-persistence-schema-electric-sync-design.md).
 
 1. **Coalescing policy** for `content` inserts (fixed ~100-200 ms interval vs char-threshold
    vs per-tool-boundary) — drives Neon write volume (autoscaling floor 0.25 CU) against

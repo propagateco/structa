@@ -2,7 +2,7 @@
 
 Type: wayfinder-prototype
 Map: iss-011-chat-map.md
-Status: open
+Status: resolved
 Blocked by: iss-015-chat-run-endpoint-streaming-transport.md
 
 ## Question
@@ -24,8 +24,47 @@ create/switch (iss-009), active-session state driving displayed output, message 
   toasts, `vaul` for overlays.
 - The endpoint contract (iss-015) must exist to prototype against; blocked by it.
 
-## Resolution shape
+## Resolution
 
-A prototype (via /prototype skill) + written decisions on layout, sessions state model, and
-message rendering. Link the prototype as an asset; close; gist to the map.
-Feeds iss-018 (all-chats) and unblocks iss-004/iss-009.
+Prototype (per /prototype skill) + written decisions on layout, sessions state model, and
+message rendering. Asset: throwaway branch (pointer appended on capture).
+
+**Sessions state model**
+- Events subscribe via a **raw per-session shape hook** (`where session_id = $1` +
+  `params[1]`, ownership pre-check per iss-016) — outside the TanStack DB collection model —
+  folded by `(run_id, seq)` into the active run's bubble. `chat_sessions` / `chat_messages` /
+  `chat_runs` are static user-level collections (`useLiveQuery`).
+- **Active-session-only**: one events subscription follows the active session; tear down on
+  switch (abort-on-unmount); returning reconstructs the finished run from the collections +
+  replayed events.
+- **Run-state source of truth**: the fetch promise while live (ack = terminal, iss-015); the
+  `chat_runs` collection is the restore/verification layer (reload, tab restore, fetch failure,
+  stale-run recovery).
+- **New Chat** = a local client-generated session row; the backend upserts it on first run;
+  empty sessions never persist (the sidebar lists only persisted sessions).
+
+**Message rendering**
+- One assistant bubble per run. `content` events stream into a single react-markdown bubble;
+  `tool_call` / `tool_result` pairs render as inline collapsible chips; `done` reconciles with
+  the materialized row (iss-016); `error` → error surface + retry.
+- Tool chips **replay from durable events** — they persist in history (the reasoning trail),
+  not just while streaming.
+
+**Run-state + retry (iss-006)**
+- **No stop button in v1**; the composer disables while a run is in-flight (the 409 guard
+  bounds the window); navigating away lets the run complete server-side and materialize.
+- Retry = a **new run** (new `runId`, iss-016); the failed attempt stays visible with its error
+  state + partial content; the new bubble appends below.
+
+**Assumptions (standard)**: composer fixed at bottom in the pathless `_chat.tsx` layout
+(iss-004); sidebar left with sessions (title + `last_message_at` desc) + New Chat at top; Enter
+sends / Shift+Enter newline; optimistic user echo reconciled by client `message_id` (iss-016);
+failed bubble shows `run.error_message` + retry; `nav-chats.tsx` becomes the sessions list.
+
+**Reference validation** (electric-sql/electric-ai-chat + examples/tanstack-db-web-starter):
+DB-as-stream confirmed (rows, no SSE); fire-and-forget rejected (serverless kills the
+invocation — terminal-ack stands); parameterized shape `where` (`$1 = ANY(...)` +
+`params[n]`) adopted for the chat shape proxies; HTTP/2 multiplexing note for shape latency
+(prod fine; dev benefit).
+
+Feeds iss-018 (all-chats). Unblocks iss-004/iss-009.
