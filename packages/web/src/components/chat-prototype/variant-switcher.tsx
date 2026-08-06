@@ -36,7 +36,7 @@ export function VariantSwitcher({ variant }: { variant: PrototypeVariant }) {
 	return (
 		<fieldset
 			aria-label="Prototype layout variant"
-			className="pointer-events-none fixed bottom-4 left-4 z-50 flex items-center gap-0.5 rounded-full border bg-background/95 p-1 shadow-lg backdrop-blur"
+			className="pointer-events-none fixed left-4 top-4 z-50 flex items-center gap-0.5 rounded-full border bg-background/95 p-1 shadow-lg backdrop-blur"
 		>
 			<span className="text-muted-foreground px-2 text-xs">
 				Prototype · layout
