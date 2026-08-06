@@ -33,7 +33,6 @@ import {
   ErrorPrimitive,
   groupPartByType,
   MessagePrimitive,
-  SuggestionPrimitive,
   ThreadPrimitive,
   type ToolCallMessagePartComponent,
   useAuiState,
@@ -203,27 +202,30 @@ const ThreadWelcome: FC = () => {
 };
 
 const ThreadSuggestions: FC = () => {
+  // Reads `s.thread.suggestions` (fed by the external-store adapter) instead
+  // of `ThreadPrimitive.Suggestions`, which subscribes to the `s.suggestions`
+  // scope — a scope external-store runtimes never populate, so it is always
+  // empty here. `ThreadPrimitive.Suggestion` takes the prompt directly, so it
+  // works with our adapter.
+  const suggestions = useAuiState((s) => s.thread.suggestions);
+  if (suggestions.length === 0) return null;
   return (
     <div className="aui-thread-welcome-suggestions flex w-full flex-wrap items-center justify-center gap-2 px-4">
-      <ThreadPrimitive.Suggestions>
-        {() => <ThreadSuggestionItem />}
-      </ThreadPrimitive.Suggestions>
-    </div>
-  );
-};
-
-const ThreadSuggestionItem: FC = () => {
-  return (
-    <div className="aui-thread-welcome-suggestion-display fade-in slide-in-from-bottom-2 animate-in fill-mode-both duration-200">
-      <SuggestionPrimitive.Trigger send asChild>
-        <Button
-          variant="ghost"
-          className="aui-thread-welcome-suggestion text-foreground hover:bg-muted border-border/60 h-auto gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-normal whitespace-nowrap transition-colors"
+      {suggestions.map((suggestion, idx) => (
+        <div
+          key={idx}
+          className="aui-thread-welcome-suggestion-display fade-in slide-in-from-bottom-2 animate-in fill-mode-both duration-200"
         >
-          <SuggestionPrimitive.Title className="aui-thread-welcome-suggestion-text-1" />
-          <SuggestionPrimitive.Description className="aui-thread-welcome-suggestion-text-2 empty:hidden" />
-        </Button>
-      </SuggestionPrimitive.Trigger>
+          <ThreadPrimitive.Suggestion
+            className="aui-thread-welcome-suggestion text-foreground hover:bg-muted border-border/60 h-auto gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-normal whitespace-nowrap transition-colors"
+            prompt={suggestion.prompt}
+            method="replace"
+            autoSend
+          >
+            {suggestion.prompt}
+          </ThreadPrimitive.Suggestion>
+        </div>
+      ))}
     </div>
   );
 };
