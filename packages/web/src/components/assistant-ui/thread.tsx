@@ -351,7 +351,7 @@ const AssistantMessage: FC = () => {
     >
       <div
         data-slot="aui_assistant-message-content"
-        className="text-foreground px-2 text-[13px] leading-relaxed wrap-break-word"
+        className="text-foreground px-2 text-base leading-relaxed wrap-break-word"
       >
         <MessagePrimitive.GroupedParts
           groupBy={groupPartByType({

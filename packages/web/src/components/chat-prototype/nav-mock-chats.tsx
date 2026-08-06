@@ -2,6 +2,16 @@
 
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -58,39 +68,16 @@ export function NavMockChats() {
 			<SidebarMenu>
 				{sessions.map((session) => (
 					<SidebarMenuItem key={session.id}>
-						{renaming?.id === session.id ? (
-							<Input
-								ref={renameInputRef}
-								autoFocus
-								aria-label="Rename chat"
-								value={renaming.value}
-								className="h-8 min-w-0 px-2 text-sm"
-								onChange={(event) =>
-									setRenaming({ ...renaming, value: event.target.value })
-								}
-								onBlur={commitRename}
-								onKeyDown={(event) => {
-									if (event.key === "Enter") {
-										event.preventDefault();
-										commitRename();
-									} else if (event.key === "Escape") {
-										event.preventDefault();
-										setRenaming(null);
-									}
-								}}
-							/>
-						) : (
-							<SidebarMenuButton
-								tooltip={sessionLabel(session)}
-								isActive={session.id === active?.id}
-								onClick={() => mockEngine.switchSession(session.id)}
-							>
-								<RunningDot running={sessionRunning(session)} />
-								<span className="min-w-0 flex-1 truncate text-sm">
-									{sessionLabel(session)}
-								</span>
-							</SidebarMenuButton>
-						)}
+						<SidebarMenuButton
+							tooltip={sessionLabel(session)}
+							isActive={session.id === active?.id}
+							onClick={() => mockEngine.switchSession(session.id)}
+						>
+							<RunningDot running={sessionRunning(session)} />
+							<span className="min-w-0 flex-1 truncate text-sm">
+								{sessionLabel(session)}
+							</span>
+						</SidebarMenuButton>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<SidebarMenuAction showOnHover>
@@ -126,6 +113,48 @@ export function NavMockChats() {
 					</SidebarMenuItem>
 				))}
 			</SidebarMenu>
+			<Dialog
+				open={renaming !== null}
+				onOpenChange={(open) => {
+					if (!open) setRenaming(null);
+				}}
+			>
+				<DialogContent className="sm:max-w-md">
+					<form
+						onSubmit={(event) => {
+							event.preventDefault();
+							commitRename();
+						}}
+					>
+						<DialogHeader>
+							<DialogTitle>Rename chat</DialogTitle>
+							<DialogDescription>
+								Choose a name for this chat session.
+							</DialogDescription>
+						</DialogHeader>
+						<Input
+							ref={renameInputRef}
+							autoFocus
+							aria-label="Chat name"
+							value={renaming?.value ?? ""}
+								className="mt-4"
+							onChange={(event) =>
+								setRenaming((current) =>
+									current ? { ...current, value: event.target.value } : current,
+								)
+							}
+						/>
+						<DialogFooter className="mt-4">
+							<DialogClose asChild>
+								<Button type="button" variant="outline">
+									Cancel
+								</Button>
+							</DialogClose>
+							<Button type="submit">Save</Button>
+						</DialogFooter>
+					</form>
+				</DialogContent>
+			</Dialog>
 		</SidebarGroup>
 	);
 }
