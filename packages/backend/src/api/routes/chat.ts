@@ -5,6 +5,7 @@ import { HTTPException } from "hono/http-exception";
 import {
 	clerkRuntime,
 	ClerkRunConflictError,
+	ClerkRuntimeUnavailableError,
 } from "../../chat/clerk-runtime";
 import { authenticatedMiddleware } from "../middleware";
 
@@ -33,6 +34,9 @@ export const ChatRoute = new Hono()
 		} catch (error) {
 			if (error instanceof ClerkRunConflictError) {
 				throw new HTTPException(409, { message: error.message });
+			}
+			if (error instanceof ClerkRuntimeUnavailableError) {
+				throw new HTTPException(503, { message: error.message });
 			}
 			throw error;
 		}

@@ -20,8 +20,19 @@ export class ClerkRunConflictError extends Error {
 	}
 }
 
+export class ClerkRuntimeUnavailableError extends Error {
+	constructor() {
+		super("Clerk runtime is not configured for this environment");
+		this.name = "ClerkRuntimeUnavailableError";
+	}
+}
+
 export const clerkRuntime: ClerkRuntime = {
 	async startRun(input) {
+		if (!process.env.OPENAI_API_KEY) {
+			throw new ClerkRuntimeUnavailableError();
+		}
+
 		const [activeRun] = await db
 			.select({ id: chatRun.id })
 			.from(chatRun)
