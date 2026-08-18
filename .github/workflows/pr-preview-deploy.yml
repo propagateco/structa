@@ -141,6 +141,7 @@ jobs:
                   AWS_PROFILE: ''
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
+                  OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
 
             - name: Unlock SST on cancellation/failure
               if: always()

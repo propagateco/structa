@@ -44,7 +44,9 @@ const api = new sst.aws.Function('Api', {
         BETTER_AUTH_SECRET: secret.BetterAuthSecret.value,
         ...(secret.OpenRouterKey
             ? { OPENROUTER_API_KEY: secret.OpenRouterKey.value }
-            : {}),
+            : process.env.OPENROUTER_API_KEY
+                ? { OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY }
+                : {}),
         // Pin S3Client region to each bucket's actual region so presigned
         // URLs are signed against the correct regional endpoint. Without
         // this, the SDK uses the Lambda's AWS_REGION (eu-west-2) which
