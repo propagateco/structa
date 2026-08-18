@@ -36,6 +36,7 @@ import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings
 import { Route as AuthAppPrototypeChatRouteImport } from './routes/_auth/app/prototype-chat'
 import { Route as AuthAppLabRouteImport } from './routes/_auth/app/lab'
 import { Route as AuthOnboardingOnboardingIndexRouteImport } from './routes/_auth/_onboarding/onboarding/index'
+import { Route as AuthAppChatConversationIdRouteImport } from './routes/_auth/app/chat/$conversationId'
 import { Route as AuthSettingsSettingsNotificationsRouteImport } from './routes/_auth/_settings/settings/notifications'
 import { Route as AuthSettingsSettingsBillingRouteImport } from './routes/_auth/_settings/settings/billing'
 import { Route as AuthSettingsSettingsAccountRouteImport } from './routes/_auth/_settings/settings/account'
@@ -172,6 +173,12 @@ const AuthOnboardingOnboardingIndexRoute =
     path: '/onboarding/',
     getParentRoute: () => AuthOnboardingRoute,
   } as any)
+const AuthAppChatConversationIdRoute =
+  AuthAppChatConversationIdRouteImport.update({
+    id: '/app/chat/$conversationId',
+    path: '/app/chat/$conversationId',
+    getParentRoute: () => AuthRoute,
+  } as any)
 const AuthSettingsSettingsNotificationsRoute =
   AuthSettingsSettingsNotificationsRouteImport.update({
     id: '/settings/notifications',
@@ -223,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/settings/account': typeof AuthSettingsSettingsAccountRoute
   '/settings/billing': typeof AuthSettingsSettingsBillingRoute
   '/settings/notifications': typeof AuthSettingsSettingsNotificationsRoute
+  '/app/chat/$conversationId': typeof AuthAppChatConversationIdRoute
   '/onboarding/': typeof AuthOnboardingOnboardingIndexRoute
 }
 export interface FileRoutesByTo {
@@ -251,6 +259,7 @@ export interface FileRoutesByTo {
   '/settings/account': typeof AuthSettingsSettingsAccountRoute
   '/settings/billing': typeof AuthSettingsSettingsBillingRoute
   '/settings/notifications': typeof AuthSettingsSettingsNotificationsRoute
+  '/app/chat/$conversationId': typeof AuthAppChatConversationIdRoute
   '/onboarding': typeof AuthOnboardingOnboardingIndexRoute
 }
 export interface FileRoutesById {
@@ -285,6 +294,7 @@ export interface FileRoutesById {
   '/_auth/_settings/settings/account': typeof AuthSettingsSettingsAccountRoute
   '/_auth/_settings/settings/billing': typeof AuthSettingsSettingsBillingRoute
   '/_auth/_settings/settings/notifications': typeof AuthSettingsSettingsNotificationsRoute
+  '/_auth/app/chat/$conversationId': typeof AuthAppChatConversationIdRoute
   '/_auth/_onboarding/onboarding/': typeof AuthOnboardingOnboardingIndexRoute
 }
 export interface FileRouteTypes {
@@ -315,6 +325,7 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/billing'
     | '/settings/notifications'
+    | '/app/chat/$conversationId'
     | '/onboarding/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -343,6 +354,7 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/billing'
     | '/settings/notifications'
+    | '/app/chat/$conversationId'
     | '/onboarding'
   id:
     | '__root__'
@@ -376,6 +388,7 @@ export interface FileRouteTypes {
     | '/_auth/_settings/settings/account'
     | '/_auth/_settings/settings/billing'
     | '/_auth/_settings/settings/notifications'
+    | '/_auth/app/chat/$conversationId'
     | '/_auth/_onboarding/onboarding/'
   fileRoutesById: FileRoutesById
 }
@@ -583,6 +596,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthOnboardingOnboardingIndexRouteImport
       parentRoute: typeof AuthOnboardingRoute
     }
+    '/_auth/app/chat/$conversationId': {
+      id: '/_auth/app/chat/$conversationId'
+      path: '/app/chat/$conversationId'
+      fullPath: '/app/chat/$conversationId'
+      preLoaderRoute: typeof AuthAppChatConversationIdRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/_settings/settings/notifications': {
       id: '/_auth/_settings/settings/notifications'
       path: '/settings/notifications'
@@ -652,6 +672,7 @@ interface AuthRouteChildren {
   AuthAppPrototypeChatRoute: typeof AuthAppPrototypeChatRoute
   AuthAppSettingsRoute: typeof AuthAppSettingsRoute
   AuthAppIndexRoute: typeof AuthAppIndexRoute
+  AuthAppChatConversationIdRoute: typeof AuthAppChatConversationIdRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
@@ -661,6 +682,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthAppPrototypeChatRoute: AuthAppPrototypeChatRoute,
   AuthAppSettingsRoute: AuthAppSettingsRoute,
   AuthAppIndexRoute: AuthAppIndexRoute,
+  AuthAppChatConversationIdRoute: AuthAppChatConversationIdRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
