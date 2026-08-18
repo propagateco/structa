@@ -160,7 +160,9 @@ jobs:
             - name: Get preview URLs
               id: get_urls
               run: |
-                  # Get outputs from SST state
+                  # Get the Web/Api outputs from SST state. PR stages intentionally
+                  # use SST's generated CloudFront URLs; dev/production retain
+                  # their stable custom domains.
                   STATE_OUTPUT=$(npx sst state export --stage ${{ env.STAGE_NAME }})
                   
                   WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '.latest.resources[0].outputs.Web // empty')
