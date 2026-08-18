@@ -53,6 +53,12 @@ export const Stage = new sst.Linkable('Stage', {
     },
 });
 
-export const dnsAdapter = sst.cloudflare.dns({
-    zone: CLOUDFLARE_ZONE_ID,
-});
+// Personal/PR stages use generated AWS URLs and must not initialize the
+// Cloudflare provider. This keeps local `sst refresh`/`sst deploy` independent
+// of the ignored root .env credentials. Stable dev/production domains still
+// use Cloudflare-managed DNS.
+export const dnsAdapter = IS_DEPLOYED_STAGE
+    ? sst.cloudflare.dns({
+          zone: CLOUDFLARE_ZONE_ID,
+      })
+    : undefined;

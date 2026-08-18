@@ -23,7 +23,9 @@ export default $config({
                     region: 'eu-west-2',
                 },
                 neon: '0.13.0',
-                cloudflare: '6.15.0',
+                ...(input?.stage === 'dev' || input?.stage === 'production'
+                    ? { cloudflare: '6.15.0' }
+                    : {}),
             },
         };
     },
