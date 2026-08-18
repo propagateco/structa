@@ -173,8 +173,8 @@ jobs:
                     | @tsv
                   '
 
-                  WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.urn // "") | test("Web|TanstackStart")) | (.outputs.url // .outputs.Web // empty)] | first // empty')
-                  API_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.urn // "") | test("ApiRouter|Router")) | (.outputs.url // .outputs.Api // empty)] | first // empty')
+                  WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.type // "") == "pulumi:pulumi:Stack") | .outputs.Web // empty] | first // empty')
+                  API_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.type // "") == "pulumi:pulumi:Stack") | .outputs.Api // empty] | first // empty')
                   
                   echo "web_url=$WEB_URL" >> $GITHUB_OUTPUT
                   echo "api_url=$API_URL" >> $GITHUB_OUTPUT
