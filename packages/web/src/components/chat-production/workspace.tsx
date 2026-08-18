@@ -1,9 +1,16 @@
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
+import { useNavigate } from "@tanstack/react-router";
 import { Thread } from "@/components/assistant-ui/thread";
 import { useProductionChat } from "@/lib/chat-production/use-production-chat";
 
 export function ProductionChatWorkspace({ sessionId }: { sessionId: string | null }) {
-	const { runtime } = useProductionChat(sessionId);
+	const navigate = useNavigate();
+	const { runtime } = useProductionChat(sessionId, (nextSessionId) => {
+		void navigate({
+			to: "/app/chat/$conversationId",
+			params: { conversationId: nextSessionId },
+		});
+	});
 
 	return (
 		<AssistantRuntimeProvider runtime={runtime}>

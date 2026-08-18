@@ -73,9 +73,17 @@ export async function listForUser(userId: string, input: ListInputType) {
 }
 
 export async function createForUser(userId: string, input: CreateInputType) {
+	return createForUserWithId(userId, createId(), input);
+}
+
+export async function createForUserWithId(
+	userId: string,
+	id: string,
+	input: CreateInputType,
+) {
 	const [created] = await db
 		.insert(conversation)
-		.values({ ...input, id: createId(), userId })
+		.values({ ...input, id, userId })
 		.returning();
 	return created;
 }

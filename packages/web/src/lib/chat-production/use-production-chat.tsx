@@ -3,6 +3,7 @@
 import { useExternalStoreRuntime } from "@assistant-ui/react";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { useMemo } from "react";
+import { useProjectSwitcher } from "@/hooks/use-project-switcher";
 import {
 	chatMessagesCollection,
 	chatRunsCollection,
@@ -11,7 +12,11 @@ import {
 } from "@/lib/collections";
 import { buildProductionAdapter, postChatRun } from "./adapter";
 
-export function useProductionChat(sessionId: string | null) {
+export function useProductionChat(
+	sessionId: string | null,
+	onSessionChange: (sessionId: string) => void,
+) {
+	const { activeProject } = useProjectSwitcher();
 	const sessionsQuery = useLiveQuery((q) =>
 		q.from({ session: chatSessionsCollection }).orderBy(
 			({ session }) => session.updatedAt,
@@ -58,11 +63,22 @@ export function useProductionChat(sessionId: string | null) {
 					messages,
 					runs,
 					events,
-					onSessionChange: () => undefined,
+					onSessionChange: (nextSessionId) => {
+					if (nextSessionId) onSessionChange(nextSessionId);
+				},
+					projectId: activeProject?.id ?? null,
 				},
 				postChatRun,
 			),
-		[sessionId, sessions, messages, runs, events],
+		[
+			activeProject?.id,
+			onSessionChange,
+			sessionId,
+			sessions,
+			messages,
+			runs,
+			events,
+		],
 	);
 
 	return {

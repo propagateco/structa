@@ -60,13 +60,24 @@ describe("production chat fold", () => {
 });
 
 describe("production chat adapter", () => {
-	it("fails clearly without a selected conversation", async () => {
+	it("creates a draft conversation id on the first message", async () => {
+		const send = vi.fn().mockResolvedValue(undefined);
+		const onSessionChange = vi.fn();
 		const adapter = buildProductionAdapter(
-			{ sessionId: null, sessions: [], messages: [], runs: [], events: [], onSessionChange: vi.fn() },
-			vi.fn(),
+			{
+				sessionId: null,
+				sessions: [],
+				messages: [],
+				runs: [],
+				events: [],
+				onSessionChange,
+			},
+			send,
 		);
-		await expect(adapter.onNew({ content: "hello" } as never)).rejects.toThrow(
-			"no conversation is selected",
+		await adapter.onNew({ content: "hello" } as never);
+		expect(send).toHaveBeenCalledWith(
+			expect.objectContaining({ content: "hello" }),
 		);
+		expect(onSessionChange).toHaveBeenCalledWith(expect.any(String));
 	});
 });

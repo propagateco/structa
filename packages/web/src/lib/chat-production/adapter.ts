@@ -9,6 +9,7 @@ export type ProductionAdapterInput = {
 	runs: ChatRun[];
 	events: ChatRunEvent[];
 	onSessionChange: (sessionId: string | null) => void;
+	projectId?: string | null;
 };
 
 export type SendChatRun = (input: {
@@ -16,6 +17,7 @@ export type SendChatRun = (input: {
 	messageId: string;
 	runId: string;
 	content: string;
+	projectId?: string | null;
 }) => Promise<void>;
 
 export async function postChatRun(input: {
@@ -23,6 +25,7 @@ export async function postChatRun(input: {
 	messageId: string;
 	runId: string;
 	content: string;
+	projectId?: string | null;
 }): Promise<void> {
 	const response = await fetch("/api/chat/run", {
 		method: "POST",
@@ -32,6 +35,7 @@ export async function postChatRun(input: {
 			messageId: input.messageId,
 			runId: input.runId,
 			content: input.content,
+			projectId: input.projectId,
 		}),
 	});
 	if (response.ok) return;
@@ -60,15 +64,17 @@ export function buildProductionAdapter(
 	const messages = foldProductionMessages(input.messages, input.runs, input.events);
 	const running = input.runs.some((run) => run.status === "running");
 	const post = async (content: string, parentId?: string) => {
-		if (!input.sessionId) throw new Error("Cannot send chat: no conversation is selected.");
 		if (!content.trim()) return;
 		const messageId = parentId ?? crypto.randomUUID();
+		const sessionId = input.sessionId ?? crypto.randomUUID();
 		await send({
-			sessionId: input.sessionId,
+			sessionId,
 			messageId,
 			runId: crypto.randomUUID(),
 			content,
+			projectId: input.projectId,
 		});
+		if (!input.sessionId) input.onSessionChange(sessionId);
 	};
 
 	return {

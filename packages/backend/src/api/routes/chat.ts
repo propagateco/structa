@@ -17,12 +17,20 @@ export const ChatRoute = new Hono()
 	.use(authenticatedMiddleware)
 	.post("/run", zValidator("json", ChatModel.RunInput), async (c) => {
 		const input = c.req.valid("json");
-		const conversation = await ConversationService.findForUser(
+		let conversation = await ConversationService.findForUser(
 			c.var.user.id,
 			input.conversationId,
 		);
 		if (!conversation) {
-			throw new HTTPException(404, { message: "Conversation not found" });
+			conversation = await ConversationService.createForUserWithId(
+				c.var.user.id,
+				input.conversationId,
+				{
+					projectId: input.projectId ?? null,
+					context: input.projectId ? "project" : "api",
+					title: "New Chat",
+				},
+			);
 		}
 
 		try {
