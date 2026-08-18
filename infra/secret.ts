@@ -10,7 +10,6 @@ export const secret = {
     ElectricSqlSecret: new sst.Secret('ElectricSqlSecret'),
     ElectricCloudApiToken: new sst.Secret('ElectricCloudApiToken'),
     ElectricCloudProjectId: new sst.Secret('ElectricCloudProjectId'),
-    OpenAIKey: new sst.Secret('OpenAIKey'),
     PosthogPublicKey: new sst.Secret('PosthogPublicKey'),
     PosthogHost: new sst.Secret('PosthogHost'),
     StripeSecretKey: new sst.Secret('StripeSecretKey'),
