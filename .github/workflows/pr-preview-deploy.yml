@@ -165,8 +165,8 @@ jobs:
                   # their stable custom domains.
                   STATE_OUTPUT=$(npx sst state export --stage ${{ env.STAGE_NAME }})
                   
-                  WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '.latest.resources[0].outputs.Web // empty')
-                  API_URL=$(echo "$STATE_OUTPUT" | jq -r '.latest.resources[0].outputs.Api // empty')
+                  WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.urn // "") | endswith("::Web")) | .outputs.url // empty] | first // empty')
+                  API_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.urn // "") | endswith("::ApiRouter")) | .outputs.url // empty] | first // empty')
                   
                   echo "web_url=$WEB_URL" >> $GITHUB_OUTPUT
                   echo "api_url=$API_URL" >> $GITHUB_OUTPUT
