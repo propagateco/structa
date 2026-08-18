@@ -4,7 +4,9 @@
 
 **Blocked by:** 01 — Persisted conversations and global Recent chats.
 
-**Status:** ready-for-agent
+**Status:** in_progress
+
+> Foundation seam landed in the current branch. Provider execution, durable event writes, and Electric collections remain to be completed before this ticket can be resolved.
 
 - [ ] The production assistant-ui ExternalStore adapter sends runs through the same-origin Clerk endpoint.
 - [ ] User messages echo immediately and reconcile with authoritative persisted rows.

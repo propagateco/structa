@@ -4,6 +4,7 @@ import { HTTPException } from "hono/http-exception";
 import { logger } from "hono/logger";
 import { ZodError } from "zod";
 import { AuthRoute } from "./routes/auth";
+import { ChatRoute } from "./routes/chat";
 import { ConversationsRoute } from "./routes/conversations";
 import { HealthRoute } from "./routes/health";
 import { StorageRoute } from "./routes/storage";
@@ -69,6 +70,7 @@ const app = new Hono().use(logger()).onError((error, c) => {
 
 const routes = app
 	.route("/auth", AuthRoute)
+	.route("/chat", ChatRoute)
 	.route("/conversations", ConversationsRoute)
 	.route("/user", UserRoute)
 	.route("/storage", StorageRoute)

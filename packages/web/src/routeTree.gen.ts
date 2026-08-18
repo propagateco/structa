@@ -29,6 +29,7 @@ import { Route as MarketingGuidesIndexRouteImport } from './routes/_marketing/gu
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiTrpcSplatRouteImport } from './routes/api/trpc/$'
+import { Route as ApiChatRunRouteImport } from './routes/api/chat/run'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MarketingGuidesSlugRouteImport } from './routes/_marketing/guides/$slug'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
@@ -137,6 +138,11 @@ const ApiTrpcSplatRoute = ApiTrpcSplatRouteImport.update({
   path: '/api/trpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatRunRoute = ApiChatRunRouteImport.update({
+  id: '/api/chat/run',
+  path: '/api/chat/run',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -222,6 +228,7 @@ export interface FileRoutesByFullPath {
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/chat/run': typeof ApiChatRunRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/app/': typeof AuthAppIndexRoute
   '/login/': typeof LoginLoginIndexRoute
@@ -251,6 +258,7 @@ export interface FileRoutesByTo {
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/chat/run': typeof ApiChatRunRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/app': typeof AuthAppIndexRoute
   '/login': typeof LoginLoginIndexRoute
@@ -286,6 +294,7 @@ export interface FileRoutesById {
   '/_login/login/code': typeof LoginLoginCodeRoute
   '/_marketing/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/chat/run': typeof ApiChatRunRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/_auth/app/': typeof AuthAppIndexRoute
   '/_login/login/': typeof LoginLoginIndexRoute
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | '/login/code'
     | '/guides/$slug'
     | '/api/auth/$'
+    | '/api/chat/run'
     | '/api/trpc/$'
     | '/app/'
     | '/login/'
@@ -346,6 +356,7 @@ export interface FileRouteTypes {
     | '/login/code'
     | '/guides/$slug'
     | '/api/auth/$'
+    | '/api/chat/run'
     | '/api/trpc/$'
     | '/app'
     | '/login'
@@ -380,6 +391,7 @@ export interface FileRouteTypes {
     | '/_login/login/code'
     | '/_marketing/guides/$slug'
     | '/api/auth/$'
+    | '/api/chat/run'
     | '/api/trpc/$'
     | '/_auth/app/'
     | '/_login/login/'
@@ -402,6 +414,7 @@ export interface RootRouteChildren {
   UseCasesKitchenRoute: typeof UseCasesKitchenRoute
   UseCasesLoftRoute: typeof UseCasesLoftRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiChatRunRoute: typeof ApiChatRunRoute
   ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
 }
 
@@ -545,6 +558,13 @@ declare module '@tanstack/react-router' {
       path: '/api/trpc/$'
       fullPath: '/api/trpc/$'
       preLoaderRoute: typeof ApiTrpcSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/run': {
+      id: '/api/chat/run'
+      path: '/api/chat/run'
+      fullPath: '/api/chat/run'
+      preLoaderRoute: typeof ApiChatRunRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -735,6 +755,7 @@ const rootRouteChildren: RootRouteChildren = {
   UseCasesKitchenRoute: UseCasesKitchenRoute,
   UseCasesLoftRoute: UseCasesLoftRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiChatRunRoute: ApiChatRunRoute,
   ApiTrpcSplatRoute: ApiTrpcSplatRoute,
 }
 export const routeTree = rootRouteImport
