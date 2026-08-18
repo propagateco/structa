@@ -164,9 +164,17 @@ jobs:
                   # use SST's generated CloudFront URLs; dev/production retain
                   # their stable custom domains.
                   STATE_OUTPUT=$(npx sst state export --stage ${{ env.STAGE_NAME }})
-                  
-                  WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.urn // "") | endswith("::Web")) | .outputs.url // empty] | first // empty')
-                  API_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.urn // "") | endswith("::ApiRouter")) | .outputs.url // empty] | first // empty')
+
+                  echo "Candidate URL outputs:"
+                  echo "$STATE_OUTPUT" | jq -r '
+                    .latest.resources[]
+                    | select((.outputs.url // .outputs.Web // .outputs.Api // "") != "")
+                    | [(.urn // ""), (.outputs.url // .outputs.Web // .outputs.Api)]
+                    | @tsv
+                  '
+
+                  WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.urn // "") | test("Web|TanstackStart")) | (.outputs.url // .outputs.Web // empty)] | first // empty')
+                  API_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.urn // "") | test("ApiRouter|Router")) | (.outputs.url // .outputs.Api // empty)] | first // empty')
                   
                   echo "web_url=$WEB_URL" >> $GITHUB_OUTPUT
                   echo "api_url=$API_URL" >> $GITHUB_OUTPUT
