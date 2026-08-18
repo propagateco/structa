@@ -1,3 +1,5 @@
+import { IS_DEPLOYED_STAGE } from './dns';
+
 export const secret = {
     BetterAuthSecret: new sst.Secret('BetterAuthSecret'),
     NeonOrgId: new sst.Secret('NeonOrgId'),
@@ -20,4 +22,7 @@ export const secret = {
     ExpoToken: new sst.Secret('ExpoToken'),
     ExpoProjectId: new sst.Secret('ExpoProjectId'),
     ExpoOwner: new sst.Secret('ExpoOwner'),
+    OpenRouterKey: IS_DEPLOYED_STAGE
+        ? new sst.Secret('OpenRouterKey')
+        : undefined,
 };

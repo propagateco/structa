@@ -1,5 +1,5 @@
 import { chat } from "@tanstack/ai";
-import { openaiText } from "@tanstack/ai-openai";
+import { openRouterText } from "@tanstack/ai-openrouter";
 import { asc, and, eq } from "drizzle-orm";
 import { ChatModel, chatMessage, chatRun, chatRunEvent } from "@structa/core/conversation";
 import { db } from "@structa/core/drizzle";
@@ -29,7 +29,7 @@ export class ClerkRuntimeUnavailableError extends Error {
 
 export const clerkRuntime: ClerkRuntime = {
 	async startRun(input) {
-		if (!process.env.OPENAI_API_KEY) {
+		if (!process.env.OPENROUTER_API_KEY) {
 			throw new ClerkRuntimeUnavailableError();
 		}
 
@@ -87,7 +87,12 @@ export const clerkRuntime: ClerkRuntime = {
 
 		try {
 			const stream = chat({
-				adapter: openaiText("gpt-5.6-luna"),
+				adapter: openRouterText(
+					(process.env.OPENROUTER_MODEL ??
+						"mistralai/ministral-3b") as Parameters<
+						typeof openRouterText
+					>[0],
+				),
 				messages: [
 					...history.map((message) => ({
 						role: message.role,

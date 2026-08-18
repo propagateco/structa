@@ -28,6 +28,7 @@ const api = new sst.aws.Function('Api', {
         secret.ExpoProjectId,
         secret.ExpoOwner,
         secret.BetterAuthSecret,
+        ...(secret.OpenRouterKey ? [secret.OpenRouterKey] : []),
     ],
     handler: 'packages/backend/src/api/api.handler',
     timeout: '2 minutes',
@@ -41,6 +42,9 @@ const api = new sst.aws.Function('Api', {
         ENCRYPTION_KEY: secret.EncryptionKey.value,
         NODE_ENV: $dev ? 'development' : 'production',
         BETTER_AUTH_SECRET: secret.BetterAuthSecret.value,
+        ...(secret.OpenRouterKey
+            ? { OPENROUTER_API_KEY: secret.OpenRouterKey.value }
+            : {}),
         // Pin S3Client region to each bucket's actual region so presigned
         // URLs are signed against the correct regional endpoint. Without
         // this, the SDK uses the Lambda's AWS_REGION (eu-west-2) which
