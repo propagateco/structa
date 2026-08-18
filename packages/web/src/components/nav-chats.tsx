@@ -77,7 +77,7 @@ export function NavChats({
                                 <span>{item.title}</span>
                             </Link>
                         </SidebarMenuButton>
-                        <DropdownMenu>
+                        {(onRename || onDelete) && <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <SidebarMenuAction showOnHover>
                                     <MoreHorizontal />
@@ -106,7 +106,7 @@ export function NavChats({
                                     <span>Delete Chat</span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
-                        </DropdownMenu>
+                        </DropdownMenu>}
                     </SidebarMenuItem>
                 ))}
             </SidebarMenu>

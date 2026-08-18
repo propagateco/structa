@@ -29,7 +29,11 @@ import { Route as MarketingGuidesIndexRouteImport } from './routes/_marketing/gu
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiTrpcSplatRouteImport } from './routes/api/trpc/$'
+import { Route as ApiChatSessionsRouteImport } from './routes/api/chat/sessions'
+import { Route as ApiChatRunsRouteImport } from './routes/api/chat/runs'
 import { Route as ApiChatRunRouteImport } from './routes/api/chat/run'
+import { Route as ApiChatMessagesRouteImport } from './routes/api/chat/messages'
+import { Route as ApiChatEventsRouteImport } from './routes/api/chat/events'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MarketingGuidesSlugRouteImport } from './routes/_marketing/guides/$slug'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
@@ -138,9 +142,29 @@ const ApiTrpcSplatRoute = ApiTrpcSplatRouteImport.update({
   path: '/api/trpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatSessionsRoute = ApiChatSessionsRouteImport.update({
+  id: '/api/chat/sessions',
+  path: '/api/chat/sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRunsRoute = ApiChatRunsRouteImport.update({
+  id: '/api/chat/runs',
+  path: '/api/chat/runs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRunRoute = ApiChatRunRouteImport.update({
   id: '/api/chat/run',
   path: '/api/chat/run',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatMessagesRoute = ApiChatMessagesRouteImport.update({
+  id: '/api/chat/messages',
+  path: '/api/chat/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatEventsRoute = ApiChatEventsRouteImport.update({
+  id: '/api/chat/events',
+  path: '/api/chat/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -228,7 +252,11 @@ export interface FileRoutesByFullPath {
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/chat/events': typeof ApiChatEventsRoute
+  '/api/chat/messages': typeof ApiChatMessagesRoute
   '/api/chat/run': typeof ApiChatRunRoute
+  '/api/chat/runs': typeof ApiChatRunsRoute
+  '/api/chat/sessions': typeof ApiChatSessionsRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/app/': typeof AuthAppIndexRoute
   '/login/': typeof LoginLoginIndexRoute
@@ -258,7 +286,11 @@ export interface FileRoutesByTo {
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/chat/events': typeof ApiChatEventsRoute
+  '/api/chat/messages': typeof ApiChatMessagesRoute
   '/api/chat/run': typeof ApiChatRunRoute
+  '/api/chat/runs': typeof ApiChatRunsRoute
+  '/api/chat/sessions': typeof ApiChatSessionsRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/app': typeof AuthAppIndexRoute
   '/login': typeof LoginLoginIndexRoute
@@ -294,7 +326,11 @@ export interface FileRoutesById {
   '/_login/login/code': typeof LoginLoginCodeRoute
   '/_marketing/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/chat/events': typeof ApiChatEventsRoute
+  '/api/chat/messages': typeof ApiChatMessagesRoute
   '/api/chat/run': typeof ApiChatRunRoute
+  '/api/chat/runs': typeof ApiChatRunsRoute
+  '/api/chat/sessions': typeof ApiChatSessionsRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/_auth/app/': typeof AuthAppIndexRoute
   '/_login/login/': typeof LoginLoginIndexRoute
@@ -326,7 +362,11 @@ export interface FileRouteTypes {
     | '/login/code'
     | '/guides/$slug'
     | '/api/auth/$'
+    | '/api/chat/events'
+    | '/api/chat/messages'
     | '/api/chat/run'
+    | '/api/chat/runs'
+    | '/api/chat/sessions'
     | '/api/trpc/$'
     | '/app/'
     | '/login/'
@@ -356,7 +396,11 @@ export interface FileRouteTypes {
     | '/login/code'
     | '/guides/$slug'
     | '/api/auth/$'
+    | '/api/chat/events'
+    | '/api/chat/messages'
     | '/api/chat/run'
+    | '/api/chat/runs'
+    | '/api/chat/sessions'
     | '/api/trpc/$'
     | '/app'
     | '/login'
@@ -391,7 +435,11 @@ export interface FileRouteTypes {
     | '/_login/login/code'
     | '/_marketing/guides/$slug'
     | '/api/auth/$'
+    | '/api/chat/events'
+    | '/api/chat/messages'
     | '/api/chat/run'
+    | '/api/chat/runs'
+    | '/api/chat/sessions'
     | '/api/trpc/$'
     | '/_auth/app/'
     | '/_login/login/'
@@ -414,7 +462,11 @@ export interface RootRouteChildren {
   UseCasesKitchenRoute: typeof UseCasesKitchenRoute
   UseCasesLoftRoute: typeof UseCasesLoftRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiChatEventsRoute: typeof ApiChatEventsRoute
+  ApiChatMessagesRoute: typeof ApiChatMessagesRoute
   ApiChatRunRoute: typeof ApiChatRunRoute
+  ApiChatRunsRoute: typeof ApiChatRunsRoute
+  ApiChatSessionsRoute: typeof ApiChatSessionsRoute
   ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
 }
 
@@ -560,11 +612,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTrpcSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat/sessions': {
+      id: '/api/chat/sessions'
+      path: '/api/chat/sessions'
+      fullPath: '/api/chat/sessions'
+      preLoaderRoute: typeof ApiChatSessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/runs': {
+      id: '/api/chat/runs'
+      path: '/api/chat/runs'
+      fullPath: '/api/chat/runs'
+      preLoaderRoute: typeof ApiChatRunsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat/run': {
       id: '/api/chat/run'
       path: '/api/chat/run'
       fullPath: '/api/chat/run'
       preLoaderRoute: typeof ApiChatRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/messages': {
+      id: '/api/chat/messages'
+      path: '/api/chat/messages'
+      fullPath: '/api/chat/messages'
+      preLoaderRoute: typeof ApiChatMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/events': {
+      id: '/api/chat/events'
+      path: '/api/chat/events'
+      fullPath: '/api/chat/events'
+      preLoaderRoute: typeof ApiChatEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -755,7 +835,11 @@ const rootRouteChildren: RootRouteChildren = {
   UseCasesKitchenRoute: UseCasesKitchenRoute,
   UseCasesLoftRoute: UseCasesLoftRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiChatEventsRoute: ApiChatEventsRoute,
+  ApiChatMessagesRoute: ApiChatMessagesRoute,
   ApiChatRunRoute: ApiChatRunRoute,
+  ApiChatRunsRoute: ApiChatRunsRoute,
+  ApiChatSessionsRoute: ApiChatSessionsRoute,
   ApiTrpcSplatRoute: ApiTrpcSplatRoute,
 }
 export const routeTree = rootRouteImport

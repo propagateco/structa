@@ -27,7 +27,9 @@ import {
 } from "@/components/ui/sidebar";
 import { useProjectSwitcher } from "@/hooks/use-project-switcher";
 import { mockEngine } from "@/lib/chat-mock/use-mock-chat";
+import { chatSessionsCollection } from "@/lib/collections";
 import { cn } from "@/lib/utils";
+import { eq, useLiveQuery } from "@tanstack/react-db";
 
 // Wrap a Hugeicon so it can be used interchangeably with a Lucide icon
 // component (both are rendered as `<item.icon />`). All Hugeicon wrappers
@@ -128,53 +130,13 @@ export function AppSidebar({
 }: AppSidebarProps) {
     const { state } = useSidebar();
     const { activeProject } = useProjectSwitcher();
-    const [conversations, setConversations] = React.useState<
-        { id: string; title: string }[]
-    >([]);
-
-    React.useEffect(() => {
-        const query = activeProject
-            ? `?projectId=${encodeURIComponent(activeProject.id)}`
-            : "";
-        void fetch(`/api/conversations${query}`, { credentials: "include" })
-            .then((response) => (response.ok ? response.json() : null))
-            .then((result: { items?: { id: string; title: string }[] } | null) => {
-                if (result?.items) setConversations(result.items);
-            });
-    }, [activeProject]);
-
-    const renameConversation = async (
-        item: { id: string; title: string },
-        title: string,
-    ) => {
-        const response = await fetch(`/api/conversations/${item.id}`, {
-            method: "PATCH",
-            credentials: "include",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ title }),
-        });
-        if (response.ok) {
-            const updated = (await response.json()) as { id: string; title: string };
-            setConversations((items) =>
-                items.map((conversation) =>
-                    conversation.id === updated.id ? updated : conversation,
-                ),
-            );
-        }
-    };
-
-    const deleteConversation = async (item: { id: string; title: string }) => {
-        if (!window.confirm(`Delete “${item.title}”?`)) return;
-        const response = await fetch(`/api/conversations/${item.id}`, {
-            method: "DELETE",
-            credentials: "include",
-        });
-        if (response.ok) {
-            setConversations((items) =>
-                items.filter((conversation) => conversation.id !== item.id),
-            );
-        }
-    };
+    const { data: sessionRows = [] } = useLiveQuery((q) => {
+        const query = q.from({ session: chatSessionsCollection });
+        return activeProject
+            ? query.where(({ session }) => eq(session.projectId, activeProject.id))
+            : query;
+    }, [activeProject?.id]);
+    const conversations = sessionRows.map(({ id, title }) => ({ id, title }));
 
     // While the iss-017 chat-layout prototype route is active, the sidebar
     // adopts the mock chat: "New chat" creates a session and "Recent chats"
@@ -236,8 +198,6 @@ export function AppSidebar({
                     <NavChats
                         title="Recent chats"
                         conversations={conversations}
-                        onRename={renameConversation}
-                        onDelete={deleteConversation}
                     />
                 )}
             </SidebarContent>
