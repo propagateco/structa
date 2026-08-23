@@ -3,6 +3,7 @@ import { snakeCamelMapper } from "@electric-sql/client";
 import { electricCollectionOptions } from "@tanstack/electric-db-collection";
 import { createCollection } from "@tanstack/react-db";
 import { trpc } from "@/lib/trpc-client";
+import { z } from "zod";
 
 /**
  * Parse a Postgres timestamp from the Electric wire format into a Date.
@@ -108,3 +109,101 @@ export const usersCollection = createCollection(
 		},
 	}),
 );
+
+const chatSessionSchema = z.object({
+	id: z.string(),
+	userId: z.string(),
+	projectId: z.string().nullable(),
+	context: z.enum(["project", "editor", "mcp", "api"]),
+	documentId: z.string().nullable(),
+	title: z.string(),
+	messageCount: z.number(),
+	lastMessageAt: z.date().nullable(),
+	createdAt: z.date(),
+	updatedAt: z.date(),
+});
+
+const chatMessageSchema = z.object({
+	id: z.string(),
+	sessionId: z.string(),
+	userId: z.string(),
+	runId: z.string().nullable(),
+	role: z.enum(["user", "assistant"]),
+	content: z.string(),
+	createdAt: z.date(),
+});
+
+const chatRunSchema = z.object({
+	id: z.string(),
+	sessionId: z.string(),
+	userId: z.string(),
+	status: z.enum(["running", "complete", "error"]),
+	errorCode: z.string().nullable(),
+	errorMessage: z.string().nullable(),
+	createdAt: z.date(),
+	updatedAt: z.date(),
+});
+
+const chatRunEventSchema = z.object({
+	runId: z.string(),
+	sessionId: z.string(),
+	userId: z.string().nullable(),
+	seq: z.number(),
+	type: z.enum(["content", "tool_call", "tool_result", "done", "error"]),
+	payload: z.record(z.string(), z.unknown()),
+	createdAt: z.date(),
+});
+
+const chatShapeOptions = (path: string) => ({
+	get url() {
+		return `${getApiBase()}${path}`;
+	},
+	columnMapper: snakeCamelMapper(),
+	parser: { timestamp: parsePgTimestamp, timestamptz: parsePgTimestamp },
+});
+
+/** Backend-owned chat rows. These collections intentionally have no write hooks. */
+export const chatSessionsCollection = createCollection(
+	electricCollectionOptions({
+		id: "chat_sessions",
+		schema: chatSessionSchema,
+		getKey: (row) => row.id,
+		shapeOptions: chatShapeOptions("/api/chat/sessions"),
+	}),
+);
+
+export const chatMessagesCollection = createCollection(
+	electricCollectionOptions({
+		id: "chat_messages",
+		schema: chatMessageSchema,
+		getKey: (row) => row.id,
+		shapeOptions: chatShapeOptions("/api/chat/messages"),
+	}),
+);
+
+export const chatRunsCollection = createCollection(
+	electricCollectionOptions({
+		id: "chat_runs",
+		schema: chatRunSchema,
+		getKey: (row) => row.id,
+		shapeOptions: chatShapeOptions("/api/chat/runs"),
+	}),
+);
+
+/** Events are session-scoped so callers cannot accidentally subscribe globally. */
+export const createChatRunEventsCollection = (sessionId: string) =>
+	createCollection(
+		electricCollectionOptions({
+			id: `chat_run_events:${sessionId}`,
+			schema: chatRunEventSchema,
+			getKey: (row) => `${row.runId}:${row.seq}`,
+			shapeOptions: chatShapeOptions(
+				`/api/chat/events?sessionId=${encodeURIComponent(sessionId)}`,
+			),
+		}),
+	);
+
+export type ChatSession = z.infer<typeof chatSessionSchema>;
+export type ChatMessage = z.infer<typeof chatMessageSchema>;
+export type ChatRun = z.infer<typeof chatRunSchema>;
+export type ChatRunEvent = z.infer<typeof chatRunEventSchema>;

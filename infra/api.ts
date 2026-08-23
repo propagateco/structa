@@ -1,4 +1,4 @@
-import { domain, Stage, Domain, dnsAdapter } from './dns';
+import { domain, IS_DEPLOYED_STAGE, Stage, Domain, dnsAdapter } from './dns';
 import { Database } from './database';
 import { bucket, optimisedBucket, bucketRegion, optimisedBucketRegion } from './storage';
 import { cdn } from './cloudfront';
@@ -28,6 +28,7 @@ const api = new sst.aws.Function('Api', {
         secret.ExpoProjectId,
         secret.ExpoOwner,
         secret.BetterAuthSecret,
+        secret.OpenRouterApiKey,
     ],
     handler: 'packages/backend/src/api/api.handler',
     timeout: '2 minutes',
@@ -41,6 +42,7 @@ const api = new sst.aws.Function('Api', {
         ENCRYPTION_KEY: secret.EncryptionKey.value,
         NODE_ENV: $dev ? 'development' : 'production',
         BETTER_AUTH_SECRET: secret.BetterAuthSecret.value,
+        OPENROUTER_API_KEY: secret.OpenRouterApiKey.value,
         // Pin S3Client region to each bucket's actual region so presigned
         // URLs are signed against the correct regional endpoint. Without
         // this, the SDK uses the Lambda's AWS_REGION (eu-west-2) which
@@ -54,8 +56,10 @@ export const apiRouter = new sst.aws.Router('ApiRouter', {
     routes: {
         '/*': api.url,
     },
-    domain: {
-        name: 'api.' + domain,
-        dns: dnsAdapter,
-    },
+    domain: IS_DEPLOYED_STAGE
+        ? {
+              name: 'api.' + domain,
+              dns: dnsAdapter,
+          }
+        : undefined,
 });

@@ -59,7 +59,10 @@ function AuthLayout() {
 		return <Outlet />;
 	}
 
-	const segments = pathname.split("/").filter(Boolean);
+	const isConversationRoute = /^\/app\/chat\/[^/]+$/.test(pathname);
+	const segments = isConversationRoute
+		? ["app", "chat"]
+		: pathname.split("/").filter(Boolean);
 	const crumbs = segments.map((segment, index) => {
 		const path = `/${segments.slice(0, index + 1).join("/")}`;
 		const title =
@@ -70,7 +73,7 @@ function AuthLayout() {
 						.replace(/\b\w/g, (letter) => letter.toUpperCase());
 		return { title, path };
 	});
-	const currentTitle = crumbs.at(-1)?.title;
+	const currentTitle = isConversationRoute ? undefined : crumbs.at(-1)?.title;
 
 	// Show loading screen while Electric syncs
 	if (isLoading) {
@@ -82,7 +85,8 @@ function AuthLayout() {
 	const rawUser = user ?? authUser;
 	const displayUser: SidebarUser = {
 		...rawUser,
-		image: getImageUrl(rawUser.image, "?width=400&height=400&format=webp") ?? null,
+		image:
+			getImageUrl(rawUser.image, "?width=400&height=400&format=webp") ?? null,
 	};
 
 	return (

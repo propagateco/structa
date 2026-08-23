@@ -23,24 +23,26 @@ export default $config({
                     region: 'eu-west-2',
                 },
                 neon: '0.13.0',
-                cloudflare: '6.15.0',
+                ...(input?.stage === 'dev' || input?.stage === 'production'
+                    ? { cloudflare: '6.15.0' }
+                    : {}),
             },
         };
     },
     async run() {
-        const dns = await import('./infra/dns');
         await import('./infra/github');
-        await import('./infra/web');
-        await import('./infra/api');
+        const web = await import('./infra/web');
+        const api = await import('./infra/api');
         await import('./infra/database');
         await import('./infra/sync');
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
-        await import('./infra/email');
-        await import('./infra/sns');
+		await import('./infra/email');
+		await import('./infra/dev');
+		await import('./infra/sns');
         return {
-            Api: dns.Domain.properties.api,
-            Web: dns.Domain.properties.web,
+            Api: api.apiRouter.url,
+            Web: web.app.url,
             CloudfrontUrl: cloudfront.imageDistribution.url,
         };
     },
