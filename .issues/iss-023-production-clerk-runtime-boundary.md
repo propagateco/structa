@@ -45,3 +45,10 @@ the active conversation's event fold.
 - **Migration:** replace `/app` with Sessions Rail immediately, remove the prototype route,
   floating variant switcher, and mock runtime after the production adapter lands. There is no
   permanent mock/demo route in the production product.
+
+## Revisit note
+
+The implementation exposed Postgres/Electric SQL replication latency for token streaming. The
+durable transport choice is being revisited by [Map: Durable Automation Platform](iss-025-durable-automation-platform-map.md),
+starting with Electric Durable Streams' TanStack AI transport. The assistant-ui presentation and
+conversation metadata boundaries remain valid; Electric event folding is not treated as immutable.
