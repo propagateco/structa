@@ -55,10 +55,19 @@ export const Header = () => {
                 </div>
 
                 <div className="flex flex-row items-center justify-center gap-6 md:gap-8">
-                    <PageLink to="/guides" variant="default">
+                    <PageLink
+                        to="/guides"
+                        variant="default"
+                        className="!text-md sm:!text-md hover:text-accent dark:hover:text-accent"
+                    >
                         guides
                     </PageLink>
-                    <PageLink to="/app" variant="primary" arrowForward>
+                    <PageLink
+                        to="/app"
+                        variant="primary"
+                        arrowForward
+                        className="!text-md sm:!text-md hover:text-accent dark:hover:text-accent"
+                    >
                         start
                     </PageLink>
                     {user && (
