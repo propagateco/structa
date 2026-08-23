@@ -37,8 +37,9 @@ export default $config({
         await import('./infra/sync');
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
-        await import('./infra/email');
-        await import('./infra/sns');
+		await import('./infra/email');
+		await import('./infra/dev');
+		await import('./infra/sns');
         return {
             Api: api.apiRouter.url,
             Web: web.app.url,

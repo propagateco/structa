@@ -92,7 +92,7 @@ When using Chrome DevTools MCP to test authenticated routes:
 
 | Step | Action | Command |
 |------|--------|---------|
-| 1 | Navigate to login | `navigate_page({ url: "http://localhost:3000/login" })` |
+| 1 | Navigate to login | `navigate_page({ url: "https://localhost:3010/login" })` |
 | 2 | Get page snapshot | `take_snapshot()` to find email input UID |
 | 3 | Enter email | `fill({ uid: "<email-input-uid>", value: "test@example.com" })` |
 | 4 | Submit form | `click({ uid: "<continue-button-uid>" })` |
@@ -117,7 +117,7 @@ The same login flow is automated end-to-end by [`scripts/agent-login.sh`](../../
 ./scripts/agent-login.sh                       # authenticates, then exits on /app
 
 # Subsequent UI-agent work reuses the same profile (already authenticated):
-agent-browser --profile ~/.structa-agent open http://localhost:3000/app
+agent-browser --profile ~/.structa-agent open https://localhost:3010/app
 agent-browser --profile ~/.structa-agent snapshot -i
 ```
 
@@ -125,7 +125,7 @@ Manual equivalent (what the script does internally):
 
 | Step | Action | Command |
 |------|--------|---------|
-| 1 | Open login (persisted profile) | `agent-browser --profile ~/.structa-agent open http://localhost:3000/app` |
+| 1 | Open login (persisted profile) | `agent-browser --profile ~/.structa-agent open https://localhost:3010/app` |
 | 2 | (If bounced to /login) snapshot | `agent-browser --profile ~/.structa-agent snapshot -i` |
 | 3 | Enter email | `agent-browser --profile ~/.structa-agent find placeholder "Enter your email" fill "agent@structa.dev"` |
 | 4 | Click continue | `agent-browser --profile ~/.structa-agent find role button click --name "Continue with Email"` |
