@@ -1,8 +1,13 @@
+import {
+	type ChatModel,
+	chatMessage,
+	chatRun,
+	chatRunEvent,
+} from "@structa/core/conversation";
+import { db } from "@structa/core/drizzle";
 import { chat } from "@tanstack/ai";
 import { openRouterText } from "@tanstack/ai-openrouter";
-import { asc, and, eq } from "drizzle-orm";
-import { ChatModel, chatMessage, chatRun, chatRunEvent } from "@structa/core/conversation";
-import { db } from "@structa/core/drizzle";
+import { and, asc, eq } from "drizzle-orm";
 
 export type ClerkRunInput = ChatModel.RunInputType & {
 	userId: string;
@@ -74,22 +79,48 @@ export const clerkRuntime: ClerkRuntime = {
 
 		let sequence = 0;
 		let responseText = "";
-		const appendEvent = async (type: string, payload: Record<string, unknown>) => {
+		const appendEvent = async (
+			type: string,
+			payload: Record<string, unknown>,
+		) => {
 			sequence += 1;
 			await db.insert(chatRunEvent).values({
 				runId: input.runId,
 				sessionId: input.conversationId,
+				userId: input.userId,
 				seq: sequence,
 				type,
 				payload,
 			});
 		};
 
+		// Batch content tokens to reduce DB writes and Electric sync overhead.
+		// Electric's long-polling has multi-second replication latency; writing
+		// one event per token would flood the WAL and starve the client of
+		// updates. Accumulating for 500ms gives the user visible progress
+		// while keeping the write count manageable.
+		let batchBuffer = "";
+		let batchTimer: ReturnType<typeof setTimeout> | null = null;
+		const flushBatch = async () => {
+			if (batchTimer) {
+				clearTimeout(batchTimer);
+				batchTimer = null;
+			}
+			if (batchBuffer) {
+				const chunk = batchBuffer;
+				batchBuffer = "";
+				await appendEvent("content", { text: chunk });
+			}
+		};
+		const scheduleFlush = () => {
+			if (!batchTimer) batchTimer = setTimeout(() => void flushBatch(), 500);
+		};
+
 		try {
 			const stream = chat({
 				adapter: openRouterText(
 					(process.env.OPENROUTER_MODEL ??
-						"mistralai/ministral-3b") as Parameters<
+						"deepseek/deepseek-v4-flash-0731") as Parameters<
 						typeof openRouterText
 					>[0],
 				),
@@ -105,14 +136,27 @@ export const clerkRuntime: ClerkRuntime = {
 			for await (const chunk of stream) {
 				if (chunk.type === "TEXT_MESSAGE_CONTENT") {
 					responseText += chunk.delta;
-					await appendEvent("content", { text: chunk.delta });
-				} else if (chunk.type === "TOOL_CALL_START" || chunk.type === "TOOL_CALL_END") {
-					await appendEvent("tool_call", chunk as unknown as Record<string, unknown>);
+					batchBuffer += chunk.delta;
+					scheduleFlush();
+				} else if (
+					chunk.type === "TOOL_CALL_START" ||
+					chunk.type === "TOOL_CALL_END"
+				) {
+					await flushBatch();
+					await appendEvent(
+						"tool_call",
+						chunk as unknown as Record<string, unknown>,
+					);
 				} else if (chunk.type === "TOOL_CALL_RESULT") {
-					await appendEvent("tool_result", chunk as unknown as Record<string, unknown>);
+					await flushBatch();
+					await appendEvent(
+						"tool_result",
+						chunk as unknown as Record<string, unknown>,
+					);
 				}
 			}
 
+			await flushBatch();
 			await appendEvent("done", {});
 			if (responseText) {
 				await db.insert(chatMessage).values({
@@ -129,7 +173,9 @@ export const clerkRuntime: ClerkRuntime = {
 				.set({ status: "complete", updatedAt: new Date() })
 				.where(eq(chatRun.id, input.runId));
 		} catch (error) {
-			const message = error instanceof Error ? error.message : "Clerk run failed";
+			await flushBatch();
+			const message =
+				error instanceof Error ? error.message : "Clerk run failed";
 			await appendEvent("error", { message });
 			await db
 				.update(chatRun)

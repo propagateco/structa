@@ -1,6 +1,14 @@
-import type { AppendMessage, ExternalStoreAdapter, ThreadSuggestion } from "@assistant-ui/react";
+import type {
+	AppendMessage,
+	ExternalStoreAdapter,
+	ThreadSuggestion,
+} from "@assistant-ui/react";
 import type { ChatMessage, ChatRun, ChatRunEvent } from "@/lib/collections";
-import { convertProductionMessage, foldProductionMessages, type ProductionMessage } from "./fold";
+import {
+	convertProductionMessage,
+	foldProductionMessages,
+	type ProductionMessage,
+} from "./fold";
 
 export type ProductionAdapterInput = {
 	sessionId: string | null;
@@ -61,12 +69,17 @@ export function buildProductionAdapter(
 	input: ProductionAdapterInput,
 	send: SendChatRun,
 ): ExternalStoreAdapter<ProductionMessage> {
-	const messages = foldProductionMessages(input.messages, input.runs, input.events);
+	const messages = foldProductionMessages(
+		input.messages,
+		input.runs,
+		input.events,
+	);
 	const running = input.runs.some((run) => run.status === "running");
 	const post = async (content: string, parentId?: string) => {
 		if (!content.trim()) return;
 		const messageId = parentId ?? crypto.randomUUID();
 		const sessionId = input.sessionId ?? crypto.randomUUID();
+		if (!input.sessionId) input.onSessionChange(sessionId);
 		await send({
 			sessionId,
 			messageId,
@@ -74,7 +87,6 @@ export function buildProductionAdapter(
 			content,
 			projectId: input.projectId,
 		});
-		if (!input.sessionId) input.onSessionChange(sessionId);
 	};
 
 	return {
@@ -84,8 +96,13 @@ export function buildProductionAdapter(
 		isSendDisabled: running,
 		onNew: async (message) => post(extractText(message.content)),
 		onReload: async (parentId) => {
-			const original = input.messages.find((message) => message.id === parentId);
-			if (!original) throw new Error(`Cannot retry chat: message '${parentId}' was not found.`);
+			const original = input.messages.find(
+				(message) => message.id === parentId,
+			);
+			if (!original)
+				throw new Error(
+					`Cannot retry chat: message '${parentId}' was not found.`,
+				);
 			await post(original.content, original.id);
 		},
 		onRefetchThread: async () => undefined,
@@ -93,7 +110,10 @@ export function buildProductionAdapter(
 			threadList: {
 				threadId: input.sessionId ?? undefined,
 				isLoading: false,
-				threads: input.sessions.map((session) => ({ ...session, status: "regular" as const })),
+				threads: input.sessions.map((session) => ({
+					...session,
+					status: "regular" as const,
+				})),
 				onSwitchToThread: (id) => input.onSessionChange(id),
 				onSwitchToNewThread: () => input.onSessionChange(null),
 			},

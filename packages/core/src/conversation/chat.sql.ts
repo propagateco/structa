@@ -4,9 +4,9 @@ import {
 	jsonb,
 	pgEnum,
 	pgTable,
+	primaryKey,
 	text,
 	timestamp,
-	primaryKey,
 } from "drizzle-orm/pg-core";
 import { conversation } from "./conversation.sql";
 
@@ -16,7 +16,10 @@ export const chatRunStatus = pgEnum("chat_run_status", [
 	"error",
 ]);
 
-export const chatMessageRole = pgEnum("chat_message_role", ["user", "assistant"]);
+export const chatMessageRole = pgEnum("chat_message_role", [
+	"user",
+	"assistant",
+]);
 
 export const chatMessage = pgTable(
 	"chat_messages",
@@ -54,7 +57,9 @@ export const chatRun = pgTable(
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 		updatedAt: timestamp("updated_at").defaultNow().notNull(),
 	},
-	(table) => [index("chat_runs_session_status_idx").on(table.sessionId, table.status)],
+	(table) => [
+		index("chat_runs_session_status_idx").on(table.sessionId, table.status),
+	],
 );
 
 export const chatRunEvent = pgTable(
@@ -66,6 +71,7 @@ export const chatRunEvent = pgTable(
 		sessionId: text("session_id")
 			.notNull()
 			.references(() => conversation.id, { onDelete: "cascade" }),
+		userId: text("user_id"),
 		seq: integer("seq").notNull(),
 		type: text("type").notNull(),
 		payload: jsonb("payload").$type<Record<string, unknown>>().notNull(),
@@ -74,5 +80,6 @@ export const chatRunEvent = pgTable(
 	(table) => [
 		primaryKey({ columns: [table.runId, table.seq] }),
 		index("chat_run_events_session_seq_idx").on(table.sessionId, table.seq),
+		index("chat_run_events_user_idx").on(table.userId),
 	],
 );

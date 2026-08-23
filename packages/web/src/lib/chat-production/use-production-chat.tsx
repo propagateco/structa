@@ -1,7 +1,7 @@
 "use client";
 
 import { useExternalStoreRuntime } from "@assistant-ui/react";
-import { eq, useLiveQuery } from "@tanstack/react-db";
+import { useLiveQuery } from "@tanstack/react-db";
 import { useMemo } from "react";
 import { useProjectSwitcher } from "@/hooks/use-project-switcher";
 import {
@@ -18,29 +18,18 @@ export function useProductionChat(
 ) {
 	const { activeProject } = useProjectSwitcher();
 	const sessionsQuery = useLiveQuery((q) =>
-		q.from({ session: chatSessionsCollection }).orderBy(
-			({ session }) => session.updatedAt,
-			"desc",
-		),
+		q.from({ session: chatSessionsCollection }),
 	);
+	// Global collections: all user's messages, runs, and sessions sync once
+	// and stay in memory. Switching conversations is instant because the
+	// data is already loaded — no new Electric shape subscriptions needed.
 	const messagesQuery = useLiveQuery((q) =>
-		sessionId
-			? q
-					.from({ message: chatMessagesCollection })
-					.where(({ message }) => eq(message.sessionId, sessionId))
-					.orderBy(({ message }) => message.createdAt, "asc")
-			: null,
-		[sessionId],
+		q.from({ message: chatMessagesCollection }),
 	);
-	const runsQuery = useLiveQuery((q) =>
-		sessionId
-			? q
-					.from({ run: chatRunsCollection })
-					.where(({ run }) => eq(run.sessionId, sessionId))
-					.orderBy(({ run }) => run.createdAt, "asc")
-			: null,
-		[sessionId],
-	);
+	const runsQuery = useLiveQuery((q) => q.from({ run: chatRunsCollection }));
+	// Events remain session-scoped: they're only needed for the active
+	// conversation's in-progress runs. Completed runs have persisted
+	// assistant message rows that the fold uses as a fallback.
 	const eventsCollection = useMemo(
 		() => (sessionId ? createChatRunEventsCollection(sessionId) : null),
 		[sessionId],
@@ -50,9 +39,31 @@ export function useProductionChat(
 		[eventsCollection],
 	);
 
-	const sessions = sessionsQuery.data ?? [];
-	const messages = messagesQuery.data ?? [];
-	const runs = runsQuery.data ?? [];
+	const sessions = useMemo(
+		() =>
+			(sessionsQuery.data ?? [])
+				.filter(
+					(session) => !activeProject || session.projectId === activeProject.id,
+				)
+				.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()),
+		[activeProject, sessionsQuery.data],
+	);
+	const messages = useMemo(
+		() =>
+			sessionId
+				? (messagesQuery.data ?? [])
+						.filter((message) => message.sessionId === sessionId)
+						.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+				: [],
+		[messagesQuery.data, sessionId],
+	);
+	const runs = useMemo(
+		() =>
+			sessionId
+				? (runsQuery.data ?? []).filter((run) => run.sessionId === sessionId)
+				: [],
+		[runsQuery.data, sessionId],
+	);
 	const events = eventsQuery.data ?? [];
 	const adapter = useMemo(
 		() =>
@@ -64,8 +75,8 @@ export function useProductionChat(
 					runs,
 					events,
 					onSessionChange: (nextSessionId) => {
-					if (nextSessionId) onSessionChange(nextSessionId);
-				},
+						if (nextSessionId) onSessionChange(nextSessionId);
+					},
 					projectId: activeProject?.id ?? null,
 				},
 				postChatRun,

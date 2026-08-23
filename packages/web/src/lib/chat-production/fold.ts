@@ -7,7 +7,12 @@ import type { ChatMessage, ChatRun, ChatRunEvent } from "@/lib/collections";
 
 export type ProductionMessage =
 	| { kind: "user"; row: ChatMessage }
-	| { kind: "assistant"; run: ChatRun; events: ChatRunEvent[] };
+	| {
+			kind: "assistant";
+			run: ChatRun;
+			row?: ChatMessage;
+			events: ChatRunEvent[];
+	  };
 
 const text = (payload: Record<string, unknown>): string =>
 	typeof payload.content === "string"
@@ -22,16 +27,25 @@ export function foldProductionMessages(
 	events: ChatRunEvent[],
 ): ProductionMessage[] {
 	const runEvents = new Map<string, ChatRunEvent[]>();
+	const assistantRows = new Map<string, ChatMessage>();
 	for (const event of events) {
 		const current = runEvents.get(event.runId) ?? [];
 		current.push(event);
 		runEvents.set(event.runId, current);
 	}
+	for (const message of messages) {
+		if (message.role === "assistant" && message.runId) {
+			assistantRows.set(message.runId, message);
+		}
+	}
 	return [
-		...messages.filter((message) => message.role === "user").map((row) => ({ kind: "user" as const, row })),
+		...messages
+			.filter((message) => message.role === "user")
+			.map((row) => ({ kind: "user" as const, row })),
 		...runs.map((run) => ({
 			kind: "assistant" as const,
 			run,
+			row: assistantRows.get(run.id),
 			events: (runEvents.get(run.id) ?? []).sort((a, b) => a.seq - b.seq),
 		})),
 	].sort((a, b) => {
@@ -62,7 +76,7 @@ export function convertProductionMessage(
 				args?: ToolCallMessagePart["args"];
 				result?: unknown;
 				isError?: boolean;
-			}
+		  }
 	> = [];
 	for (const event of message.events) {
 		if (event.type === "content") {
@@ -73,22 +87,32 @@ export function convertProductionMessage(
 		} else if (event.type === "tool_call") {
 			parts.push({
 				type: "tool-call",
-				toolCallId: typeof event.payload.toolCallId === "string" ? event.payload.toolCallId : undefined,
-				toolName: typeof event.payload.name === "string" ? event.payload.name : "Tool",
+				toolCallId:
+					typeof event.payload.toolCallId === "string"
+						? event.payload.toolCallId
+						: undefined,
+				toolName:
+					typeof event.payload.name === "string" ? event.payload.name : "Tool",
 				args: event.payload.input as ToolCallMessagePart["args"],
 			});
 		} else if (event.type === "tool_result") {
 			const id = event.payload.toolCallId;
-			const call = parts.find((part) => part.type === "tool-call" && part.toolCallId === id);
+			const call = parts.find(
+				(part) => part.type === "tool-call" && part.toolCallId === id,
+			);
 			if (call?.type === "tool-call") {
 				call.result = event.payload.output;
 				if (typeof event.payload.error === "string") call.isError = true;
 			}
 		}
 	}
+	if (parts.length === 0 && message.row?.content) {
+		parts.push({ type: "text", text: message.row.content });
+	}
 
 	let status: MessageStatus = { type: "running" };
-	if (message.run.status === "complete") status = { type: "complete", reason: "stop" };
+	if (message.run.status === "complete")
+		status = { type: "complete", reason: "stop" };
 	if (message.run.status === "error") {
 		status = {
 			type: "incomplete",

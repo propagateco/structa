@@ -2,10 +2,11 @@ import { zValidator } from "@hono/zod-validator";
 import { ChatModel, ConversationService } from "@structa/core/conversation";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { createChatTitle } from "../../chat/chat-title";
 import {
-	clerkRuntime,
 	ClerkRunConflictError,
 	ClerkRuntimeUnavailableError,
+	clerkRuntime,
 } from "../../chat/clerk-runtime";
 import { authenticatedMiddleware } from "../middleware";
 
@@ -31,6 +32,14 @@ export const ChatRoute = new Hono()
 					title: "New Chat",
 				},
 			);
+		}
+		if (conversation.title === "New Chat") {
+			conversation =
+				(await ConversationService.renameForUser(
+					c.var.user.id,
+					conversation.id,
+					{ title: createChatTitle(input.content) },
+				)) ?? conversation;
 		}
 
 		try {

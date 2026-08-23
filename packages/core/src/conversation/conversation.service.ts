@@ -62,7 +62,7 @@ export async function listForUser(userId: string, input: ListInputType) {
 	const last = items[items.length - 1];
 	return {
 		items,
-		 nextCursor:
+		nextCursor:
 			hasMore && last
 				? encodeCursor({
 						activityAt: (last.lastMessageAt ?? last.createdAt).toISOString(),

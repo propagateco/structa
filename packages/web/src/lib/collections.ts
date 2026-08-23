@@ -147,6 +147,7 @@ const chatRunSchema = z.object({
 const chatRunEventSchema = z.object({
 	runId: z.string(),
 	sessionId: z.string(),
+	userId: z.string().nullable(),
 	seq: z.number(),
 	type: z.enum(["content", "tool_call", "tool_result", "done", "error"]),
 	payload: z.record(z.string(), z.unknown()),

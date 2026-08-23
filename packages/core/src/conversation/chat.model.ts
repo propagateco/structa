@@ -6,9 +6,9 @@ export const RunInput = z
 	.object({
 		conversationId: z.string().min(1),
 		projectId: z.string().min(1).nullable().optional(),
-	messageId: z.string().min(1),
-	runId: z.string().min(1),
-	content: z.string().trim().min(1).max(20_000),
+		messageId: z.string().min(1),
+		runId: z.string().min(1),
+		content: z.string().trim().min(1).max(20_000),
 	})
 	.strict();
 
