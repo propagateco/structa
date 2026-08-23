@@ -13,7 +13,7 @@ export function ProductionChatWorkspace({ sessionId }: { sessionId: string | nul
 	});
 
 	return (
-		<AssistantRuntimeProvider runtime={runtime}>
+		<AssistantRuntimeProvider key={sessionId ?? "new"} runtime={runtime}>
 			<div className="h-[calc(100svh-3.5rem)] overflow-hidden">
 				<main className="h-full min-w-0">
 					<Thread />

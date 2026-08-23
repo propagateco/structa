@@ -41,6 +41,7 @@ import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings
 import { Route as AuthAppPrototypeChatRouteImport } from './routes/_auth/app/prototype-chat'
 import { Route as AuthAppLabRouteImport } from './routes/_auth/app/lab'
 import { Route as AuthOnboardingOnboardingIndexRouteImport } from './routes/_auth/_onboarding/onboarding/index'
+import { Route as ApiChatConversationsConversationIdRouteImport } from './routes/api/chat/conversations/$conversationId'
 import { Route as AuthAppChatConversationIdRouteImport } from './routes/_auth/app/chat/$conversationId'
 import { Route as AuthSettingsSettingsNotificationsRouteImport } from './routes/_auth/_settings/settings/notifications'
 import { Route as AuthSettingsSettingsBillingRouteImport } from './routes/_auth/_settings/settings/billing'
@@ -203,6 +204,12 @@ const AuthOnboardingOnboardingIndexRoute =
     path: '/onboarding/',
     getParentRoute: () => AuthOnboardingRoute,
   } as any)
+const ApiChatConversationsConversationIdRoute =
+  ApiChatConversationsConversationIdRouteImport.update({
+    id: '/api/chat/conversations/$conversationId',
+    path: '/api/chat/conversations/$conversationId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthAppChatConversationIdRoute =
   AuthAppChatConversationIdRouteImport.update({
     id: '/app/chat/$conversationId',
@@ -266,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/settings/billing': typeof AuthSettingsSettingsBillingRoute
   '/settings/notifications': typeof AuthSettingsSettingsNotificationsRoute
   '/app/chat/$conversationId': typeof AuthAppChatConversationIdRoute
+  '/api/chat/conversations/$conversationId': typeof ApiChatConversationsConversationIdRoute
   '/onboarding/': typeof AuthOnboardingOnboardingIndexRoute
 }
 export interface FileRoutesByTo {
@@ -300,6 +308,7 @@ export interface FileRoutesByTo {
   '/settings/billing': typeof AuthSettingsSettingsBillingRoute
   '/settings/notifications': typeof AuthSettingsSettingsNotificationsRoute
   '/app/chat/$conversationId': typeof AuthAppChatConversationIdRoute
+  '/api/chat/conversations/$conversationId': typeof ApiChatConversationsConversationIdRoute
   '/onboarding': typeof AuthOnboardingOnboardingIndexRoute
 }
 export interface FileRoutesById {
@@ -340,6 +349,7 @@ export interface FileRoutesById {
   '/_auth/_settings/settings/billing': typeof AuthSettingsSettingsBillingRoute
   '/_auth/_settings/settings/notifications': typeof AuthSettingsSettingsNotificationsRoute
   '/_auth/app/chat/$conversationId': typeof AuthAppChatConversationIdRoute
+  '/api/chat/conversations/$conversationId': typeof ApiChatConversationsConversationIdRoute
   '/_auth/_onboarding/onboarding/': typeof AuthOnboardingOnboardingIndexRoute
 }
 export interface FileRouteTypes {
@@ -376,6 +386,7 @@ export interface FileRouteTypes {
     | '/settings/billing'
     | '/settings/notifications'
     | '/app/chat/$conversationId'
+    | '/api/chat/conversations/$conversationId'
     | '/onboarding/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -410,6 +421,7 @@ export interface FileRouteTypes {
     | '/settings/billing'
     | '/settings/notifications'
     | '/app/chat/$conversationId'
+    | '/api/chat/conversations/$conversationId'
     | '/onboarding'
   id:
     | '__root__'
@@ -449,6 +461,7 @@ export interface FileRouteTypes {
     | '/_auth/_settings/settings/billing'
     | '/_auth/_settings/settings/notifications'
     | '/_auth/app/chat/$conversationId'
+    | '/api/chat/conversations/$conversationId'
     | '/_auth/_onboarding/onboarding/'
   fileRoutesById: FileRoutesById
 }
@@ -468,6 +481,7 @@ export interface RootRouteChildren {
   ApiChatRunsRoute: typeof ApiChatRunsRoute
   ApiChatSessionsRoute: typeof ApiChatSessionsRoute
   ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
+  ApiChatConversationsConversationIdRoute: typeof ApiChatConversationsConversationIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -696,6 +710,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthOnboardingOnboardingIndexRouteImport
       parentRoute: typeof AuthOnboardingRoute
     }
+    '/api/chat/conversations/$conversationId': {
+      id: '/api/chat/conversations/$conversationId'
+      path: '/api/chat/conversations/$conversationId'
+      fullPath: '/api/chat/conversations/$conversationId'
+      preLoaderRoute: typeof ApiChatConversationsConversationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/app/chat/$conversationId': {
       id: '/_auth/app/chat/$conversationId'
       path: '/app/chat/$conversationId'
@@ -841,6 +862,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRunsRoute: ApiChatRunsRoute,
   ApiChatSessionsRoute: ApiChatSessionsRoute,
   ApiTrpcSplatRoute: ApiTrpcSplatRoute,
+  ApiChatConversationsConversationIdRoute:
+    ApiChatConversationsConversationIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

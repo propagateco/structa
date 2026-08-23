@@ -7,5 +7,10 @@ export const Route = createFileRoute("/_auth/app/chat/$conversationId")({
 
 function ConversationComponent() {
 	const { conversationId } = Route.useParams();
-	return <ProductionChatWorkspace sessionId={conversationId === "new" ? null : conversationId} />;
+	return (
+		<ProductionChatWorkspace
+			key={conversationId}
+			sessionId={conversationId === "new" ? null : conversationId}
+		/>
+	);
 }

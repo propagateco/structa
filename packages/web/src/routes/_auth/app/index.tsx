@@ -6,5 +6,5 @@ export const Route = createFileRoute("/_auth/app/")({
 });
 
 function DashboardComponent() {
-	return <ProductionChatWorkspace sessionId={null} />;
+	return <ProductionChatWorkspace key="new" sessionId={null} />;
 }
