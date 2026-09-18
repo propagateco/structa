@@ -42,11 +42,14 @@ see [overview.md](overview.md).
 |------------|---------|---------------|
 | **TanStack Query** | Async state management & caching | [tanstack.com/query/latest](https://tanstack.com/query/latest) |
 | **TanStack DB** | Live queries & database collections | [tanstack.com/db/latest/docs](https://tanstack.com/db/latest/docs) |
+| **TanStack Query Collection** | API-backed normalized collections and optimistic mutations | [Query Collection](https://tanstack.com/db/latest/docs/collections/query-collection) |
 | **Drizzle ORM** | Database interactions & schema definitions | [orm.drizzle.team/docs](https://orm.drizzle.team/docs) |
 | **Zod** | Schema validation & type inference | [zod.dev](https://zod.dev) |
-| **Electric SQL** | Local-first PostgreSQL sync | [electric-sql.com/docs/](https://electric-sql.com/docs/) |
 | **Yjs** | CRDT documents for floor plans | [docs.yjs.dev](https://docs.yjs.dev) |
-| **Durable Streams** | Document storage & real-time broadcast | [guides](https://electric-sql.com/guides/2025/12/09/announcing-durable-streams) • [Source](https://github.com/durable-streams/durable-streams) |
+| **Cloudflare Durable Objects** | Per-conversation/job durable state and real-time coordination | [Durable Objects](https://developers.cloudflare.com/durable-objects/) |
+| **Cloudflare Workflows** | Durable multi-step jobs, retries, sleeps, and approvals | [Workflows](https://developers.cloudflare.com/workflows/) |
+| **Cloudflare R2** | Private document, image, and generated artifact storage | [R2](https://developers.cloudflare.com/r2/) |
+| **Cloudflare AI Search** | Tenant-filtered document indexing and retrieval | [AI Search](https://developers.cloudflare.com/ai-search/) |
 
 ---
 
@@ -55,6 +58,7 @@ see [overview.md](overview.md).
 | Technology | Purpose | Documentation |
 |------------|---------|---------------|
 | **SST (Serverless Stack)** | AWS infrastructure deployment | [sst.dev/docs](https://sst.dev/docs) |
+| **Cloudflare Workers** | Edge API, Durable Object routing, jobs, storage and retrieval adapters | [Workers](https://developers.cloudflare.com/workers/) |
 | **Better Auth** | Authentication (Email OTP + Google OAuth) | [www.better-auth.com](https://www.better-auth.com) |
 | **TanStack AI** | AI orchestration (The Clerk) | [tanstack.com/ai/latest/docs](https://tanstack.com/ai/latest/docs) |
 | **Nitro** | Serverless framework for AWS Lambda | [nitro.unjs.io](https://nitro.unjs.io) |
@@ -69,6 +73,9 @@ see [overview.md](overview.md).
 | **Drizzle ORM** | Database interactions & schema definitions | [orm.drizzle.team/docs](https://orm.drizzle.team/docs) |
 
 > **Note:** Neon is a serverless PostgreSQL provider. Drizzle ORM is used for database interactions.
+
+> **Migration note:** Electric Sync and S3 remain in the current implementation while they are replaced
+> phase-by-phase. See [STR-005](../../../.plan/STR-005-cloudflare-platform-migration.md).
 
 ---
 

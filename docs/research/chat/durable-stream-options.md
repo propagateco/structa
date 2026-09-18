@@ -1,5 +1,10 @@
 # Durable Stream Options for Chat Runs
 
+> **Historical decision:** this research records the original Postgres + Electric Sync event-fold
+> choice. It is superseded by [STR-005: Cloudflare Platform Migration](../../../.plan/STR-005-cloudflare-platform-migration.md),
+> which moves chat runtime state and streaming to Cloudflare Durable Objects while retaining Neon
+> materializations for global queries and portability.
+
 ## Overview
 
 This documents the concrete options for "durable stream" chat output in Structa's stack,

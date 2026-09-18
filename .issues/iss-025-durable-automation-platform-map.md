@@ -1,7 +1,7 @@
 # Map: Durable Automation Platform
 
 Type: wayfinder-map
-Status: open
+Status: resolved
 
 ## Destination
 
@@ -38,6 +38,30 @@ Structa's domain logic to one model, cloud, or agent framework.
 - [Cloudflare durable execution fit](iss-028-cloudflare-durable-execution-fit.md) — Cloudflare offers
   the strongest integrated managed runtime, but its lock-in conflicts with the current AWS-first,
   portable direction.
+- [Portable agent and domain boundary](iss-029-portable-agent-domain-boundary.md) — expose both quick
+  tools and durable jobs through one versioned, audited capability boundary independent of chat or
+  runtime vendors.
+- [Durable runtime and session architecture](iss-030-durable-runtime-and-session-architecture.md) —
+  choose the portable near-term stream/session design and long-term execution runtime while keeping
+  migration and exit seams explicit.
+- [External API and MCP trust boundary](iss-031-external-api-mcp-trust-boundary.md) — define how
+  external clients and agents invoke the shared capability layer with scoped identity, approvals,
+  idempotency, and auditability.
+- [Self-host Durable Streams on AWS/SST](iss-036-self-host-durable-streams-on-aws.md) — operate the
+  stream origin as a single-writer persistent ECS/Fargate service with EFS and authenticated proxies.
+
+## Resolution
+
+Structa's pre-revenue target uses Neon as the global business authority, TanStack DB Query Collections
+for API-backed normalized client state, Cloudflare Durable Objects for conversations and live job
+coordination, Workflows for durable execution, R2 for artifacts, and AI Search for tenant-filtered
+retrieval. Quick tools and durable jobs share a versioned capability boundary, and API/MCP expose
+capabilities rather than Cloudflare runtime entities. Provider-specific types remain behind Structa
+interfaces and terminal business records are materialized to Neon for portability.
+
+This supersedes the earlier self-hosted Electric Sync/Durable Streams execution direction because the
+fixed EC2/ECS/ALB/NAT operational cost is not appropriate pre-revenue. Electric and S3 are transitional
+implementation dependencies removed through STR-005.
 
 ## Not yet specified
 

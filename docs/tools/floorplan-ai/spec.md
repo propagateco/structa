@@ -1,5 +1,11 @@
 # Floor Plan Image → 3D Model Pipeline
 
+> **Architecture migration:** references in this specification to Electric SQL, Durable Streams, and
+> R2/S3 alternatives predate the selected Cloudflare platform direction. Use
+> [STR-005: Cloudflare Platform Migration](../../../.plan/STR-005-cloudflare-platform-migration.md)
+> as the current infrastructure authority: Query Collections over Neon APIs, Durable Objects/Workflows,
+> R2 artifacts, and Cloudflare AI Search. The floor-plan domain and UX requirements remain applicable.
+
 **Status:** Draft Spec
 **Model:** FloorPlanFormer (AAAI 2026)
 **Inference Runtime:** C++ (ONNX Runtime, Lambda GPU)
