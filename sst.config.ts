@@ -39,11 +39,13 @@ export default $config({
         const cloudfront = await import('./infra/cloudfront');
 		await import('./infra/email');
 		await import('./infra/dev');
+        const cloudflare = await import('./infra/cloudflare');
 		await import('./infra/sns');
         return {
             Api: api.apiRouter.url,
             Web: web.app.url,
             CloudfrontUrl: cloudfront.imageDistribution.url,
+            DataService: cloudflare.dataService.url,
         };
     },
 });

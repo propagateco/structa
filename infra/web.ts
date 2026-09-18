@@ -1,5 +1,6 @@
 import { Domain, domain, IS_DEPLOYED_STAGE, Stage, dnsAdapter } from './dns';
 import { apiRouter } from './api';
+import { dataService } from './cloudflare';
 import { Database } from './database';
 import { authEmail, notifyEmail } from './email';
 import { bucket, optimisedBucket, bucketRegion, optimisedBucketRegion } from './storage';
@@ -34,6 +35,7 @@ export const app = new sst.aws.TanStackStart('Web', {
         optimisedBucket,
         cdn,
         SyncEngine,
+        dataService,
         secret.GoogleClientId,
         secret.GoogleClientSecret,
         secret.StripeSecretKey,
@@ -51,6 +53,7 @@ export const app = new sst.aws.TanStackStart('Web', {
         // outputs cannot be baked into the SyncEngine link).
         secret.ElectricCloudApiToken,
         secret.ElectricCloudProjectId,
+        secret.DataServiceToken,
     ],
     environment: {
         ...(IS_DEPLOYED_STAGE
@@ -59,6 +62,10 @@ export const app = new sst.aws.TanStackStart('Web', {
                   PLATFORM_URL: Domain.properties.web,
               }
             : {}),
+        DATA_SERVICE_URL: dataService.url,
+        DATA_SERVICE_TOKEN: secret.DataServiceToken.value,
+        // Public Worker URL for browser WebSocket + capability-ticket calls.
+        VITE_DATA_SERVICE_URL: dataService.url,
         REACT_APP_STRIPE_PUBLISHABLE_KEY: secret.StripePublishableKey.value,
         VITE_PUBLIC_POSTHOG_KEY: secret.PosthogPublicKey.value,
         VITE_PUBLIC_POSTHOG_HOST: secret.PosthogHost.value,

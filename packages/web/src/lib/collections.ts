@@ -2,6 +2,8 @@ import { selectUserSchema } from "@core/auth/auth.sql";
 import { snakeCamelMapper } from "@electric-sql/client";
 import { electricCollectionOptions } from "@tanstack/electric-db-collection";
 import { createCollection } from "@tanstack/react-db";
+import { queryCollectionOptions } from "@tanstack/query-db-collection";
+import { queryClient } from "@/lib/query-client";
 import { trpc } from "@/lib/trpc-client";
 import { z } from "zod";
 
@@ -46,66 +48,29 @@ const getApiBase = (): string => {
 	);
 };
 
-/**
- * Users collection with Electric sync
- *
- * This collection syncs the current user's profile data via ElectricSQL.
- * Uses optimistic updates with tRPC mutations and txid-based confirmation.
- *
- * Note: URL is computed lazily via getter to avoid SSR issues with window.location
- *
- * Usage:
- * ```tsx
- * import { usersCollection } from '@/lib/collections';
- * import { useLiveQuery } from '@tanstack/react-db';
- *
- * function UserProfile() {
- *   const { data: users } = useLiveQuery((q) =>
- *     q.from({ user: usersCollection })
- *   );
- *
- *   const currentUser = users[0];
- *
- *   const updateName = (name: string) => {
- *     usersCollection.update(currentUser.id, (draft) => {
- *       draft.name = name;
- *     });
- *   };
- * }
- * ```
- */
+/** Users collection backed by the authenticated API and TanStack Query. */
 export const usersCollection = createCollection(
-	electricCollectionOptions({
+	queryCollectionOptions({
 		id: "users",
 		schema: selectUserSchema,
-		getKey: (item) => item.id,
-		shapeOptions: {
-			// Use getter to defer URL construction until sync actually starts (client-side only)
-			get url() {
-				return `${getApiBase()}/api/users`;
-			},
-			// The user table uses snake_case columns (created_at, workspace_id, ...)
-			// while the app schema is camelCase. Map column names on the way in.
-			columnMapper: snakeCamelMapper(),
-			// Electric leaves non-scalar types as strings; parse timestamps into
-			// Date objects so rows match the collection schema (z.date()).
-			parser: {
-				timestamp: parsePgTimestamp,
-				timestamptz: parsePgTimestamp,
-			},
+		queryKey: ["users", "me"],
+		queryClient,
+		queryFn: async () => {
+			const response = await fetch(`${getApiBase()}/api/users`, {
+				credentials: "include",
+			});
+			if (!response.ok)
+				throw new Error(`Failed to load user (${response.status})`);
+			return [selectUserSchema.parse(await response.json())];
 		},
+		getKey: (item) => item.id,
 		onUpdate: async ({ transaction }) => {
 			const { changes } = transaction.mutations[0];
-
-			// Call tRPC mutation to persist changes
-			const result = await trpc.users.update.mutate({
+			await trpc.users.update.mutate({
 				name: changes.name as string | undefined,
 				workspaceName: changes.workspaceName as string | undefined,
 				image: changes.image as string | null | undefined,
 			});
-
-			// Return txid to wait for sync confirmation
-			return { txid: result.txid };
 		},
 	}),
 );
@@ -122,6 +87,23 @@ const chatSessionSchema = z.object({
 	createdAt: z.date(),
 	updatedAt: z.date(),
 });
+
+export const chatSessionsCollection = createCollection(
+	queryCollectionOptions({
+		id: "chat_sessions",
+		schema: chatSessionSchema,
+		queryKey: ["chat-sessions"],
+		queryClient,
+		queryFn: async () => {
+			const response = await fetch(`${getApiBase()}/api/chat/conversations`);
+			if (!response.ok)
+				throw new Error(`Failed to load conversations (${response.status})`);
+			const result = (await response.json()) as { items: unknown[] };
+			return result.items.map((item) => chatSessionSchema.parse(item));
+		},
+		getKey: (row) => row.id,
+	}),
+);
 
 const chatMessageSchema = z.object({
 	id: z.string(),
@@ -162,31 +144,35 @@ const chatShapeOptions = (path: string) => ({
 	parser: { timestamp: parsePgTimestamp, timestamptz: parsePgTimestamp },
 });
 
-/** Backend-owned chat rows. These collections intentionally have no write hooks. */
-export const chatSessionsCollection = createCollection(
-	electricCollectionOptions({
-		id: "chat_sessions",
-		schema: chatSessionSchema,
-		getKey: (row) => row.id,
-		shapeOptions: chatShapeOptions("/api/chat/sessions"),
-	}),
-);
+const fetchChatRows = async <T>(path: string, schema: z.ZodType<T>) => {
+	const response = await fetch(`${getApiBase()}${path}`, {
+		credentials: "include",
+	});
+	if (!response.ok)
+		throw new Error(`Failed to load chat data (${response.status})`);
+	const rows = (await response.json()) as unknown[];
+	return rows.map((row) => schema.parse(row));
+};
 
 export const chatMessagesCollection = createCollection(
-	electricCollectionOptions({
+	queryCollectionOptions({
 		id: "chat_messages",
 		schema: chatMessageSchema,
+		queryKey: ["chat-messages"],
+		queryClient,
+		queryFn: () => fetchChatRows("/api/chat/messages", chatMessageSchema),
 		getKey: (row) => row.id,
-		shapeOptions: chatShapeOptions("/api/chat/messages"),
 	}),
 );
 
 export const chatRunsCollection = createCollection(
-	electricCollectionOptions({
+	queryCollectionOptions({
 		id: "chat_runs",
 		schema: chatRunSchema,
+		queryKey: ["chat-runs"],
+		queryClient,
+		queryFn: () => fetchChatRows("/api/chat/runs", chatRunSchema),
 		getKey: (row) => row.id,
-		shapeOptions: chatShapeOptions("/api/chat/runs"),
 	}),
 );
 

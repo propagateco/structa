@@ -8,36 +8,35 @@ import {
 	chatMessagesCollection,
 	chatRunsCollection,
 	chatSessionsCollection,
-	createChatRunEventsCollection,
 } from "@/lib/collections";
 import { buildProductionAdapter, postChatRun } from "./adapter";
+import { useConversationStream } from "./use-conversation-stream";
+
+/** Merge Neon rows with live DO-stream rows, deduplicating by id. */
+function mergeById<T extends { id: string }>(
+	neon: readonly T[],
+	live: readonly T[],
+): T[] {
+	const byId = new Map(neon.map((item) => [item.id, item]));
+	for (const item of live) byId.set(item.id, item);
+	return [...byId.values()];
+}
 
 export function useProductionChat(
 	sessionId: string | null,
 	onSessionChange: (sessionId: string) => void,
 ) {
 	const { activeProject } = useProjectSwitcher();
+
 	const sessionsQuery = useLiveQuery((q) =>
 		q.from({ session: chatSessionsCollection }),
 	);
-	// Global collections: all user's messages, runs, and sessions sync once
-	// and stay in memory. Switching conversations is instant because the
-	// data is already loaded — no new Electric shape subscriptions needed.
 	const messagesQuery = useLiveQuery((q) =>
 		q.from({ message: chatMessagesCollection }),
 	);
 	const runsQuery = useLiveQuery((q) => q.from({ run: chatRunsCollection }));
-	// Events remain session-scoped: they're only needed for the active
-	// conversation's in-progress runs. Completed runs have persisted
-	// assistant message rows that the fold uses as a fallback.
-	const eventsCollection = useMemo(
-		() => (sessionId ? createChatRunEventsCollection(sessionId) : null),
-		[sessionId],
-	);
-	const eventsQuery = useLiveQuery(
-		(q) => (eventsCollection ? q.from({ event: eventsCollection }) : null),
-		[eventsCollection],
-	);
+
+	const stream = useConversationStream(sessionId);
 
 	const sessions = useMemo(
 		() =>
@@ -48,7 +47,8 @@ export function useProductionChat(
 				.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()),
 		[activeProject, sessionsQuery.data],
 	);
-	const messages = useMemo(
+
+	const neonMessages = useMemo(
 		() =>
 			sessionId
 				? (messagesQuery.data ?? [])
@@ -57,14 +57,28 @@ export function useProductionChat(
 				: [],
 		[messagesQuery.data, sessionId],
 	);
-	const runs = useMemo(
+
+	const neonRuns = useMemo(
 		() =>
 			sessionId
 				? (runsQuery.data ?? []).filter((run) => run.sessionId === sessionId)
 				: [],
 		[runsQuery.data, sessionId],
 	);
-	const events = eventsQuery.data ?? [];
+
+	// Merge live DO-stream rows with persisted Neon rows. The live state
+	// covers in-progress assistant turns that the Neon query may not have
+	// materialised yet; for completed runs, Neon is authoritative and will
+	// be used by the merge when the same id appears in both.
+	const messages = useMemo(
+		() => mergeById(neonMessages, stream.messages),
+		[neonMessages, stream.messages],
+	);
+	const runs = useMemo(
+		() => mergeById(neonRuns, stream.runs),
+		[neonRuns, stream.runs],
+	);
+
 	const adapter = useMemo(
 		() =>
 			buildProductionAdapter(
@@ -73,7 +87,7 @@ export function useProductionChat(
 					sessions,
 					messages,
 					runs,
-					events,
+					events: stream.events,
 					onSessionChange: (nextSessionId) => {
 						if (nextSessionId) onSessionChange(nextSessionId);
 					},
@@ -88,7 +102,7 @@ export function useProductionChat(
 			sessions,
 			messages,
 			runs,
-			events,
+			stream.events,
 		],
 	);
 
@@ -96,9 +110,6 @@ export function useProductionChat(
 		runtime: useExternalStoreRuntime(adapter),
 		sessions,
 		isLoading:
-			sessionsQuery.isLoading ||
-			messagesQuery.isLoading ||
-			runsQuery.isLoading ||
-			eventsQuery.isLoading,
+			sessionsQuery.isLoading || messagesQuery.isLoading || runsQuery.isLoading,
 	};
 }

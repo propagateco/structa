@@ -19,8 +19,8 @@ export interface ClerkRuntime {
 }
 
 export class ClerkRunConflictError extends Error {
-	constructor() {
-		super("This conversation already has an active run");
+	constructor(message?: string) {
+		super(message ?? "This conversation already has an active run");
 		this.name = "ClerkRunConflictError";
 	}
 }
