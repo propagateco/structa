@@ -2,7 +2,7 @@
 // Import Buffer polyfill first to ensure gray-matter works in browser during HMR
 import "@/lib/buffer-polyfill";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import {
 	createRootRoute,
 	HeadContent,
@@ -13,6 +13,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { PostHogProvider } from "posthog-js/react";
 import * as React from "react";
+import { queryClient } from "@/lib/query-client";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "@/styles/app.css?url";
@@ -130,8 +131,6 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-	const [queryClient] = React.useState(() => new QueryClient());
-
 	return (
 		<QueryClientProvider client={queryClient}>
 			<PostHogProviderClientOnly>

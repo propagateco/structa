@@ -29,12 +29,23 @@ import { Route as MarketingGuidesIndexRouteImport } from './routes/_marketing/gu
 import { Route as LoginLoginIndexRouteImport } from './routes/_login/login/index'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/app/index'
 import { Route as ApiTrpcSplatRouteImport } from './routes/api/trpc/$'
+import { Route as ApiChatTicketRouteImport } from './routes/api/chat/ticket'
+import { Route as ApiChatStreamEventsRouteImport } from './routes/api/chat/stream-events'
+import { Route as ApiChatSessionsRouteImport } from './routes/api/chat/sessions'
+import { Route as ApiChatRunsRouteImport } from './routes/api/chat/runs'
+import { Route as ApiChatRunRouteImport } from './routes/api/chat/run'
+import { Route as ApiChatMessagesRouteImport } from './routes/api/chat/messages'
+import { Route as ApiChatEventsRouteImport } from './routes/api/chat/events'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as MarketingGuidesSlugRouteImport } from './routes/_marketing/guides/$slug'
 import { Route as LoginLoginCodeRouteImport } from './routes/_login/login/code'
 import { Route as AuthAppSettingsRouteImport } from './routes/_auth/app/settings'
+import { Route as AuthAppPrototypeChatRouteImport } from './routes/_auth/app/prototype-chat'
 import { Route as AuthAppLabRouteImport } from './routes/_auth/app/lab'
+import { Route as ApiChatConversationsIndexRouteImport } from './routes/api/chat/conversations/index'
 import { Route as AuthOnboardingOnboardingIndexRouteImport } from './routes/_auth/_onboarding/onboarding/index'
+import { Route as ApiChatConversationsConversationIdRouteImport } from './routes/api/chat/conversations/$conversationId'
+import { Route as AuthAppChatConversationIdRouteImport } from './routes/_auth/app/chat/$conversationId'
 import { Route as AuthSettingsSettingsNotificationsRouteImport } from './routes/_auth/_settings/settings/notifications'
 import { Route as AuthSettingsSettingsBillingRouteImport } from './routes/_auth/_settings/settings/billing'
 import { Route as AuthSettingsSettingsAccountRouteImport } from './routes/_auth/_settings/settings/account'
@@ -135,6 +146,41 @@ const ApiTrpcSplatRoute = ApiTrpcSplatRouteImport.update({
   path: '/api/trpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatTicketRoute = ApiChatTicketRouteImport.update({
+  id: '/api/chat/ticket',
+  path: '/api/chat/ticket',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatStreamEventsRoute = ApiChatStreamEventsRouteImport.update({
+  id: '/api/chat/stream-events',
+  path: '/api/chat/stream-events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatSessionsRoute = ApiChatSessionsRouteImport.update({
+  id: '/api/chat/sessions',
+  path: '/api/chat/sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRunsRoute = ApiChatRunsRouteImport.update({
+  id: '/api/chat/runs',
+  path: '/api/chat/runs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRunRoute = ApiChatRunRouteImport.update({
+  id: '/api/chat/run',
+  path: '/api/chat/run',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatMessagesRoute = ApiChatMessagesRouteImport.update({
+  id: '/api/chat/messages',
+  path: '/api/chat/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatEventsRoute = ApiChatEventsRouteImport.update({
+  id: '/api/chat/events',
+  path: '/api/chat/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -155,16 +201,39 @@ const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
   path: '/app/settings',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthAppPrototypeChatRoute = AuthAppPrototypeChatRouteImport.update({
+  id: '/app/prototype-chat',
+  path: '/app/prototype-chat',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthAppLabRoute = AuthAppLabRouteImport.update({
   id: '/app/lab',
   path: '/app/lab',
   getParentRoute: () => AuthRoute,
 } as any)
+const ApiChatConversationsIndexRoute =
+  ApiChatConversationsIndexRouteImport.update({
+    id: '/api/chat/conversations/',
+    path: '/api/chat/conversations/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthOnboardingOnboardingIndexRoute =
   AuthOnboardingOnboardingIndexRouteImport.update({
     id: '/onboarding/',
     path: '/onboarding/',
     getParentRoute: () => AuthOnboardingRoute,
+  } as any)
+const ApiChatConversationsConversationIdRoute =
+  ApiChatConversationsConversationIdRouteImport.update({
+    id: '/api/chat/conversations/$conversationId',
+    path: '/api/chat/conversations/$conversationId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthAppChatConversationIdRoute =
+  AuthAppChatConversationIdRouteImport.update({
+    id: '/app/chat/$conversationId',
+    path: '/app/chat/$conversationId',
+    getParentRoute: () => AuthRoute,
   } as any)
 const AuthSettingsSettingsNotificationsRoute =
   AuthSettingsSettingsNotificationsRouteImport.update({
@@ -204,10 +273,18 @@ export interface FileRoutesByFullPath {
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/lab': typeof AuthAppLabRoute
+  '/app/prototype-chat': typeof AuthAppPrototypeChatRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/chat/events': typeof ApiChatEventsRoute
+  '/api/chat/messages': typeof ApiChatMessagesRoute
+  '/api/chat/run': typeof ApiChatRunRoute
+  '/api/chat/runs': typeof ApiChatRunsRoute
+  '/api/chat/sessions': typeof ApiChatSessionsRoute
+  '/api/chat/stream-events': typeof ApiChatStreamEventsRoute
+  '/api/chat/ticket': typeof ApiChatTicketRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/app/': typeof AuthAppIndexRoute
   '/login/': typeof LoginLoginIndexRoute
@@ -216,7 +293,10 @@ export interface FileRoutesByFullPath {
   '/settings/account': typeof AuthSettingsSettingsAccountRoute
   '/settings/billing': typeof AuthSettingsSettingsBillingRoute
   '/settings/notifications': typeof AuthSettingsSettingsNotificationsRoute
+  '/app/chat/$conversationId': typeof AuthAppChatConversationIdRoute
+  '/api/chat/conversations/$conversationId': typeof ApiChatConversationsConversationIdRoute
   '/onboarding/': typeof AuthOnboardingOnboardingIndexRoute
+  '/api/chat/conversations/': typeof ApiChatConversationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
@@ -231,10 +311,18 @@ export interface FileRoutesByTo {
   '/use-cases/kitchen': typeof UseCasesKitchenRoute
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/app/lab': typeof AuthAppLabRoute
+  '/app/prototype-chat': typeof AuthAppPrototypeChatRoute
   '/app/settings': typeof AuthAppSettingsRoute
   '/login/code': typeof LoginLoginCodeRoute
   '/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/chat/events': typeof ApiChatEventsRoute
+  '/api/chat/messages': typeof ApiChatMessagesRoute
+  '/api/chat/run': typeof ApiChatRunRoute
+  '/api/chat/runs': typeof ApiChatRunsRoute
+  '/api/chat/sessions': typeof ApiChatSessionsRoute
+  '/api/chat/stream-events': typeof ApiChatStreamEventsRoute
+  '/api/chat/ticket': typeof ApiChatTicketRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/app': typeof AuthAppIndexRoute
   '/login': typeof LoginLoginIndexRoute
@@ -243,7 +331,10 @@ export interface FileRoutesByTo {
   '/settings/account': typeof AuthSettingsSettingsAccountRoute
   '/settings/billing': typeof AuthSettingsSettingsBillingRoute
   '/settings/notifications': typeof AuthSettingsSettingsNotificationsRoute
+  '/app/chat/$conversationId': typeof AuthAppChatConversationIdRoute
+  '/api/chat/conversations/$conversationId': typeof ApiChatConversationsConversationIdRoute
   '/onboarding': typeof AuthOnboardingOnboardingIndexRoute
+  '/api/chat/conversations': typeof ApiChatConversationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -264,10 +355,18 @@ export interface FileRoutesById {
   '/use-cases/loft': typeof UseCasesLoftRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/_auth/app/lab': typeof AuthAppLabRoute
+  '/_auth/app/prototype-chat': typeof AuthAppPrototypeChatRoute
   '/_auth/app/settings': typeof AuthAppSettingsRoute
   '/_login/login/code': typeof LoginLoginCodeRoute
   '/_marketing/guides/$slug': typeof MarketingGuidesSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/chat/events': typeof ApiChatEventsRoute
+  '/api/chat/messages': typeof ApiChatMessagesRoute
+  '/api/chat/run': typeof ApiChatRunRoute
+  '/api/chat/runs': typeof ApiChatRunsRoute
+  '/api/chat/sessions': typeof ApiChatSessionsRoute
+  '/api/chat/stream-events': typeof ApiChatStreamEventsRoute
+  '/api/chat/ticket': typeof ApiChatTicketRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/_auth/app/': typeof AuthAppIndexRoute
   '/_login/login/': typeof LoginLoginIndexRoute
@@ -276,7 +375,10 @@ export interface FileRoutesById {
   '/_auth/_settings/settings/account': typeof AuthSettingsSettingsAccountRoute
   '/_auth/_settings/settings/billing': typeof AuthSettingsSettingsBillingRoute
   '/_auth/_settings/settings/notifications': typeof AuthSettingsSettingsNotificationsRoute
+  '/_auth/app/chat/$conversationId': typeof AuthAppChatConversationIdRoute
+  '/api/chat/conversations/$conversationId': typeof ApiChatConversationsConversationIdRoute
   '/_auth/_onboarding/onboarding/': typeof AuthOnboardingOnboardingIndexRoute
+  '/api/chat/conversations/': typeof ApiChatConversationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -293,10 +395,18 @@ export interface FileRouteTypes {
     | '/use-cases/kitchen'
     | '/use-cases/loft'
     | '/app/lab'
+    | '/app/prototype-chat'
     | '/app/settings'
     | '/login/code'
     | '/guides/$slug'
     | '/api/auth/$'
+    | '/api/chat/events'
+    | '/api/chat/messages'
+    | '/api/chat/run'
+    | '/api/chat/runs'
+    | '/api/chat/sessions'
+    | '/api/chat/stream-events'
+    | '/api/chat/ticket'
     | '/api/trpc/$'
     | '/app/'
     | '/login/'
@@ -305,7 +415,10 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/billing'
     | '/settings/notifications'
+    | '/app/chat/$conversationId'
+    | '/api/chat/conversations/$conversationId'
     | '/onboarding/'
+    | '/api/chat/conversations/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -320,10 +433,18 @@ export interface FileRouteTypes {
     | '/use-cases/kitchen'
     | '/use-cases/loft'
     | '/app/lab'
+    | '/app/prototype-chat'
     | '/app/settings'
     | '/login/code'
     | '/guides/$slug'
     | '/api/auth/$'
+    | '/api/chat/events'
+    | '/api/chat/messages'
+    | '/api/chat/run'
+    | '/api/chat/runs'
+    | '/api/chat/sessions'
+    | '/api/chat/stream-events'
+    | '/api/chat/ticket'
     | '/api/trpc/$'
     | '/app'
     | '/login'
@@ -332,7 +453,10 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/billing'
     | '/settings/notifications'
+    | '/app/chat/$conversationId'
+    | '/api/chat/conversations/$conversationId'
     | '/onboarding'
+    | '/api/chat/conversations'
   id:
     | '__root__'
     | '/_auth'
@@ -352,10 +476,18 @@ export interface FileRouteTypes {
     | '/use-cases/loft'
     | '/_marketing/'
     | '/_auth/app/lab'
+    | '/_auth/app/prototype-chat'
     | '/_auth/app/settings'
     | '/_login/login/code'
     | '/_marketing/guides/$slug'
     | '/api/auth/$'
+    | '/api/chat/events'
+    | '/api/chat/messages'
+    | '/api/chat/run'
+    | '/api/chat/runs'
+    | '/api/chat/sessions'
+    | '/api/chat/stream-events'
+    | '/api/chat/ticket'
     | '/api/trpc/$'
     | '/_auth/app/'
     | '/_login/login/'
@@ -364,7 +496,10 @@ export interface FileRouteTypes {
     | '/_auth/_settings/settings/account'
     | '/_auth/_settings/settings/billing'
     | '/_auth/_settings/settings/notifications'
+    | '/_auth/app/chat/$conversationId'
+    | '/api/chat/conversations/$conversationId'
     | '/_auth/_onboarding/onboarding/'
+    | '/api/chat/conversations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -377,7 +512,16 @@ export interface RootRouteChildren {
   UseCasesKitchenRoute: typeof UseCasesKitchenRoute
   UseCasesLoftRoute: typeof UseCasesLoftRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiChatEventsRoute: typeof ApiChatEventsRoute
+  ApiChatMessagesRoute: typeof ApiChatMessagesRoute
+  ApiChatRunRoute: typeof ApiChatRunRoute
+  ApiChatRunsRoute: typeof ApiChatRunsRoute
+  ApiChatSessionsRoute: typeof ApiChatSessionsRoute
+  ApiChatStreamEventsRoute: typeof ApiChatStreamEventsRoute
+  ApiChatTicketRoute: typeof ApiChatTicketRoute
   ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
+  ApiChatConversationsConversationIdRoute: typeof ApiChatConversationsConversationIdRoute
+  ApiChatConversationsIndexRoute: typeof ApiChatConversationsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -522,6 +666,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTrpcSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat/ticket': {
+      id: '/api/chat/ticket'
+      path: '/api/chat/ticket'
+      fullPath: '/api/chat/ticket'
+      preLoaderRoute: typeof ApiChatTicketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/stream-events': {
+      id: '/api/chat/stream-events'
+      path: '/api/chat/stream-events'
+      fullPath: '/api/chat/stream-events'
+      preLoaderRoute: typeof ApiChatStreamEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/sessions': {
+      id: '/api/chat/sessions'
+      path: '/api/chat/sessions'
+      fullPath: '/api/chat/sessions'
+      preLoaderRoute: typeof ApiChatSessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/runs': {
+      id: '/api/chat/runs'
+      path: '/api/chat/runs'
+      fullPath: '/api/chat/runs'
+      preLoaderRoute: typeof ApiChatRunsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/run': {
+      id: '/api/chat/run'
+      path: '/api/chat/run'
+      fullPath: '/api/chat/run'
+      preLoaderRoute: typeof ApiChatRunRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/messages': {
+      id: '/api/chat/messages'
+      path: '/api/chat/messages'
+      fullPath: '/api/chat/messages'
+      preLoaderRoute: typeof ApiChatMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat/events': {
+      id: '/api/chat/events'
+      path: '/api/chat/events'
+      fullPath: '/api/chat/events'
+      preLoaderRoute: typeof ApiChatEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -550,6 +743,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppSettingsRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/app/prototype-chat': {
+      id: '/_auth/app/prototype-chat'
+      path: '/app/prototype-chat'
+      fullPath: '/app/prototype-chat'
+      preLoaderRoute: typeof AuthAppPrototypeChatRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_auth/app/lab': {
       id: '/_auth/app/lab'
       path: '/app/lab'
@@ -557,12 +757,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppLabRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/api/chat/conversations/': {
+      id: '/api/chat/conversations/'
+      path: '/api/chat/conversations'
+      fullPath: '/api/chat/conversations/'
+      preLoaderRoute: typeof ApiChatConversationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/_onboarding/onboarding/': {
       id: '/_auth/_onboarding/onboarding/'
       path: '/onboarding'
       fullPath: '/onboarding/'
       preLoaderRoute: typeof AuthOnboardingOnboardingIndexRouteImport
       parentRoute: typeof AuthOnboardingRoute
+    }
+    '/api/chat/conversations/$conversationId': {
+      id: '/api/chat/conversations/$conversationId'
+      path: '/api/chat/conversations/$conversationId'
+      fullPath: '/api/chat/conversations/$conversationId'
+      preLoaderRoute: typeof ApiChatConversationsConversationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/app/chat/$conversationId': {
+      id: '/_auth/app/chat/$conversationId'
+      path: '/app/chat/$conversationId'
+      fullPath: '/app/chat/$conversationId'
+      preLoaderRoute: typeof AuthAppChatConversationIdRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/_auth/_settings/settings/notifications': {
       id: '/_auth/_settings/settings/notifications'
@@ -630,16 +851,20 @@ interface AuthRouteChildren {
   AuthOnboardingRoute: typeof AuthOnboardingRouteWithChildren
   AuthSettingsRoute: typeof AuthSettingsRouteWithChildren
   AuthAppLabRoute: typeof AuthAppLabRoute
+  AuthAppPrototypeChatRoute: typeof AuthAppPrototypeChatRoute
   AuthAppSettingsRoute: typeof AuthAppSettingsRoute
   AuthAppIndexRoute: typeof AuthAppIndexRoute
+  AuthAppChatConversationIdRoute: typeof AuthAppChatConversationIdRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthOnboardingRoute: AuthOnboardingRouteWithChildren,
   AuthSettingsRoute: AuthSettingsRouteWithChildren,
   AuthAppLabRoute: AuthAppLabRoute,
+  AuthAppPrototypeChatRoute: AuthAppPrototypeChatRoute,
   AuthAppSettingsRoute: AuthAppSettingsRoute,
   AuthAppIndexRoute: AuthAppIndexRoute,
+  AuthAppChatConversationIdRoute: AuthAppChatConversationIdRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -692,7 +917,17 @@ const rootRouteChildren: RootRouteChildren = {
   UseCasesKitchenRoute: UseCasesKitchenRoute,
   UseCasesLoftRoute: UseCasesLoftRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiChatEventsRoute: ApiChatEventsRoute,
+  ApiChatMessagesRoute: ApiChatMessagesRoute,
+  ApiChatRunRoute: ApiChatRunRoute,
+  ApiChatRunsRoute: ApiChatRunsRoute,
+  ApiChatSessionsRoute: ApiChatSessionsRoute,
+  ApiChatStreamEventsRoute: ApiChatStreamEventsRoute,
+  ApiChatTicketRoute: ApiChatTicketRoute,
   ApiTrpcSplatRoute: ApiTrpcSplatRoute,
+  ApiChatConversationsConversationIdRoute:
+    ApiChatConversationsConversationIdRoute,
+  ApiChatConversationsIndexRoute: ApiChatConversationsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

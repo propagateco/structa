@@ -58,7 +58,7 @@ export function Hero({
 				<div className="w-full flex flex-col sm:flex-row items-center justify-start gap-2 sm:gap-8 pt-2 md:pt-3">
 					<Link to={primaryCTA.to} className="w-full sm:w-auto">
 						<Button
-							className="w-full inline-flex items-center justify-center"
+							className="w-full inline-flex items-center justify-center !text-md sm:!text-md"
 							size="lg"
 						>
 							{primaryCTA.text}

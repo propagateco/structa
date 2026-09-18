@@ -9,7 +9,8 @@ import { cn } from "@/lib/utils";
  * Tailwind v4 / shadcn "new-york" conventions:
  *  - function component (no forwardRef)
  *  - `data-slot` for styling anchors
- *  - default cursor (no `cursor-pointer`) per shadcn v4 changelog
+ *  - `cursor-pointer` restored on hover (deviates from shadcn v4 default
+ *    cursor; matches the rest of Structa's interactive controls)
  *  - modern `focus-visible` ring + `aria-invalid` styling
  *  - `[&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4`
  *
@@ -21,7 +22,7 @@ import { cn } from "@/lib/utils";
  *    disables the button (unless `asChild`).
  */
 const buttonVariants = cva(
-    "group inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+    "group inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
     {
         variants: {
             variant: {

@@ -28,6 +28,11 @@ declare module "sst" {
       "type": "sst.sst.Linkable"
       "url": string
     }
+    "DataService": import("@cloudflare/workers-types").Service
+    "DataServiceToken": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "Database": {
       "type": "sst.sst.Linkable"
       "url": string
@@ -86,11 +91,6 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
-    "MarketingEmail": {
-      "configSet": string
-      "sender": string
-      "type": "sst.aws.Email"
-    }
     "NODE_TLS_REJECT_UNAUTHORIZED": {
       "type": "sst.sst.Secret"
       "value": string
@@ -111,6 +111,10 @@ declare module "sst" {
       "configSet": string
       "sender": string
       "type": "sst.aws.Email"
+    }
+    "OpenRouterApiKey": {
+      "type": "sst.sst.Secret"
+      "value": string
     }
     "OptimisedStorage": {
       "name": string
@@ -154,18 +158,11 @@ declare module "sst" {
       "value": string
     }
     "SyncEngine": {
-      "secret": string
-      "source": string
       "type": "sst.sst.Linkable"
     }
     "Web": {
       "type": "sst.aws.TanstackStart"
       "url": string
-    }
-    "anotherPersonalEmail": {
-      "configSet": string
-      "sender": string
-      "type": "sst.aws.Email"
     }
   }
 }

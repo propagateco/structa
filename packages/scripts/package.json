@@ -16,7 +16,8 @@
     "worktrees:delete": "ts-node src/worktrees.ts delete",
     "worktrees:list": "ts-node src/worktrees.ts list",
     "issues:create": "ts-node src/issues.ts create",
-    "issues:complete": "ts-node src/issues.ts complete"
+    "issues:complete": "ts-node src/issues.ts complete",
+    "issues:sync": "ts-node src/issues.ts sync"
   },
   "devDependencies": {
     "@types/node": "^22",

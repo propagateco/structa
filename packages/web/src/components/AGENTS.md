@@ -3,8 +3,8 @@
 Convention reminders for agents creating or editing components in this tree.
 
 For repo-wide rules, shadcn install steps, and component locations, see the
-parent [`packages/web/AGENTS.md`](../../../AGENTS.md) and
-[docs/design/UI.md](../../../../docs/design/UI.md).
+parent [`packages/web/AGENTS.md`](../../AGENTS.md) and
+[docs/core/design/ui.md](../../../../docs/core/design/ui.md).
 
 ## Where new components go
 

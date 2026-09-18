@@ -160,11 +160,21 @@ jobs:
             - name: Get preview URLs
               id: get_urls
               run: |
-                  # Get outputs from SST state
+                  # Get the Web/Api outputs from SST state. PR stages intentionally
+                  # use SST's generated CloudFront URLs; dev/production retain
+                  # their stable custom domains.
                   STATE_OUTPUT=$(npx sst state export --stage ${{ env.STAGE_NAME }})
-                  
-                  WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '.latest.resources[0].outputs.Web // empty')
-                  API_URL=$(echo "$STATE_OUTPUT" | jq -r '.latest.resources[0].outputs.Api // empty')
+
+                  echo "Candidate URL outputs:"
+                  echo "$STATE_OUTPUT" | jq -r '
+                    .latest.resources[]
+                    | select((.outputs.url // .outputs.Web // .outputs.Api // "") != "")
+                    | [(.urn // ""), (.outputs.url // .outputs.Web // .outputs.Api)]
+                    | @tsv
+                  '
+
+                  WEB_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.type // "") == "pulumi:pulumi:Stack") | .outputs.Web // empty] | first // empty')
+                  API_URL=$(echo "$STATE_OUTPUT" | jq -r '[.latest.resources[] | select((.type // "") == "pulumi:pulumi:Stack") | .outputs.Api // empty] | first // empty')
                   
                   echo "web_url=$WEB_URL" >> $GITHUB_OUTPUT
                   echo "api_url=$API_URL" >> $GITHUB_OUTPUT

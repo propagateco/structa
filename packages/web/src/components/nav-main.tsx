@@ -26,6 +26,8 @@ export function NavMain({
         url: string;
         icon: React.ComponentType<{ className?: string }>;
         isActive?: boolean;
+        /** When provided the item renders as a button instead of a link. */
+        onClick?: () => void;
         items?: {
             title: string;
             url: string;
@@ -42,16 +44,27 @@ export function NavMain({
                         defaultOpen={item.isActive}
                     >
                         <SidebarMenuItem>
-                            <SidebarMenuButton
-                                asChild
-                                tooltip={item.title}
-                                isActive={item.isActive}
-                            >
-                                <Link to={item.url}>
+                            {item.onClick ? (
+                                <SidebarMenuButton
+                                    tooltip={item.title}
+                                    isActive={item.isActive}
+                                    onClick={item.onClick}
+                                >
                                     <item.icon />
                                     <span>{item.title}</span>
-                                </Link>
-                            </SidebarMenuButton>
+                                </SidebarMenuButton>
+                            ) : (
+                                <SidebarMenuButton
+                                    asChild
+                                    tooltip={item.title}
+                                    isActive={item.isActive}
+                                >
+                                    <Link to={item.url}>
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            )}
                             {item.items?.length ? (
                                 <>
                                     <CollapsibleTrigger asChild>

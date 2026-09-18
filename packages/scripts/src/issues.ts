@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process'
+import fs from 'node:fs'
 import path from 'node:path'
 
 function run(cmd: string, cwd?: string) {
@@ -7,6 +8,90 @@ function run(cmd: string, cwd?: string) {
 
 function slugify(text: string) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
+const GH_ISSUE_LINK = /\*\*See:\*\* \[GitHub Issue #(\d+)\]\(([^)]*)\)/
+
+interface GhIssue {
+  number: number
+  title: string
+  body: string | null
+  labels: string[]
+  url: string
+}
+
+function syncIssues() {
+  const root = path.resolve(process.cwd(), '..', '..')
+  const issuesDir = path.join(root, '.issues')
+  fs.mkdirSync(issuesDir, { recursive: true })
+
+  let issues: GhIssue[]
+  try {
+    const json = execSync(
+      `gh issue list --state open --limit 100 --json number,title,body,labels,url --jq '[.[] | {number, title, body, labels: [.labels[].name], url}]'`,
+      { cwd: root, encoding: 'utf-8' },
+    ).toString()
+    issues = JSON.parse(json)
+  } catch (e) {
+    console.error('Failed to fetch GitHub issues. Ensure gh CLI is authenticated and this repo is linked.')
+    process.exit(1)
+  }
+
+  const files = fs.readdirSync(issuesDir).filter(f => f.endsWith('.md') && !['index.md', 'TEMPLATE.md'].includes(f))
+
+  // Index existing drafts: by GitHub link when present, else by title. Track the next local number.
+  const byGhNumber = new Map<number, string>()
+  const byTitle = new Map<string, string>()
+  let nextNum = 0
+  for (const file of files) {
+    const num = file.match(/^iss-(\d+)/)?.[1]
+    if (num) nextNum = Math.max(nextNum, parseInt(num, 10))
+    const content = fs.readFileSync(path.join(issuesDir, file), 'utf-8')
+    const link = content.match(GH_ISSUE_LINK)
+    if (link) byGhNumber.set(parseInt(link[1], 10), file)
+    const titleLine = content.split('\n').find(line => line.startsWith('# '))
+    if (titleLine) byTitle.set(titleLine.slice(2).trim().toLowerCase(), file)
+  }
+  nextNum += 1
+
+  const summary: string[] = []
+  for (const issue of issues) {
+    const file = byGhNumber.get(issue.number) ?? byTitle.get(issue.title.toLowerCase())
+    if (file) {
+      const fullPath = path.join(issuesDir, file)
+      let content = fs.readFileSync(fullPath, 'utf-8')
+      if (GH_ISSUE_LINK.test(content)) {
+        summary.push(`Already linked: ${file} (GitHub #${issue.number})`)
+      } else {
+        const link = `**See:** [GitHub Issue #${issue.number}](${issue.url})`
+        const newline = content.indexOf('\n')
+        content = newline === -1
+          ? `${content}\n\n${link}\n`
+          : `${content.slice(0, newline + 1)}\n${link}\n${content.slice(newline + 1)}`
+        fs.writeFileSync(fullPath, content)
+        summary.push(`Linked ${file} → GitHub #${issue.number}`)
+      }
+    } else {
+      const filename = `iss-${String(nextNum).padStart(3, '0')}-${slugify(issue.title)}.md`
+      const parts = [
+        `# ${issue.title}`,
+        '',
+        `**See:** [GitHub Issue #${issue.number}](${issue.url})`,
+        '',
+        'Status: needs-triage',
+        '',
+        issue.body?.trim() ?? '',
+      ]
+      if (issue.labels.length > 0) {
+        parts.push('', '---', '', '## Labels', '', issue.labels.map(label => `\`${label}\``).join(' '))
+      }
+      fs.writeFileSync(path.join(issuesDir, filename), parts.join('\n') + '\n')
+      summary.push(`Created ${filename} (GitHub #${issue.number})`)
+      nextNum += 1
+    }
+  }
+
+  console.log(summary.length ? summary.join('\n') : 'No open GitHub issues found. Nothing to sync.')
 }
 
 function createIssueWorktree(issueId: string, title: string, base = 'main') {
@@ -30,9 +115,14 @@ function openDraftPR(branchName: string, title: string, body: string) {
 }
 
 const [,, cmd, issueIdArg, titleArg] = process.argv
-if (!cmd || !['create','complete'].includes(cmd)) {
-  console.log('Usage: ts-node src/issues.ts <create|complete> <issueId> <title>')
+if (!cmd || !['create','complete','sync'].includes(cmd)) {
+  console.log('Usage: ts-node src/issues.ts <create|complete|sync> [issueId] [title]')
   process.exit(1)
+}
+
+if (cmd === 'sync') {
+  syncIssues()
+  process.exit(0)
 }
 
 if (cmd === 'create') {

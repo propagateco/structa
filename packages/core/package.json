@@ -20,6 +20,8 @@
         "check:fix": "biome check --write"
     },
     "exports": {
+        "./conversation/chat.sql": "./src/conversation/chat.sql.ts",
+        "./conversation/conversation.sql": "./src/conversation/conversation.sql.ts",
         "./*": [
             "./src/*/index.ts",
             "./src/*/*.ts",

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "tw-shimmer";
 @plugin "@tailwindcss/typography";
 
 /* Configure dark mode to use .dark class selector.
@@ -140,7 +141,7 @@
     --color-card: var(--ds-white);
     --color-card-foreground: var(--ds-neutral-800);
     --color-popover: var(--ds-white);
-    --color-popover-foreground: var(--ds-neutral-800);
+    --color-popover-foreground: var(--ds-neutral-500);
 
     --color-primary: var(--ds-neutral-900);
     --color-primary-foreground: var(--ds-neutral-50);
@@ -678,6 +679,24 @@
     transform: scale(1.02);
 }
 
+@keyframes collapsible-down {
+    from {
+        height: 0;
+    }
+    to {
+        height: var(--radix-collapsible-content-height, var(--collapsible-panel-height, auto));
+    }
+}
+
+@keyframes collapsible-up {
+    from {
+        height: var(--radix-collapsible-content-height, var(--collapsible-panel-height, auto));
+    }
+    to {
+        height: 0;
+    }
+}
+
 @keyframes slideIn {
     from {
         opacity: 0;
@@ -977,3 +996,7 @@ html {
         }
     }
 }
+
+@custom-variant data-open (&:where([data-state="open"], [data-open]:not([data-open="false"])));
+
+@custom-variant data-closed (&:where([data-state="closed"], [data-closed]:not([data-closed="false"])));
