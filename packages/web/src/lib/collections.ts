@@ -3,6 +3,7 @@ import { createCollection } from "@tanstack/react-db";
 import { queryCollectionOptions } from "@tanstack/query-db-collection";
 import { queryClient } from "@/lib/query-client";
 import { trpc } from "@/lib/trpc-client";
+import { normalizeUserRow } from "@/lib/user-row";
 import { z } from "zod";
 
 /**
@@ -33,7 +34,7 @@ export const usersCollection = createCollection(
 		queryClient,
 		queryFn: async () => {
 			const user = await trpc.users.get.query();
-			return [selectUserSchema.parse(user)];
+			return [selectUserSchema.parse(normalizeUserRow(user))];
 		},
 		getKey: (item) => item.id,
 		onUpdate: async ({ transaction }) => {
