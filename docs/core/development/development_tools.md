@@ -196,6 +196,10 @@ npx sst dev                 # Default multiplexed mode with tabbed UI (Linux/mac
 Electric SQL's long-polling shapes benefit from HTTP/2 multiplexing; Vite's dev
 server only supports HTTP/1.1 (6 concurrent connections per domain).
 
+> **Transitional:** Caddy is required while the current Electric collections remain. STR-005 replaces
+> them with Query Collections and Cloudflare real-time transports, after which this proxy and its
+> port-3010 testing requirement should be removed.
+
 **One-time setup:**
 
 ```bash

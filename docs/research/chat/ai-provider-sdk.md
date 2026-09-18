@@ -1,5 +1,10 @@
 # AI Provider + SDK Selection for The Clerk
 
+> **Transport note:** provider comparisons remain useful, but references to Electric delivering chat
+> token events are superseded by [STR-005: Cloudflare Platform Migration](../../../.plan/STR-005-cloudflare-platform-migration.md).
+> The target Conversation Durable Object streams model/tool events directly and materializes completed
+> records to Neon.
+
 Research for [iss-013](../../../.issues/iss-013-ai-provider-sdk-research.md). Decides the AI
 stack for the `POST /api/chat/run` endpoint: framework SDK vs raw provider HTTP, and which
 model provider. Companion research: [durable-stream-options.md](./durable-stream-options.md)
