@@ -28,6 +28,11 @@ declare module "sst" {
       "type": "sst.sst.Linkable"
       "url": string
     }
+    "DataService": import("@cloudflare/workers-types").Service
+    "DataServiceToken": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "Database": {
       "type": "sst.sst.Linkable"
       "url": string
@@ -107,6 +112,10 @@ declare module "sst" {
       "sender": string
       "type": "sst.aws.Email"
     }
+    "OpenRouterApiKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "OptimisedStorage": {
       "name": string
       "type": "sst.aws.Bucket"
@@ -149,8 +158,6 @@ declare module "sst" {
       "value": string
     }
     "SyncEngine": {
-      "secret": string
-      "source": string
       "type": "sst.sst.Linkable"
     }
     "Web": {

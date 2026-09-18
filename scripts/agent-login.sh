@@ -32,8 +32,8 @@
 #     human step is needed as long as the email below is allowed to sign in.
 #
 # Usage:
-#   ./scripts/agent-login.sh                          # OTP mode, localhost
-#   ./scripts/agent-login.sh http://localhost:3000/app   # OTP mode, custom target
+#   ./scripts/agent-login.sh                          # OTP mode, localhost (via Caddy)
+#   ./scripts/agent-login.sh http://localhost:3000/app   # OTP mode, direct (no Caddy)
 #   ./scripts/agent-login.sh --bot <preview-url>      # bot-login against a preview
 #   AGENT_EMAIL=agent@structa.dev ./scripts/agent-login.sh
 #   AGENT_PROFILE=~/.structa-agent ./scripts/agent-login.sh
@@ -50,7 +50,7 @@ AGENT_PROFILE="${AGENT_PROFILE:-$HOME/.structa-agent}"
 usage() {
 	cat >&2 <<'EOF'
 Usage:
-  ./scripts/agent-login.sh [target-url]          OTP login (default: http://localhost:3000/app)
+  ./scripts/agent-login.sh [target-url]          OTP login (default: https://localhost:3010/app via Caddy)
   ./scripts/agent-login.sh --bot <preview-url>   bot-login against a PR preview (no OTP / DB)
 
 Environment:
@@ -85,8 +85,8 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
-TARGET="${1:-http://localhost:3000/app}"
-WEB_BASE="${WEB_BASE:-http://localhost:3000}"
+TARGET="${1:-https://localhost:3010/app}"
+WEB_BASE="${WEB_BASE:-https://localhost:3010}"
 
 # agent-browser command prefix — pass --profile on every invocation so the
 # persistent profile (cookies + localStorage) is reused across runs.

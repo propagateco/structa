@@ -20,4 +20,6 @@ export const secret = {
     ExpoToken: new sst.Secret('ExpoToken'),
     ExpoProjectId: new sst.Secret('ExpoProjectId'),
     ExpoOwner: new sst.Secret('ExpoOwner'),
+    OpenRouterApiKey: new sst.Secret('OpenRouterApiKey'),
+    DataServiceToken: new sst.Secret('DataServiceToken'),
 };

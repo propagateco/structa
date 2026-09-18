@@ -1,5 +1,6 @@
-import { Domain, domain, Stage, dnsAdapter } from './dns';
+import { Domain, domain, IS_DEPLOYED_STAGE, Stage, dnsAdapter } from './dns';
 import { apiRouter } from './api';
+import { dataService } from './cloudflare';
 import { Database } from './database';
 import { authEmail, notifyEmail } from './email';
 import { bucket, optimisedBucket, bucketRegion, optimisedBucketRegion } from './storage';
@@ -17,11 +18,13 @@ export const app = new sst.aws.TanStackStart('Web', {
     //   "FATAL ERROR: Reached heap limit Allocation failed - JavaScript
     //    heap out of memory" during the nitro env build.
     buildCommand: 'NODE_OPTIONS=--max-old-space-size=4096 npm run build',
-    domain: {
-        name: domain,
-        redirects: ['www.' + domain],
-        dns: dnsAdapter,
-    },
+    domain: IS_DEPLOYED_STAGE
+        ? {
+              name: domain,
+              redirects: ['www.' + domain],
+              dns: dnsAdapter,
+          }
+        : undefined,
     link: [
         Stage,
         Domain,
@@ -32,6 +35,7 @@ export const app = new sst.aws.TanStackStart('Web', {
         optimisedBucket,
         cdn,
         SyncEngine,
+        dataService,
         secret.GoogleClientId,
         secret.GoogleClientSecret,
         secret.StripeSecretKey,
@@ -49,15 +53,26 @@ export const app = new sst.aws.TanStackStart('Web', {
         // outputs cannot be baked into the SyncEngine link).
         secret.ElectricCloudApiToken,
         secret.ElectricCloudProjectId,
+        secret.DataServiceToken,
     ],
     environment: {
-        BETTER_AUTH_URL: Domain.properties.web,
-        PLATFORM_URL: Domain.properties.web,
+        ...(IS_DEPLOYED_STAGE
+            ? {
+                  BETTER_AUTH_URL: Domain.properties.web,
+                  PLATFORM_URL: Domain.properties.web,
+              }
+            : {}),
+        DATA_SERVICE_URL: dataService.url,
+        DATA_SERVICE_TOKEN: secret.DataServiceToken.value,
+        // Public Worker URL for browser WebSocket + capability-ticket calls.
+        VITE_DATA_SERVICE_URL: dataService.url,
         REACT_APP_STRIPE_PUBLISHABLE_KEY: secret.StripePublishableKey.value,
         VITE_PUBLIC_POSTHOG_KEY: secret.PosthogPublicKey.value,
         VITE_PUBLIC_POSTHOG_HOST: secret.PosthogHost.value,
         VITE_API_URL: apiRouter.url,
-        VITE_PLATFORM_URL: Domain.properties.web,
+        ...(IS_DEPLOYED_STAGE
+            ? { VITE_PLATFORM_URL: Domain.properties.web }
+            : {}),
         VITE_COOKIE_PREFIX: Stage.properties.cookiePrefix,
         // CloudFront distribution that fronts the image-processor Lambda
         // + OptimisedStorage bucket. Prepending this to bare S3 object

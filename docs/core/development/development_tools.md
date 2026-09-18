@@ -190,6 +190,28 @@ npx sst dev                 # Default multiplexed mode with tabbed UI (Linux/mac
 - Use `--mode=mono` to avoid log file accumulation (logs go to stdout only)
 - If enabling `--print-logs` or `--verbose`, monitor disk usage: `du -sh .sst/`
 
+### Caddy HTTP/2 Proxy (Local Development)
+
+`sst dev` auto-starts Caddy as an HTTP/2 reverse proxy via an `sst.x.DevCommand`.
+Electric SQL's long-polling shapes benefit from HTTP/2 multiplexing; Vite's dev
+server only supports HTTP/1.1 (6 concurrent connections per domain).
+
+**One-time setup:**
+
+```bash
+brew install caddy
+sudo security add-trusted-cert -d -r trustRoot \
+  -k /Library/Keychains/System.keychain \
+  ~/.local/share/caddy/pki/authorities/local/root.crt
+```
+
+**Usage:** access the app at `https://localhost:3010/app` (not port 3000).
+All agent-browser commands and tests should use port 3010.
+
+If Caddy isn't installed, the DevCommand pane shows a helpful error but doesn't
+crash the rest of `sst dev`. Port 3000 still works directly, but Electric shapes
+will be slower due to the HTTP/1.1 connection limit.
+
 ---
 
 ## Related Documentation

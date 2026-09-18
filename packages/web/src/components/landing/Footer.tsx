@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router';
 import { Container } from '@/components/layout/Container';
 import { GridPattern } from '@/components/layout/GridPattern';
 import { HomeIconLink, ScrollToTopLink } from '@/components/ui/link';
@@ -28,19 +27,19 @@ export function Footer() {
                         </h3>
                         <ScrollToTopLink
                             to="/"
-                            className="text-muted-foreground hover:text-accent transition-colors"
+                            className="text-md text-muted-foreground hover:text-accent transition-colors"
                         >
                             home
                         </ScrollToTopLink>
                         <ScrollToTopLink
                             to="/privacy"
-                            className="text-muted-foreground hover:text-accent transition-colors"
+                            className="text-md text-muted-foreground hover:text-accent transition-colors"
                         >
                             privacy policy
                         </ScrollToTopLink>
                         <ScrollToTopLink
                             to="/terms"
-                            className="text-muted-foreground hover:text-accent transition-colors"
+                            className="text-md text-muted-foreground hover:text-accent transition-colors"
                         >
                             terms of service
                         </ScrollToTopLink>
@@ -54,7 +53,7 @@ export function Footer() {
 
                         <ScrollToTopLink
                             to="/guides"
-                            className="text-muted-foreground hover:text-accent transition-colors"
+                            className="text-md text-muted-foreground hover:text-accent transition-colors"
                         >
                             guides
                         </ScrollToTopLink>
@@ -69,7 +68,7 @@ export function Footer() {
                             href="https://x.com/getstructa"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-muted-foreground hover:text-accent transition-colors"
+                            className="text-md text-muted-foreground hover:text-accent transition-colors"
                         >
                             @getstructa
                         </a>
@@ -77,7 +76,7 @@ export function Footer() {
                             href="https://www.instagram.com/lifewithcharacter"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-muted-foreground hover:text-accent transition-colors"
+                            className="text-md text-muted-foreground hover:text-accent transition-colors"
                         >
                             @lifewithcharacter
                         </a>

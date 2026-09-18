@@ -83,8 +83,12 @@ async function resolveElectricCredentials(): Promise<{
 	}
 
 	// 1. Static link (dev/production).
-	const staticSource = Resource.SyncEngine?.source;
-	const staticSecret = Resource.SyncEngine?.secret;
+	const syncEngine = Resource.SyncEngine as typeof Resource.SyncEngine & {
+		source?: string;
+		secret?: string;
+	};
+	const staticSource = syncEngine?.source;
+	const staticSecret = syncEngine?.secret;
 	if (staticSource && staticSecret) {
 		cachedSource = staticSource;
 		cachedSecret = staticSecret;

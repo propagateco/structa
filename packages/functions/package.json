@@ -3,10 +3,22 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
+    "@neondatabase/serverless": "*",
     "@structa/core": "*",
+    "@tanstack/ai": "^0.45.1",
+    "@tanstack/ai-openrouter": "^0.17.1",
+    "drizzle-orm": "*",
     "sst": "*"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8"
+    "@types/aws-lambda": "^8",
+    "@cloudflare/workers-types": "^5.20260908.1",
+    "wrangler": "^4.71.0"
+  },
+  "scripts": {
+    "test:cloudflare": "vitest run --config vitest.cloudflare.config.ts",
+    "typecheck:cloudflare": "tsc --noEmit -p tsconfig.cloudflare.json",
+    "e2e:dataservice": "node scripts/e2e-data-service.mjs",
+    "e2e:materialize": "node scripts/e2e-materialize.mjs"
   }
 }

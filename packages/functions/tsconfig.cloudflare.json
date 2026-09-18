@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "@cloudflare/workers-types/experimental",
+      "node"
+    ],
+    "lib": ["ES2022"],
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": [
+    "src/cloudflare/**/*.ts",
+    "sst-env.d.ts",
+    "../../sst-env.d.ts"
+  ]
+}

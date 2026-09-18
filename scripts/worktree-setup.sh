@@ -88,7 +88,13 @@ else
 	exit 1
 fi
 
-# 5. Install dependencies (fresh worktree has no node_modules).
+# 5. Copy .env from repo root (gitignored, won't exist in fresh worktree).
+if [[ -f "$REPO_ROOT/.env" ]] && [[ ! -f "$WORKTREE_PATH/.env" ]]; then
+	log "Copying .env from repo root..."
+	cp "$REPO_ROOT/.env" "$WORKTREE_PATH/.env"
+fi
+
+# 6. Install dependencies (fresh worktree has no node_modules).
 log "Installing dependencies in ${WORKTREE_PATH}..."
 (cd "$WORKTREE_PATH" && npm install)
 
