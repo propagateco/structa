@@ -17,6 +17,8 @@
   },
   "scripts": {
     "test:cloudflare": "vitest run --config vitest.cloudflare.config.ts",
-    "typecheck:cloudflare": "tsc --noEmit -p tsconfig.cloudflare.json"
+    "typecheck:cloudflare": "tsc --noEmit -p tsconfig.cloudflare.json",
+    "e2e:dataservice": "node scripts/e2e-data-service.mjs",
+    "e2e:materialize": "node scripts/e2e-materialize.mjs"
   }
 }
