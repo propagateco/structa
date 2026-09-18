@@ -26,7 +26,6 @@ export const bucket = new sst.aws.Bucket("Storage", {
         allowOrigins: [
             web,
             "http://localhost:3000",
-            "https://localhost:3010",
             "https://structa.so",
             "https://dev.structa.so",
         ],

@@ -2,11 +2,11 @@ import { selectUserSchema, user } from "@core/auth/auth.sql";
 import { db } from "@core/drizzle";
 import { eq, getTableColumns } from "drizzle-orm";
 import { z } from "zod";
-import { pgCurrentTxId, protectedProcedure, router } from "@/lib/trpc";
+import { protectedProcedure, router } from "@/lib/trpc";
 
 /**
  * Users tRPC router
- * Provides type-safe mutations for user data with txid generation for Electric sync
+ * Provides type-safe reads and mutations for user profile data.
  */
 export const usersRouter = router({
 	/**
@@ -29,14 +29,9 @@ export const usersRouter = router({
 	/**
 	 * Update the current user's profile
 	 *
-	 * Returns the Postgres txid of the mutation so the Electric collection can
-	 * wait for the change to sync back (optimistic update confirmation).
-	 *
-	 * The txid is read with `pg_current_xact_id()` in the RETURNING clause of
-	 * the UPDATE itself. neon-http executes each statement in its own implicit
-	 * transaction, so this is the same transaction that performs the write —
-	 * a separate `SELECT pg_current_xact_id()` would return a different txid
-	 * that never appears in the Electric stream.
+	 * Persists the update directly to Neon so the users Query Collection picks
+	 * it up on its next refetch. Optimistic UI confirmation is handled by the
+	 * collection's own persistence tracking.
 	 */
 	update: protectedProcedure
 		.input(
@@ -60,23 +55,12 @@ export const usersRouter = router({
 				.where(eq(user.id, ctx.user.id))
 				.returning({
 					...getTableColumns(user),
-					// Same-statement read → same transaction as the write
-					txid: pgCurrentTxId,
 				});
 
 			if (!row) {
 				throw new Error("UPDATE_FAILED");
 			}
 
-			const { txid, ...updatedUser } = row;
-			const parsedTxid = Number.parseInt(txid, 10);
-			if (Number.isNaN(parsedTxid)) {
-				throw new Error("TXID_FAILED");
-			}
-
-			return {
-				data: selectUserSchema.parse(updatedUser),
-				txid: parsedTxid,
-			};
+			return selectUserSchema.parse(row);
 		}),
 });

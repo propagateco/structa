@@ -34,11 +34,9 @@ export default $config({
         const web = await import('./infra/web');
         const api = await import('./infra/api');
         await import('./infra/database');
-        await import('./infra/sync');
         await import('./infra/storage');
         const cloudfront = await import('./infra/cloudfront');
 		await import('./infra/email');
-		await import('./infra/dev');
         const cloudflare = await import('./infra/cloudflare');
 		await import('./infra/sns');
         return {

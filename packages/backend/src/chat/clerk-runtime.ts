@@ -94,11 +94,10 @@ export const clerkRuntime: ClerkRuntime = {
 			});
 		};
 
-		// Batch content tokens to reduce DB writes and Electric sync overhead.
-		// Electric's long-polling has multi-second replication latency; writing
-		// one event per token would flood the WAL and starve the client of
-		// updates. Accumulating for 500ms gives the user visible progress
-		// while keeping the write count manageable.
+		// Batch content tokens to reduce DB writes. Writing one event per
+		// token would flood the WAL with chatRunEvent rows; accumulating for
+		// 500ms gives the user visible progress while keeping the write count
+		// manageable.
 		let batchBuffer = "";
 		let batchTimer: ReturnType<typeof setTimeout> | null = null;
 		const flushBatch = async () => {

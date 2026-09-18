@@ -12,8 +12,6 @@ export const registry: DocPage[] = [
   { lib: 'tanstack-router', name: 'overview', url: 'https://tanstack.com/router/latest/docs/overview', filename: 'overview.md' },
   { lib: 'tanstack-start', name: 'overview', url: 'https://tanstack.com/start/latest/docs/overview', filename: 'overview.md' },
   { lib: 'tanstack-db', name: 'overview', url: 'https://tanstack.com/db/latest/docs/overview', filename: 'overview.md' },
-  // ElectricSQL
-  { lib: 'electricsql', name: 'overview', url: 'https://electric-sql.com/docs', filename: 'overview.md' },
   // SST
   { lib: 'sst', name: 'overview', url: 'https://docs.sst.dev/', filename: 'overview.md' },
   // Drizzle

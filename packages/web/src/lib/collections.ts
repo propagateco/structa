@@ -1,33 +1,9 @@
 import { selectUserSchema } from "@core/auth/auth.sql";
-import { snakeCamelMapper } from "@electric-sql/client";
-import { electricCollectionOptions } from "@tanstack/electric-db-collection";
 import { createCollection } from "@tanstack/react-db";
 import { queryCollectionOptions } from "@tanstack/query-db-collection";
 import { queryClient } from "@/lib/query-client";
 import { trpc } from "@/lib/trpc-client";
 import { z } from "zod";
-
-/**
- * Parse a Postgres timestamp from the Electric wire format into a Date.
- *
- * Electric serves values as strings in Postgres text format:
- * - `timestamp`   → "2026-07-17 08:23:41.123456"    (no offset; stored as UTC)
- * - `timestamptz` → "2026-07-17 08:23:41.123456+00" (with offset)
- *
- * The default Electric parser leaves timestamps as strings, but our collection
- * schema (drizzle-zod) expects Date objects.
- */
-const parsePgTimestamp = (value: string): Date => {
-	const iso = value
-		.replace(" ", "T")
-		// Normalize "+00" → "+00:00" so Date parsing is reliable cross-browser
-		.replace(
-			/([+-]\d{2})(\d{2})?$/,
-			(_match, hours, minutes) => `${hours}:${minutes ?? "00"}`,
-		);
-	// `timestamp` columns carry no offset — drizzle writes UTC via toISOString()
-	return new Date(/(Z|[+-]\d{2}:\d{2})$/.test(iso) ? iso : `${iso}Z`);
-};
 
 /**
  * Get the API base URL for client-side requests.
@@ -48,7 +24,7 @@ const getApiBase = (): string => {
 	);
 };
 
-/** Users collection backed by the authenticated API and TanStack Query. */
+/** Users collection backed by the authenticated tRPC API and TanStack Query. */
 export const usersCollection = createCollection(
 	queryCollectionOptions({
 		id: "users",
@@ -56,12 +32,8 @@ export const usersCollection = createCollection(
 		queryKey: ["users", "me"],
 		queryClient,
 		queryFn: async () => {
-			const response = await fetch(`${getApiBase()}/api/users`, {
-				credentials: "include",
-			});
-			if (!response.ok)
-				throw new Error(`Failed to load user (${response.status})`);
-			return [selectUserSchema.parse(await response.json())];
+			const user = await trpc.users.get.query();
+			return [selectUserSchema.parse(user)];
 		},
 		getKey: (item) => item.id,
 		onUpdate: async ({ transaction }) => {
@@ -136,14 +108,6 @@ const chatRunEventSchema = z.object({
 	createdAt: z.date(),
 });
 
-const chatShapeOptions = (path: string) => ({
-	get url() {
-		return `${getApiBase()}${path}`;
-	},
-	columnMapper: snakeCamelMapper(),
-	parser: { timestamp: parsePgTimestamp, timestamptz: parsePgTimestamp },
-});
-
 const fetchChatRows = async <T>(path: string, schema: z.ZodType<T>) => {
 	const response = await fetch(`${getApiBase()}${path}`, {
 		credentials: "include",
@@ -175,19 +139,6 @@ export const chatRunsCollection = createCollection(
 		getKey: (row) => row.id,
 	}),
 );
-
-/** Events are session-scoped so callers cannot accidentally subscribe globally. */
-export const createChatRunEventsCollection = (sessionId: string) =>
-	createCollection(
-		electricCollectionOptions({
-			id: `chat_run_events:${sessionId}`,
-			schema: chatRunEventSchema,
-			getKey: (row) => `${row.runId}:${row.seq}`,
-			shapeOptions: chatShapeOptions(
-				`/api/chat/events?sessionId=${encodeURIComponent(sessionId)}`,
-			),
-		}),
-	);
 
 export type ChatSession = z.infer<typeof chatSessionSchema>;
 export type ChatMessage = z.infer<typeof chatMessageSchema>;
