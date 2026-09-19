@@ -74,11 +74,13 @@ export function useUpdateUser(userId: string) {
 		// Toasts are reserved for errors and warnings.
 		onError: (error) => {
 			console.error("Error updating user settings:", error);
-			toast.error(
-				error instanceof Error
-					? error.message
-					: "Failed to update settings. Please try again.",
-			);
+			const message =
+				typeof error === "object" &&
+				error !== null &&
+				"message" in error
+					? String(error.message)
+					: "Failed to update settings. Please try again.";
+			toast.error(message);
 		},
 	});
 }
