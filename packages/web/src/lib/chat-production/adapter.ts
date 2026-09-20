@@ -79,7 +79,6 @@ export function buildProductionAdapter(
 		if (!content.trim()) return;
 		const messageId = parentId ?? crypto.randomUUID();
 		const sessionId = input.sessionId ?? crypto.randomUUID();
-		if (!input.sessionId) input.onSessionChange(sessionId);
 		await send({
 			sessionId,
 			messageId,
@@ -87,6 +86,7 @@ export function buildProductionAdapter(
 			content,
 			projectId: input.projectId,
 		});
+		if (!input.sessionId) input.onSessionChange(sessionId);
 	};
 
 	return {

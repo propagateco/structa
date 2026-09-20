@@ -2,7 +2,8 @@
 
 import { useExternalStoreRuntime } from "@assistant-ui/react";
 import { useLiveQuery } from "@tanstack/react-db";
-import { useMemo } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useMemo } from "react";
 import { useProjectSwitcher } from "@/hooks/use-project-switcher";
 import {
 	chatMessagesCollection,
@@ -27,6 +28,7 @@ export function useProductionChat(
 	onSessionChange: (sessionId: string) => void,
 ) {
 	const { activeProject } = useProjectSwitcher();
+	const queryClient = useQueryClient();
 
 	const sessionsQuery = useLiveQuery((q) =>
 		q.from({ session: chatSessionsCollection }),
@@ -37,6 +39,13 @@ export function useProductionChat(
 	const runsQuery = useLiveQuery((q) => q.from({ run: chatRunsCollection }));
 
 	const stream = useConversationStream(sessionId);
+	const send = useCallback(
+		async (input: Parameters<typeof postChatRun>[0]) => {
+			await postChatRun(input);
+			await queryClient.invalidateQueries({ queryKey: ["chat-sessions"] });
+		},
+		[queryClient],
+	);
 
 	const sessions = useMemo(
 		() =>
@@ -93,7 +102,7 @@ export function useProductionChat(
 					},
 					projectId: activeProject?.id ?? null,
 				},
-				postChatRun,
+				send,
 			),
 		[
 			activeProject?.id,
@@ -103,6 +112,7 @@ export function useProductionChat(
 			messages,
 			runs,
 			stream.events,
+			send,
 		],
 	);
 

@@ -136,7 +136,7 @@ describe("production chat adapter", () => {
 		expect(onSessionChange).toHaveBeenCalledWith(expect.any(String));
 	});
 
-	it("navigates before waiting for the first run to finish", async () => {
+	it("navigates after the first run is accepted", async () => {
 		let resolveSend!: () => void;
 		const send = vi.fn(
 			() => new Promise<void>((resolve) => (resolveSend = resolve)),
@@ -155,10 +155,11 @@ describe("production chat adapter", () => {
 		);
 
 		const pending = adapter.onNew({ content: "hello" } as never);
-		expect(onSessionChange).toHaveBeenCalledWith(expect.any(String));
+		expect(onSessionChange).not.toHaveBeenCalled();
 		expect(send).toHaveBeenCalledOnce();
 
 		resolveSend();
 		await pending;
+		expect(onSessionChange).toHaveBeenCalledWith(expect.any(String));
 	});
 });
