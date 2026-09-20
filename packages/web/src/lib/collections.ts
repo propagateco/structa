@@ -102,16 +102,6 @@ const chatRunSchema = z.object({
 	updatedAt: z.date(),
 });
 
-const chatRunEventSchema = z.object({
-	runId: z.string(),
-	sessionId: z.string(),
-	userId: z.string().nullable(),
-	seq: z.number(),
-	type: z.enum(["content", "tool_call", "tool_result", "done", "error"]),
-	payload: z.record(z.string(), z.unknown()),
-	createdAt: z.date(),
-});
-
 const fetchChatRows = async <T>(path: string, schema: z.ZodType<T>) => {
 	const response = await fetch(`${getApiBase()}${path}`, {
 		credentials: "include",
@@ -147,4 +137,3 @@ export const chatRunsCollection = createCollection(
 export type ChatSession = z.infer<typeof chatSessionSchema>;
 export type ChatMessage = z.infer<typeof chatMessageSchema>;
 export type ChatRun = z.infer<typeof chatRunSchema>;
-export type ChatRunEvent = z.infer<typeof chatRunEventSchema>;

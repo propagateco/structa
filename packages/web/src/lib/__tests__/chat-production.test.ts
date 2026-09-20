@@ -4,7 +4,8 @@ import {
 	convertProductionMessage,
 	foldProductionMessages,
 } from "../chat-production/fold";
-import type { ChatMessage, ChatRun, ChatRunEvent } from "../collections";
+import type { ChatMessage, ChatRun } from "../collections";
+import type { ChatRunEvent } from "../chat-production/types";
 
 const date = new Date("2026-08-18T10:00:00.000Z");
 const message: ChatMessage = {

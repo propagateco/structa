@@ -3,7 +3,8 @@ import type {
 	ExternalStoreAdapter,
 	ThreadSuggestion,
 } from "@assistant-ui/react";
-import type { ChatMessage, ChatRun, ChatRunEvent } from "@/lib/collections";
+import type { ChatMessage, ChatRun } from "@/lib/collections";
+import type { ChatRunEvent } from "./types";
 import {
 	convertProductionMessage,
 	foldProductionMessages,
