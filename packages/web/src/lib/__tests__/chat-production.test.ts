@@ -96,6 +96,22 @@ describe("production chat fold", () => {
 			{ type: "text", text: "The typical cost is £8,000–£15,000." },
 		]);
 	});
+
+	it("renders content events while a run is still running", () => {
+		const runningRun = { ...run, status: "running" as const };
+		const folded = foldProductionMessages(
+			[message],
+			[runningRun],
+			[event("content", 1, { content: "Streaming now" })],
+		);
+
+		const assistant = convertProductionMessage(folded[1]);
+
+		expect(assistant.content).toEqual([
+			{ type: "text", text: "Streaming now" },
+		]);
+		expect(assistant.status).toEqual({ type: "running" });
+	});
 });
 
 describe("production chat adapter", () => {
