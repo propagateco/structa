@@ -112,6 +112,23 @@ describe("production chat fold", () => {
 		]);
 		expect(assistant.status).toEqual({ type: "running" });
 	});
+
+	it("keeps the user message before its run despite timestamp skew", () => {
+		const skewedUserMessage = {
+			...message,
+			runId: run.id,
+			createdAt: new Date(date.getTime() + 10_000),
+		};
+		const runningRun = { ...run, status: "running" as const };
+		const folded = foldProductionMessages(
+			[skewedUserMessage],
+			[runningRun],
+			[event("content", 1, { content: "Streaming now" })],
+		);
+
+		expect(folded[0]?.kind).toBe("user");
+		expect(folded[1]?.kind).toBe("assistant");
+	});
 });
 
 describe("production chat adapter", () => {

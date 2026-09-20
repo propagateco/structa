@@ -21,7 +21,9 @@ function mergeById<T extends { id: string }>(
 	live: readonly T[],
 ): T[] {
 	const byId = new Map(neon.map((item) => [item.id, item]));
-	for (const item of live) byId.set(item.id, item);
+	for (const item of live) {
+		byId.set(item.id, { ...byId.get(item.id), ...item });
+	}
 	return [...byId.values()];
 }
 
