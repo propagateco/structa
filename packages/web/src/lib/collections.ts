@@ -37,17 +37,13 @@ export const usersCollection = createCollection(
 			return [selectUserSchema.parse(normalizeUserRow(user))];
 		},
 		getKey: (item) => item.id,
-		onUpdate: async ({ transaction, collection }) => {
+		onUpdate: async ({ transaction }) => {
 			const { changes } = transaction.mutations[0];
-			const updatedUser = await trpc.users.update.mutate({
+			await trpc.users.update.mutate({
 				name: changes.name as string | undefined,
 				workspaceName: changes.workspaceName as string | undefined,
 				image: changes.image as string | null | undefined,
 			});
-			collection.utils.writeUpdate(
-				selectUserSchema.parse(normalizeUserRow(updatedUser)),
-			);
-			return { refetch: false };
 		},
 	}),
 );
