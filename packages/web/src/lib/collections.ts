@@ -3,6 +3,7 @@ import { createCollection } from "@tanstack/react-db";
 import { queryCollectionOptions } from "@tanstack/query-db-collection";
 import { queryClient } from "@/lib/query-client";
 import { trpc } from "@/lib/trpc-client";
+import { normalizeRowDates } from "@/lib/row-dates";
 import { normalizeUserRow } from "@/lib/user-row";
 import { z } from "zod";
 
@@ -72,7 +73,9 @@ export const chatSessionsCollection = createCollection(
 			if (!response.ok)
 				throw new Error(`Failed to load conversations (${response.status})`);
 			const result = (await response.json()) as { items: unknown[] };
-			return result.items.map((item) => chatSessionSchema.parse(item));
+			return result.items.map((item) =>
+				chatSessionSchema.parse(normalizeRowDates(item)),
+			);
 		},
 		getKey: (row) => row.id,
 	}),
@@ -116,7 +119,7 @@ const fetchChatRows = async <T>(path: string, schema: z.ZodType<T>) => {
 	if (!response.ok)
 		throw new Error(`Failed to load chat data (${response.status})`);
 	const rows = (await response.json()) as unknown[];
-	return rows.map((row) => schema.parse(row));
+	return rows.map((row) => schema.parse(normalizeRowDates(row)));
 };
 
 export const chatMessagesCollection = createCollection(
