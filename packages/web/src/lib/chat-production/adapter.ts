@@ -16,6 +16,8 @@ export type ProductionAdapterInput = {
 	messages: ChatMessage[];
 	runs: ChatRun[];
 	events: ChatRunEvent[];
+	userId?: string;
+	onOptimisticMessage?: (message: ChatMessage) => void;
 	onSessionChange: (sessionId: string | null) => void;
 	projectId?: string | null;
 };
@@ -79,10 +81,20 @@ export function buildProductionAdapter(
 		if (!content.trim()) return;
 		const messageId = parentId ?? crypto.randomUUID();
 		const sessionId = input.sessionId ?? crypto.randomUUID();
+		const runId = crypto.randomUUID();
+		input.onOptimisticMessage?.({
+			id: messageId,
+			sessionId,
+			userId: input.userId ?? "pending-user",
+			runId,
+			role: "user",
+			content,
+			createdAt: new Date(),
+		});
 		await send({
 			sessionId,
 			messageId,
-			runId: crypto.randomUUID(),
+			runId,
 			content,
 			projectId: input.projectId,
 		});

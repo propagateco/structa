@@ -3,13 +3,15 @@
 import { useExternalStoreRuntime } from "@assistant-ui/react";
 import { useLiveQuery } from "@tanstack/react-db";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useProjectSwitcher } from "@/hooks/use-project-switcher";
+import { useUser } from "@/hooks/use-user";
 import {
 	chatMessagesCollection,
 	chatRunsCollection,
 	chatSessionsCollection,
 } from "@/lib/collections";
+import type { ChatMessage } from "@/lib/collections";
 import { buildProductionAdapter, postChatRun } from "./adapter";
 import { useConversationStream } from "./use-conversation-stream";
 
@@ -28,7 +30,9 @@ export function useProductionChat(
 	onSessionChange: (sessionId: string) => void,
 ) {
 	const { activeProject } = useProjectSwitcher();
+	const { user } = useUser();
 	const queryClient = useQueryClient();
+	const [optimisticMessages, setOptimisticMessages] = useState<ChatMessage[]>([]);
 
 	const sessionsQuery = useLiveQuery((q) =>
 		q.from({ session: chatSessionsCollection }),
@@ -80,8 +84,8 @@ export function useProductionChat(
 	// materialised yet; for completed runs, Neon is authoritative and will
 	// be used by the merge when the same id appears in both.
 	const messages = useMemo(
-		() => mergeById(neonMessages, stream.messages),
-		[neonMessages, stream.messages],
+		() => mergeById(mergeById(optimisticMessages, neonMessages), stream.messages),
+		[neonMessages, optimisticMessages, stream.messages],
 	);
 	const runs = useMemo(
 		() => mergeById(neonRuns, stream.runs),
@@ -97,6 +101,9 @@ export function useProductionChat(
 					messages,
 					runs,
 					events: stream.events,
+					userId: user?.id,
+					onOptimisticMessage: (message) =>
+						setOptimisticMessages((current) => mergeById(current, [message])),
 					onSessionChange: (nextSessionId) => {
 						if (nextSessionId) onSessionChange(nextSessionId);
 					},
@@ -110,6 +117,8 @@ export function useProductionChat(
 			sessionId,
 			sessions,
 			messages,
+			user?.id,
+			optimisticMessages,
 			runs,
 			stream.events,
 			send,
