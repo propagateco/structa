@@ -44,7 +44,7 @@ function AccountSettings() {
     // Get user from route context as fallback
     const { authUser } = Route.useRouteContext();
 
-    // Use Electric user if synced, fallback to auth context
+    // Use collection user if loaded, fallback to auth context
     const currentUser = user ?? authUser;
 
     // Initialize the mutation hook with the current user's ID
@@ -80,7 +80,7 @@ function AccountSettings() {
         },
     });
 
-    // Update form when user data changes from Electric sync
+    // Update form when user data changes from the collection
     // Use primitive values as dependencies to avoid object reference issues
     useEffect(() => {
         const currentName = form.getValues("name");
@@ -162,7 +162,7 @@ function AccountSettings() {
         }
     }, [fileRejections]);
 
-    // Show loading state while Electric syncs.
+    // Show loading state while the user collection loads.
     // NOTE: must come after ALL hooks (Rules of Hooks).
     if (isUserLoading) {
         return (

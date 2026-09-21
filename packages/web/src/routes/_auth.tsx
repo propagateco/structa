@@ -17,7 +17,7 @@ import { useUser } from "@/hooks/use-user";
 import { getAuth } from "@/lib/auth-server";
 
 export const Route = createFileRoute("/_auth")({
-	ssr: false, // Required for Electric collections
+	ssr: false, // Required for client-side Query Collections
 	beforeLoad: async ({ location }) => {
 		const session = await getAuth();
 
@@ -54,7 +54,7 @@ function AuthLayout() {
 	// Call ALL hooks before any early returns to satisfy React's Rules of Hooks
 	const { user, isLoading } = useUser();
 
-	// Onboarding routes are standalone (no sidebar, no Electric)
+	// Onboarding routes are standalone (no sidebar)
 	if (pathname.startsWith("/onboarding")) {
 		return <Outlet />;
 	}
@@ -75,12 +75,12 @@ function AuthLayout() {
 	});
 	const currentTitle = isConversationRoute ? undefined : crumbs.at(-1)?.title;
 
-	// Show loading screen while Electric syncs
+	// Show loading screen while the user collection loads
 	if (isLoading) {
 		return <LoadingScreen />;
 	}
 
-	// Use Electric user if synced, fallback to auth user.
+	// Use collection user if loaded, fallback to auth user.
 	// Spread preserves all fields so NavUser can access id, plan, etc.
 	const rawUser = user ?? authUser;
 	const displayUser: SidebarUser = {

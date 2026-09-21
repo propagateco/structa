@@ -2,13 +2,16 @@
 
 import { useExternalStoreRuntime } from "@assistant-ui/react";
 import { useLiveQuery } from "@tanstack/react-db";
-import { useMemo } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useMemo, useState } from "react";
 import { useProjectSwitcher } from "@/hooks/use-project-switcher";
+import { useUser } from "@/hooks/use-user";
 import {
 	chatMessagesCollection,
 	chatRunsCollection,
 	chatSessionsCollection,
 } from "@/lib/collections";
+import type { ChatMessage } from "@/lib/collections";
 import { buildProductionAdapter, postChatRun } from "./adapter";
 import { useConversationStream } from "./use-conversation-stream";
 
@@ -18,7 +21,9 @@ function mergeById<T extends { id: string }>(
 	live: readonly T[],
 ): T[] {
 	const byId = new Map(neon.map((item) => [item.id, item]));
-	for (const item of live) byId.set(item.id, item);
+	for (const item of live) {
+		byId.set(item.id, { ...byId.get(item.id), ...item });
+	}
 	return [...byId.values()];
 }
 
@@ -27,6 +32,9 @@ export function useProductionChat(
 	onSessionChange: (sessionId: string) => void,
 ) {
 	const { activeProject } = useProjectSwitcher();
+	const { user } = useUser();
+	const queryClient = useQueryClient();
+	const [optimisticMessages, setOptimisticMessages] = useState<ChatMessage[]>([]);
 
 	const sessionsQuery = useLiveQuery((q) =>
 		q.from({ session: chatSessionsCollection }),
@@ -37,6 +45,13 @@ export function useProductionChat(
 	const runsQuery = useLiveQuery((q) => q.from({ run: chatRunsCollection }));
 
 	const stream = useConversationStream(sessionId);
+	const send = useCallback(
+		async (input: Parameters<typeof postChatRun>[0]) => {
+			await postChatRun(input);
+			await queryClient.invalidateQueries({ queryKey: ["chat-sessions"] });
+		},
+		[queryClient],
+	);
 
 	const sessions = useMemo(
 		() =>
@@ -71,8 +86,8 @@ export function useProductionChat(
 	// materialised yet; for completed runs, Neon is authoritative and will
 	// be used by the merge when the same id appears in both.
 	const messages = useMemo(
-		() => mergeById(neonMessages, stream.messages),
-		[neonMessages, stream.messages],
+		() => mergeById(mergeById(optimisticMessages, neonMessages), stream.messages),
+		[neonMessages, optimisticMessages, stream.messages],
 	);
 	const runs = useMemo(
 		() => mergeById(neonRuns, stream.runs),
@@ -88,12 +103,15 @@ export function useProductionChat(
 					messages,
 					runs,
 					events: stream.events,
+					userId: user?.id,
+					onOptimisticMessage: (message) =>
+						setOptimisticMessages((current) => mergeById(current, [message])),
 					onSessionChange: (nextSessionId) => {
 						if (nextSessionId) onSessionChange(nextSessionId);
 					},
 					projectId: activeProject?.id ?? null,
 				},
-				postChatRun,
+				send,
 			),
 		[
 			activeProject?.id,
@@ -101,8 +119,11 @@ export function useProductionChat(
 			sessionId,
 			sessions,
 			messages,
+			user?.id,
+			optimisticMessages,
 			runs,
 			stream.events,
+			send,
 		],
 	);
 

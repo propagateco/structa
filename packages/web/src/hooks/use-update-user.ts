@@ -12,15 +12,15 @@ interface UpdateUserInput {
 }
 
 /**
- * Hook to update user settings via Electric collection
+ * Hook to update user settings via the users Query Collection
  *
  * Flow:
  * 1. If image provided, upload to S3 first via presigned URL
- * 2. Update via Electric collection (applies optimistic update)
- * 3. Collection's onUpdate handler persists via tRPC mutation
- * 4. Wait for the mutation to be confirmed via Electric sync (txid match).
- *    Rejects — rolling back the optimistic update — if the server update
- *    fails or the txid never syncs back.
+ * 2. Update via the collection (applies an optimistic update)
+ * 3. Collection's onUpdate handler persists via a tRPC mutation
+ * 4. Wait for the mutation to be confirmed (server round-trip reflected in
+ *    the collection). Rejects — rolling back the optimistic update — if the
+ *    server update fails or the change never comes back from the server.
  *
  * @param userId - The ID of the user to update
  */
@@ -54,7 +54,7 @@ export function useUpdateUser(userId: string) {
 				}
 			}
 
-			// Update via Electric collection - applies an optimistic update and
+			// Update via the collection - applies an optimistic update and
 			// triggers the collection's onUpdate handler (tRPC mutation)
 			const transaction = usersCollection.update(values.userId, (draft) => {
 				draft.name = values.name;
@@ -64,8 +64,8 @@ export function useUpdateUser(userId: string) {
 				}
 			});
 
-			// Wait until the mutation is persisted and confirmed via Electric
-			// sync (txid match) so the caller can react to the real outcome
+			// Wait until the mutation is persisted (server round-trip confirmed)
+			// so the caller can react to the real outcome
 			await transaction.isPersisted.promise;
 
 			return { success: true };
@@ -74,11 +74,13 @@ export function useUpdateUser(userId: string) {
 		// Toasts are reserved for errors and warnings.
 		onError: (error) => {
 			console.error("Error updating user settings:", error);
-			toast.error(
-				error instanceof Error
-					? error.message
-					: "Failed to update settings. Please try again.",
-			);
+			const message =
+				typeof error === "object" &&
+				error !== null &&
+				"message" in error
+					? String(error.message)
+					: "Failed to update settings. Please try again.";
+			toast.error(message);
 		},
 	});
 }

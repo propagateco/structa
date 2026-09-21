@@ -284,6 +284,18 @@ export class ConversationObject extends DurableObject<DataServiceEnv> {
 				createdAt: now,
 			},
 		});
+		this.broadcast({
+			type: "run",
+			run: {
+				id: run.runId,
+				sessionId: conversationId,
+				userId: run.userId,
+				status: "running",
+				errorMessage: null,
+				createdAt: now,
+				updatedAt: now,
+			},
+		});
 		this.ctx.waitUntil(this.executeRun(run, conversationId));
 	}
 

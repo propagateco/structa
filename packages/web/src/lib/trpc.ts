@@ -1,6 +1,5 @@
 import { initTRPC } from "@trpc/server";
 import type { Session, User } from "better-auth/types";
-import { sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 
 /**
@@ -55,21 +54,3 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 		},
 	});
 });
-
-/**
- * SQL fragment that returns the current Postgres transaction ID as text.
- *
- * The `::xid` cast strips the epoch, giving the raw 32-bit value that Postgres
- * sends in logical replication streams — which is what Electric exposes as
- * `headers.txids` in the sync stream and what TanStack DB's `awaitTxId`
- * matches against.
- *
- * IMPORTANT: This MUST be embedded in the SAME statement as the mutation
- * (e.g. in its RETURNING clause). neon-http runs each statement in its own
- * implicit transaction, so reading `pg_current_xact_id()` in a separate query
- * returns a different txid that never appears in the sync stream — causing
- * `awaitTxId` to stall and time out, rolling back the optimistic update.
- *
- * @see https://tanstack.com/db/latest/docs/collections/electric-collection#debugging
- */
-export const pgCurrentTxId = sql<string>`pg_current_xact_id()::xid::text`;

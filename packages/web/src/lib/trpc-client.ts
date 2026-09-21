@@ -19,11 +19,3 @@ export const trpc = createTRPCProxyClient<AppRouter>({
 		}),
 	],
 });
-
-/**
- * Type-safe mutation result with txid for Electric sync confirmation
- */
-export interface MutationResult<T = unknown> {
-	data: T;
-	txid: number;
-}

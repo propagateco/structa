@@ -4,7 +4,8 @@ import {
 	convertProductionMessage,
 	foldProductionMessages,
 } from "../chat-production/fold";
-import type { ChatMessage, ChatRun, ChatRunEvent } from "../collections";
+import type { ChatMessage, ChatRun } from "../collections";
+import type { ChatRunEvent } from "../chat-production/types";
 
 const date = new Date("2026-08-18T10:00:00.000Z");
 const message: ChatMessage = {
@@ -96,6 +97,39 @@ describe("production chat fold", () => {
 			{ type: "text", text: "The typical cost is £8,000–£15,000." },
 		]);
 	});
+
+	it("renders content events while a run is still running", () => {
+		const runningRun = { ...run, status: "running" as const };
+		const folded = foldProductionMessages(
+			[message],
+			[runningRun],
+			[event("content", 1, { content: "Streaming now" })],
+		);
+
+		const assistant = convertProductionMessage(folded[1]);
+
+		expect(assistant.content).toEqual([
+			{ type: "text", text: "Streaming now" },
+		]);
+		expect(assistant.status).toEqual({ type: "running" });
+	});
+
+	it("keeps the user message before its run despite timestamp skew", () => {
+		const skewedUserMessage = {
+			...message,
+			runId: run.id,
+			createdAt: new Date(date.getTime() + 10_000),
+		};
+		const runningRun = { ...run, status: "running" as const };
+		const folded = foldProductionMessages(
+			[skewedUserMessage],
+			[runningRun],
+			[event("content", 1, { content: "Streaming now" })],
+		);
+
+		expect(folded[0]?.kind).toBe("user");
+		expect(folded[1]?.kind).toBe("assistant");
+	});
 });
 
 describe("production chat adapter", () => {
@@ -120,7 +154,7 @@ describe("production chat adapter", () => {
 		expect(onSessionChange).toHaveBeenCalledWith(expect.any(String));
 	});
 
-	it("navigates before waiting for the first run to finish", async () => {
+	it("navigates after the first run is accepted", async () => {
 		let resolveSend!: () => void;
 		const send = vi.fn(
 			() => new Promise<void>((resolve) => (resolveSend = resolve)),
@@ -139,10 +173,11 @@ describe("production chat adapter", () => {
 		);
 
 		const pending = adapter.onNew({ content: "hello" } as never);
-		expect(onSessionChange).toHaveBeenCalledWith(expect.any(String));
+		expect(onSessionChange).not.toHaveBeenCalled();
 		expect(send).toHaveBeenCalledOnce();
 
 		resolveSend();
 		await pending;
+		expect(onSessionChange).toHaveBeenCalledWith(expect.any(String));
 	});
 });

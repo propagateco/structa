@@ -2,16 +2,15 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { ChatMessage, ChatRun, ChatRunEvent } from "@/lib/collections";
+import type { ChatMessage, ChatRun } from "@/lib/collections";
+import type { ChatRunEvent } from "./types";
 
 /**
  * Live WebSocket subscription to a conversation Durable Object. Provides the
- * same shape the Electric event collection delivered — `events`, `messages`,
- * `runs` — merged with stale Neon rows on reconnect so the production
- * adapter can render running assistant turns immediately.
+ * Streams `events`, `messages`, and `runs`, merged with stale Neon rows on reconnect so the
+ * production adapter can render running assistant turns immediately.
  *
- * Replaces `createChatRunEventsCollection` (Electric) with a direct socket
- * to the Worker + short-lived HMAC capability ticket.
+ * Streams directly from the Worker over a short-lived HMAC capability ticket.
  */
 
 type StreamEnvelope =

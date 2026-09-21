@@ -3,7 +3,8 @@ import type {
 	ThreadMessageLike,
 	ToolCallMessagePart,
 } from "@assistant-ui/react";
-import type { ChatMessage, ChatRun, ChatRunEvent } from "@/lib/collections";
+import type { ChatMessage, ChatRun } from "@/lib/collections";
+import type { ChatRunEvent } from "./types";
 
 export type ProductionMessage =
 	| { kind: "user"; row: ChatMessage }
@@ -49,6 +50,10 @@ export function foldProductionMessages(
 			events: (runEvents.get(run.id) ?? []).sort((a, b) => a.seq - b.seq),
 		})),
 	].sort((a, b) => {
+		if (a.kind === "user" && b.kind === "assistant" && a.row.runId === b.run.id)
+			return -1;
+		if (a.kind === "assistant" && b.kind === "user" && b.row.runId === a.run.id)
+			return 1;
 		const aDate = a.kind === "user" ? a.row.createdAt : a.run.createdAt;
 		const bDate = b.kind === "user" ? b.row.createdAt : b.run.createdAt;
 		return aDate.getTime() - bDate.getTime();

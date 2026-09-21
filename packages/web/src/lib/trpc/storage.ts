@@ -19,7 +19,7 @@ export const storageRouter = router({
 	 * Get a presigned S3 PUT URL for the current user's avatar.
 	 *
 	 * Returns `{ url, key }`. The caller then PUTs the raw File to `url`
-	 * and persists `key` to the user row via the optimistic Electric
+	 * and persists `key` to the user row via the optimistic
 	 * collection update flow (see `use-update-user.ts`).
 	 */
 	uploadUserImage: protectedProcedure

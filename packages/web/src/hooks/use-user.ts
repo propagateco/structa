@@ -4,8 +4,9 @@ import { useLiveQuery } from "@tanstack/react-db";
 import { usersCollection } from "@/lib/collections";
 
 /**
- * Hook to get the current user from the Electric collection with real-time sync.
- * Uses findOne() to get a single user (Electric shape already filters to current user).
+ * Hook to get the current user from the Query Collection (server-synced).
+ * Uses findOne() to get a single user (the collection only holds the
+ * authenticated user's row).
  *
  * Returns an object with user data and loading state to match TanStack DB patterns.
  *
@@ -16,7 +17,7 @@ import { usersCollection } from "@/lib/collections";
  *
  * if (isLoading) return <LoadingScreen />;
  *
- * // Use user data (may be undefined if sync failed)
+ * // Use user data (may be undefined if the fetch failed)
  * const name = user?.name ?? authUser.name;
  */
 export function useUser() {

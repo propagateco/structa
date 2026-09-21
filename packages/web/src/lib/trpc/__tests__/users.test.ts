@@ -128,8 +128,6 @@ vi.mock("@/lib/trpc", () => {
 			if (!ctx.user) throw new Error("UNAUTHORIZED");
 			return next({ ctx });
 		}),
-		// SQL fragment stub — the db chain is mocked so this is never executed
-		pgCurrentTxId: { sql: "pg_current_xact_id()::xid::text" },
 	};
 });
 
@@ -224,9 +222,7 @@ describe("tRPC Users Router", () => {
 	});
 
 	describe("update procedure", () => {
-		it("updates user name and returns txid", async () => {
-			// The UPDATE ... RETURNING includes pg_current_xact_id() as `txid`
-			// (returned by Postgres as text)
+		it("updates user name and returns the updated row", async () => {
 			const returnedRow = {
 				id: "user-123",
 				name: "Updated Name",
@@ -240,7 +236,6 @@ describe("tRPC Users Router", () => {
 				role: null,
 				plan: "pro",
 				product: null,
-				txid: "756",
 			};
 
 			// Set up the mock chain: update().set().where().returning()
@@ -254,13 +249,10 @@ describe("tRPC Users Router", () => {
 			const caller = usersRouter.createCaller(createMockContext());
 			const result = await caller.update({ name: "Updated Name" });
 
-			expect(result.data.name).toBe("Updated Name");
-			// txid is parsed to a number and stripped from the user data
-			expect(result.txid).toBe(756);
-			expect(result.data).not.toHaveProperty("txid");
+			expect(result.name).toBe("Updated Name");
 		});
 
-		it("updates user image and returns txid", async () => {
+		it("updates user image and returns the updated row", async () => {
 			const returnedRow = {
 				id: "user-123",
 				name: "Test User",
@@ -274,7 +266,6 @@ describe("tRPC Users Router", () => {
 				role: null,
 				plan: "pro",
 				product: null,
-				txid: "757",
 			};
 
 			const mockReturning = vi.fn().mockResolvedValue([returnedRow]);
@@ -289,8 +280,7 @@ describe("tRPC Users Router", () => {
 				image: "https://example.com/avatar.png",
 			});
 
-			expect(result.data.image).toBe("https://example.com/avatar.png");
-			expect(result.txid).toBe(757);
+			expect(result.image).toBe("https://example.com/avatar.png");
 		});
 
 		it("allows setting image to null", async () => {
@@ -307,7 +297,6 @@ describe("tRPC Users Router", () => {
 				role: null,
 				plan: "pro",
 				product: null,
-				txid: "758",
 			};
 
 			const mockReturning = vi.fn().mockResolvedValue([returnedRow]);
@@ -320,38 +309,7 @@ describe("tRPC Users Router", () => {
 			const caller = usersRouter.createCaller(createMockContext());
 			const result = await caller.update({ image: null });
 
-			expect(result.data.image).toBeNull();
-		});
-
-		it("throws error when the returned txid is not a number", async () => {
-			const returnedRow = {
-				id: "user-123",
-				name: "Test User",
-				email: "test@example.com",
-				emailVerified: true,
-				image: null,
-				createdAt: new Date("2024-01-01"),
-				updatedAt: new Date(),
-				workspaceId: null,
-				workspaceName: null,
-				role: null,
-				plan: "pro",
-				product: null,
-				txid: undefined,
-			};
-
-			const mockReturning = vi.fn().mockResolvedValue([returnedRow]);
-			const mockUpdateWhere = vi
-				.fn()
-				.mockReturnValue({ returning: mockReturning });
-			const mockSet = vi.fn().mockReturnValue({ where: mockUpdateWhere });
-			(db.update as ReturnType<typeof vi.fn>).mockReturnValue({ set: mockSet });
-
-			const caller = usersRouter.createCaller(createMockContext());
-
-			await expect(caller.update({ name: "New Name" })).rejects.toThrow(
-				"TXID_FAILED",
-			);
+			expect(result.image).toBeNull();
 		});
 
 		it("throws error when update fails", async () => {
