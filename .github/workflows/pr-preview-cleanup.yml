@@ -1,7 +1,10 @@
 name: PR Cleanup
 
 on:
-    pull_request:
+    # Run from the base branch so closing a PR targeting dev is cleaned up too.
+    # This workflow only destroys an explicitly derived pr-N stage and does not
+    # execute code from the closed PR.
+    pull_request_target:
         types: [closed]
     workflow_dispatch:
         inputs:
@@ -16,7 +19,7 @@ permissions:
 
 env:
     AWS_REGION: eu-west-2
-    STAGE_NAME: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('pr-{0}', github.event.inputs.pr_number) }}
+    STAGE_NAME: ${{ github.event_name == 'pull_request_target' && format('pr-{0}', github.event.pull_request.number) || format('pr-{0}', github.event.inputs.pr_number) }}
 
 jobs:
     # ===========================================
@@ -58,22 +61,31 @@ jobs:
               # credentials, and provider errors should fail the job directly.
               run: |
                   set +e
-                  LOG_FILE="$RUNNER_TEMP/sst-remove.log"
-                  npx sst remove --stage "${{ env.STAGE_NAME }}" --print-logs 2>&1 | tee "$LOG_FILE"
-                  EXIT_CODE=${PIPESTATUS[0]}
+                  MAX_ATTEMPTS=3
+                  for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
+                      LOG_FILE="$RUNNER_TEMP/sst-remove-${attempt}.log"
+                      npx sst remove --stage "${{ env.STAGE_NAME }}" --print-logs 2>&1 | tee "$LOG_FILE"
+                      EXIT_CODE=${PIPESTATUS[0]}
 
-                  if [ "$EXIT_CODE" -eq 0 ]; then
-                      exit 0
-                  fi
+                      if [ "$EXIT_CODE" -eq 0 ]; then
+                          exit 0
+                      fi
 
-                  if grep -Eiq 'lock|already[[:space:]]+running|another[[:space:]].*process|acquir(e|ing).*state' "$LOG_FILE"; then
-                      echo "lock_failure=true" >> "$GITHUB_OUTPUT"
-                      echo "SST removal failed because the stage appears to be locked; retrying after unlock."
-                      exit 0
-                  fi
+                      if grep -Eiq 'lock|already[[:space:]]+running|another[[:space:]].*process|acquir(e|ing).*state' "$LOG_FILE"; then
+                          echo "lock_failure=true" >> "$GITHUB_OUTPUT"
+                          echo "SST removal failed because the stage appears to be locked; retrying after unlock."
+                          exit 0
+                      fi
 
-                  echo "SST removal failed for a non-lock error; not retrying."
-                  exit "$EXIT_CODE"
+                      if grep -Eiq 'bad status: 5[0-9]{2}|gateway timeout|could not install bun|timed out|econnreset' "$LOG_FILE" && [ "$attempt" -lt "$MAX_ATTEMPTS" ]; then
+                          echo "Transient SST bootstrap/network failure; retrying in 10 seconds (attempt $((attempt + 1))/$MAX_ATTEMPTS)."
+                          sleep 10
+                          continue
+                      fi
+
+                      echo "SST removal failed for a non-retryable error."
+                      exit "$EXIT_CODE"
+                  done
 
             - name: Clear stale SST lock
               if: steps.destroy.outputs.lock_failure == 'true'
