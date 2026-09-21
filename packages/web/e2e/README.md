@@ -13,7 +13,7 @@ Before running E2E tests, ensure the development server is running:
 npx sst dev --mode=mono
 ```
 
-This will start the web server at `http://localhost:3000`.
+This will start the web server at `https://localhost:3010` (via Caddy HTTP/2 proxy).
 
 ### Run all tests
 
