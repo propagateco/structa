@@ -6,7 +6,6 @@ import { authEmail, notifyEmail } from './email';
 import { bucket, optimisedBucket, bucketRegion, optimisedBucketRegion } from './storage';
 import { cdn } from './cloudfront';
 import { secret } from './secret';
-import { SyncEngine } from './sync';
 
 export const app = new sst.aws.TanStackStart('Web', {
     path: 'packages/web',
@@ -34,7 +33,6 @@ export const app = new sst.aws.TanStackStart('Web', {
         bucket,
         optimisedBucket,
         cdn,
-        SyncEngine,
         dataService,
         secret.GoogleClientId,
         secret.GoogleClientSecret,
@@ -48,11 +46,6 @@ export const app = new sst.aws.TanStackStart('Web', {
         secret.ExpoOwner,
         secret.BetterAuthSecret,
         secret.LoopsApiKey,
-        // Used at runtime to resolve the Electric Cloud sync source id +
-        // secret on preview stages (the ElectricCloudSync dynamic resource's
-        // outputs cannot be baked into the SyncEngine link).
-        secret.ElectricCloudApiToken,
-        secret.ElectricCloudProjectId,
         secret.DataServiceToken,
     ],
     environment: {

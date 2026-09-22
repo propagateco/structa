@@ -102,6 +102,6 @@ export const accountRelations = relations(account, ({ one }) => ({
 	}),
 }));
 
-// Zod schemas for Electric sync and tRPC validation
+// Zod schemas for tRPC validation and TanStack Query Collections
 export const selectUserSchema = createSelectSchema(user);
 export const updateUserSchema = createUpdateSchema(user);

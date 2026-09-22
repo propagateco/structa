@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { HomeIconLink } from "@/components/ui/link";
+import { useUser } from "@/hooks/use-user";
 
 interface WaitlistInput {
 	email: string;
@@ -63,10 +64,13 @@ export const Route = createFileRoute("/_auth/_onboarding/onboarding/")({
 
 function OnboardingPage() {
 	const { authUser } = Route.useRouteContext();
+	const { user } = useUser();
 	const navigate = useNavigate();
+	const currentUser = user ?? authUser;
 
-	const isOnWaitlist = authUser.plan === "waitlist";
-	const userHasName = authUser.name != null && authUser.name.trim().length > 0;
+	const isOnWaitlist = currentUser.plan === "waitlist";
+	const userHasName =
+		currentUser.name != null && currentUser.name.trim().length > 0;
 	const [name, setName] = useState("");
 
 	const joinWaitlistMutation = useMutation({
@@ -84,15 +88,15 @@ function OnboardingPage() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (!authUser.email || !authUser.id) {
+		if (!currentUser.email || !currentUser.id) {
 			return;
 		}
 
 		joinWaitlistMutation.mutate({
 			data: {
-				email: authUser.email,
-				userId: authUser.id,
-				name: !userHasName ? name || undefined : authUser.name || undefined,
+				email: currentUser.email,
+				userId: currentUser.id,
+				name: !userHasName ? name || undefined : currentUser.name || undefined,
 				updateName: !userHasName && !!name,
 			},
 		});
@@ -138,7 +142,7 @@ function OnboardingPage() {
 							disabled={
 								isOnWaitlist ||
 								joinWaitlistMutation.isPending ||
-								!authUser.email
+								!currentUser.email
 							}
 						>
 							{isOnWaitlist
