@@ -21,8 +21,19 @@ Structa's domain logic to one model, cloud, or agent framework.
   explicit interfaces. Prefer open protocols and self-hostable components where practical.
 - **Domain boundary:** agents call audited Structa capabilities; core renovation/project logic must
   not live inside prompts, MCP handlers, or vendor-specific runtime callbacks.
-- **Current chat:** `iss-020-production-chat-workspace-map.md` remains the shipping UI map. Its
-  Electric SQL event-fold transport is now a decision to revisit, not a constraint on this map.
+- **Current shipped chat:** `iss-020-production-chat-workspace-map.md` remains the shipping UI map.
+  The production run path uses a Cloudflare Worker and per-conversation Durable Object; the DO's
+  SQLite stores active transcript/run/event state and streams ordered events over WebSocket with
+  replay. Neon remains authoritative for user-owned conversation metadata and materialized message/run
+  history. Electric SQL, Electric Cloud, and Neon `chat_run_events` are retired; do not treat the old
+  event-fold design as current architecture.
+- **Scope of that choice:** Cloudflare Durable Objects are adopted for the shipped chat execution and
+  live-stream path. This is not yet a decision to move all future durable jobs or agent orchestration
+  to Cloudflare, nor a decision that the current implementation is the desired portability boundary.
+- **Migration/exit seam:** keep business capabilities, authorization, and persisted conversation
+  records outside the DO implementation. The current DO SQLite transcript/event log is operational
+  execution state; replacing or migrating it must preserve active-run recovery, replay, and Neon
+  materialization semantics.
 - **Skills:** use `/research` for runtimes and protocols, `/grilling` + `/domain-modeling` for
   product and trust boundaries, and `/prototype` for approval/agent-progress interactions.
 - **Plan, don't do:** this map resolves architecture decisions. Implementation follows as separate
@@ -30,24 +41,46 @@ Structa's domain logic to one model, cloud, or agent framework.
 
 ## Decisions so far
 
-- [Electric Streams + TanStack AI fit](iss-026-durable-streams-tanstack-ai-fit.md) — use open Durable
-  Streams incrementally for responsive, resumable TanStack AI delivery while retaining Postgres as
-  the initial business/history authority.
+- **Shipped chat baseline (implementation decision):** Cloudflare Durable Objects execute chat runs
+  and provide per-conversation SQLite state, WebSocket streaming, and event replay; Neon stores
+  conversation metadata and materialized messages/runs. This supersedes the proposed Electric
+  Durable Streams chat transport in [iss-026](iss-026-durable-streams-tanstack-ai-fit.md); that
+  research remains historical, not a pending migration requirement.
 - [Electric Agents runtime fit](iss-027-electric-agents-runtime-fit.md) — Agents is a promising later
-  orchestration runtime; preserve the upgrade path by keeping Structa's domain model independent.
+  orchestration candidate, not a selected runtime; preserve options by keeping Structa's domain model
+  independent.
 - [Cloudflare durable execution fit](iss-028-cloudflare-durable-execution-fit.md) — Cloudflare offers
-  the strongest integrated managed runtime, but its lock-in conflicts with the current AWS-first,
-  portable direction.
+  the strongest integrated managed runtime, but the earlier AWS-first recommendation is superseded
+  for chat execution by the shipped DO implementation. Its suitability for broader automation is
+  still an open strategic question.
 
 ## Not yet specified
 
 - Human approval and interruption UX for consequential or costly actions.
 - Agent memory, project knowledge retrieval, and source/citation boundaries.
+- The portable domain-capability boundary that lets first-party chat, APIs, MCP, and future runtimes
+  invoke the same audited business operations.
+- Whether long-running non-chat automation should use Cloudflare Workflows/Queues, AWS primitives, a
+  portable runtime, or a combination; decide an exit/migration contract before expanding DO-specific
+  coupling.
 - Operational policy for budgets, timeouts, retries, cancellation, observability, and incident
-  recovery once a runtime direction is selected.
+  recovery for both the existing chat runtime and future automation.
 - Packaging and versioning of Structa capabilities across first-party UI, public API, MCP, and agent
   runtimes.
 - Which autonomous workflows form the first tracer bullet after the architecture is selected.
+
+## Next wayfinding sequence
+
+1. Resolve [iss-029](iss-029-portable-agent-domain-boundary.md): define the portable capability,
+   principal, effect, artifact, job, approval, progress, and audit vocabulary before selecting a
+   general-purpose agent runtime.
+2. Revisit [iss-030](iss-030-durable-runtime-and-session-architecture.md) for non-chat automation only;
+   treat the shipped Cloudflare DO + Neon chat architecture above as the existing baseline, not an
+   unresolved chat transport choice.
+3. Resolve [iss-031](iss-031-external-api-mcp-trust-boundary.md) using the capability and runtime
+   boundaries from the first two decisions.
+4. Select one autonomous-workflow tracer bullet and create implementation tickets only after these
+   boundaries are settled.
 
 ## Out of scope
 
