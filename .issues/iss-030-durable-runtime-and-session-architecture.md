@@ -3,13 +3,14 @@
 Type: wayfinder-grilling
 Map: iss-025-durable-automation-platform-map.md
 Status: open
-Blocked by: iss-026, iss-027, iss-028, iss-029
+Blocked by: iss-029
 
 ## Question
 
-Which combination of Postgres/Electric SQL, Electric Durable Streams, Electric Agents, Cloudflare
-durable primitives, and Structa-owned abstractions should own conversation streams, long-running job
-execution, agent state, scheduling, and recovery?
+Given that chat execution and live replay currently run in Cloudflare Durable Objects while Neon owns
+conversation metadata and materialized history, what runtime boundary should support **future
+non-chat, long-running automation**? Compare Cloudflare Workflows/Queues, AWS primitives, portable
+runtimes, and Structa-owned abstractions for agent state, scheduling, and recovery.
 
-Resolve the near-term chat transport and the long-term automation runtime separately where useful,
-including explicit upgrade and exit seams.
+Do not reopen the shipped chat transport decision unless a concrete failure or requirement demands it.
+Resolve automation separately, including explicit upgrade, interoperability, and exit/migration seams.
