@@ -9,9 +9,13 @@ on:
     workflow_dispatch:
         inputs:
             pr_number:
-                description: 'PR number to cleanup (for manual cleanup)'
-                required: true
+                description: 'PR number to clean up'
+                required: false
                 type: number
+            stage_name:
+                description: 'Allowlisted personal SST stage to clean up (harrisonking only)'
+                required: false
+                type: string
 
 permissions:
     id-token: write
@@ -19,7 +23,6 @@ permissions:
 
 env:
     AWS_REGION: eu-west-2
-    STAGE_NAME: ${{ github.event_name == 'pull_request_target' && format('pr-{0}', github.event.pull_request.number) || format('pr-{0}', github.event.inputs.pr_number) }}
 
 jobs:
     # ===========================================
@@ -36,6 +39,37 @@ jobs:
             CLOUDFLARE_DEFAULT_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_DEFAULT_ACCOUNT_ID }}
 
         steps:
+            - name: Resolve and validate cleanup target
+              id: target
+              shell: bash
+              env:
+                  EVENT_NAME: ${{ github.event_name }}
+                  PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+                  MANUAL_STAGE: ${{ github.event.inputs.stage_name }}
+              run: |
+                  set -euo pipefail
+
+                  if [[ "$EVENT_NAME" == "pull_request_target" ]]; then
+                      STAGE_NAME="pr-${PR_NUMBER}"
+                  elif [[ -n "$MANUAL_STAGE" && -n "$PR_NUMBER" ]]; then
+                      echo "Provide either pr_number or stage_name, not both." >&2
+                      exit 1
+                  elif [[ "$MANUAL_STAGE" == "harrisonking" ]]; then
+                      STAGE_NAME="$MANUAL_STAGE"
+                  elif [[ "$MANUAL_STAGE" == "" && "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+                      STAGE_NAME="pr-${PR_NUMBER}"
+                  else
+                      echo "Target must be a PR number or the allowlisted stage harrisonking." >&2
+                      exit 1
+                  fi
+
+                  if [[ ! "$STAGE_NAME" =~ ^pr-[0-9]+$ && "$STAGE_NAME" != "harrisonking" ]]; then
+                      echo "Refusing to clean non-preview stage '$STAGE_NAME'." >&2
+                      exit 1
+                  fi
+
+                  echo "stage_name=$STAGE_NAME" >> "$GITHUB_OUTPUT"
+
             - name: Checkout code
               uses: actions/checkout@v4
 
@@ -57,6 +91,8 @@ jobs:
             - name: Destroy SST environment
               id: destroy
               shell: bash
+              env:
+                  STAGE_NAME: ${{ steps.target.outputs.stage_name }}
               # Only recover from an SST state-lock failure. Configuration,
               # credentials, and provider errors should fail the job directly.
               run: |
@@ -64,7 +100,7 @@ jobs:
                   MAX_ATTEMPTS=3
                   for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
                       LOG_FILE="$RUNNER_TEMP/sst-remove-${attempt}.log"
-                      npx sst remove --stage "${{ env.STAGE_NAME }}" --print-logs 2>&1 | tee "$LOG_FILE"
+                      npx sst remove --stage "$STAGE_NAME" --print-logs 2>&1 | tee "$LOG_FILE"
                       EXIT_CODE=${PIPESTATUS[0]}
 
                       if [ "$EXIT_CODE" -eq 0 ]; then
@@ -89,8 +125,12 @@ jobs:
 
             - name: Clear stale SST lock
               if: steps.destroy.outputs.lock_failure == 'true'
-              run: npx sst unlock --stage ${{ env.STAGE_NAME }} --print-logs
+              env:
+                  STAGE_NAME: ${{ steps.target.outputs.stage_name }}
+              run: npx sst unlock --stage "$STAGE_NAME" --print-logs
 
             - name: Retry cleanup after clearing lock
               if: steps.destroy.outputs.lock_failure == 'true'
-              run: npx sst remove --stage ${{ env.STAGE_NAME }} --print-logs
+              env:
+                  STAGE_NAME: ${{ steps.target.outputs.stage_name }}
+              run: npx sst remove --stage "$STAGE_NAME" --print-logs
